@@ -4,6 +4,10 @@ This directory owns the canonical editable GrooveMap brand. `tokens.json` and `t
 
 The constellation-record geometry and Deep Space + Purple palette were migrated from the monorepo's `scripts/generate_brand_assets.py`. The product name and copy are now GrooveMap and `groovemap.music`.
 
+`legacy/` retains the monorepo's original design-system document and showcase with their
+source commit. They are historical references, not editable GrooveMap sources or promoted
+build inputs; the current tokens and templates in this directory are authoritative.
+
 ## Reproduction
 
 ```sh
