@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  required:
+    uses: groovemap-music/automation/.github/workflows/reusable-ci.yml@2f34a4da5c552bc23c75edd3d8d81be0a4b3271c
+    with:
+      runner: ubuntu-24.04
+      language: mixed
+      setup-command: just setup
+      check-command: just check
+      coverage-command: just coverage
+      audit-command: just audit
+      license-command: just license-check
+      secret-scan-command: just secret-scan
+      package-command: just build
+      install-command: just install-check
+      coverage-files: coverage/lcov.info
+      coverage-flags: design
