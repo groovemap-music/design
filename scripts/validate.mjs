@@ -3,6 +3,7 @@
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, extname, relative, resolve, sep } from "node:path";
+import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -96,7 +97,7 @@ export function findExposureIssues(content) {
   return EXPOSURE_PATTERNS.filter(([, pattern]) => pattern.test(content)).map(([name]) => name);
 }
 
-export function validateCatalog(schema, catalog) {
+export function validateCatalogContract(schema) {
   const errors = [];
   const repositorySchema = schema?.$defs?.repository;
   const schemaFields = Object.keys(repositorySchema?.properties ?? {});
@@ -107,42 +108,6 @@ export function validateCatalog(schema, catalog) {
   }
   if (!sameValues(schemaFields, REQUIRED_REPOSITORY_FIELDS)) errors.push("schema field allowlist differs from the public catalog contract");
   if (!sameValues(repositorySchema?.required ?? [], REQUIRED_REPOSITORY_FIELDS)) errors.push("every public repository field must be explicit");
-  if (catalog.schema_version !== 1) errors.push("catalog schema_version must equal 1");
-  if (!Array.isArray(catalog.repositories)) return [...errors, "catalog repositories must be an array"];
-
-  const names = new Set();
-  for (const [index, repository] of catalog.repositories.entries()) {
-    const prefix = `repositories[${index}]`;
-    if (!repository || typeof repository !== "object" || Array.isArray(repository)) {
-      errors.push(`${prefix} must be an object`);
-      continue;
-    }
-    const fields = Object.keys(repository);
-    if (!sameValues(fields, REQUIRED_REPOSITORY_FIELDS)) errors.push(`${prefix} must contain exactly the public field allowlist`);
-    if (!/^[a-z0-9][a-z0-9.-]*$/.test(repository.name ?? "")) errors.push(`${prefix}.name is invalid`);
-    if (names.has(repository.name)) errors.push(`${prefix}.name is duplicated`);
-    names.add(repository.name);
-    for (const field of ["description", "license", "url"]) {
-      if (typeof repository[field] !== "string" || repository[field].length === 0) errors.push(`${prefix}.${field} must be nonblank`);
-    }
-    for (const field of ["responsibilities", "relationships", "languages", "topics", "release_units"]) {
-      if (!Array.isArray(repository[field])) errors.push(`${prefix}.${field} must be an array`);
-    }
-    if (Array.isArray(repository.responsibilities) && repository.responsibilities.length === 0) {
-      errors.push(`${prefix}.responsibilities must not be empty`);
-    }
-    if (typeof repository.commercial_license_available !== "boolean") {
-      errors.push(`${prefix}.commercial_license_available must be boolean`);
-    }
-    if (!["public", "private"].includes(repository.destination_visibility)) errors.push(`${prefix}.destination_visibility is invalid`);
-    if (!["private", "preparing", "public"].includes(repository.publication_status)) errors.push(`${prefix}.publication_status is invalid`);
-    if (!(repository.homepage === null || typeof repository.homepage === "string")) errors.push(`${prefix}.homepage must be a string or null`);
-    for (const [relationshipIndex, relationship] of (repository.relationships ?? []).entries()) {
-      if (!relationship || typeof relationship !== "object" || !sameValues(Object.keys(relationship), ["repository", "kind"])) {
-        errors.push(`${prefix}.relationships[${relationshipIndex}] must contain only repository and kind`);
-      }
-    }
-  }
   return errors;
 }
 
@@ -167,16 +132,20 @@ function checkLinks() {
 }
 
 function checkCatalog() {
-  const schema = JSON.parse(readFileSync(resolve(ROOT, "catalog/repositories.schema.json"), "utf8"));
-  const fixture = JSON.parse(readFileSync(resolve(ROOT, "fixtures/catalog-valid.json"), "utf8"));
-  const fixtures = [["fixtures/catalog-valid.json", fixture]];
+  const schemaPath = resolve(ROOT, "catalog/repositories.schema.json");
+  const schema = JSON.parse(readFileSync(schemaPath, "utf8"));
+  const errors = validateCatalogContract(schema);
+  requireCondition(errors.length === 0, `catalog schema contract:\n- ${errors.join("\n- ")}`);
+
+  const instances = [resolve(ROOT, "fixtures/catalog-valid.json")];
   const catalogPath = resolve(ROOT, "catalog/repositories.json");
-  if (existsSync(catalogPath)) fixtures.push(["catalog/repositories.json", JSON.parse(readFileSync(catalogPath, "utf8"))]);
-  for (const [path, catalog] of fixtures) {
-    const errors = validateCatalog(schema, catalog);
-    requireCondition(errors.length === 0, `${path}:\n- ${errors.join("\n- ")}`);
+  if (existsSync(catalogPath)) instances.push(catalogPath);
+  for (const arguments_ of [["metaschema", schemaPath], ["validate", schemaPath, ...instances, "--format-assertion"]]) {
+    const result = spawnSync("jsonschema", arguments_, { cwd: ROOT, encoding: "utf8" });
+    requireCondition(!result.error, `unable to execute the pinned JSON Schema validator: ${result.error?.message}`);
+    requireCondition(result.status === 0, `JSON Schema validation failed:\n${result.stdout}${result.stderr}`);
   }
-  console.log(`Verified the public catalog schema against ${fixtures.length} catalog document(s).`);
+  console.log(`Verified the 2020-12 public catalog schema against ${instances.length} catalog document(s).`);
 }
 
 function checkWorkflow() {
@@ -245,7 +214,7 @@ function checkLicense() {
 
 function checkDependencies() {
   const mise = readFileSync(resolve(ROOT, ".mise.toml"), "utf8");
-  for (const marker of ['gitleaks = "8.30.1"', 'just = "1.57.0"', 'node = "24.20.0"', 'trufflehog = "3.97.1"']) {
+  for (const marker of ['gitleaks = "8.30.1"', 'jsonschema = "16.8.0"', 'just = "1.57.0"', 'node = "24.20.0"', 'trufflehog = "3.97.1"']) {
     requireCondition(mise.includes(marker), `tool pin is missing: ${marker}`);
   }
   for (const path of ["package.json", "package-lock.json", "pyproject.toml", "uv.lock", "Cargo.toml", "Cargo.lock"]) {

@@ -16,7 +16,7 @@ The [brand guide](brand/README.md) documents the source layout, asset reproducti
 
 ## Validation and automation
 
-Install the pinned tools with `just setup`, then run the credential-free `just check` gate. It verifies local links, the public catalog schema, the immutable CI caller, license metadata, public-content safety, full-history secret scans, deterministic rendering, the reviewed 12-asset checksum set, and a deterministic package containing the assets and applicable notices.
+Install the pinned tools with `just setup`, then run the credential-free `just check` gate. It verifies local links, the public catalog through a pinned standards-compliant JSON Schema 2020-12 implementation, the immutable CI caller, license metadata, public-content safety, full-history secret scans, deterministic rendering, the reviewed 12-asset checksum set, and a deterministic package containing the assets and applicable notices.
 
 Pull requests and pushes to `main` use the reusable GrooveMap CI workflow pinned to an immutable automation commit. Dependabot opens ordinary pull requests, so dependency updates execute the same required job and complete validation graph as contributor pull requests; there is no actor-specific reduced path.
 
