@@ -13,3 +13,11 @@ The MIT License is a copyright license. It does not grant permission to imply th
 Public contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting changes. Brand-source changes must include the corresponding deterministic generated assets and pass `just check`.
 
 The [brand guide](brand/README.md) documents the source layout, asset reproduction, and font-provenance requirements.
+
+## Validation and automation
+
+Install the pinned tools with `just setup`, then run the credential-free `just check` gate. It verifies local links, the public catalog through a pinned standards-compliant JSON Schema 2020-12 implementation, the immutable CI caller, license metadata, public-content safety, full-history secret scans, deterministic rendering, the reviewed 12-asset checksum set, and a deterministic package containing the assets and applicable notices.
+
+Pull requests and pushes to `main` use the reusable GrooveMap CI workflow pinned to an immutable automation commit. Dependabot opens ordinary pull requests, so dependency updates execute the same required job and complete validation graph as contributor pull requests; there is no actor-specific reduced path.
+
+The catalog schema is available at [`catalog/repositories.schema.json`](catalog/repositories.schema.json). Until the reviewed public catalog is added, its contract is exercised with synthetic data in [`fixtures/catalog-valid.json`](fixtures/catalog-valid.json); private operational metadata remains outside this repository.

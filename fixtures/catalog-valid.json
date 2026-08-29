@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "repositories": [
+    {
+      "name": "example-repository",
+      "url": "https://github.com/example/example-repository",
+      "description": "Synthetic repository used only to test the public catalog schema.",
+      "responsibilities": ["Exercise schema validation"],
+      "relationships": [
+        { "repository": "example-consumer", "kind": "consumed-by" }
+      ],
+      "homepage": null,
+      "languages": ["JavaScript"],
+      "topics": ["synthetic-fixture"],
+      "license": "MIT",
+      "commercial_license_available": false,
+      "release_units": ["source"],
+      "destination_visibility": "public",
+      "publication_status": "preparing"
+    }
+  ]
+}

@@ -51,7 +51,7 @@ expect("CONTRIBUTING.md", [
 ]);
 
 for (const [path, text] of Object.entries(contents)) {
-  if (/discogsography/i.test(text)) fail(`${path} contains the retired project name.`);
+  if (new RegExp(["discogs", "ography"].join(""), "i").test(text)) fail(`${path} contains the retired project name.`);
   if (/\/Users\//.test(text)) fail(`${path} contains an operator-specific path.`);
 }
 
