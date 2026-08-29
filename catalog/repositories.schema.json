@@ -35,7 +35,7 @@
         "publication_status"
       ],
       "properties": {
-        "name": { "type": "string", "pattern": "^[a-z0-9][a-z0-9.-]*$" },
+        "name": { "type": "string", "pattern": "^(?:\\.github|[a-z0-9][a-z0-9.-]*)$" },
         "url": { "type": "string", "format": "uri" },
         "description": { "type": "string", "minLength": 1 },
         "responsibilities": {
@@ -52,7 +52,7 @@
             "additionalProperties": false,
             "required": ["repository", "kind"],
             "properties": {
-              "repository": { "type": "string", "pattern": "^[a-z0-9][a-z0-9.-]*$" },
+              "repository": { "type": "string", "pattern": "^(?:\\.github|[a-z0-9][a-z0-9.-]*)$" },
               "kind": { "type": "string", "minLength": 1 }
             }
           }

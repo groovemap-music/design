@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 import assert from "node:assert/strict";
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -12,11 +12,13 @@ import {
   extractLinks,
   findExposureIssues,
   validateActionReference,
+  validateCanonicalCatalog,
   validateCatalogContract,
 } from "./validate.mjs";
 
 import schema from "../catalog/repositories.schema.json" with { type: "json" };
 import fixture from "../fixtures/catalog-valid.json" with { type: "json" };
+import catalog from "../catalog/repositories.json" with { type: "json" };
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const schemaPath = resolve(root, "catalog/repositories.schema.json");
@@ -60,8 +62,39 @@ test("findExposureIssues detects private-boundary material without storing it", 
   assert.deepEqual(findExposureIssues("ordinary public design text"), []);
 });
 
+test("publication handoff implementation is local and non-mutating", () => {
+  const script = readFileSync(resolve(root, "scripts/publication-readiness.mjs"), "utf8");
+  assert.match(script, /publication_action_performed: false/);
+  assert.match(script, /git\("status", "--porcelain"/);
+  for (const forbidden of ["gh ", "tofu ", "git push", "visibility", "fetch(", "https.request"]) {
+    assert.equal(script.includes(forbidden), false, `publication handoff contains forbidden operation: ${forbidden}`);
+  }
+});
+
 test("catalog schema retains the exact public field boundary", () => {
   assert.deepEqual(validateCatalogContract(schema), []);
+});
+
+test("canonical catalog contains the exact sorted 20-repository set", () => {
+  assert.deepEqual(validateCanonicalCatalog(catalog), []);
+  assert.equal(catalog.repositories.length, 20);
+});
+
+test("catalog schema rejects private operational metadata fields", async (t) => {
+  for (const field of [
+    "branch_rule_id",
+    "has_issues",
+    "provider_id",
+    "secret_repositories",
+    "source_paths",
+    "team_permission",
+  ]) {
+    await t.test(field, () => {
+      const result = validateInstance(mutate((_catalog, repository) => { repository[field] = "excluded"; }));
+      assert.equal(result.error, undefined);
+      assert.equal(result.status, 2, `${field} unexpectedly passed:\n${result.stdout}${result.stderr}`);
+    });
+  }
 });
 
 test("standards validator accepts the complete synthetic fixture", () => {

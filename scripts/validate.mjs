@@ -24,6 +24,28 @@ const REQUIRED_REPOSITORY_FIELDS = [
   "topics",
   "url",
 ];
+const EXPECTED_REPOSITORIES = [
+  ".github",
+  "analytics-engine",
+  "automation",
+  "catalog-api",
+  "catalog-ingestion",
+  "database-schema",
+  "deployment",
+  "design",
+  "discogs-graph-enricher",
+  "discogs-sql-loader",
+  "graph-explorer",
+  "groovemap-music.github.io",
+  "infra",
+  "mcp-server",
+  "musicbrainz-graph-enricher",
+  "musicbrainz-sql-loader",
+  "operations-console",
+  "operations-toolkit",
+  "planning-archive",
+  "python-libraries",
+];
 const REQUIRED_FILES = [
   ".github/dependabot.yml",
   ".github/workflows/ci.yml",
@@ -34,17 +56,26 @@ const REQUIRED_FILES = [
   "Justfile",
   "LICENSE",
   "NOTICE",
+  "PUBLICATION.md",
   "README.md",
   "TRADEMARKS.md",
   "brand/README.md",
   "brand/assets.sha256",
   "brand/render.mjs",
   "brand/tokens.json",
+  "catalog/README.md",
+  "catalog/repositories.json",
   "catalog/repositories.schema.json",
+  "docs/README.md",
+  "docs/adr/0001-repository-ownership-boundary.md",
+  "docs/adr/0002-shared-automation-boundary.md",
+  "docs/adr/0003-agpl-commercial-licensing.md",
+  "docs/adr/0004-beadhive-compatible-branch-policy.md",
   "fixtures/catalog-valid.json",
   "scripts/build.mjs",
   "scripts/check-governance.mjs",
   "scripts/check-secrets.sh",
+  "scripts/publication-readiness.mjs",
   "scripts/validate.mjs",
   "scripts/validate.test.mjs",
 ];
@@ -111,6 +142,25 @@ export function validateCatalogContract(schema) {
   return errors;
 }
 
+export function validateCanonicalCatalog(catalog) {
+  const errors = [];
+  const repositories = catalog?.repositories ?? [];
+  const names = repositories.map((repository) => repository.name);
+  if (!sameValues(names, EXPECTED_REPOSITORIES)) errors.push("catalog must contain the exact 20-repository organization set");
+  if (JSON.stringify(names) !== JSON.stringify(sorted(names))) errors.push("catalog repositories must be sorted by name");
+  if (new Set(names).size !== names.length) errors.push("catalog repository names must be unique");
+  for (const repository of repositories) {
+    const relationshipTargets = repository.relationships.map((relationship) => relationship.repository);
+    if (relationshipTargets.some((target) => !EXPECTED_REPOSITORIES.includes(target))) {
+      errors.push(`${repository.name} has a relationship to an unknown repository`);
+    }
+    if (new Set(relationshipTargets.map((target, index) => `${target}:${repository.relationships[index].kind}`)).size !== repository.relationships.length) {
+      errors.push(`${repository.name} has a duplicate relationship`);
+    }
+  }
+  return errors;
+}
+
 function checkRequiredFiles() {
   for (const path of REQUIRED_FILES) requireCondition(existsSync(resolve(ROOT, path)), `required file is missing: ${path}`);
 }
@@ -139,7 +189,11 @@ function checkCatalog() {
 
   const instances = [resolve(ROOT, "fixtures/catalog-valid.json")];
   const catalogPath = resolve(ROOT, "catalog/repositories.json");
-  if (existsSync(catalogPath)) instances.push(catalogPath);
+  requireCondition(existsSync(catalogPath), "canonical repository catalog is missing");
+  const catalog = JSON.parse(readFileSync(catalogPath, "utf8"));
+  const catalogErrors = validateCanonicalCatalog(catalog);
+  requireCondition(catalogErrors.length === 0, `canonical catalog contract:\n- ${catalogErrors.join("\n- ")}`);
+  instances.push(catalogPath);
   for (const arguments_ of [["metaschema", schemaPath], ["validate", schemaPath, ...instances, "--format-assertion"]]) {
     const result = spawnSync("jsonschema", arguments_, { cwd: ROOT, encoding: "utf8" });
     requireCondition(!result.error, `unable to execute the pinned JSON Schema validator: ${result.error?.message}`);
@@ -206,7 +260,7 @@ function checkLicense() {
   requireCondition(licenseHash === MIT_SHA256, "LICENSE must remain the unmodified approved MIT text");
   const notice = readFileSync(resolve(ROOT, "NOTICE"), "utf8");
   requireCondition(/MIT License/.test(notice) && /does not grant trademark rights/i.test(notice), "NOTICE must retain the copyright/trademark boundary");
-  for (const path of ["Justfile", "scripts/build.mjs", "scripts/check-governance.mjs", "scripts/check-secrets.sh", "scripts/validate.mjs", "scripts/validate.test.mjs"]) {
+  for (const path of ["Justfile", "scripts/build.mjs", "scripts/check-governance.mjs", "scripts/check-secrets.sh", "scripts/publication-readiness.mjs", "scripts/validate.mjs", "scripts/validate.test.mjs"]) {
     requireCondition(readFileSync(resolve(ROOT, path), "utf8").includes("SPDX-License-Identifier: MIT"), `${path} is missing MIT license metadata`);
   }
   console.log("Verified MIT license metadata and the separate trademark boundary.");

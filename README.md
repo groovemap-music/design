@@ -1,6 +1,8 @@
 # GrooveMap design
 
-This repository owns GrooveMap's canonical brand sources and generated brand assets. The editable design tokens and SVG templates live in [`brand/`](brand/); applications and documentation consume the generated assets rather than maintaining independent copies.
+This repository owns GrooveMap's canonical brand sources, generated brand assets, public architecture decisions, and sanitized repository catalog. The editable design tokens and SVG templates live in [`brand/`](brand/); applications and documentation consume the generated assets rather than maintaining independent copies.
+
+The [`catalog/repositories.json`](catalog/repositories.json) catalog describes the public responsibilities and relationships of all 20 organization repositories. Its deliberately narrow schema excludes provider identifiers, access policy, secret distribution, source-extraction paths, and other operational configuration. Public architecture decisions are indexed in [`docs/`](docs/README.md).
 
 ## Licensing and identity
 
@@ -20,4 +22,8 @@ Install the pinned tools with `just setup`, then run the credential-free `just c
 
 Pull requests and pushes to `main` use the reusable GrooveMap CI workflow pinned to an immutable automation commit. Dependabot opens ordinary pull requests, so dependency updates execute the same required job and complete validation graph as contributor pull requests; there is no actor-specific reduced path.
 
-The catalog schema is available at [`catalog/repositories.schema.json`](catalog/repositories.schema.json). Until the reviewed public catalog is added, its contract is exercised with synthetic data in [`fixtures/catalog-valid.json`](fixtures/catalog-valid.json); private operational metadata remains outside this repository.
+The catalog schema is available at [`catalog/repositories.schema.json`](catalog/repositories.schema.json). Its contract is exercised with synthetic data in [`fixtures/catalog-valid.json`](fixtures/catalog-valid.json) and against the canonical catalog. Private operational metadata remains outside this repository.
+
+## Publication handoff
+
+The repository stays private until its separately reviewed infrastructure publication change. After a clean review commit, `just publication-readiness` repeats the complete gate and emits the exact commit and catalog SHA-256 that infrastructure must pin. See [PUBLICATION.md](PUBLICATION.md) for the handoff contract.

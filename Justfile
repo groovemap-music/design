@@ -62,3 +62,8 @@ build:
 
 install-check: build
     {{tool}} node scripts/build.mjs --check
+
+# Run the complete review gate, then emit the exact immutable handoff for infra.
+publication-readiness:
+    just check
+    {{tool}} node scripts/publication-readiness.mjs

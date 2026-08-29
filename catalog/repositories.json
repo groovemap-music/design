@@ -1,0 +1,370 @@
+{
+  "schema_version": 1,
+  "repositories": [
+    {
+      "name": ".github",
+      "url": "https://github.com/groovemap-music/.github",
+      "description": "GrooveMap organization profile and shared community-health files.",
+      "responsibilities": ["Publish the organization profile", "Provide shared community-health guidance"],
+      "relationships": [{ "repository": "design", "kind": "consumes-public-design-guidance-from" }],
+      "homepage": "https://groovemap.music/",
+      "languages": ["Markdown", "YAML"],
+      "topics": ["community-health", "github-profile", "groovemap", "organization"],
+      "license": "MIT",
+      "commercial_license_available": false,
+      "release_units": ["unversioned organization metadata"],
+      "destination_visibility": "public",
+      "publication_status": "public"
+    },
+    {
+      "name": "analytics-engine",
+      "url": "https://github.com/groovemap-music/analytics-engine",
+      "description": "Scheduled and precomputed music analytics with PostgreSQL and Redis caching.",
+      "responsibilities": ["Compute catalog analytics", "Cache reusable analytical results"],
+      "relationships": [
+        { "repository": "catalog-api", "kind": "provides-analytics-to" },
+        { "repository": "deployment", "kind": "deployed-by" },
+        { "repository": "python-libraries", "kind": "uses-runtime-from" }
+      ],
+      "homepage": null,
+      "languages": ["Dockerfile", "Python", "Shell"],
+      "topics": ["analytics", "music", "postgresql", "python", "redis"],
+      "license": "AGPL-3.0-only",
+      "commercial_license_available": true,
+      "release_units": ["container image", "service distribution"],
+      "destination_visibility": "public",
+      "publication_status": "preparing"
+    },
+    {
+      "name": "automation",
+      "url": "https://github.com/groovemap-music/automation",
+      "description": "Reusable GitHub Actions workflows and composite actions for GrooveMap repositories.",
+      "responsibilities": ["Define shared continuous-integration contracts", "Define reusable release and security workflows"],
+      "relationships": [],
+      "homepage": null,
+      "languages": ["Shell", "YAML"],
+      "topics": ["automation", "continuous-integration", "github-actions", "groovemap"],
+      "license": "MIT",
+      "commercial_license_available": false,
+      "release_units": ["composite actions", "reusable workflows"],
+      "destination_visibility": "public",
+      "publication_status": "preparing"
+    },
+    {
+      "name": "catalog-api",
+      "url": "https://github.com/groovemap-music/catalog-api",
+      "description": "GrooveMap authentication, catalog search, graph query, recommendation, and analytics API.",
+      "responsibilities": ["Expose the catalog and graph API", "Coordinate authentication, recommendations, and analytics requests"],
+      "relationships": [
+        { "repository": "analytics-engine", "kind": "consumes-analytics-from" },
+        { "repository": "database-schema", "kind": "uses-schema-from" },
+        { "repository": "deployment", "kind": "deployed-by" },
+        { "repository": "python-libraries", "kind": "uses-libraries-from" }
+      ],
+      "homepage": "https://groovemap.music/",
+      "languages": ["Dockerfile", "HTML", "Python", "Shell"],
+      "topics": ["api", "fastapi", "music", "neo4j", "python"],
+      "license": "AGPL-3.0-only",
+      "commercial_license_available": true,
+      "release_units": ["container image", "operator command-line tools", "service distribution"],
+      "destination_visibility": "public",
+      "publication_status": "preparing"
+    },
+    {
+      "name": "catalog-ingestion",
+      "url": "https://github.com/groovemap-music/catalog-ingestion",
+      "description": "Downloads, parses, normalizes, and publishes Discogs and MusicBrainz datasets.",
+      "responsibilities": ["Acquire source datasets", "Publish normalized catalog events"],
+      "relationships": [
+        { "repository": "discogs-graph-enricher", "kind": "publishes-events-to" },
+        { "repository": "discogs-sql-loader", "kind": "publishes-events-to" },
+        { "repository": "musicbrainz-graph-enricher", "kind": "publishes-events-to" },
+        { "repository": "musicbrainz-sql-loader", "kind": "publishes-events-to" }
+      ],
+      "homepage": null,
+      "languages": ["Dockerfile", "Rust", "Shell"],
+      "topics": ["etl", "ingestion", "music", "rabbitmq", "rust"],
+      "license": "MIT",
+      "commercial_license_available": false,
+      "release_units": ["command-line binaries", "container images"],
+      "destination_visibility": "public",
+      "publication_status": "preparing"
+    },
+    {
+      "name": "database-schema",
+      "url": "https://github.com/groovemap-music/database-schema",
+      "description": "Versioned Neo4j and PostgreSQL schemas, migrations, and compatibility policy.",
+      "responsibilities": ["Initialize supported databases", "Version persistence schemas and compatibility contracts"],
+      "relationships": [
+        { "repository": "catalog-api", "kind": "provides-schema-to" },
+        { "repository": "deployment", "kind": "provides-initializer-image-to" },
+        { "repository": "discogs-graph-enricher", "kind": "provides-schema-to" },
+        { "repository": "discogs-sql-loader", "kind": "provides-schema-to" },
+        { "repository": "musicbrainz-graph-enricher", "kind": "provides-schema-to" },
+        { "repository": "musicbrainz-sql-loader", "kind": "provides-schema-to" }
+      ],
+      "homepage": null,
+      "languages": ["Dockerfile", "Python", "SQL", "Shell"],
+      "topics": ["database", "migrations", "neo4j", "postgresql", "schema"],
+      "license": "MIT",
+      "commercial_license_available": false,
+      "release_units": ["container image", "schema package"],
+      "destination_visibility": "public",
+      "publication_status": "preparing"
+    },
+    {
+      "name": "deployment",
+      "url": "https://github.com/groovemap-music/deployment",
+      "description": "GrooveMap deployment, environment, and whole-stack operations configuration.",
+      "responsibilities": ["Compose versioned service releases", "Define stack-level deployment and rollback configuration"],
+      "relationships": [
+        { "repository": "database-schema", "kind": "deploys-initializer-from" },
+        { "repository": "operations-toolkit", "kind": "operated-with" }
+      ],
+      "homepage": null,
+      "languages": ["Dockerfile", "Python", "Shell", "YAML"],
+      "topics": ["deployment", "docker-compose", "groovemap", "operations"],
+      "license": "MIT",
+      "commercial_license_available": false,
+      "release_units": ["unversioned deployment configuration"],
+      "destination_visibility": "public",
+      "publication_status": "preparing"
+    },
+    {
+      "name": "design",
+      "url": "https://github.com/groovemap-music/design",
+      "description": "GrooveMap brand sources, public architecture decisions, and repository catalog.",
+      "responsibilities": ["Maintain canonical brand sources and generated assets", "Publish public architecture decisions and repository metadata"],
+      "relationships": [{ "repository": ".github", "kind": "provides-public-design-guidance-to" }],
+      "homepage": "https://groovemap.music/",
+      "languages": ["CSS", "JavaScript", "JSON", "SVG"],
+      "topics": ["architecture", "branding", "design-system", "groovemap"],
+      "license": "MIT",
+      "commercial_license_available": false,
+      "release_units": ["brand asset package", "public architecture documentation"],
+      "destination_visibility": "public",
+      "publication_status": "preparing"
+    },
+    {
+      "name": "discogs-graph-enricher",
+      "url": "https://github.com/groovemap-music/discogs-graph-enricher",
+      "description": "Consumes Discogs events and constructs the Neo4j music knowledge graph.",
+      "responsibilities": ["Consume normalized catalog events", "Build Discogs-derived graph entities and relationships"],
+      "relationships": [
+        { "repository": "catalog-ingestion", "kind": "consumes-events-from" },
+        { "repository": "database-schema", "kind": "uses-schema-from" },
+        { "repository": "deployment", "kind": "deployed-by" },
+        { "repository": "python-libraries", "kind": "uses-runtime-from" }
+      ],
+      "homepage": null,
+      "languages": ["Dockerfile", "Python", "Shell"],
+      "topics": ["knowledge-graph", "music", "neo4j", "python", "rabbitmq"],
+      "license": "MIT",
+      "commercial_license_available": false,
+      "release_units": ["container image", "service distribution"],
+      "destination_visibility": "public",
+      "publication_status": "preparing"
+    },
+    {
+      "name": "discogs-sql-loader",
+      "url": "https://github.com/groovemap-music/discogs-sql-loader",
+      "description": "Consumes Discogs events and builds PostgreSQL analytical tables.",
+      "responsibilities": ["Consume normalized catalog events", "Build Discogs-derived relational tables"],
+      "relationships": [
+        { "repository": "catalog-ingestion", "kind": "consumes-events-from" },
+        { "repository": "database-schema", "kind": "uses-schema-from" },
+        { "repository": "deployment", "kind": "deployed-by" },
+        { "repository": "python-libraries", "kind": "uses-runtime-from" }
+      ],
+      "homepage": null,
+      "languages": ["Dockerfile", "Python", "Shell"],
+      "topics": ["etl", "music", "postgresql", "python", "rabbitmq"],
+      "license": "MIT",
+      "commercial_license_available": false,
+      "release_units": ["container image", "service distribution"],
+      "destination_visibility": "public",
+      "publication_status": "preparing"
+    },
+    {
+      "name": "graph-explorer",
+      "url": "https://github.com/groovemap-music/graph-explorer",
+      "description": "Public-facing GrooveMap graph-exploration web application and catalog API proxy.",
+      "responsibilities": ["Render interactive music graph exploration", "Proxy browser requests to the catalog API"],
+      "relationships": [
+        { "repository": "catalog-api", "kind": "uses-api-from" },
+        { "repository": "deployment", "kind": "deployed-by" },
+        { "repository": "design", "kind": "uses-brand-assets-from" }
+      ],
+      "homepage": "https://groovemap.music/",
+      "languages": ["CSS", "Dockerfile", "HTML", "JavaScript", "Python"],
+      "topics": ["graph-visualization", "music", "neo4j", "python", "web"],
+      "license": "AGPL-3.0-only",
+      "commercial_license_available": true,
+      "release_units": ["container image", "web application distribution"],
+      "destination_visibility": "public",
+      "publication_status": "preparing"
+    },
+    {
+      "name": "groovemap-music.github.io",
+      "url": "https://github.com/groovemap-music/groovemap-music.github.io",
+      "description": "Static Astro organization website for groovemap.music.",
+      "responsibilities": ["Publish the project website", "Introduce and link the project's public work"],
+      "relationships": [{ "repository": "design", "kind": "uses-brand-assets-from" }],
+      "homepage": "https://groovemap.music/",
+      "languages": ["Astro", "CSS", "TypeScript"],
+      "topics": ["astro", "github-pages", "groovemap", "website"],
+      "license": "MIT",
+      "commercial_license_available": false,
+      "release_units": ["static website"],
+      "destination_visibility": "public",
+      "publication_status": "public"
+    },
+    {
+      "name": "infra",
+      "url": "https://github.com/groovemap-music/infra",
+      "description": "Private source of truth for GrooveMap organization infrastructure and policy.",
+      "responsibilities": ["Manage organization infrastructure as code", "Hold private operational policy and encrypted configuration"],
+      "relationships": [
+        { "repository": "automation", "kind": "configures-organization-access-for" },
+        { "repository": "design", "kind": "consumes-sanitized-catalog-from" }
+      ],
+      "homepage": null,
+      "languages": ["HCL", "JavaScript", "Shell", "YAML"],
+      "topics": ["github", "groovemap", "infrastructure-as-code", "opentofu"],
+      "license": "MIT",
+      "commercial_license_available": false,
+      "release_units": ["unversioned infrastructure configuration"],
+      "destination_visibility": "private",
+      "publication_status": "private"
+    },
+    {
+      "name": "mcp-server",
+      "url": "https://github.com/groovemap-music/mcp-server",
+      "description": "Model Context Protocol integration exposing GrooveMap through the catalog API.",
+      "responsibilities": ["Expose catalog capabilities as MCP tools", "Translate MCP requests to catalog API calls"],
+      "relationships": [
+        { "repository": "catalog-api", "kind": "uses-api-from" },
+        { "repository": "deployment", "kind": "deployed-by" },
+        { "repository": "python-libraries", "kind": "uses-agent-tools-from" }
+      ],
+      "homepage": null,
+      "languages": ["Dockerfile", "Python", "Shell"],
+      "topics": ["ai", "integration", "mcp", "music", "python"],
+      "license": "MIT",
+      "commercial_license_available": false,
+      "release_units": ["container image", "Python package", "service distribution"],
+      "destination_visibility": "public",
+      "publication_status": "preparing"
+    },
+    {
+      "name": "musicbrainz-graph-enricher",
+      "url": "https://github.com/groovemap-music/musicbrainz-graph-enricher",
+      "description": "Consumes MusicBrainz events and enriches matched Neo4j entities.",
+      "responsibilities": ["Consume normalized MusicBrainz events", "Enrich matched graph entities and relationships"],
+      "relationships": [
+        { "repository": "catalog-ingestion", "kind": "consumes-events-from" },
+        { "repository": "database-schema", "kind": "uses-schema-from" },
+        { "repository": "deployment", "kind": "deployed-by" },
+        { "repository": "python-libraries", "kind": "uses-runtime-from" }
+      ],
+      "homepage": null,
+      "languages": ["Dockerfile", "Python", "Shell"],
+      "topics": ["knowledge-graph", "music", "neo4j", "python", "rabbitmq"],
+      "license": "MIT",
+      "commercial_license_available": false,
+      "release_units": ["container image", "service distribution"],
+      "destination_visibility": "public",
+      "publication_status": "preparing"
+    },
+    {
+      "name": "musicbrainz-sql-loader",
+      "url": "https://github.com/groovemap-music/musicbrainz-sql-loader",
+      "description": "Consumes MusicBrainz events and loads the complete dataset into PostgreSQL.",
+      "responsibilities": ["Consume normalized MusicBrainz events", "Load MusicBrainz data into relational tables"],
+      "relationships": [
+        { "repository": "catalog-ingestion", "kind": "consumes-events-from" },
+        { "repository": "database-schema", "kind": "uses-schema-from" },
+        { "repository": "deployment", "kind": "deployed-by" },
+        { "repository": "python-libraries", "kind": "uses-runtime-from" }
+      ],
+      "homepage": null,
+      "languages": ["Dockerfile", "Python", "Shell"],
+      "topics": ["etl", "music", "postgresql", "python", "rabbitmq"],
+      "license": "MIT",
+      "commercial_license_available": false,
+      "release_units": ["container image", "service distribution"],
+      "destination_visibility": "public",
+      "publication_status": "preparing"
+    },
+    {
+      "name": "operations-console",
+      "url": "https://github.com/groovemap-music/operations-console",
+      "description": "Privileged GrooveMap administration and monitoring web console.",
+      "responsibilities": ["Present operational health and data-quality views", "Proxy authenticated operator actions to the catalog API"],
+      "relationships": [
+        { "repository": "catalog-api", "kind": "uses-operator-api-from" },
+        { "repository": "deployment", "kind": "deployed-by" },
+        { "repository": "design", "kind": "uses-brand-assets-from" }
+      ],
+      "homepage": null,
+      "languages": ["CSS", "Dockerfile", "HTML", "JavaScript", "Python"],
+      "topics": ["administration", "monitoring", "operations", "python", "web"],
+      "license": "AGPL-3.0-only",
+      "commercial_license_available": true,
+      "release_units": ["container image", "web application distribution"],
+      "destination_visibility": "public",
+      "publication_status": "preparing"
+    },
+    {
+      "name": "operations-toolkit",
+      "url": "https://github.com/groovemap-music/operations-toolkit",
+      "description": "Queue, error, system, and deployment inspection command-line utilities.",
+      "responsibilities": ["Inspect queue and service health", "Provide observational operational diagnostics"],
+      "relationships": [
+        { "repository": "deployment", "kind": "operates" },
+        { "repository": "python-libraries", "kind": "uses-runtime-from" }
+      ],
+      "homepage": null,
+      "languages": ["Python", "Shell"],
+      "topics": ["cli", "monitoring", "operations", "python", "rabbitmq"],
+      "license": "MIT",
+      "commercial_license_available": false,
+      "release_units": ["Python command-line package"],
+      "destination_visibility": "public",
+      "publication_status": "preparing"
+    },
+    {
+      "name": "planning-archive",
+      "url": "https://github.com/groovemap-music/planning-archive",
+      "description": "Private archive of historical GrooveMap product planning and decision records.",
+      "responsibilities": ["Preserve historical planning records", "Preserve provenance and supersession metadata"],
+      "relationships": [{ "repository": "design", "kind": "separates-private-history-from" }],
+      "homepage": null,
+      "languages": ["JSON", "Markdown"],
+      "topics": ["archive", "decisions", "planning"],
+      "license": "NONE",
+      "commercial_license_available": false,
+      "release_units": ["unversioned historical documentation"],
+      "destination_visibility": "private",
+      "publication_status": "private"
+    },
+    {
+      "name": "python-libraries",
+      "url": "https://github.com/groovemap-music/python-libraries",
+      "description": "Versioned Python runtime, resilience, and agent-tool libraries shared by GrooveMap services.",
+      "responsibilities": ["Provide reusable runtime and resilience primitives", "Provide framework-neutral catalog agent tools"],
+      "relationships": [
+        { "repository": "catalog-api", "kind": "provides-libraries-to" },
+        { "repository": "mcp-server", "kind": "provides-agent-tools-to" }
+      ],
+      "homepage": null,
+      "languages": ["Python", "Shell"],
+      "topics": ["libraries", "python", "resilience", "runtime"],
+      "license": "MIT",
+      "commercial_license_available": false,
+      "release_units": ["groovemap-agent-tools Python package", "groovemap-runtime Python package"],
+      "destination_visibility": "public",
+      "publication_status": "preparing"
+    }
+  ]
+}
