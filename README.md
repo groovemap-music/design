@@ -23,3 +23,7 @@ Install the pinned tools with `just setup`, then run the credential-free `just c
 Pull requests and pushes to `main` use the reusable GrooveMap CI workflow pinned to an immutable automation commit. Dependabot opens ordinary pull requests, so dependency updates execute the same required job and complete validation graph as contributor pull requests; there is no actor-specific reduced path.
 
 The catalog schema is available at [`catalog/repositories.schema.json`](catalog/repositories.schema.json). Its contract is exercised with synthetic data in [`fixtures/catalog-valid.json`](fixtures/catalog-valid.json) and against the canonical catalog. Private operational metadata remains outside this repository.
+
+## Publication handoff
+
+The repository stays private until its separately reviewed infrastructure publication change. After a clean review commit, `just publication-readiness` repeats the complete gate and emits the exact commit and catalog SHA-256 that infrastructure must pin. See [PUBLICATION.md](PUBLICATION.md) for the handoff contract.

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 import assert from "node:assert/strict";
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -60,6 +60,15 @@ test("findExposureIssues detects private-boundary material without storing it", 
   assert.deepEqual(findExposureIssues(["discogs", "ography"].join("")), ["retired-project-name"]);
   assert.deepEqual(findExposureIssues(["/", "Users", "/operator/file"].join("")), ["host-local-path"]);
   assert.deepEqual(findExposureIssues("ordinary public design text"), []);
+});
+
+test("publication handoff implementation is local and non-mutating", () => {
+  const script = readFileSync(resolve(root, "scripts/publication-readiness.mjs"), "utf8");
+  assert.match(script, /publication_action_performed: false/);
+  assert.match(script, /git\("status", "--porcelain"/);
+  for (const forbidden of ["gh ", "tofu ", "git push", "visibility", "fetch(", "https.request"]) {
+    assert.equal(script.includes(forbidden), false, `publication handoff contains forbidden operation: ${forbidden}`);
+  }
 });
 
 test("catalog schema retains the exact public field boundary", () => {
