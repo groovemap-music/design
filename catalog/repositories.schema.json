@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://groovemap.music/schemas/repository-catalog-v1.json",
+  "title": "GrooveMap public repository catalog",
+  "description": "Public design facts only; private operational metadata belongs in the infrastructure overlay.",
+  "x-license": "MIT",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "repositories"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "repositories": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/repository" }
+    }
+  },
+  "$defs": {
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "url",
+        "description",
+        "responsibilities",
+        "relationships",
+        "homepage",
+        "languages",
+        "topics",
+        "license",
+        "commercial_license_available",
+        "release_units",
+        "destination_visibility",
+        "publication_status"
+      ],
+      "properties": {
+        "name": { "type": "string", "pattern": "^[a-z0-9][a-z0-9.-]*$" },
+        "url": { "type": "string", "format": "uri" },
+        "description": { "type": "string", "minLength": 1 },
+        "responsibilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "relationships": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["repository", "kind"],
+            "properties": {
+              "repository": { "type": "string", "pattern": "^[a-z0-9][a-z0-9.-]*$" },
+              "kind": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "homepage": { "type": ["string", "null"], "format": "uri" },
+        "languages": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "topics": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" }
+        },
+        "license": { "type": "string", "minLength": 1 },
+        "commercial_license_available": { "type": "boolean" },
+        "release_units": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "destination_visibility": { "enum": ["public", "private"] },
+        "publication_status": { "enum": ["private", "preparing", "public"] }
+      }
+    }
+  }
+}

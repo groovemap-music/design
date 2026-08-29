@@ -15,6 +15,8 @@ just brand
 
 The renderer uses only pinned Node.js standard-library APIs. Given the same tracked inputs it produces byte-identical source assets. Consumers that require PNG or ICO outputs should add an explicitly pinned rasterizer and retain the SVG originals as provenance.
 
+`assets.sha256` fixes the reviewed 12-file output set. `just brand` first renders in check mode and then verifies every output byte against that manifest.
+
 ## Font licensing
 
 The source monorepo contained Space Grotesk TTF files without an adjacent OFL or other font notice. Those binaries are intentionally **not** promoted here. Current SVGs request a system font stack and embed no font software. Space Grotesk may be added only with verified provenance, its required license text, and a deterministic pinned rendering toolchain.
