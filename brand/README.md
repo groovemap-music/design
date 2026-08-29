@@ -1,5 +1,7 @@
 # GrooveMap brand source
 
+See the infrastructure [documentation index](../docs/README.md) for design ownership.
+
 This directory owns the canonical editable GrooveMap brand. `tokens.json` and `templates/` are the sources; `assets/` contains deterministic rendered SVG, manifest, and CSS outputs. Change sources once, run `just brand-render`, review the diff, and promote only generated files to `.github`, the Pages site, applications, or documentation.
 
 The constellation-record geometry and Deep Space + Purple palette were migrated from the monorepo's `scripts/generate_brand_assets.py`. The product name and copy are now GrooveMap and `groovemap.music`.
