@@ -11,6 +11,7 @@ import { fileURLToPath } from "node:url";
 import {
   extractLinks,
   findExposureIssues,
+  trackedFiles,
   validateActionReference,
   validateCanonicalCatalog,
   validateCatalogContract,
@@ -60,6 +61,13 @@ test("findExposureIssues detects private-boundary material without storing it", 
   assert.deepEqual(findExposureIssues(["discogs", "ography"].join("")), ["retired-project-name"]);
   assert.deepEqual(findExposureIssues(["/", "Users", "/operator/file"].join("")), ["host-local-path"]);
   assert.deepEqual(findExposureIssues("ordinary public design text"), []);
+});
+
+test("validation input is the tracked publishable source tree", () => {
+  const files = trackedFiles();
+  assert.ok(files.includes(resolve(root, "scripts/validate.mjs")));
+  assert.equal(files.some((path) => path.includes("/.beads/")), false);
+  assert.equal(files.some((path) => path.includes("/.build/")), false);
 });
 
 test("publication handoff implementation is local and non-mutating", () => {
