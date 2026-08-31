@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 import { createHash } from "node:crypto";
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { dirname, extname, relative, resolve, sep } from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
@@ -90,15 +90,10 @@ const EXPOSURE_PATTERNS = [
   ["encrypted-operations", /(?:sops\.yaml|age1[ac-hj-np-z02-9]{20,})/i],
 ];
 
-function walk(directory) {
-  const files = [];
-  for (const entry of readdirSync(directory, { withFileTypes: true })) {
-    if ([".git", ".build", "coverage", "dist"].includes(entry.name)) continue;
-    const path = resolve(directory, entry.name);
-    if (entry.isDirectory()) files.push(...walk(path));
-    else if (entry.isFile()) files.push(path);
-  }
-  return files;
+export function trackedFiles(root = ROOT) {
+  const result = spawnSync("git", ["ls-files", "-z"], { cwd: root, encoding: "utf8" });
+  requireCondition(result.status === 0, `git ls-files failed: ${result.stderr.trim()}`);
+  return result.stdout.split("\0").filter(Boolean).map((path) => resolve(root, path));
 }
 
 function requireCondition(condition, message) {
@@ -166,7 +161,7 @@ function checkRequiredFiles() {
 }
 
 function checkLinks() {
-  for (const path of walk(ROOT).filter((item) => extname(item) === ".md")) {
+  for (const path of trackedFiles().filter((item) => extname(item) === ".md")) {
     for (const rawLink of extractLinks(readFileSync(path, "utf8"))) {
       const link = rawLink.replace(/^<|>$/g, "");
       if (/^(?:https?:|mailto:)/.test(link) || link.startsWith("#")) continue;
@@ -278,7 +273,7 @@ function checkDependencies() {
 }
 
 function checkPublicSafety() {
-  for (const path of walk(ROOT)) {
+  for (const path of trackedFiles()) {
     const content = readFileSync(path, "utf8");
     const issues = findExposureIssues(content);
     requireCondition(issues.length === 0, `${relative(ROOT, path)} contains prohibited public-boundary material: ${issues.join(", ")}`);
