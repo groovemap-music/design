@@ -73,6 +73,8 @@ test("validation input is the tracked publishable source tree", () => {
 test("publication handoff implementation is local and non-mutating", () => {
   const script = readFileSync(resolve(root, "scripts/publication-readiness.mjs"), "utf8");
   assert.match(script, /publication_action_performed: false/);
+  assert.match(script, /catalog_schema_version: catalog\.schema_version/);
+  assert.match(script, /catalog_source_repositories: catalogSourceRepositories/);
   assert.match(script, /git\("status", "--porcelain"/);
   for (const forbidden of ["gh ", "tofu ", "git push", "visibility", "fetch(", "https.request"]) {
     assert.equal(script.includes(forbidden), false, `publication handoff contains forbidden operation: ${forbidden}`);

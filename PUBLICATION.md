@@ -12,7 +12,8 @@ The command first runs the complete credential-free `just check` gate. That gate
 
 - the exact design commit;
 - the SHA-256 of `catalog/repositories.json`;
-- the catalog repository count and schema version; and
+- the catalog repository count and schema version;
+- the sorted source-owned ingestion repository identities; and
 - an explicit statement that no publication action was performed.
 
 Infrastructure must pin those values without copying private operational configuration into this repository. A later reviewer can regenerate the handoff from the same commit and compare it byte-for-byte before authorizing any visibility change.
