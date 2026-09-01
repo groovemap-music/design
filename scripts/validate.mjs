@@ -29,17 +29,18 @@ const EXPECTED_REPOSITORIES = [
   "analytics-engine",
   "automation",
   "catalog-api",
-  "catalog-ingestion",
   "database-schema",
   "deployment",
   "design",
   "discogs-graph-enricher",
+  "discogs-ingestion",
   "discogs-sql-loader",
   "graph-explorer",
   "groovemap-music.github.io",
   "infra",
   "mcp-server",
   "musicbrainz-graph-enricher",
+  "musicbrainz-ingestion",
   "musicbrainz-sql-loader",
   "operations-console",
   "operations-toolkit",
@@ -71,6 +72,7 @@ const REQUIRED_FILES = [
   "docs/adr/0002-shared-automation-boundary.md",
   "docs/adr/0003-agpl-commercial-licensing.md",
   "docs/adr/0004-beadhive-compatible-branch-policy.md",
+  "docs/adr/0005-source-owned-catalog-ingestion.md",
   "fixtures/catalog-valid.json",
   "scripts/build.mjs",
   "scripts/check-governance.mjs",
@@ -141,7 +143,7 @@ export function validateCanonicalCatalog(catalog) {
   const errors = [];
   const repositories = catalog?.repositories ?? [];
   const names = repositories.map((repository) => repository.name);
-  if (!sameValues(names, EXPECTED_REPOSITORIES)) errors.push("catalog must contain the exact 20-repository organization set");
+  if (!sameValues(names, EXPECTED_REPOSITORIES)) errors.push(`catalog must contain the exact ${EXPECTED_REPOSITORIES.length}-repository organization set`);
   if (JSON.stringify(names) !== JSON.stringify(sorted(names))) errors.push("catalog repositories must be sorted by name");
   if (new Set(names).size !== names.length) errors.push("catalog repository names must be unique");
   for (const repository of repositories) {
@@ -151,6 +153,33 @@ export function validateCanonicalCatalog(catalog) {
     }
     if (new Set(relationshipTargets.map((target, index) => `${target}:${repository.relationships[index].kind}`)).size !== repository.relationships.length) {
       errors.push(`${repository.name} has a duplicate relationship`);
+    }
+  }
+
+  const relationshipsFor = (name) => repositories.find((repository) => repository.name === name)?.relationships ?? [];
+  const hasRelationship = (name, target, kind) =>
+    relationshipsFor(name).some((relationship) => relationship.repository === target && relationship.kind === kind);
+  const sourceConsumers = {
+    "discogs-ingestion": ["discogs-graph-enricher", "discogs-sql-loader"],
+    "musicbrainz-ingestion": ["musicbrainz-graph-enricher", "musicbrainz-sql-loader"],
+  };
+  for (const [producer, consumers] of Object.entries(sourceConsumers)) {
+    for (const consumer of consumers) {
+      if (!hasRelationship(producer, consumer, "publishes-events-to")) errors.push(`${producer} must publish events to ${consumer}`);
+      if (!hasRelationship(consumer, producer, "consumes-events-from")) errors.push(`${consumer} must consume events from ${producer}`);
+    }
+  }
+  for (const [consumer, otherProducer] of [
+    ["discogs-graph-enricher", "musicbrainz-ingestion"],
+    ["discogs-sql-loader", "musicbrainz-ingestion"],
+    ["musicbrainz-graph-enricher", "discogs-ingestion"],
+    ["musicbrainz-sql-loader", "discogs-ingestion"],
+  ]) {
+    if (hasRelationship(consumer, otherProducer, "consumes-events-from")) errors.push(`${consumer} must not consume events from ${otherProducer}`);
+  }
+  for (const composer of ["catalog-api", "operations-console", "operations-toolkit"]) {
+    for (const producer of Object.keys(sourceConsumers)) {
+      if (!hasRelationship(composer, producer, "composes-contract-from")) errors.push(`${composer} must compose the contract from ${producer}`);
     }
   }
   return errors;

@@ -73,6 +73,8 @@ test("validation input is the tracked publishable source tree", () => {
 test("publication handoff implementation is local and non-mutating", () => {
   const script = readFileSync(resolve(root, "scripts/publication-readiness.mjs"), "utf8");
   assert.match(script, /publication_action_performed: false/);
+  assert.match(script, /catalog_schema_version: catalog\.schema_version/);
+  assert.match(script, /catalog_source_repositories: catalogSourceRepositories/);
   assert.match(script, /git\("status", "--porcelain"/);
   for (const forbidden of ["gh ", "tofu ", "git push", "visibility", "fetch(", "https.request"]) {
     assert.equal(script.includes(forbidden), false, `publication handoff contains forbidden operation: ${forbidden}`);
@@ -83,9 +85,13 @@ test("catalog schema retains the exact public field boundary", () => {
   assert.deepEqual(validateCatalogContract(schema), []);
 });
 
-test("canonical catalog contains the exact sorted 20-repository set", () => {
+test("canonical catalog contains the exact sorted 21-repository set and source-owned ingestion relationships", () => {
   assert.deepEqual(validateCanonicalCatalog(catalog), []);
-  assert.equal(catalog.repositories.length, 20);
+  assert.equal(catalog.repositories.length, 21);
+  assert.equal(catalog.repositories.some((repository) => repository.name === "catalog-ingestion"), false);
+  for (const producer of ["discogs-ingestion", "musicbrainz-ingestion"]) {
+    assert.ok(catalog.repositories.some((repository) => repository.name === producer));
+  }
 });
 
 test("catalog schema rejects private operational metadata fields", async (t) => {
