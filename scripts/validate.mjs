@@ -71,6 +71,7 @@ const REQUIRED_FILES = [
   "docs/adr/0002-shared-automation-boundary.md",
   "docs/adr/0003-agpl-commercial-licensing.md",
   "docs/adr/0004-beadhive-compatible-branch-policy.md",
+  "docs/adr/0005-source-owned-catalog-ingestion.md",
   "fixtures/catalog-valid.json",
   "scripts/build.mjs",
   "scripts/check-governance.mjs",
