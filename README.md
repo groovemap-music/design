@@ -2,7 +2,7 @@
 
 This repository owns GrooveMap's canonical brand sources, generated brand assets, public architecture decisions, and sanitized repository catalog. The editable design tokens and SVG templates live in [`brand/`](brand/); applications and documentation consume the generated assets rather than maintaining independent copies.
 
-The [`catalog/repositories.json`](catalog/repositories.json) catalog describes the public responsibilities and relationships of all 20 organization repositories. Its deliberately narrow schema excludes provider identifiers, access policy, secret distribution, source-extraction paths, and other operational configuration. Public architecture decisions are indexed in [`docs/`](docs/README.md).
+The [`catalog/repositories.json`](catalog/repositories.json) catalog describes the public responsibilities and relationships of all 21 organization repositories. Its deliberately narrow schema excludes provider identifiers, access policy, secret distribution, source-extraction paths, and other operational configuration. Public architecture decisions are indexed in [`docs/`](docs/README.md).
 
 ## Licensing and identity
 

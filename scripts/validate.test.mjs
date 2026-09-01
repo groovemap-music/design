@@ -83,9 +83,13 @@ test("catalog schema retains the exact public field boundary", () => {
   assert.deepEqual(validateCatalogContract(schema), []);
 });
 
-test("canonical catalog contains the exact sorted 20-repository set", () => {
+test("canonical catalog contains the exact sorted 21-repository set and source-owned ingestion relationships", () => {
   assert.deepEqual(validateCanonicalCatalog(catalog), []);
-  assert.equal(catalog.repositories.length, 20);
+  assert.equal(catalog.repositories.length, 21);
+  assert.equal(catalog.repositories.some((repository) => repository.name === "catalog-ingestion"), false);
+  for (const producer of ["discogs-ingestion", "musicbrainz-ingestion"]) {
+    assert.ok(catalog.repositories.some((repository) => repository.name === producer));
+  }
 });
 
 test("catalog schema rejects private operational metadata fields", async (t) => {

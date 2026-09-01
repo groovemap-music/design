@@ -59,6 +59,8 @@
         { "repository": "analytics-engine", "kind": "consumes-analytics-from" },
         { "repository": "database-schema", "kind": "uses-schema-from" },
         { "repository": "deployment", "kind": "deployed-by" },
+        { "repository": "discogs-ingestion", "kind": "composes-contract-from" },
+        { "repository": "musicbrainz-ingestion", "kind": "composes-contract-from" },
         { "repository": "python-libraries", "kind": "uses-libraries-from" }
       ],
       "homepage": "https://groovemap.music/",
@@ -67,26 +69,6 @@
       "license": "AGPL-3.0-only",
       "commercial_license_available": true,
       "release_units": ["container image", "operator command-line tools", "service distribution"],
-      "destination_visibility": "public",
-      "publication_status": "preparing"
-    },
-    {
-      "name": "catalog-ingestion",
-      "url": "https://github.com/groovemap-music/catalog-ingestion",
-      "description": "Downloads, parses, normalizes, and publishes Discogs and MusicBrainz datasets.",
-      "responsibilities": ["Acquire source datasets", "Publish normalized catalog events"],
-      "relationships": [
-        { "repository": "discogs-graph-enricher", "kind": "publishes-events-to" },
-        { "repository": "discogs-sql-loader", "kind": "publishes-events-to" },
-        { "repository": "musicbrainz-graph-enricher", "kind": "publishes-events-to" },
-        { "repository": "musicbrainz-sql-loader", "kind": "publishes-events-to" }
-      ],
-      "homepage": null,
-      "languages": ["Dockerfile", "Rust", "Shell"],
-      "topics": ["etl", "ingestion", "music", "rabbitmq", "rust"],
-      "license": "MIT",
-      "commercial_license_available": false,
-      "release_units": ["command-line binaries", "container images"],
       "destination_visibility": "public",
       "publication_status": "preparing"
     },
@@ -151,9 +133,9 @@
       "description": "Consumes Discogs events and constructs the Neo4j music knowledge graph.",
       "responsibilities": ["Consume normalized catalog events", "Build Discogs-derived graph entities and relationships"],
       "relationships": [
-        { "repository": "catalog-ingestion", "kind": "consumes-events-from" },
         { "repository": "database-schema", "kind": "uses-schema-from" },
         { "repository": "deployment", "kind": "deployed-by" },
+        { "repository": "discogs-ingestion", "kind": "consumes-events-from" },
         { "repository": "python-libraries", "kind": "uses-runtime-from" }
       ],
       "homepage": null,
@@ -166,14 +148,32 @@
       "publication_status": "preparing"
     },
     {
+      "name": "discogs-ingestion",
+      "url": "https://github.com/groovemap-music/discogs-ingestion",
+      "description": "Downloads, parses, normalizes, and publishes the Discogs dataset.",
+      "responsibilities": ["Acquire and normalize Discogs data", "Own and publish the Discogs event contract"],
+      "relationships": [
+        { "repository": "discogs-graph-enricher", "kind": "publishes-events-to" },
+        { "repository": "discogs-sql-loader", "kind": "publishes-events-to" }
+      ],
+      "homepage": null,
+      "languages": ["Dockerfile", "Rust", "Shell"],
+      "topics": ["discogs", "etl", "ingestion", "rabbitmq", "rust"],
+      "license": "MIT",
+      "commercial_license_available": false,
+      "release_units": ["command-line binary", "container image", "Discogs event contract"],
+      "destination_visibility": "public",
+      "publication_status": "preparing"
+    },
+    {
       "name": "discogs-sql-loader",
       "url": "https://github.com/groovemap-music/discogs-sql-loader",
       "description": "Consumes Discogs events and builds PostgreSQL analytical tables.",
       "responsibilities": ["Consume normalized catalog events", "Build Discogs-derived relational tables"],
       "relationships": [
-        { "repository": "catalog-ingestion", "kind": "consumes-events-from" },
         { "repository": "database-schema", "kind": "uses-schema-from" },
         { "repository": "deployment", "kind": "deployed-by" },
+        { "repository": "discogs-ingestion", "kind": "consumes-events-from" },
         { "repository": "python-libraries", "kind": "uses-runtime-from" }
       ],
       "homepage": null,
@@ -262,9 +262,9 @@
       "description": "Consumes MusicBrainz events and enriches matched Neo4j entities.",
       "responsibilities": ["Consume normalized MusicBrainz events", "Enrich matched graph entities and relationships"],
       "relationships": [
-        { "repository": "catalog-ingestion", "kind": "consumes-events-from" },
         { "repository": "database-schema", "kind": "uses-schema-from" },
         { "repository": "deployment", "kind": "deployed-by" },
+        { "repository": "musicbrainz-ingestion", "kind": "consumes-events-from" },
         { "repository": "python-libraries", "kind": "uses-runtime-from" }
       ],
       "homepage": null,
@@ -277,14 +277,33 @@
       "publication_status": "preparing"
     },
     {
+      "name": "musicbrainz-ingestion",
+      "url": "https://github.com/groovemap-music/musicbrainz-ingestion",
+      "description": "Downloads, parses, normalizes, and publishes the MusicBrainz dataset.",
+      "responsibilities": ["Acquire and normalize MusicBrainz data", "Own and publish the MusicBrainz event contract"],
+      "relationships": [
+        { "repository": "discogs-ingestion", "kind": "coordinates-after" },
+        { "repository": "musicbrainz-graph-enricher", "kind": "publishes-events-to" },
+        { "repository": "musicbrainz-sql-loader", "kind": "publishes-events-to" }
+      ],
+      "homepage": null,
+      "languages": ["Dockerfile", "Rust", "Shell"],
+      "topics": ["etl", "ingestion", "musicbrainz", "rabbitmq", "rust"],
+      "license": "MIT",
+      "commercial_license_available": false,
+      "release_units": ["command-line binary", "container image", "MusicBrainz event contract"],
+      "destination_visibility": "public",
+      "publication_status": "preparing"
+    },
+    {
       "name": "musicbrainz-sql-loader",
       "url": "https://github.com/groovemap-music/musicbrainz-sql-loader",
       "description": "Consumes MusicBrainz events and loads the complete dataset into PostgreSQL.",
       "responsibilities": ["Consume normalized MusicBrainz events", "Load MusicBrainz data into relational tables"],
       "relationships": [
-        { "repository": "catalog-ingestion", "kind": "consumes-events-from" },
         { "repository": "database-schema", "kind": "uses-schema-from" },
         { "repository": "deployment", "kind": "deployed-by" },
+        { "repository": "musicbrainz-ingestion", "kind": "consumes-events-from" },
         { "repository": "python-libraries", "kind": "uses-runtime-from" }
       ],
       "homepage": null,
@@ -304,7 +323,9 @@
       "relationships": [
         { "repository": "catalog-api", "kind": "uses-operator-api-from" },
         { "repository": "deployment", "kind": "deployed-by" },
-        { "repository": "design", "kind": "uses-brand-assets-from" }
+        { "repository": "design", "kind": "uses-brand-assets-from" },
+        { "repository": "discogs-ingestion", "kind": "composes-contract-from" },
+        { "repository": "musicbrainz-ingestion", "kind": "composes-contract-from" }
       ],
       "homepage": null,
       "languages": ["CSS", "Dockerfile", "HTML", "JavaScript", "Python"],
@@ -322,6 +343,8 @@
       "responsibilities": ["Inspect queue and service health", "Provide observational operational diagnostics"],
       "relationships": [
         { "repository": "deployment", "kind": "operates" },
+        { "repository": "discogs-ingestion", "kind": "composes-contract-from" },
+        { "repository": "musicbrainz-ingestion", "kind": "composes-contract-from" },
         { "repository": "python-libraries", "kind": "uses-runtime-from" }
       ],
       "homepage": null,

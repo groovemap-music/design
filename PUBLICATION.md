@@ -8,7 +8,7 @@ Run the handoff from a clean reviewed commit:
 just publication-readiness
 ```
 
-The command first runs the complete credential-free `just check` gate. That gate verifies local links, the canonical 20-repository catalog and its closed schema, public-content safety, deterministic brand rendering, byte identity of reviewed assets, licensing, packaging, and both worktree and full-history secret scans. It then prints a JSON handoff containing:
+The command first runs the complete credential-free `just check` gate. That gate verifies local links, the canonical 21-repository catalog and its closed schema, public-content safety, deterministic brand rendering, byte identity of reviewed assets, licensing, packaging, and both worktree and full-history secret scans. It then prints a JSON handoff containing:
 
 - the exact design commit;
 - the SHA-256 of `catalog/repositories.json`;
