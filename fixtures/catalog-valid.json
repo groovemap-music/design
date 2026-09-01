@@ -2,6 +2,23 @@
   "schema_version": 1,
   "repositories": [
     {
+      "name": "example-consumer",
+      "url": "https://github.com/example/example-consumer",
+      "description": "Synthetic consumer used to test public source-owned relationships.",
+      "responsibilities": ["Compose a synthetic producer contract"],
+      "relationships": [
+        { "repository": "example-repository", "kind": "composes-contract-from" }
+      ],
+      "homepage": null,
+      "languages": ["JavaScript"],
+      "topics": ["synthetic-fixture"],
+      "license": "MIT",
+      "commercial_license_available": false,
+      "release_units": ["source"],
+      "destination_visibility": "public",
+      "publication_status": "preparing"
+    },
+    {
       "name": "example-repository",
       "url": "https://github.com/example/example-repository",
       "description": "Synthetic repository used only to test the public catalog schema.",

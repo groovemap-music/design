@@ -6,3 +6,4 @@ These records describe stable, public boundaries for the GrooveMap organization.
 - [ADR 0002: Shared automation boundary](adr/0002-shared-automation-boundary.md)
 - [ADR 0003: AGPL and commercial licensing model](adr/0003-agpl-commercial-licensing.md)
 - [ADR 0004: Beadhive-compatible branch policy](adr/0004-beadhive-compatible-branch-policy.md)
+- [ADR 0005: Source-owned catalog ingestion repositories](adr/0005-source-owned-catalog-ingestion.md)

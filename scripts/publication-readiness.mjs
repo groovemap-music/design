@@ -20,8 +20,13 @@ if (status !== "") throw new Error("publication readiness requires a clean revie
 
 const catalogBytes = readFileSync(resolve(root, "catalog/repositories.json"));
 const catalog = JSON.parse(catalogBytes.toString("utf8"));
-if (catalog.schema_version !== 1 || catalog.repositories.length !== 20) {
+if (catalog.schema_version !== 1 || catalog.repositories.length !== 21) {
   throw new Error("catalog identity changed after validation");
+}
+const catalogSourceRepositories = ["discogs-ingestion", "musicbrainz-ingestion"];
+const catalogRepositoryNames = new Set(catalog.repositories.map((repository) => repository.name));
+if (!catalogSourceRepositories.every((repository) => catalogRepositoryNames.has(repository)) || catalogRepositoryNames.has("catalog-ingestion")) {
+  throw new Error("source-owned catalog ingestion identity changed after validation");
 }
 
 const handoff = {
@@ -29,7 +34,9 @@ const handoff = {
   design_commit: git("rev-parse", "HEAD"),
   catalog_path: "catalog/repositories.json",
   catalog_sha256: createHash("sha256").update(catalogBytes).digest("hex"),
+  catalog_schema_version: catalog.schema_version,
   catalog_repository_count: catalog.repositories.length,
+  catalog_source_repositories: catalogSourceRepositories,
   publication_action_performed: false,
 };
 
