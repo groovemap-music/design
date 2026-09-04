@@ -1,0 +1,63 @@
+{
+  "name": "discogs-non-object-entries",
+  "provider": "discogs",
+  "description": "Format entries that are not plain objects (null, an array, a string, a number) are skipped entirely, without recording anything under unmapped; a valid sibling entry still maps normally.",
+  "input": {
+    "formats": [
+      null,
+      ["Vinyl"],
+      "Vinyl",
+      12,
+      {
+        "name": "Vinyl",
+        "qty": "1",
+        "descriptions": {
+          "description": [
+            "12\"",
+            "Album"
+          ]
+        }
+      }
+    ]
+  },
+  "expected": {
+    "taxonomy_version": "1",
+    "items": [
+      {
+        "family": "vinyl",
+        "medium": "vinyl_12",
+        "qty": 1,
+        "size_inches": 12,
+        "speed_rpm": null,
+        "channels": null,
+        "codec": null,
+        "variants": [],
+        "appearance": [],
+        "position": null,
+        "track_count": null,
+        "source": {
+          "provider": "discogs",
+          "name": "Vinyl",
+          "descriptions": [
+            "12\"",
+            "Album"
+          ],
+          "text": null
+        }
+      }
+    ],
+    "families": [
+      "vinyl"
+    ],
+    "release_kind": "album",
+    "traits": [],
+    "edition": [],
+    "packaging": null,
+    "container": null,
+    "flags": [],
+    "unmapped": {
+      "formats": [],
+      "descriptions": []
+    }
+  }
+}
