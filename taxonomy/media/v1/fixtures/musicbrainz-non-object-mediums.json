@@ -1,0 +1,56 @@
+{
+  "name": "musicbrainz-non-object-mediums",
+  "provider": "musicbrainz",
+  "description": "Medium entries that are not plain objects (null, an array, a string, a number) are skipped entirely, without recording anything under unmapped; a valid sibling medium still maps normally.",
+  "input": {
+    "media": [
+      null,
+      ["CD"],
+      "CD",
+      7,
+      {
+        "format": "12\" Vinyl",
+        "position": 1,
+        "title": "",
+        "track_count": 4
+      }
+    ]
+  },
+  "expected": {
+    "taxonomy_version": "1",
+    "items": [
+      {
+        "family": "vinyl",
+        "medium": "vinyl_12",
+        "qty": 1,
+        "size_inches": 12,
+        "speed_rpm": null,
+        "channels": null,
+        "codec": null,
+        "variants": [],
+        "appearance": [],
+        "position": 1,
+        "track_count": 4,
+        "source": {
+          "provider": "musicbrainz",
+          "name": "12\" Vinyl",
+          "descriptions": [],
+          "text": null
+        }
+      }
+    ],
+    "families": [
+      "vinyl"
+    ],
+    "release_kind": null,
+    "traits": [],
+    "edition": [],
+    "packaging": null,
+    "container": null,
+    "flags": [],
+    "unmapped": {
+      "formats": [],
+      "descriptions": []
+    }
+  }
+}

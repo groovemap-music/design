@@ -1,0 +1,75 @@
+{
+  "name": "discogs-prototype-key-names",
+  "provider": "discogs",
+  "description": "Format and description names that collide with inherited Object.prototype members (constructor, __proto__, toString, hasOwnProperty) must be looked up as own properties of the vocabulary maps, so an unknown name lands in unmapped instead of silently resolving to the inherited value.",
+  "input": {
+    "formats": [
+      {
+        "name": "constructor",
+        "qty": "1"
+      },
+      {
+        "name": "__proto__",
+        "qty": "1"
+      },
+      {
+        "name": "Vinyl",
+        "qty": "1",
+        "descriptions": {
+          "description": [
+            "toString",
+            "hasOwnProperty",
+            "12\""
+          ]
+        }
+      }
+    ]
+  },
+  "expected": {
+    "taxonomy_version": "1",
+    "items": [
+      {
+        "family": "vinyl",
+        "medium": "vinyl_12",
+        "qty": 1,
+        "size_inches": 12,
+        "speed_rpm": null,
+        "channels": null,
+        "codec": null,
+        "variants": [],
+        "appearance": [],
+        "position": null,
+        "track_count": null,
+        "source": {
+          "provider": "discogs",
+          "name": "Vinyl",
+          "descriptions": [
+            "toString",
+            "hasOwnProperty",
+            "12\""
+          ],
+          "text": null
+        }
+      }
+    ],
+    "families": [
+      "vinyl"
+    ],
+    "release_kind": null,
+    "traits": [],
+    "edition": [],
+    "packaging": null,
+    "container": null,
+    "flags": [],
+    "unmapped": {
+      "formats": [
+        "__proto__",
+        "constructor"
+      ],
+      "descriptions": [
+        "hasOwnProperty",
+        "toString"
+      ]
+    }
+  }
+}

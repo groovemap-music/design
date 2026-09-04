@@ -8,8 +8,34 @@ const ITEM_ATTRIBUTES = new Set(["size_inches", "speed_rpm", "channels", "codec"
 const ITEM_LISTS = { variant: "variants", appearance: "appearance" };
 const RELEASE_LISTS = { trait: "traits", edition: "edition", flag: "flags" };
 
+function compareByCodePoint(left, right) {
+  const leftPoints = Array.from(left);
+  const rightPoints = Array.from(right);
+  const length = Math.min(leftPoints.length, rightPoints.length);
+  for (let index = 0; index < length; index += 1) {
+    const difference = leftPoints[index].codePointAt(0) - rightPoints[index].codePointAt(0);
+    if (difference !== 0) return difference;
+  }
+  return leftPoints.length - rightPoints.length;
+}
+
 function sortedUnique(values) {
-  return [...new Set(values)].sort((left, right) => (left < right ? -1 : left > right ? 1 : 0));
+  return [...new Set(values)].sort(compareByCodePoint);
+}
+
+// Own-property lookup for a vocabulary map: a plain object keyed by upstream
+// names we do not control (Discogs/MusicBrainz strings). Bracket access alone
+// would resolve inherited names like "constructor" or the "__proto__" setter
+// to a truthy, non-undefined value from Object.prototype, so a genuinely
+// unmapped name would silently fall through instead of landing in `unmapped`.
+function ownGet(map, key) {
+  return Object.hasOwn(map, key) ? map[key] : undefined;
+}
+
+// A format/medium entry must be a plain object: not null, not an array, and
+// not a bare string or number standing in for one.
+function isPlainEntry(value) {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 function index(taxonomy) {
@@ -65,7 +91,7 @@ function finishItem(item, lookup) {
   if (item.medium && !item.family) item.family = lookup.media.get(item.medium).family;
   if (!item.medium) {
     const family = lookup.families.get(item.family);
-    const resolved = family.resolve ? family.resolve.map[String(item[family.resolve.attribute])] : undefined;
+    const resolved = family.resolve ? ownGet(family.resolve.map, String(item[family.resolve.attribute])) : undefined;
     item.medium = resolved ?? `${item.family}_unspecified`;
   }
   const defaults = lookup.media.get(item.medium).defaults;
@@ -100,11 +126,11 @@ export function mapDiscogsFormats(taxonomy, formats) {
   const lookup = index(taxonomy);
   const block = emptyBlock(taxonomy);
   for (const format of Array.isArray(formats) ? formats : []) {
-    if (format === null || typeof format !== "object") continue;
+    if (!isPlainEntry(format)) continue;
     const name = typeof format.name === "string" ? format.name : null;
     const descriptions = flattenDescriptions(format.descriptions);
     const text = typeof format.text === "string" ? format.text : null;
-    const entry = name === null ? undefined : taxonomy.discogs.formats[name];
+    const entry = name === null ? undefined : ownGet(taxonomy.discogs.formats, name);
     let item = null;
     if (entry === undefined) {
       if (name !== null) block.unmapped.formats.push(name);
@@ -113,7 +139,7 @@ export function mapDiscogsFormats(taxonomy, formats) {
       if (item) item.qty = parseQty(format.qty);
     }
     for (const description of descriptions) {
-      const rule = taxonomy.discogs.descriptions[description];
+      const rule = ownGet(taxonomy.discogs.descriptions, description);
       if (rule === undefined) {
         block.unmapped.descriptions.push(description);
         continue;
@@ -140,7 +166,7 @@ export function mapMusicBrainzRelease(taxonomy, release) {
   const block = emptyBlock(taxonomy);
   const media = Array.isArray(release?.media) ? release.media : [];
   for (const medium of media) {
-    if (medium === null || typeof medium !== "object") continue;
+    if (!isPlainEntry(medium)) continue;
     const name = typeof medium.format === "string" && medium.format !== "" ? medium.format : null;
     const item = newItem("musicbrainz", name, [], null);
     item.position = Number.isInteger(medium.position) ? medium.position : null;
@@ -148,7 +174,7 @@ export function mapMusicBrainzRelease(taxonomy, release) {
     if (name === null) {
       item.medium = "other_unspecified";
     } else {
-      const entry = taxonomy.musicbrainz.formats[name];
+      const entry = ownGet(taxonomy.musicbrainz.formats, name);
       if (entry === undefined) {
         block.unmapped.formats.push(name);
         continue;
@@ -159,25 +185,25 @@ export function mapMusicBrainzRelease(taxonomy, release) {
   }
   const status = release?.status;
   if (typeof status === "string") {
-    const edition = taxonomy.musicbrainz.status[status];
+    const edition = ownGet(taxonomy.musicbrainz.status, status);
     if (edition === undefined) block.unmapped.descriptions.push(status);
     else if (edition !== null) block.edition.push(edition);
   }
   const packaging = release?.packaging;
   if (typeof packaging === "string") {
-    const mapped = taxonomy.musicbrainz.packaging[packaging];
+    const mapped = ownGet(taxonomy.musicbrainz.packaging, packaging);
     if (mapped === undefined) block.unmapped.descriptions.push(packaging);
     else block.packaging = mapped;
   }
   const group = release?.release_group ?? {};
   if (typeof group.primary_type === "string") {
-    const kind = taxonomy.musicbrainz.primary_types[group.primary_type];
+    const kind = ownGet(taxonomy.musicbrainz.primary_types, group.primary_type);
     if (kind === undefined) block.unmapped.descriptions.push(group.primary_type);
     else block.release_kind = kind;
   }
   for (const secondary of Array.isArray(group.secondary_types) ? group.secondary_types : []) {
     if (typeof secondary !== "string") continue;
-    const trait = taxonomy.musicbrainz.secondary_types[secondary];
+    const trait = ownGet(taxonomy.musicbrainz.secondary_types, secondary);
     if (trait === undefined) block.unmapped.descriptions.push(secondary);
     else block.traits.push(trait);
   }

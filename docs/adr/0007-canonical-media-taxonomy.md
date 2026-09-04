@@ -206,3 +206,10 @@ The vocabulary is authoritative; these rules explain the choices it encodes.
   `text` field: appearance on the item; the text is kept verbatim in `source.text`.
 - **Unknown values**: kept in `unmapped.formats` or `unmapped.descriptions`. A release whose
   only format is unknown has no items and an empty families list.
+- **Malformed entries**: a format or medium entry that is not a plain object (`null`, an
+  array, a string, a number) is skipped and contributes nothing, not even to `unmapped` — it
+  never named a format or medium. A well-formed entry whose name happens to collide with an
+  inherited `Object.prototype` member (`constructor`, `toString`, `hasOwnProperty`,
+  `__proto__`) is looked up as an own property of the vocabulary map, so it still lands in
+  `unmapped` like any other unknown name, rather than silently resolving to the inherited
+  value.
