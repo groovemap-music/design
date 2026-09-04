@@ -74,6 +74,7 @@ const REQUIRED_FILES = [
   "docs/adr/0004-beadhive-compatible-branch-policy.md",
   "docs/adr/0005-source-owned-catalog-ingestion.md",
   "docs/adr/0006-opentelemetry-metrics.md",
+  "docs/adr/0007-canonical-media-taxonomy.md",
   "fixtures/catalog-valid.json",
   "scripts/build.mjs",
   "scripts/check-governance.mjs",

@@ -8,3 +8,4 @@ These records describe stable, public boundaries for the GrooveMap organization.
 - [ADR 0004: Beadhive-compatible branch policy](adr/0004-beadhive-compatible-branch-policy.md)
 - [ADR 0005: Source-owned catalog ingestion repositories](adr/0005-source-owned-catalog-ingestion.md)
 - [ADR 0006: OpenTelemetry metrics and Grafana dashboards](adr/0006-opentelemetry-metrics.md)
+- [ADR 0007: Canonical media taxonomy and media-neutral product core](adr/0007-canonical-media-taxonomy.md)
