@@ -28,7 +28,8 @@ record that revision in its initial provenance.
 Each producer owns its source-specific acquisition, parsing, normalization, orchestration,
 tests, contract manifest, generated bindings, deterministic fixtures, image, and release.
 `discogs-ingestion` owns the Discogs extraction rules. `musicbrainz-ingestion` owns the
-MusicBrainz-to-Discogs health coordination behavior.
+MusicBrainz extraction rules. (Superseded 2026-09-04: see Amendments — the two producers do
+not coordinate with each other.)
 
 ```mermaid
 flowchart LR
@@ -36,7 +37,6 @@ flowchart LR
     D -->|Discogs v1 events| DS[discogs-sql-loader]
     M[musicbrainz-ingestion] -->|MusicBrainz v1 events| MG[musicbrainz-graph-enricher]
     M -->|MusicBrainz v1 events| MS[musicbrainz-sql-loader]
-    D -. health advisory .-> M
 ```
 
 ### Frozen compatibility boundary
@@ -73,11 +73,8 @@ A file remains complete only after its `file_complete` event is broker-accepted.
 extraction remains complete only after every file succeeds and `extraction_complete` is
 broker-accepted. Producer completion must continue to precede the durable completed marker.
 
-Before every initial, periodic, or triggered MusicBrainz run, MusicBrainz continues to poll
-Discogs health. A `running` response delays the run; idle, waiting, completed, or failed
-allows it. Unreachable health retries ten times with escalating delay from five seconds up
-to five minutes and then fails open; an unparseable response fails open immediately. All
-waits remain shutdown-aware. This is scheduling preference, not distributed exclusion.
+(Superseded 2026-09-04: see Amendments. MusicBrainz no longer polls Discogs health before a
+run; the two extractors run concurrently and independently.)
 
 ### Cutover and rollback
 
@@ -111,3 +108,26 @@ Consumers promote artifacts only from their matching producer, while services th
 the full catalog can pin both source contracts explicitly. Compatibility is intentionally
 conservative during the split; future breaking changes require a new contract version and a
 coordinated producer/consumer rollout.
+
+## Amendments
+
+### 2026-09-04: MusicBrainz-to-Discogs health advisory dropped
+
+The original decision gave `musicbrainz-ingestion` a MusicBrainz-to-Discogs health
+coordination behavior: before every initial, periodic, or triggered run, MusicBrainz would
+poll Discogs's `/health` endpoint and delay its own run while Discogs reported `running`.
+That coordination was dropped at the split and never shipped: `musicbrainz-ingestion`
+v0.2.1 has no `DISCOGS_HEALTH_URL` configuration, and deployment's cutover tests assert
+that no cross-source health polling is wired between the two extractors.
+
+The two extractors run concurrently and independently, with no health advisory or
+scheduling coordination between them. This is safe because the split left no shared state
+for the advisory to protect: each producer owns its own source data, markers, exchanges,
+queues, and consumers outright, so a concurrent Discogs run cannot corrupt or race
+MusicBrainz's extraction, or vice versa. The advisory existed only while both sources lived
+in the same repository and shared implicit assumptions about run ordering; once ownership
+split cleanly, there was nothing left for it to serialize against.
+
+The mermaid diagram edge `D -. health advisory .-> M` and the "MusicBrainz continues to
+poll Discogs health" paragraph above are superseded by this amendment and should be read as
+historical context only, not current behavior.
