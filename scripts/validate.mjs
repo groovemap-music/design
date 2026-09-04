@@ -77,6 +77,7 @@ const REQUIRED_FILES = [
   "docs/adr/0005-source-owned-catalog-ingestion.md",
   "docs/adr/0006-opentelemetry-metrics.md",
   "docs/adr/0007-canonical-media-taxonomy.md",
+  "docs/programs/media-taxonomy.md",
   "fixtures/catalog-valid.json",
   "scripts/build.mjs",
   "scripts/check-governance.mjs",

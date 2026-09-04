@@ -9,3 +9,7 @@ These records describe stable, public boundaries for the GrooveMap organization.
 - [ADR 0005: Source-owned catalog ingestion repositories](adr/0005-source-owned-catalog-ingestion.md)
 - [ADR 0006: OpenTelemetry metrics and Grafana dashboards](adr/0006-opentelemetry-metrics.md)
 - [ADR 0007: Canonical media taxonomy and media-neutral product core](adr/0007-canonical-media-taxonomy.md)
+
+## Program rollout plans
+
+- [Media-taxonomy program rollout](programs/media-taxonomy.md) delivers ADR 0007 across the organization in five waves.
