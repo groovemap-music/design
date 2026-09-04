@@ -182,7 +182,7 @@ test("standards validator rejects every declared catalog constraint", async (t) 
 });
 
 import { validateFixtureSet } from "./validate.mjs";
-import { flattenDescriptions, mapDiscogsFormats, mapMusicBrainzRelease, validateTaxonomy } from "./media-mapper.mjs";
+import { flattenDescriptions, mapDiscogsFormats, mapFixtureInput, mapMusicBrainzRelease, validateTaxonomy } from "./media-mapper.mjs";
 import taxonomy from "../taxonomy/media/v1/media-taxonomy.json" with { type: "json" };
 
 const fixtureDirectory = resolve(root, "taxonomy/media/v1/fixtures");
@@ -304,6 +304,33 @@ test("conformance fixtures agree with the reference mapper and cover the require
   drifted[0].expected.families = ["other"];
   assert.ok(validateFixtureSet(taxonomy, drifted).some((error) => error.includes("differs from the reference mapper")));
   assert.ok(validateFixtureSet(taxonomy, fixtures.slice(0, 1)).some((error) => error.includes("required conformance fixture is missing")));
+});
+
+test("non-object format and medium entries are skipped without recording unmapped values", () => {
+  const discogsFixture = fixtures.find((entry) => entry.name === "discogs-non-object-entries");
+  const musicbrainzFixture = fixtures.find((entry) => entry.name === "musicbrainz-non-object-mediums");
+  assert.deepEqual(mapFixtureInput(taxonomy, discogsFixture), discogsFixture.expected);
+  assert.equal(discogsFixture.expected.items.length, 1);
+  assert.equal(discogsFixture.expected.items[0].medium, "vinyl_12");
+  assert.deepEqual(discogsFixture.expected.unmapped, { formats: [], descriptions: [] });
+  assert.deepEqual(mapFixtureInput(taxonomy, musicbrainzFixture), musicbrainzFixture.expected);
+  assert.equal(musicbrainzFixture.expected.items.length, 1);
+  assert.equal(musicbrainzFixture.expected.items[0].medium, "vinyl_12");
+  assert.deepEqual(musicbrainzFixture.expected.unmapped, { formats: [], descriptions: [] });
+});
+
+test("format and description names that collide with Object.prototype members land in unmapped", () => {
+  const fixture = fixtures.find((entry) => entry.name === "discogs-prototype-key-names");
+  assert.deepEqual(mapFixtureInput(taxonomy, fixture), fixture.expected);
+  assert.deepEqual(fixture.expected.unmapped.formats, ["__proto__", "constructor"]);
+  assert.deepEqual(fixture.expected.unmapped.descriptions, ["hasOwnProperty", "toString"]);
+  assert.equal(fixture.expected.items.length, 1);
+  assert.equal(fixture.expected.items[0].medium, "vinyl_12");
+});
+
+test("sortedUnique orders lists by Unicode code point, not UTF-16 code unit", () => {
+  const block = mapDiscogsFormats(taxonomy, [{ name: "Vinyl", qty: "1", descriptions: ["￿", "\u{10000}"] }]);
+  assert.deepEqual(block.unmapped.descriptions, ["￿", "\u{10000}"]);
 });
 
 test("publication handoff carries the media taxonomy digest", () => {
