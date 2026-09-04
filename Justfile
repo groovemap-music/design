@@ -11,12 +11,13 @@ setup:
     mise install
 
 # Run the complete credential-free local and CI boundary.
-check: syntax-check test policy-check links catalog brand license-check audit secret-scan build install-check
+check: syntax-check test policy-check links catalog taxonomy brand license-check audit secret-scan build install-check
 
 syntax-check:
     {{tool}} node --check brand/render.mjs
     {{tool}} node --check scripts/build.mjs
     {{tool}} node --check scripts/check-governance.mjs
+    {{tool}} node --check scripts/media-mapper.mjs
     {{tool}} node --check scripts/validate.mjs
     {{tool}} node --check scripts/validate.test.mjs
     bash -n scripts/check-secrets.sh
@@ -37,6 +38,10 @@ links:
 
 catalog:
     {{tool}} node scripts/validate.mjs --catalog
+
+# Validate the canonical media taxonomy, its schemas, and the conformance fixtures.
+taxonomy:
+    {{tool}} node scripts/validate.mjs --taxonomy
 
 # Verify that tracked brand assets match their canonical sources.
 brand:

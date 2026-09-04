@@ -2,7 +2,7 @@
 
 This repository owns GrooveMap's canonical brand sources, generated brand assets, public architecture decisions, and sanitized repository catalog. The editable design tokens and SVG templates live in [`brand/`](brand/); applications and documentation consume the generated assets rather than maintaining independent copies.
 
-The [`catalog/repositories.json`](catalog/repositories.json) catalog describes the public responsibilities and relationships of all 21 organization repositories. Its deliberately narrow schema excludes provider identifiers, access policy, secret distribution, source-extraction paths, and other operational configuration. Public architecture decisions are indexed in [`docs/`](docs/README.md).
+The [`catalog/repositories.json`](catalog/repositories.json) catalog describes the public responsibilities and relationships of all 21 organization repositories. Its deliberately narrow schema excludes provider identifiers, access policy, secret distribution, source-extraction paths, and other operational configuration. Public architecture decisions are indexed in [`docs/`](docs/README.md). The [`taxonomy/media/`](taxonomy/media/README.md) directory owns the canonical media vocabulary, its schemas, and the conformance fixtures that every service vendors under [ADR 0007](docs/adr/0007-canonical-media-taxonomy.md).
 
 ## Licensing and identity
 
@@ -18,7 +18,7 @@ The [brand guide](brand/README.md) documents the source layout, asset reproducti
 
 ## Validation and automation
 
-Install the pinned tools with `just setup`, then run the credential-free `just check` gate. It verifies local links, the public catalog through a pinned standards-compliant JSON Schema 2020-12 implementation, the immutable CI caller, license metadata, public-content safety, full-history secret scans, deterministic rendering, the reviewed 12-asset checksum set, and a deterministic package containing the assets and applicable notices.
+Install the pinned tools with `just setup`, then run the credential-free `just check` gate. It verifies local links, the public catalog and the media taxonomy through a pinned standards-compliant JSON Schema 2020-12 implementation, the immutable CI caller, license metadata, public-content safety, full-history secret scans, deterministic rendering, the reviewed 12-asset checksum set, and a deterministic package containing the assets and applicable notices.
 
 Pull requests and pushes to `main` use the reusable GrooveMap CI workflow pinned to an immutable automation commit. Dependabot opens ordinary pull requests, so dependency updates execute the same required job and complete validation graph as contributor pull requests; there is no actor-specific reduced path.
 

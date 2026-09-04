@@ -29,6 +29,10 @@ if (!catalogSourceRepositories.every((repository) => catalogRepositoryNames.has(
   throw new Error("source-owned catalog ingestion identity changed after validation");
 }
 
+const taxonomyBytes = readFileSync(resolve(root, "taxonomy/media/v1/media-taxonomy.json"));
+const taxonomy = JSON.parse(taxonomyBytes.toString("utf8"));
+if (taxonomy.taxonomy_version !== "1") throw new Error("media taxonomy identity changed after validation");
+
 const handoff = {
   schema_version: 1,
   design_commit: git("rev-parse", "HEAD"),
@@ -37,6 +41,9 @@ const handoff = {
   catalog_schema_version: catalog.schema_version,
   catalog_repository_count: catalog.repositories.length,
   catalog_source_repositories: catalogSourceRepositories,
+  media_taxonomy_path: "taxonomy/media/v1/media-taxonomy.json",
+  media_taxonomy_sha256: createHash("sha256").update(taxonomyBytes).digest("hex"),
+  media_taxonomy_version: taxonomy.taxonomy_version,
   publication_action_performed: false,
 };
 

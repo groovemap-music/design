@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://groovemap.music/schemas/media-taxonomy-v1.json",
+  "title": "GrooveMap canonical media taxonomy",
+  "description": "Provider-neutral media vocabulary and the Discogs and MusicBrainz mappings onto it (ADR 0007).",
+  "x-license": "MIT",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["taxonomy_version", "license", "families", "media", "values", "discogs", "musicbrainz"],
+  "properties": {
+    "taxonomy_version": { "const": "1" },
+    "license": { "const": "MIT" },
+    "families": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "physical", "grooved", "resolve"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "label": { "type": "string", "minLength": 1 },
+          "physical": { "type": "boolean" },
+          "grooved": { "type": "boolean" },
+          "resolve": {
+            "type": ["object", "null"],
+            "additionalProperties": false,
+            "required": ["attribute", "map"],
+            "properties": {
+              "attribute": { "enum": ["size_inches"] },
+              "map": { "type": "object", "minProperties": 1, "additionalProperties": { "$ref": "#/$defs/id" } }
+            }
+          }
+        }
+      }
+    },
+    "media": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "family", "label", "defaults"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "family": { "$ref": "#/$defs/id" },
+          "label": { "type": "string", "minLength": 1 },
+          "defaults": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "size_inches": { "type": "number", "exclusiveMinimum": 0 },
+              "speed_rpm": { "type": "number", "exclusiveMinimum": 0 }
+            }
+          }
+        }
+      }
+    },
+    "values": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["channels", "codecs", "variants", "appearances", "release_kinds", "traits", "editions", "packagings", "containers", "flags"],
+      "properties": {
+        "channels": { "$ref": "#/$defs/idList" },
+        "codecs": { "$ref": "#/$defs/idList" },
+        "variants": { "$ref": "#/$defs/idList" },
+        "appearances": { "$ref": "#/$defs/idList" },
+        "release_kinds": { "$ref": "#/$defs/idList" },
+        "traits": { "$ref": "#/$defs/idList" },
+        "editions": { "$ref": "#/$defs/idList" },
+        "packagings": { "$ref": "#/$defs/idList" },
+        "containers": { "$ref": "#/$defs/idList" },
+        "flags": { "$ref": "#/$defs/idList" }
+      }
+    },
+    "discogs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["formats", "descriptions"],
+      "properties": {
+        "formats": { "type": "object", "minProperties": 1, "additionalProperties": { "$ref": "#/$defs/formatEntry" } },
+        "descriptions": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["target"],
+            "properties": {
+              "target": { "enum": ["size_inches", "speed_rpm", "channels", "codec", "variant", "appearance", "release_kind", "trait", "edition", "packaging", "container", "flag", "ignore"] },
+              "value": { "type": ["string", "number"] }
+            }
+          }
+        }
+      }
+    },
+    "musicbrainz": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["formats", "status", "packaging", "primary_types", "secondary_types"],
+      "properties": {
+        "formats": { "type": "object", "minProperties": 1, "additionalProperties": { "$ref": "#/$defs/formatEntry" } },
+        "status": { "type": "object", "minProperties": 1, "additionalProperties": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] } },
+        "packaging": { "type": "object", "minProperties": 1, "additionalProperties": { "$ref": "#/$defs/id" } },
+        "primary_types": { "type": "object", "minProperties": 1, "additionalProperties": { "$ref": "#/$defs/id" } },
+        "secondary_types": { "type": "object", "minProperties": 1, "additionalProperties": { "$ref": "#/$defs/id" } }
+      }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+    "idList": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+    "formatEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "family": { "$ref": "#/$defs/id" },
+        "medium": { "$ref": "#/$defs/id" },
+        "variant": { "$ref": "#/$defs/id" },
+        "container": { "$ref": "#/$defs/id" },
+        "flag": { "$ref": "#/$defs/id" }
+      }
+    }
+  }
+}
