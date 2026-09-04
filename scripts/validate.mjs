@@ -1,10 +1,12 @@
 // SPDX-License-Identifier: MIT
 
 import { createHash } from "node:crypto";
-import { existsSync, readFileSync, statSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { dirname, extname, relative, resolve, sep } from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+
+import { mapFixtureInput, validateTaxonomy } from "./media-mapper.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const AUTOMATION_REVISION = "2f34a4da5c552bc23c75edd3d8d81be0a4b3271c";
@@ -79,9 +81,14 @@ const REQUIRED_FILES = [
   "scripts/build.mjs",
   "scripts/check-governance.mjs",
   "scripts/check-secrets.sh",
+  "scripts/media-mapper.mjs",
   "scripts/publication-readiness.mjs",
   "scripts/validate.mjs",
   "scripts/validate.test.mjs",
+  "taxonomy/media/README.md",
+  "taxonomy/media/v1/media-block.schema.json",
+  "taxonomy/media/v1/media-taxonomy.json",
+  "taxonomy/media/v1/media-taxonomy.schema.json",
 ];
 const EXPOSURE_PATTERNS = [
   ["retired-project-name", new RegExp(["discogs", "ography"].join(""), "i")],
@@ -228,6 +235,64 @@ function checkCatalog() {
   console.log(`Verified the 2020-12 public catalog schema against ${instances.length} catalog document(s).`);
 }
 
+export function validateFixtureSet(taxonomy, fixtures) {
+  const errors = [];
+  const names = new Set();
+  for (const fixture of fixtures) {
+    for (const field of ["name", "provider", "description", "input", "expected"]) {
+      if (!(field in fixture)) errors.push(`fixture ${fixture.name ?? "?"} is missing ${field}`);
+    }
+    if (names.has(fixture.name)) errors.push(`duplicate fixture name ${fixture.name}`);
+    names.add(fixture.name);
+    let actual;
+    try {
+      actual = mapFixtureInput(taxonomy, fixture);
+    } catch (error) {
+      errors.push(`fixture ${fixture.name}: ${error.message}`);
+      continue;
+    }
+    if (JSON.stringify(actual) !== JSON.stringify(fixture.expected)) errors.push(`fixture ${fixture.name} expected output differs from the reference mapper`);
+  }
+  for (const required of ["discogs-7-inch-45-single", "discogs-2xlp-gatefold-reissue", "discogs-hybrid-sacd", "discogs-box-set-cd-and-vinyl", "discogs-file-flac", "discogs-unknown-format", "musicbrainz-12-inch-vinyl", "musicbrainz-digital-media", "musicbrainz-other-medium"]) {
+    if (!names.has(required)) errors.push(`required conformance fixture is missing: ${required}`);
+  }
+  return errors;
+}
+
+function runJsonSchema(arguments_, message) {
+  const result = spawnSync("jsonschema", arguments_, { cwd: ROOT, encoding: "utf8" });
+  requireCondition(!result.error, `unable to execute the pinned JSON Schema validator: ${result.error?.message}`);
+  requireCondition(result.status === 0, `${message}:\n${result.stdout}${result.stderr}`);
+}
+
+function checkTaxonomy() {
+  const base = resolve(ROOT, "taxonomy/media/v1");
+  const taxonomySchema = resolve(base, "media-taxonomy.schema.json");
+  const blockSchema = resolve(base, "media-block.schema.json");
+  const taxonomyPath = resolve(base, "media-taxonomy.json");
+  for (const schema of [taxonomySchema, blockSchema]) runJsonSchema(["metaschema", schema], `${relative(ROOT, schema)} is not a valid 2020-12 schema`);
+  runJsonSchema(["validate", taxonomySchema, taxonomyPath, "--format-assertion"], "media taxonomy does not satisfy its schema");
+  const taxonomy = JSON.parse(readFileSync(taxonomyPath, "utf8"));
+  const errors = validateTaxonomy(taxonomy);
+  requireCondition(errors.length === 0, `media taxonomy structure:\n- ${errors.join("\n- ")}`);
+  const fixturePaths = sorted(readdirSync(resolve(base, "fixtures")).filter((name) => name.endsWith(".json"))).map((name) => resolve(base, "fixtures", name));
+  requireCondition(fixturePaths.length > 0, "media taxonomy conformance fixtures are missing");
+  const fixtures = fixturePaths.map((path) => JSON.parse(readFileSync(path, "utf8")));
+  const fixtureErrors = validateFixtureSet(taxonomy, fixtures);
+  requireCondition(fixtureErrors.length === 0, `media taxonomy fixtures:\n- ${fixtureErrors.join("\n- ")}`);
+  const expectedDirectory = resolve(ROOT, ".build", "media-fixtures");
+  rmSync(expectedDirectory, { recursive: true, force: true });
+  mkdirSync(expectedDirectory, { recursive: true });
+  const expectedPaths = fixtures.map((fixture) => {
+    const path = resolve(expectedDirectory, `${fixture.name}.json`);
+    writeFileSync(path, `${JSON.stringify(fixture.expected)}\n`, "utf8");
+    return path;
+  });
+  runJsonSchema(["validate", blockSchema, ...expectedPaths, "--format-assertion"], "a fixture's expected media block does not satisfy the media block schema");
+  rmSync(expectedDirectory, { recursive: true, force: true });
+  console.log(`Verified the media taxonomy, its schemas, and ${fixtures.length} conformance fixtures against the reference mapper.`);
+}
+
 function checkWorkflow() {
   const workflowPath = resolve(ROOT, ".github/workflows/ci.yml");
   const workflow = readFileSync(workflowPath, "utf8");
@@ -286,7 +351,7 @@ function checkLicense() {
   requireCondition(licenseHash === MIT_SHA256, "LICENSE must remain the unmodified approved MIT text");
   const notice = readFileSync(resolve(ROOT, "NOTICE"), "utf8");
   requireCondition(/MIT License/.test(notice) && /does not grant trademark rights/i.test(notice), "NOTICE must retain the copyright/trademark boundary");
-  for (const path of ["Justfile", "scripts/build.mjs", "scripts/check-governance.mjs", "scripts/check-secrets.sh", "scripts/publication-readiness.mjs", "scripts/validate.mjs", "scripts/validate.test.mjs"]) {
+  for (const path of ["Justfile", "scripts/build.mjs", "scripts/check-governance.mjs", "scripts/check-secrets.sh", "scripts/media-mapper.mjs", "scripts/publication-readiness.mjs", "scripts/validate.mjs", "scripts/validate.test.mjs"]) {
     requireCondition(readFileSync(resolve(ROOT, path), "utf8").includes("SPDX-License-Identifier: MIT"), `${path} is missing MIT license metadata`);
   }
   console.log("Verified MIT license metadata and the separate trademark boundary.");
@@ -327,6 +392,7 @@ function run(mode) {
     "--license": checkLicense,
     "--links": checkLinks,
     "--policy": checkPolicy,
+    "--taxonomy": checkTaxonomy,
   };
   requireCondition(mode in checks, `unknown validation mode: ${mode}`);
   checks[mode]();

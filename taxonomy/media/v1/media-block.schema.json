@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://groovemap.music/schemas/media-block-v1.json",
+  "title": "GrooveMap canonical media block",
+  "description": "The additive `media` object every releases event and every release-shaped store carries (ADR 0007).",
+  "x-license": "MIT",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["taxonomy_version", "items", "families", "release_kind", "traits", "edition", "packaging", "container", "flags", "unmapped"],
+  "properties": {
+    "taxonomy_version": { "const": "1" },
+    "items": { "type": "array", "items": { "$ref": "#/$defs/item" } },
+    "families": { "$ref": "#/$defs/sortedIds" },
+    "release_kind": { "$ref": "#/$defs/nullableId" },
+    "traits": { "$ref": "#/$defs/sortedIds" },
+    "edition": { "$ref": "#/$defs/sortedIds" },
+    "packaging": { "$ref": "#/$defs/nullableId" },
+    "container": { "$ref": "#/$defs/nullableId" },
+    "flags": { "$ref": "#/$defs/sortedIds" },
+    "unmapped": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["formats", "descriptions"],
+      "properties": {
+        "formats": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+        "descriptions": { "type": "array", "uniqueItems": true, "items": { "type": "string" } }
+      }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+    "nullableId": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
+    "sortedIds": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["family", "medium", "qty", "size_inches", "speed_rpm", "channels", "codec", "variants", "appearance", "position", "track_count", "source"],
+      "properties": {
+        "family": { "$ref": "#/$defs/id" },
+        "medium": { "$ref": "#/$defs/id" },
+        "qty": { "type": "integer", "minimum": 1 },
+        "size_inches": { "type": ["number", "null"] },
+        "speed_rpm": { "type": ["number", "null"] },
+        "channels": { "$ref": "#/$defs/nullableId" },
+        "codec": { "$ref": "#/$defs/nullableId" },
+        "variants": { "$ref": "#/$defs/sortedIds" },
+        "appearance": { "$ref": "#/$defs/sortedIds" },
+        "position": { "type": ["integer", "null"] },
+        "track_count": { "type": ["integer", "null"] },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["provider", "name", "descriptions", "text"],
+          "properties": {
+            "provider": { "enum": ["discogs", "musicbrainz"] },
+            "name": { "type": ["string", "null"] },
+            "descriptions": { "type": "array", "items": { "type": "string" } },
+            "text": { "type": ["string", "null"] }
+          }
+        }
+      }
+    }
+  }
+}

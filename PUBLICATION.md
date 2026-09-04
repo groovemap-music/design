@@ -12,6 +12,7 @@ The command first runs the complete credential-free `just check` gate. That gate
 
 - the exact design commit;
 - the SHA-256 of `catalog/repositories.json`;
+- the SHA-256 and version of `taxonomy/media/v1/media-taxonomy.json`;
 - the catalog repository count and schema version;
 - the sorted source-owned ingestion repository identities; and
 - an explicit statement that no publication action was performed.
