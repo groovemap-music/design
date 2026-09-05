@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 import { mapFixtureInput, validateTaxonomy } from "./media-mapper.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const AUTOMATION_REVISION = "2f34a4da5c552bc23c75edd3d8d81be0a4b3271c";
+const AUTOMATION_REVISION = "833cb464507678c38ab78bd4718ce697399463e9";
 const MIT_SHA256 = "9572d39cdc09c0b2cd792a14fef5dcc4ed1b955d9b1ea2a3d0c058221fa5f391";
 const REQUIRED_REPOSITORY_FIELDS = [
   "commercial_license_available",
