@@ -1,6 +1,7 @@
 # ADR 0006: OpenTelemetry metrics and Grafana dashboards
 
 - Status: Accepted
+- Amended by [ADR 0008](0008-victoriametrics-tracing-runtime-alerting.md) (backend)
 
 ## Context
 
