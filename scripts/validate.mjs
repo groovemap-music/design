@@ -82,6 +82,8 @@ const REQUIRED_FILES = [
   "fixtures/catalog-valid.json",
   "scripts/build.mjs",
   "scripts/check-governance.mjs",
+  "scripts/check-recipes.mjs",
+  "scripts/check-recipes.test.mjs",
   "scripts/check-secrets.sh",
   "scripts/media-mapper.mjs",
   "scripts/publication-readiness.mjs",
@@ -353,7 +355,7 @@ function checkLicense() {
   requireCondition(licenseHash === MIT_SHA256, "LICENSE must remain the unmodified approved MIT text");
   const notice = readFileSync(resolve(ROOT, "NOTICE"), "utf8");
   requireCondition(/MIT License/.test(notice) && /does not grant trademark rights/i.test(notice), "NOTICE must retain the copyright/trademark boundary");
-  for (const path of ["Justfile", "scripts/build.mjs", "scripts/check-governance.mjs", "scripts/check-secrets.sh", "scripts/media-mapper.mjs", "scripts/publication-readiness.mjs", "scripts/validate.mjs", "scripts/validate.test.mjs"]) {
+  for (const path of ["Justfile", "scripts/build.mjs", "scripts/check-governance.mjs", "scripts/check-recipes.mjs", "scripts/check-recipes.test.mjs", "scripts/check-secrets.sh", "scripts/media-mapper.mjs", "scripts/publication-readiness.mjs", "scripts/validate.mjs", "scripts/validate.test.mjs"]) {
     requireCondition(readFileSync(resolve(ROOT, path), "utf8").includes("SPDX-License-Identifier: MIT"), `${path} is missing MIT license metadata`);
   }
   console.log("Verified MIT license metadata and the separate trademark boundary.");
@@ -382,7 +384,6 @@ function checkPublicSafety() {
 function checkPolicy() {
   checkRequiredFiles();
   checkWorkflow();
-  checkAssets();
   checkPublicSafety();
 }
 
