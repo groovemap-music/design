@@ -2,11 +2,10 @@
 
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { resolve } from "node:path";
 import { spawnSync } from "node:child_process";
-import { fileURLToPath } from "node:url";
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+import { ROOT as root } from "./tooling.mjs";
 
 function git(...arguments_) {
   const result = spawnSync("git", arguments_, { cwd: root, encoding: "utf8" });

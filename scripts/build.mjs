@@ -1,11 +1,9 @@
 // SPDX-License-Identifier: MIT
 
-import { createHash } from "node:crypto";
 import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { basename, dirname, join, relative } from "node:path";
-import { fileURLToPath } from "node:url";
 
-const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+import { ROOT as root, sha256 } from "./tooling.mjs";
 const outputRoot = join(root, "dist", "design");
 const check = process.argv.includes("--check");
 const checksumEntries = (await readFile(join(root, "brand", "assets.sha256"), "utf8")).trim().split("\n");
@@ -22,7 +20,7 @@ const expectedFiles = new Map();
 const manifestFiles = [];
 for (const { sourcePath, packagePath, expected } of sources) {
   const content = await readFile(join(root, sourcePath));
-  const actual = createHash("sha256").update(content).digest("hex");
+  const actual = sha256(content);
   if (expected !== null && actual !== expected) throw new Error(`Asset checksum differs: ${sourcePath}`);
   expectedFiles.set(packagePath, content);
   manifestFiles.push({ path: packagePath, sha256: actual, bytes: content.byteLength });
