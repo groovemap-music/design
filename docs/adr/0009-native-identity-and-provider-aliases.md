@@ -133,9 +133,11 @@ The projection is a named maintenance job owned by `catalog-api`, which already 
 PostgreSQL session and a Neo4j session, and it runs after the loaders mint. The graph
 enrichers do not do this work: they have no PostgreSQL access by design, and giving them
 alias-table reads to populate `gm_id` would create exactly the cross-store coupling their
-boundary exists to prevent. The same job owns the `COLLECTED {instance_id}` edges that
-`catalog-api` writes today and `database-schema` never declared; bringing them under a
-declared shape is part of this projection's scope rather than a separate cleanup.
+boundary exists to prevent.
+
+The job's scope is that one property. It reads the alias table and sets `gm_id` on nodes that
+already exist; it creates no node, writes no relationship, and changes no other property, so a
+failed or lagging run leaves a stale property rather than a mutated graph.
 
 ## Consequences
 
@@ -150,7 +152,7 @@ the ingest write path, so its uniqueness rule and its bulk resolve are performan
 not merely correctness-relevant; a per-row implementation would be a visible regression in
 loader throughput.
 
-Three things this record deliberately does not decide:
+Four things this record deliberately does not decide:
 
 - **Contraction.** When and how provider-keyed columns stop being primary keys, and the
   contract version that carries it.
@@ -161,3 +163,7 @@ Three things this record deliberately does not decide:
 - **Enricher-side minting.** The enrichers stay free of PostgreSQL under this decision. If
   graph-only entities ever need native identifiers minted where no relational row exists, that
   requires its own decision about which store is authoritative for them.
+- **The `COLLECTED` edge shape.** `catalog-api` writes `COLLECTED {instance_id}` edges that
+  `database-schema` never declared. Declaring that edge and bringing it under a named owner is
+  a real gap, and an explicit non-goal of this program; it is a separate follow-on with its own
+  record.
