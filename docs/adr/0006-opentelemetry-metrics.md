@@ -75,6 +75,14 @@ drift out of sync with what services actually emit. Because the two pre-existing
 surfaces are explicitly out of scope, operators keep their current health-check and
 historical-query workflows unchanged while the new OTEL pipeline is adopted alongside them.
 
+## Amendment: current metric export interval default (2026-09-12)
+
+The appendix below remains unchanged as historical evidence of the original program decision,
+including its `15000 ms` default. Established runtime behavior now defaults
+`OTEL_METRIC_EXPORT_INTERVAL` to `60000` ms unless an operator explicitly sets the environment
+variable. This amendment supersedes only the appendix's original default; it does not change the
+standard environment-variable boundary, exporter behavior, or any runtime configuration.
+
 ## Appendix: GrooveMap OpenTelemetry metrics conventions
 
 The following block is the durable, authoritative copy of the conventions shared by every

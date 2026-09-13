@@ -14,6 +14,7 @@ import {
   validateCanonicalCatalog,
   validateCatalogContract,
   validateFixtureSet,
+  validateTelemetryDecision,
 } from "./validation-policy.mjs";
 import { ROOT, sha256 } from "./tooling.mjs";
 export {
@@ -23,6 +24,7 @@ export {
   validateCanonicalCatalog,
   validateCatalogContract,
   validateFixtureSet,
+  validateTelemetryDecision,
 } from "./validation-policy.mjs";
 
 const AUTOMATION_REVISION = "833cb464507678c38ab78bd4718ce697399463e9";
@@ -248,6 +250,10 @@ function checkPolicy() {
   checkRequiredFiles();
   checkWorkflow();
   checkPublicSafety();
+  const decision = readFileSync(resolve(ROOT, "docs/adr/0006-opentelemetry-metrics.md"), "utf8");
+  const decisionErrors = validateTelemetryDecision(decision);
+  requireCondition(decisionErrors.length === 0, `telemetry decision contract:\n- ${decisionErrors.join("\n- ")}`);
+  console.log("Verified the amended telemetry decision contract.");
 }
 
 function run(mode) {

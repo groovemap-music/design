@@ -15,6 +15,7 @@ import {
   validateCanonicalCatalog,
   validateCatalogContract,
   validateFixtureSet,
+  validateTelemetryDecision,
 } from "./validation-policy.mjs";
 import { trackedFiles, validateCatalogContract as validateCatalogContractEntry } from "./validate.mjs";
 
@@ -98,7 +99,7 @@ test("catalog schema retains the exact public field boundary", () => {
   assert.equal(validateCatalogContractEntry, validateCatalogContract);
 });
 
-test("canonical catalog contains the exact sorted 21-repository set and source-owned ingestion relationships", () => {
+test("canonical catalog contains the exact repository set and decided deployment ownership", () => {
   assert.deepEqual(validateCanonicalCatalog(catalog), []);
   assert.equal(catalog.repositories.length, 21);
   assert.equal(catalog.repositories.filter((repository) => repository.publication_status === "public").length, 19);
@@ -108,8 +109,12 @@ test("canonical catalog contains the exact sorted 21-repository set and source-o
   );
   assert.equal(catalog.repositories.some((repository) => repository.name === "catalog-ingestion"), false);
   for (const producer of ["discogs-ingestion", "musicbrainz-ingestion"]) {
-    assert.ok(catalog.repositories.some((repository) => repository.name === producer));
+    const repository = catalog.repositories.find((candidate) => candidate.name === producer);
+    assert.ok(repository.relationships.some((relationship) => relationship.repository === "deployment" && relationship.kind === "deployed-by"));
   }
+  const mcpServer = catalog.repositories.find((repository) => repository.name === "mcp-server");
+  assert.match(mcpServer.description, /^Client-run /);
+  assert.equal(mcpServer.relationships.some((relationship) => relationship.repository === "deployment"), false);
 });
 
 test("canonical catalog rejects stale publication state and cross-source producer coordination", () => {
@@ -123,6 +128,34 @@ test("canonical catalog rejects stale publication state and cross-source produce
     kind: "coordinates-after",
   });
   assert.match(validateCanonicalCatalog(coordinatedSources).join("\n"), /musicbrainz-ingestion must remain independent/);
+});
+
+test("canonical catalog rejects deployment ownership that contradicts the active topology", () => {
+  const missingIngestionDeployment = structuredClone(catalog);
+  const discogs = missingIngestionDeployment.repositories.find((repository) => repository.name === "discogs-ingestion");
+  discogs.relationships = discogs.relationships.filter((relationship) => relationship.repository !== "deployment");
+  assert.match(validateCanonicalCatalog(missingIngestionDeployment).join("\n"), /discogs-ingestion must be deployed by deployment/);
+
+  const hostedMcp = structuredClone(catalog);
+  const mcpServer = hostedMcp.repositories.find((repository) => repository.name === "mcp-server");
+  mcpServer.description = mcpServer.description.replace(/^Client-run /, "Hosted ");
+  mcpServer.relationships.push({ repository: "deployment", kind: "deployed-by" });
+  const errors = validateCanonicalCatalog(hostedMcp).join("\n");
+  assert.match(errors, /mcp-server must be described as client-run/);
+  assert.match(errors, /mcp-server is client-run and must not be catalogued as deployed by deployment/);
+});
+
+test("telemetry ADR preserves the historical default and records the current runtime default", () => {
+  const decision = readFileSync(resolve(root, "docs/adr/0006-opentelemetry-metrics.md"), "utf8");
+  assert.deepEqual(validateTelemetryDecision(decision), []);
+  assert.match(
+    validateTelemetryDecision(decision.replace("`60000` ms", "`15000` ms")).join("\n"),
+    /60000 ms as the current metric export interval default/,
+  );
+  assert.match(
+    validateTelemetryDecision(decision.replace("OTEL_METRIC_EXPORT_INTERVAL (default 15000 ms)", "OTEL_METRIC_EXPORT_INTERVAL")).join("\n"),
+    /preserve the original 15000 ms appendix text/,
+  );
 });
 
 test("catalog schema rejects private operational metadata fields", async (t) => {

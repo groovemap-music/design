@@ -75,6 +75,29 @@ export function findExposureIssues(content) {
   return EXPOSURE_PATTERNS.filter(([, pattern]) => pattern.test(content)).map(([name]) => name);
 }
 
+export function validateTelemetryDecision(markdown) {
+  const errors = [];
+  const historicalDefault = "OTEL_METRIC_EXPORT_INTERVAL (default 15000 ms)";
+  const amendmentHeading = "## Amendment: current metric export interval default (2026-09-12)";
+  const amendmentStart = markdown.indexOf(amendmentHeading);
+  const appendixStart = markdown.indexOf("## Appendix: GrooveMap OpenTelemetry metrics conventions");
+  if (!markdown.includes(historicalDefault)) errors.push("ADR 0006 must preserve the original 15000 ms appendix text");
+  if (amendmentStart < 0) errors.push("ADR 0006 must identify the current metric export interval amendment");
+  if (amendmentStart >= 0 && appendixStart >= 0 && amendmentStart > appendixStart) {
+    errors.push("ADR 0006 must distinguish the current amendment from its historical appendix");
+  }
+  const amendment = amendmentStart >= 0 && appendixStart > amendmentStart
+    ? markdown.slice(amendmentStart, appendixStart)
+    : "";
+  if (!amendment.includes("`OTEL_METRIC_EXPORT_INTERVAL` to `60000` ms")) {
+    errors.push("ADR 0006 must record 60000 ms as the current metric export interval default");
+  }
+  if (!/unless an operator explicitly sets the environment\s+variable/.test(amendment)) {
+    errors.push("ADR 0006 must preserve the operator override for OTEL_METRIC_EXPORT_INTERVAL");
+  }
+  return errors;
+}
+
 export function validateCatalogContract(schema) {
   const errors = [];
   const repositorySchema = schema?.$defs?.repository;
@@ -126,6 +149,7 @@ export function validateCanonicalCatalog(catalog) {
     }
   }
   for (const [producer, consumers] of Object.entries(sourceConsumers)) {
+    if (!hasRelationship(producer, "deployment", "deployed-by")) errors.push(`${producer} must be deployed by deployment`);
     for (const consumer of consumers) {
       if (!hasRelationship(producer, consumer, "publishes-events-to")) errors.push(`${producer} must publish events to ${consumer}`);
       if (!hasRelationship(consumer, producer, "consumes-events-from")) errors.push(`${consumer} must consume events from ${producer}`);
@@ -143,6 +167,13 @@ export function validateCanonicalCatalog(catalog) {
     for (const producer of Object.keys(sourceConsumers)) {
       if (!hasRelationship(composer, producer, "composes-contract-from")) errors.push(`${composer} must compose the contract from ${producer}`);
     }
+  }
+  const mcpServer = repositories.find((repository) => repository.name === "mcp-server");
+  if (typeof mcpServer?.description !== "string" || !mcpServer.description.startsWith("Client-run ")) {
+    errors.push("mcp-server must be described as client-run");
+  }
+  if (hasRelationship("mcp-server", "deployment", "deployed-by")) {
+    errors.push("mcp-server is client-run and must not be catalogued as deployed by deployment");
   }
   return errors;
 }
