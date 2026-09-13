@@ -1,6 +1,6 @@
 # ADR 0002: Shared automation boundary
 
-- Status: Accepted
+- Status: Accepted; amended 2026-09-12
 
 ## Context
 
@@ -17,3 +17,18 @@ Release workflows produce immutable artifacts, checksums, software bills of mate
 ## Consequences
 
 Policy is consistent without centralizing repository-specific build logic. A workflow revision is reviewable as an ordinary source dependency, and automated dependency updates exercise the same gates as all other changes.
+
+## Amendments
+
+### 2026-09-12: Reusable workflow migration completed
+
+The migration is complete: public `automation` is the sole implementation owner for shared
+CI, release, and security workflows. The `.github` repository owns the public organization
+profile and community-health files and calls reusable automation where needed; it no longer
+hosts a second reusable-workflow implementation.
+
+Callers continue to pin full automation commit revisions, pass only explicit inputs and
+secrets, and retain their repository-specific `just check` contract. Private organization
+allowlists, credentials, and their application remain owned by `infra`. With all shared
+libraries now public, reusable CI does not need a GitHub App fanout path to read private
+library repositories.

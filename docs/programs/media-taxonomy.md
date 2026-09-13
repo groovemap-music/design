@@ -1,6 +1,24 @@
 # Media-taxonomy program rollout
 
-This document is the rollout plan for [ADR 0007](../adr/0007-canonical-media-taxonomy.md). The decision and the vocabulary live in this repository; the implementation is delivered as one molecule per repository, in five waves. Each wave pins the artifacts the previous wave produced, so a wave is filed only after the wave it depends on has merged. It records what each repository changes, what it pins, and how it verifies the pin.
+**Status: Completed 2026-09-12.**
+
+This document preserves the rollout plan for
+[ADR 0007](../adr/0007-canonical-media-taxonomy.md). The decision and vocabulary live in
+this repository; implementation was delivered as one molecule per repository in five waves.
+The planned wave sections below remain as execution history. This status section records the
+maintained result rather than rewriting those sections into retrospective prose.
+
+| Wave | Completed result |
+| --- | --- |
+| 0 | Design published ADR 0007, the v1 vocabulary and schemas, and the conformance fixtures. |
+| 1 | Both ingestion producers and `python-libraries` vendored the canonical vocabulary; `database-schema` published its media persistence contract. |
+| 2 | The graph enrichers, SQL loaders, and operator toolkit promoted their matching source and persistence contracts. |
+| 3 | `catalog-api` published media-aware routes and contracts; `analytics-engine` promoted the corresponding insights contract. |
+| 4 | Graph Explorer, the MCP server, and Operations Console promoted their consumer contracts; the public site uses media-neutral copy. |
+| 5 | Deployment added the per-source cutover and canonical-media smoke boundary. |
+
+The three direct vocabulary consumers retain byte-identical copies with source records that
+pin Design commit `5e89a70f32973d0ad32da01c31695cf004d832f7` and the published digest below.
 
 ## Artifacts every wave pins
 
@@ -12,7 +30,7 @@ This document is the rollout plan for [ADR 0007](../adr/0007-canonical-media-tax
 | `groovemap-runtime` revision that ships `common.media` | python-libraries | Pin the immutable commit in `pyproject.toml` | `just source-check` compares the pin with the persistence compatibility record |
 | Catalog API consumer contracts with the `media` routes and parameters | catalog-api | Promote the matching `contracts/catalog-api/<consumer>/v1` set | `just source-check` |
 
-The vocabulary digest at the commit that published this document:
+The vocabulary digest at the commit that published this program:
 
 ```text
 73677c6e577a9098136582539f5515814b8b73e4069a74fd6424d6b74e4553ac  taxonomy/media/v1/media-taxonomy.json

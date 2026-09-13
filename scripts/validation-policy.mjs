@@ -40,6 +40,7 @@ const EXPECTED_REPOSITORIES = [
   "planning-archive",
   "python-libraries",
 ];
+const PRIVATE_REPOSITORIES = new Set(["infra", "planning-archive"]);
 const EXPOSURE_PATTERNS = [
   ["retired-project-name", new RegExp(["discogs", "ography"].join(""), "i")],
   ["host-local-path", /(?:\/Users\/|\/var\/folders\/|[A-Z]:\\Users\\)/],
@@ -96,6 +97,10 @@ export function validateCanonicalCatalog(catalog) {
   if (JSON.stringify(names) !== JSON.stringify(sorted(names))) errors.push("catalog repositories must be sorted by name");
   if (new Set(names).size !== names.length) errors.push("catalog repository names must be unique");
   for (const repository of repositories) {
+    const expectedPublicationState = PRIVATE_REPOSITORIES.has(repository.name) ? "private" : "public";
+    if (repository.destination_visibility !== expectedPublicationState || repository.publication_status !== expectedPublicationState) {
+      errors.push(`${repository.name} must record its current ${expectedPublicationState} publication state`);
+    }
     const relationshipTargets = repository.relationships.map((relationship) => relationship.repository);
     if (relationshipTargets.some((target) => !EXPECTED_REPOSITORIES.includes(target))) {
       errors.push(`${repository.name} has a relationship to an unknown repository`);
@@ -112,6 +117,14 @@ export function validateCanonicalCatalog(catalog) {
     "discogs-ingestion": ["discogs-graph-enricher", "discogs-sql-loader"],
     "musicbrainz-ingestion": ["musicbrainz-graph-enricher", "musicbrainz-sql-loader"],
   };
+  for (const [producer, otherProducer] of [
+    ["discogs-ingestion", "musicbrainz-ingestion"],
+    ["musicbrainz-ingestion", "discogs-ingestion"],
+  ]) {
+    if (relationshipsFor(producer).some((relationship) => relationship.repository === otherProducer)) {
+      errors.push(`${producer} must remain independent of ${otherProducer}`);
+    }
+  }
   for (const [producer, consumers] of Object.entries(sourceConsumers)) {
     for (const consumer of consumers) {
       if (!hasRelationship(producer, consumer, "publishes-events-to")) errors.push(`${producer} must publish events to ${consumer}`);

@@ -35,6 +35,17 @@ shasum -a 256 taxonomy/media/v1/media-taxonomy.json
 
 `just publication-readiness` prints the same digest as `media_taxonomy_sha256` next to the catalog digest, so consumers can pin a reviewed commit and its vocabulary together.
 
+## Current promotion record
+
+The canonical v1 bytes have SHA-256
+`73677c6e577a9098136582539f5515814b8b73e4069a74fd6424d6b74e4553ac`.
+The source records in `discogs-ingestion`, `musicbrainz-ingestion`, and
+`python-libraries` pin Design commit
+`5e89a70f32973d0ad32da01c31695cf004d832f7` with that digest. The current Design revision
+retains the same byte-identical vocabulary. Consumer source records are promotion
+provenance; each consumer remains responsible for reviewing and validating its vendored
+copy.
+
 ## Changing the vocabulary
 
 Add or re-route values in `media-taxonomy.json`, keep mapping keys sorted, add a fixture for any new behaviour, and run `just check`. A new upstream format name is a vocabulary change followed by re-vendoring; it is never a code change in a consumer. Renaming or removing an id, or changing what a target means, is a breaking change and requires a new `taxonomy_version` directory.
