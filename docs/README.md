@@ -19,3 +19,8 @@ maintained current state.
 ## Program rollout plans
 
 - [Media-taxonomy program rollout](programs/media-taxonomy.md) records the completed delivery of ADR 0007 across the organization in five waves.
+
+## Verification reports
+
+- [Organization-wide verification — 2026-09-13](audits/organization-wide-verification-2026-09-13.md)
+  records the final sanitized 21-repository maintenance matrix and diagram audit.

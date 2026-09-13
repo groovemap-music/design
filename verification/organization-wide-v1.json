@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-09-13",
+  "design_input_revision": "1b9ab79ce8c2986262f35a7f04d89bf0629f3b5f",
+  "final_design_validation": "beadhive-tree-attestation",
+  "diagram_audit": {
+    "renderer": "@mermaid-js/mermaid-cli@11.12.0",
+    "browser": "Chrome Headless Shell 152.0.7977.75",
+    "maintained_mermaid": 94,
+    "excluded_historical_mermaid": 6,
+    "total_mermaid": 100,
+    "maintained_conceptual_ascii": 0
+  },
+  "repositories": [
+    {
+      "name": ".github",
+      "revision": "dc245aa4b237080b2db84eb1eec31b0f1cc1bd70",
+      "tree": "bb04bfa609892e0e622b178892eabf99094b225e",
+      "verdict": "pass",
+      "maintained_mermaid": 0,
+      "evidence_roots": ["profile/", "docs/", "policy/", ".github/workflows/"]
+    },
+    {
+      "name": "analytics-engine",
+      "revision": "e8d30627d5513a6e62b93e235ea979f9b0ae7edf",
+      "tree": "bd85575fcbb123456f615f2949d12ccb0440a418",
+      "verdict": "pass",
+      "maintained_mermaid": 2,
+      "evidence_roots": ["README.md", "docs/", "contracts/", "insights/", "Justfile"]
+    },
+    {
+      "name": "automation",
+      "revision": "cc0450350d4c9fe91561a900bb390edf1660b52f",
+      "tree": "e5bb3bb0adb8dd87423bc308400456e2230777ad",
+      "verdict": "pass",
+      "maintained_mermaid": 1,
+      "evidence_roots": ["README.md", "docs/", ".github/workflows/", ".github/actions/"]
+    },
+    {
+      "name": "catalog-api",
+      "revision": "3151db4a79eb5bb02d175f0204cd2f6c5acc7404",
+      "tree": "ca41381baf179da552879fd36d67399748aa227e",
+      "verdict": "pass",
+      "maintained_mermaid": 12,
+      "evidence_roots": ["README.md", "docs/", "api/", "contracts/", "Justfile"]
+    },
+    {
+      "name": "database-schema",
+      "revision": "58debe082f063e55ab8f8b00e0f3cb31bcd4de2a",
+      "tree": "4848d665fe25753f2ddcb2cda1e0bba899b2fa6c",
+      "verdict": "pass",
+      "maintained_mermaid": 2,
+      "evidence_roots": ["README.md", "docs/", "src/", "contracts/", "Justfile"]
+    },
+    {
+      "name": "deployment",
+      "revision": "0ea358a78a85372252f7c5c39dcf13b0a5214867",
+      "tree": "19b2eb9967e6c09c4c63cd0bca0a81c17286a6ad",
+      "verdict": "pass",
+      "maintained_mermaid": 11,
+      "evidence_roots": ["README.md", "docs/", "compose.yaml", "compose.production.yaml", "config/", "Justfile"]
+    },
+    {
+      "name": "design",
+      "revision": "1b9ab79ce8c2986262f35a7f04d89bf0629f3b5f",
+      "tree": "053bcac37cc40d680077c9a3b60461231c381045",
+      "verdict": "pass",
+      "maintained_mermaid": 2,
+      "evidence_roots": ["catalog/", "docs/adr/", "brand/", "taxonomy/", "Justfile"]
+    },
+    {
+      "name": "discogs-graph-enricher",
+      "revision": "906561a33282d598fffd490b7713d578e03e1bd5",
+      "tree": "87ade4409895b6e3c4489d2bb4126c7991ab4a24",
+      "verdict": "pass",
+      "maintained_mermaid": 7,
+      "evidence_roots": ["README.md", "docs/", "contracts/", "graphinator/", "Justfile"]
+    },
+    {
+      "name": "discogs-ingestion",
+      "revision": "a3fe6c054ffc095f6ad5fd3235669c88f8fe1384",
+      "tree": "a061bd42ecfe33fa8b6ecffcdf8e95451fa706d9",
+      "verdict": "pass",
+      "maintained_mermaid": 8,
+      "evidence_roots": ["README.md", "docs/", "contracts/", "src/", "Justfile"]
+    },
+    {
+      "name": "discogs-sql-loader",
+      "revision": "b85259dc432be46f16b32521f39a521cf851abd3",
+      "tree": "8765e19fe362a1623fee9afc600e8f690138a331",
+      "verdict": "pass",
+      "maintained_mermaid": 10,
+      "evidence_roots": ["README.md", "docs/", "contracts/", "tableinator/", "Justfile"]
+    },
+    {
+      "name": "graph-explorer",
+      "revision": "6593ae4a9762f43f429611b4828007a74d1d59e7",
+      "tree": "1b460a28035c311bf3ec676d2e72ad1a8dadd6c0",
+      "verdict": "pass",
+      "maintained_mermaid": 4,
+      "evidence_roots": ["README.md", "docs/", "contracts/", "explore/", "Justfile"]
+    },
+    {
+      "name": "groovemap-music.github.io",
+      "revision": "ad5ea5bdd4663bf2b72681defab8a5a66d0bd94f",
+      "tree": "78619365ce1697d35364adc57260f8fd09ef01aa",
+      "verdict": "pass",
+      "maintained_mermaid": 0,
+      "evidence_roots": ["README.md", "src/", "public/", ".github/workflows/", "Justfile"]
+    },
+    {
+      "name": "infra",
+      "revision": "cfc599ee44bfd30e1a63b429774b9b0c5e3aceab",
+      "verdict": "pass"
+    },
+    {
+      "name": "mcp-server",
+      "revision": "30afb452e924b4e02031651401850e81b7f6e061",
+      "tree": "2b462e9895a98d444e5c227fb4199ebdd6884bea",
+      "verdict": "pass",
+      "maintained_mermaid": 4,
+      "evidence_roots": ["README.md", "docs/", "contracts/", "src/", "Justfile"]
+    },
+    {
+      "name": "musicbrainz-graph-enricher",
+      "revision": "d5026c448810f2b7c1ed1b1e276868e5abdbef96",
+      "tree": "d500387cd627f3fe489afebb77b5c5e290d4c93d",
+      "verdict": "pass",
+      "maintained_mermaid": 7,
+      "evidence_roots": ["README.md", "docs/", "contracts/", "brainzgraphinator/", "Justfile"]
+    },
+    {
+      "name": "musicbrainz-ingestion",
+      "revision": "b98f1f86480dd4082ec99ab21f70e14500c6a666",
+      "tree": "792f5b7c8fedc334173411ab3d70a608f3a4fea1",
+      "verdict": "pass",
+      "maintained_mermaid": 6,
+      "evidence_roots": ["README.md", "docs/", "contracts/", "src/", "Justfile"]
+    },
+    {
+      "name": "musicbrainz-sql-loader",
+      "revision": "0c301978800a8cc0de2d96ecd42b4374bf59aca7",
+      "tree": "0d77cbfe5212525178c5df0f70d391e43c16ecce",
+      "verdict": "pass",
+      "maintained_mermaid": 7,
+      "evidence_roots": ["README.md", "docs/", "contracts/", "brainztableinator/", "Justfile"]
+    },
+    {
+      "name": "operations-console",
+      "revision": "e444ff4a5a58fd6ff5c662ea4d45be943a786a64",
+      "tree": "60192ca30a450ca7b3f573e6ecf0e19462de7179",
+      "verdict": "pass",
+      "maintained_mermaid": 2,
+      "evidence_roots": ["README.md", "docs/", "contracts/", "dashboard/", "Justfile"]
+    },
+    {
+      "name": "operations-toolkit",
+      "revision": "b7b35b60409ba81e14ff95a1ef6ff1caafedb953",
+      "tree": "be36c2bca09ec86a3292c2e81cc59d03fe71545e",
+      "verdict": "pass",
+      "maintained_mermaid": 2,
+      "evidence_roots": ["README.md", "docs/", "contracts/", "utilities/", "Justfile"]
+    },
+    {
+      "name": "planning-archive",
+      "revision": "764cde7a7b56ef882ce7d5fcae17a73bfe23b0ba",
+      "verdict": "pass"
+    },
+    {
+      "name": "python-libraries",
+      "revision": "66b65dc322c7a6b742f7a84e55a598802ecb55f5",
+      "tree": "e5a1df488e4a03db064d7f21d5992c80ee6aa914",
+      "verdict": "pass",
+      "maintained_mermaid": 5,
+      "evidence_roots": ["README.md", "docs/", "src/", "tests/", "Justfile"]
+    }
+  ]
+}

@@ -15,6 +15,7 @@ import {
   validateCanonicalCatalog,
   validateCatalogContract,
   validateFixtureSet,
+  validateOrganizationVerification,
   validateTelemetryDecision,
 } from "./validation-policy.mjs";
 import { trackedFiles, validateCatalogContract as validateCatalogContractEntry } from "./validate.mjs";
@@ -22,6 +23,7 @@ import { trackedFiles, validateCatalogContract as validateCatalogContractEntry }
 import schema from "../catalog/repositories.schema.json" with { type: "json" };
 import fixture from "../fixtures/catalog-valid.json" with { type: "json" };
 import catalog from "../catalog/repositories.json" with { type: "json" };
+import organizationVerification from "../verification/organization-wide-v1.json" with { type: "json" };
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const schemaPath = resolve(root, "catalog/repositories.schema.json");
@@ -128,6 +130,22 @@ test("canonical catalog rejects stale publication state and cross-source produce
     kind: "coordinates-after",
   });
   assert.match(validateCanonicalCatalog(coordinatedSources).join("\n"), /musicbrainz-ingestion must remain independent/);
+});
+
+test("organization verification pins the final repository and diagram evidence", () => {
+  assert.deepEqual(validateOrganizationVerification(organizationVerification, catalog), []);
+
+  const mutableRevision = structuredClone(organizationVerification);
+  mutableRevision.repositories[0].revision = "main";
+  assert.ok(validateOrganizationVerification(mutableRevision, catalog).some((error) => /full commit/.test(error)));
+
+  const expandedPrivateEvidence = structuredClone(organizationVerification);
+  expandedPrivateEvidence.repositories.find((repository) => repository.name === "infra").tree = "a".repeat(40);
+  assert.ok(validateOrganizationVerification(expandedPrivateEvidence, catalog).some((error) => /private evidence must remain/.test(error)));
+
+  const missingDiagram = structuredClone(organizationVerification);
+  missingDiagram.diagram_audit.maintained_mermaid -= 1;
+  assert.ok(validateOrganizationVerification(missingDiagram, catalog).some((error) => /94 \+ 6 Mermaid baseline/.test(error)));
 });
 
 test("canonical catalog rejects deployment ownership that contradicts the active topology", () => {

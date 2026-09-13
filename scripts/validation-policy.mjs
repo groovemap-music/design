@@ -177,6 +177,65 @@ export function validateCanonicalCatalog(catalog) {
   }
   return errors;
 }
+
+export function validateOrganizationVerification(report, catalog) {
+  const errors = [];
+  const repositories = report?.repositories ?? [];
+  const names = repositories.map((repository) => repository.name);
+  const catalogNames = (catalog?.repositories ?? []).map((repository) => repository.name);
+  if (report?.schema_version !== 1) errors.push("organization verification must use schema version 1");
+  if (report?.reviewed_on !== "2026-09-13") errors.push("organization verification date must remain versioned");
+  if (!/^[a-f0-9]{40}$/.test(report?.design_input_revision ?? "")) {
+    errors.push("organization verification must retain a full Design input revision");
+  }
+  if (report?.final_design_validation !== "beadhive-tree-attestation") {
+    errors.push("final Design validation must rely on the Beadhive tree attestation");
+  }
+  if (JSON.stringify(names) !== JSON.stringify(catalogNames)) {
+    errors.push("organization verification repository order must match the canonical catalog");
+  }
+  for (const repository of repositories) {
+    if (!/^[a-f0-9]{40}$/.test(repository.revision ?? "")) errors.push(`${repository.name}: reviewed revision must be a full commit`);
+    if (repository.verdict !== "pass") errors.push(`${repository.name}: exact-tree verdict must be pass`);
+    if (PRIVATE_REPOSITORIES.has(repository.name)) {
+      if (JSON.stringify(Object.keys(repository).sort()) !== JSON.stringify(["name", "revision", "verdict"])) {
+        errors.push(`${repository.name}: private evidence must remain identity, revision, and verdict only`);
+      }
+      continue;
+    }
+    if (!/^[a-f0-9]{40}$/.test(repository.tree ?? "")) {
+      errors.push(`${repository.name}: public exact-tree evidence is missing`);
+    }
+    if (!Number.isInteger(repository.maintained_mermaid) || repository.maintained_mermaid < 0) {
+      errors.push(`${repository.name}: maintained Mermaid count is invalid`);
+    }
+    if (!Array.isArray(repository.evidence_roots) || repository.evidence_roots.length === 0) {
+      errors.push(`${repository.name}: evidence roots are missing`);
+    }
+  }
+  const diagrams = report?.diagram_audit ?? {};
+  const design = repositories.find((repository) => repository.name === "design");
+  if (design?.revision !== report?.design_input_revision) {
+    errors.push("organization verification Design row must match its reviewed input revision");
+  }
+  if (diagrams.renderer !== "@mermaid-js/mermaid-cli@11.12.0") {
+    errors.push("organization verification must retain the pinned Mermaid renderer");
+  }
+  if (diagrams.browser !== "Chrome Headless Shell 152.0.7977.75") {
+    errors.push("organization verification must retain the reviewed Chromium build");
+  }
+  if (diagrams.maintained_mermaid !== 94 || diagrams.excluded_historical_mermaid !== 6 || diagrams.total_mermaid !== 100) {
+    errors.push("organization verification must retain the reconciled 94 + 6 Mermaid baseline");
+  }
+  if (diagrams.maintained_conceptual_ascii !== 0) {
+    errors.push("organization verification must not retain maintained conceptual ASCII diagrams");
+  }
+  const publicMermaid = repositories
+    .filter((repository) => !PRIVATE_REPOSITORIES.has(repository.name))
+    .reduce((total, repository) => total + (repository.maintained_mermaid ?? 0), 0);
+  if (publicMermaid !== 92) errors.push("public repository Mermaid counts differ from the reviewed matrix");
+  return errors;
+}
 export function validateFixtureSet(taxonomy, fixtures) {
   const errors = [];
   const names = new Set();
