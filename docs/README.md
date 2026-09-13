@@ -15,10 +15,13 @@ maintained current state.
 - [ADR 0006: OpenTelemetry metrics and Grafana dashboards](adr/0006-opentelemetry-metrics.md)
 - [ADR 0007: Canonical media taxonomy and media-neutral product core](adr/0007-canonical-media-taxonomy.md)
 - [ADR 0008: VictoriaMetrics backend, distributed tracing, runtime metrics, and alerting](adr/0008-victoriametrics-tracing-runtime-alerting.md)
+- [ADR 0009: Native identity and provider aliases](adr/0009-native-identity-and-provider-aliases.md)
+- [ADR 0010: First-party events, consent, and deletion closure](adr/0010-first-party-events-consent-and-deletion.md)
 
 ## Program rollout plans
 
 - [Media-taxonomy program rollout](programs/media-taxonomy.md) records the completed delivery of ADR 0007 across the organization in five waves.
+- [Native identity and first-party events program rollout](programs/native-identity-and-events.md) records the four-wave delivery plan for ADR 0009 and ADR 0010, the artifacts each wave pins, and the gaps it deliberately leaves to their own records.
 
 ## Verification reports
 

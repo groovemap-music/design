@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://groovemap.music/schemas/event-types-v1.json",
+  "title": "GrooveMap first-party event-type vocabulary",
+  "description": "The closed version 1 event-type vocabulary, its surfaces, and the inline payload schemas each type names (ADR 0010).",
+  "x-license": "MIT",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["vocabulary_version", "license", "naming_rule", "consent_purposes", "surfaces", "event_types", "$defs"],
+  "properties": {
+    "vocabulary_version": { "const": "1" },
+    "license": { "const": "MIT" },
+    "naming_rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["form", "regular_past_tense_suffix", "irregular_past_tense", "nouns_of_record"],
+      "properties": {
+        "form": { "const": "<surface>.<past-tense verb>" },
+        "regular_past_tense_suffix": { "const": "ed" },
+        "irregular_past_tense": { "$ref": "#/$defs/wordList" },
+        "nouns_of_record": { "$ref": "#/$defs/wordList" }
+      }
+    },
+    "consent_purposes": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": { "enum": ["product_analytics", "model_training"] }
+    },
+    "surfaces": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "description"],
+        "properties": {
+          "id": { "$ref": "#/$defs/surfaceId" },
+          "label": { "type": "string", "minLength": 1 },
+          "description": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "event_types": {
+      "type": "array",
+      "minItems": 16,
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "surface", "verb", "schema_version", "description", "payload_schema"],
+        "properties": {
+          "id": { "$ref": "#/$defs/eventTypeId" },
+          "surface": { "$ref": "#/$defs/surfaceId" },
+          "verb": { "$ref": "#/$defs/word" },
+          "schema_version": { "type": "integer", "minimum": 1 },
+          "description": { "type": "string", "minLength": 1 },
+          "payload_schema": { "type": "string", "pattern": "^#/\\$defs/[a-z][a-z0-9_]*$" }
+        }
+      }
+    },
+    "$defs": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$" },
+      "additionalProperties": { "type": "object" }
+    }
+  },
+  "$defs": {
+    "surfaceId": { "enum": ["search", "recommendation", "collection", "wantlist", "consent", "account"] },
+    "eventTypeId": {
+      "enum": [
+        "search.query",
+        "search.result_impression",
+        "recommendation.shown",
+        "recommendation.opened",
+        "recommendation.saved",
+        "recommendation.dismissed",
+        "recommendation.hidden",
+        "collection.item_added",
+        "collection.item_removed",
+        "collection.item_updated",
+        "wantlist.item_added",
+        "wantlist.item_removed",
+        "consent.granted",
+        "consent.revoked",
+        "account.export_requested",
+        "account.erasure_requested"
+      ]
+    },
+    "word": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+    "wordList": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/word" } }
+  }
+}

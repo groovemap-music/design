@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://groovemap.music/schemas/identity-vocabulary-v1.json",
+  "title": "GrooveMap native identity vocabulary",
+  "description": "The closed entity-kind, provider, and alias-source vocabulary that provider aliases are drawn from (ADR 0009).",
+  "x-license": "MIT",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["vocabulary_version", "license", "native_id_format", "entity_kinds", "providers", "sources", "provider_aliases"],
+  "properties": {
+    "vocabulary_version": { "const": "1" },
+    "license": { "const": "MIT" },
+    "native_id_format": { "const": "uuid_v7" },
+    "entity_kinds": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "native_table", "user_creatable", "description"],
+        "properties": {
+          "id": { "$ref": "#/$defs/entityKindId" },
+          "label": { "$ref": "#/$defs/label" },
+          "native_table": { "enum": ["catalog_items", "artifacts", "owned_copies", "collection_snapshots", "observations"] },
+          "user_creatable": { "type": "boolean" },
+          "description": { "$ref": "#/$defs/description" }
+        }
+      }
+    },
+    "providers": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "kind", "description"],
+        "properties": {
+          "id": { "$ref": "#/$defs/providerId" },
+          "label": { "$ref": "#/$defs/label" },
+          "kind": { "enum": ["catalog", "identifier"] },
+          "description": { "$ref": "#/$defs/description" }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "description"],
+        "properties": {
+          "id": { "$ref": "#/$defs/sourceId" },
+          "label": { "$ref": "#/$defs/label" },
+          "description": { "$ref": "#/$defs/description" }
+        }
+      }
+    },
+    "provider_aliases": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["columns", "required", "unique_on", "unique_scope"],
+      "properties": {
+        "columns": { "$ref": "#/$defs/columnList" },
+        "required": { "$ref": "#/$defs/columnList" },
+        "unique_on": { "$ref": "#/$defs/columnList" },
+        "unique_scope": { "const": "currently_valid_row" }
+      }
+    }
+  },
+  "$defs": {
+    "entityKindId": { "enum": ["release", "master", "artist", "label", "artifact", "owned_copy", "collection_snapshot", "observation"] },
+    "providerId": { "enum": ["discogs", "musicbrainz", "wikidata", "barcode", "catalog_number", "isrc", "matrix"] },
+    "sourceId": { "enum": ["catalog", "user", "inference"] },
+    "label": { "type": "string", "minLength": 1 },
+    "description": { "type": "string", "minLength": 1 },
+    "columnList": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }
+    }
+  }
+}
