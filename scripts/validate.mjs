@@ -14,6 +14,8 @@ import {
   validateCanonicalCatalog,
   validateCatalogContract,
   validateFixtureSet,
+  validateOrganizationVerification,
+  validateTelemetryDecision,
 } from "./validation-policy.mjs";
 import { ROOT, sha256 } from "./tooling.mjs";
 export {
@@ -23,6 +25,8 @@ export {
   validateCanonicalCatalog,
   validateCatalogContract,
   validateFixtureSet,
+  validateOrganizationVerification,
+  validateTelemetryDecision,
 } from "./validation-policy.mjs";
 
 const AUTOMATION_REVISION = "833cb464507678c38ab78bd4718ce697399463e9";
@@ -56,6 +60,7 @@ const REQUIRED_FILES = [
   "docs/adr/0006-opentelemetry-metrics.md",
   "docs/adr/0007-canonical-media-taxonomy.md",
   "docs/adr/0008-victoriametrics-tracing-runtime-alerting.md",
+  "docs/audits/organization-wide-verification-2026-09-13.md",
   "docs/programs/media-taxonomy.md",
   "fixtures/catalog-valid.json",
   "scripts/build.mjs",
@@ -73,6 +78,7 @@ const REQUIRED_FILES = [
   "taxonomy/media/v1/media-block.schema.json",
   "taxonomy/media/v1/media-taxonomy.json",
   "taxonomy/media/v1/media-taxonomy.schema.json",
+  "verification/organization-wide-v1.json",
 ];
 
 export function trackedFiles(root = ROOT) {
@@ -248,6 +254,15 @@ function checkPolicy() {
   checkRequiredFiles();
   checkWorkflow();
   checkPublicSafety();
+  const decision = readFileSync(resolve(ROOT, "docs/adr/0006-opentelemetry-metrics.md"), "utf8");
+  const decisionErrors = validateTelemetryDecision(decision);
+  requireCondition(decisionErrors.length === 0, `telemetry decision contract:\n- ${decisionErrors.join("\n- ")}`);
+  const verification = JSON.parse(readFileSync(resolve(ROOT, "verification/organization-wide-v1.json"), "utf8"));
+  const catalog = JSON.parse(readFileSync(resolve(ROOT, "catalog/repositories.json"), "utf8"));
+  const verificationErrors = validateOrganizationVerification(verification, catalog);
+  requireCondition(verificationErrors.length === 0, `organization verification contract:\n- ${verificationErrors.join("\n- ")}`);
+  console.log("Verified the amended telemetry decision contract.");
+  console.log("Verified the versioned organization-wide verification matrix.");
 }
 
 function run(mode) {
