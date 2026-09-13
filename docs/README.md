@@ -15,6 +15,8 @@ maintained current state.
 - [ADR 0006: OpenTelemetry metrics and Grafana dashboards](adr/0006-opentelemetry-metrics.md)
 - [ADR 0007: Canonical media taxonomy and media-neutral product core](adr/0007-canonical-media-taxonomy.md)
 - [ADR 0008: VictoriaMetrics backend, distributed tracing, runtime metrics, and alerting](adr/0008-victoriametrics-tracing-runtime-alerting.md)
+- [ADR 0009: Native identity and provider aliases](adr/0009-native-identity-and-provider-aliases.md)
+- [ADR 0010: First-party events, consent, and deletion closure](adr/0010-first-party-events-consent-and-deletion.md)
 
 ## Program rollout plans
 
