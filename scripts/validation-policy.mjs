@@ -259,3 +259,240 @@ export function validateFixtureSet(taxonomy, fixtures) {
   }
   return errors;
 }
+
+const IDENTITY_ENTITY_KINDS = ["release", "master", "artist", "label", "artifact", "owned_copy", "collection_snapshot", "observation"];
+const IDENTITY_NATIVE_TABLES = {
+  release: "catalog_items",
+  master: "catalog_items",
+  artist: "catalog_items",
+  label: "catalog_items",
+  artifact: "artifacts",
+  owned_copy: "owned_copies",
+  collection_snapshot: "collection_snapshots",
+  observation: "observations",
+};
+const IDENTITY_USER_CREATABLE = new Set(["artifact", "owned_copy", "collection_snapshot", "observation"]);
+const IDENTITY_PROVIDERS = ["discogs", "musicbrainz", "wikidata", "barcode", "catalog_number", "isrc", "matrix"];
+const IDENTITY_SOURCES = ["catalog", "user", "inference"];
+const ALIAS_COLUMNS = ["provider", "external_id", "entity_kind", "native_id", "valid_from", "valid_to", "confidence", "source", "asserted_at"];
+const ALIAS_UNIQUE_ON = ["provider", "entity_kind", "external_id"];
+
+const EVENT_TYPES_V1 = [
+  "search.query",
+  "search.result_impression",
+  "recommendation.shown",
+  "recommendation.opened",
+  "recommendation.saved",
+  "recommendation.dismissed",
+  "recommendation.hidden",
+  "collection.item_added",
+  "collection.item_removed",
+  "collection.item_updated",
+  "wantlist.item_added",
+  "wantlist.item_removed",
+  "consent.granted",
+  "consent.revoked",
+  "account.export_requested",
+  "account.erasure_requested",
+];
+const EVENT_NOUNS_OF_RECORD = ["query", "result_impression"];
+const CONSENT_PURPOSES = ["product_analytics", "model_training"];
+const EVENT_ENVELOPE_COLUMNS = [
+  "event_id",
+  "event_type",
+  "schema_version",
+  "subject_id",
+  "session_id",
+  "occurred_at",
+  "recorded_at",
+  "producer",
+  "consent_purposes",
+  "model_version",
+  "feature_version",
+  "idempotency_key",
+  "payload",
+];
+const IMPRESSION_COLUMNS = [
+  "impression_id",
+  "subject_id",
+  "surface",
+  "policy_id",
+  "candidate_set_id",
+  "position",
+  "item_id",
+  "score",
+  "propensity",
+  "request_id",
+  "occurred_at",
+];
+const REQUIRED_EVENT_REJECTIONS = [
+  "unknown-event-type",
+  "missing-consent-purposes",
+  "impression-missing-policy-id",
+  "impression-missing-candidate-set-id",
+];
+
+function sameSequence(actual, expected) {
+  return JSON.stringify(actual ?? null) === JSON.stringify(expected);
+}
+
+export function validateIdentityVocabulary(vocabulary) {
+  const errors = [];
+  if (vocabulary?.vocabulary_version !== "1") errors.push("the identity vocabulary must declare vocabulary_version 1");
+  if (vocabulary?.license !== "MIT") errors.push("the identity vocabulary must declare MIT license metadata");
+  if (vocabulary?.native_id_format !== "uuid_v7") errors.push("native identifiers must be UUID version 7");
+
+  const kinds = vocabulary?.entity_kinds ?? [];
+  if (!sameSequence(kinds.map((kind) => kind.id), IDENTITY_ENTITY_KINDS)) {
+    errors.push("entity kinds must be the closed ADR 0009 set in declaration order");
+  }
+  for (const kind of kinds) {
+    const table = IDENTITY_NATIVE_TABLES[kind.id];
+    if (table === undefined) continue;
+    if (kind.native_table !== table) errors.push(`entity kind ${kind.id} must live in ${table}`);
+    if (kind.user_creatable !== IDENTITY_USER_CREATABLE.has(kind.id)) {
+      errors.push(`entity kind ${kind.id} misstates whether a user can create it`);
+    }
+  }
+
+  const providers = vocabulary?.providers ?? [];
+  if (!sameSequence(providers.map((provider) => provider.id), IDENTITY_PROVIDERS)) {
+    errors.push("providers must be the closed ADR 0009 set in declaration order");
+  }
+  for (const provider of providers) {
+    if (!["catalog", "identifier"].includes(provider.kind)) errors.push(`provider ${provider.id} must be a catalog or an identifier namespace`);
+  }
+  if (!sameSequence((vocabulary?.sources ?? []).map((source) => source.id), IDENTITY_SOURCES)) {
+    errors.push("alias sources must be the closed catalog, user, and inference set in declaration order");
+  }
+
+  const aliases = vocabulary?.provider_aliases ?? {};
+  if (!sameSequence(aliases.columns, ALIAS_COLUMNS)) errors.push("the alias table must declare every ADR 0009 column in order");
+  if (!sameSequence(aliases.unique_on, ALIAS_UNIQUE_ON)) errors.push("alias uniqueness must be on (provider, entity_kind, external_id)");
+  if (aliases.unique_scope !== "currently_valid_row") errors.push("alias uniqueness must apply to the currently valid row");
+  for (const column of aliases.required ?? []) {
+    if (!(aliases.columns ?? []).includes(column)) errors.push(`alias requires an undeclared column: ${column}`);
+  }
+  if ((aliases.required ?? []).includes("valid_to")) errors.push("an open alias interval must leave valid_to unset");
+  return errors;
+}
+
+export function validateEventVocabulary(vocabulary) {
+  const errors = [];
+  if (vocabulary?.vocabulary_version !== "1") errors.push("the event-type vocabulary must declare vocabulary_version 1");
+  if (vocabulary?.license !== "MIT") errors.push("the event-type vocabulary must declare MIT license metadata");
+  if (!sameSequence(vocabulary?.consent_purposes, CONSENT_PURPOSES)) errors.push("consent purposes must be product_analytics and model_training");
+
+  const rule = vocabulary?.naming_rule ?? {};
+  if (rule.form !== "<surface>.<past-tense verb>") errors.push("the naming rule must remain <surface>.<past-tense verb>");
+  if (rule.regular_past_tense_suffix !== "ed") errors.push("the regular past-tense suffix must remain ed");
+  if (!sameSequence(rule.nouns_of_record, EVENT_NOUNS_OF_RECORD)) {
+    errors.push("the two version 1 nouns of record are closed and cannot grow: query and result_impression");
+  }
+
+  const surfaces = (vocabulary?.surfaces ?? []).map((surface) => surface.id);
+  const types = vocabulary?.event_types ?? [];
+  if (!sameSequence(types.map((type) => type.id), EVENT_TYPES_V1)) {
+    errors.push("event types must be the closed ADR 0010 version 1 set in declaration order");
+  }
+  const irregular = new Set(rule.irregular_past_tense ?? []);
+  const nouns = new Set(rule.nouns_of_record ?? []);
+  const usedIrregular = new Set();
+  const definitions = vocabulary?.$defs ?? {};
+  for (const type of types) {
+    if (type.id !== `${type.surface}.${type.verb}`) errors.push(`event type ${type.id} must be <surface>.<verb>`);
+    if (!surfaces.includes(type.surface)) errors.push(`event type ${type.id} names an undeclared surface: ${type.surface}`);
+    const head = String(type.verb ?? "").split("_").pop();
+    if (nouns.has(type.verb)) {
+      // A version 1 carry-over that names the record rather than the act.
+    } else if (irregular.has(head)) {
+      usedIrregular.add(head);
+    } else if (!head.endsWith("ed")) {
+      errors.push(`event type ${type.id} does not name something that happened in the past tense`);
+    }
+    const reference = String(type.payload_schema ?? "");
+    const name = reference.startsWith("#/$defs/") ? reference.slice("#/$defs/".length) : "";
+    if (!Object.hasOwn(definitions, name)) errors.push(`event type ${type.id} names a payload schema that is not defined: ${reference}`);
+    if (!Number.isInteger(type.schema_version) || type.schema_version < 1) errors.push(`event type ${type.id} must carry a payload schema version`);
+  }
+  for (const word of irregular) {
+    if (!usedIrregular.has(word)) errors.push(`the naming rule declares an unused irregular past tense: ${word}`);
+  }
+  for (const surface of surfaces) {
+    if (!types.some((type) => type.surface === surface)) errors.push(`surface ${surface} carries no event type`);
+  }
+  return errors;
+}
+
+export function validateEventEnvelopeContract(envelope, impression, vocabulary) {
+  const errors = [];
+  for (const [name, schema, columns] of [["event envelope", envelope, EVENT_ENVELOPE_COLUMNS], ["impression", impression, IMPRESSION_COLUMNS]]) {
+    if (schema?.$schema !== "https://json-schema.org/draft/2020-12/schema") errors.push(`the ${name} schema must use JSON Schema 2020-12`);
+    if (schema?.["x-license"] !== "MIT") errors.push(`the ${name} schema must declare MIT license metadata`);
+    if (schema?.additionalProperties !== false) errors.push(`the ${name} schema must reject undeclared columns`);
+    if (!sameValues(Object.keys(schema?.properties ?? {}), columns)) errors.push(`the ${name} schema must declare every ADR 0010 column`);
+    if (!sameValues(schema?.required ?? [], columns)) errors.push(`every ${name} column must be present on the wire`);
+  }
+  const declaredTypes = envelope?.$defs?.eventTypeId?.enum;
+  if (!sameSequence(declaredTypes, (vocabulary?.event_types ?? []).map((type) => type.id))) {
+    errors.push("the event envelope's event_type enumeration has drifted from the vocabulary");
+  }
+  if (!sameValues(envelope?.properties?.consent_purposes?.items?.enum ?? [], vocabulary?.consent_purposes ?? [])) {
+    errors.push("the event envelope's consent purposes have drifted from the vocabulary");
+  }
+  if (!sameValues(impression?.$defs?.surfaceId?.enum ?? [], (vocabulary?.surfaces ?? []).map((surface) => surface.id))) {
+    errors.push("the impression surface enumeration has drifted from the vocabulary");
+  }
+  return errors;
+}
+
+export function validateEventFixtureSet(vocabulary, fixtures) {
+  const errors = [];
+  const names = new Set();
+  const covered = new Set();
+  const rejections = new Set();
+  const valid = { event: 0, impression: 0 };
+  const invalid = { event: 0, impression: 0 };
+  const types = new Map((vocabulary?.event_types ?? []).map((type) => [type.id, type]));
+
+  for (const fixture of fixtures) {
+    for (const field of ["name", "envelope", "valid", "description", "document"]) {
+      if (!(field in fixture)) errors.push(`fixture ${fixture.name ?? "?"} is missing ${field}`);
+    }
+    if (names.has(fixture.name)) errors.push(`duplicate fixture name ${fixture.name}`);
+    names.add(fixture.name);
+    if (fixture.file !== undefined && fixture.file !== `${fixture.name}.json`) errors.push(`fixture ${fixture.name} does not match its file name`);
+    if (!["event", "impression"].includes(fixture.envelope)) {
+      errors.push(`fixture ${fixture.name} names an unknown envelope: ${fixture.envelope}`);
+      continue;
+    }
+    if (fixture.valid === false) {
+      invalid[fixture.envelope] += 1;
+      if (typeof fixture.rejection !== "string" || fixture.rejection === "") errors.push(`invalid fixture ${fixture.name} must name what rejects it`);
+      else rejections.add(fixture.rejection);
+      continue;
+    }
+    valid[fixture.envelope] += 1;
+    if ("rejection" in fixture) errors.push(`valid fixture ${fixture.name} must not name a rejection`);
+    if (fixture.envelope !== "event") continue;
+    const type = types.get(fixture.document?.event_type);
+    if (type === undefined) {
+      errors.push(`valid fixture ${fixture.name} carries an event type outside the vocabulary`);
+      continue;
+    }
+    covered.add(type.id);
+    if (fixture.document.schema_version !== type.schema_version) errors.push(`fixture ${fixture.name} disagrees with the payload schema version of ${type.id}`);
+  }
+
+  for (const envelope of ["event", "impression"]) {
+    if (valid[envelope] === 0) errors.push(`the ${envelope} envelope has no valid example`);
+    if (invalid[envelope] === 0) errors.push(`the ${envelope} envelope has no invalid example`);
+  }
+  for (const type of types.keys()) {
+    if (!covered.has(type)) errors.push(`event type has no valid fixture: ${type}`);
+  }
+  for (const rejection of REQUIRED_EVENT_REJECTIONS) {
+    if (!rejections.has(rejection)) errors.push(`required rejection fixture is missing: ${rejection}`);
+  }
+  return errors;
+}

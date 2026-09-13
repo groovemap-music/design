@@ -419,3 +419,203 @@ test("publication handoff carries the media taxonomy digest", () => {
   assert.match(script, /media_taxonomy_sha256: createHash\("sha256"\)/);
   assert.match(script, /media_taxonomy_version: taxonomy\.taxonomy_version/);
 });
+
+import {
+  validateEventEnvelopeContract,
+  validateEventFixtureSet,
+  validateEventVocabulary,
+  validateIdentityVocabulary,
+} from "./validation-policy.mjs";
+import identityVocabulary from "../taxonomy/identity/v1/identity-vocabulary.json" with { type: "json" };
+import eventVocabulary from "../taxonomy/events/v1/event-types.json" with { type: "json" };
+import eventEnvelopeSchema from "../taxonomy/events/v1/event-envelope.schema.json" with { type: "json" };
+import impressionSchema from "../taxonomy/events/v1/impression.schema.json" with { type: "json" };
+
+const eventFixtureDirectory = resolve(root, "taxonomy/events/v1/fixtures");
+const eventFixtures = readdirSync(eventFixtureDirectory)
+  .filter((name) => name.endsWith(".json"))
+  .sort()
+  .map((file) => ({ file, ...JSON.parse(readFileSync(join(eventFixtureDirectory, file), "utf8")) }));
+
+function validateDocument(schemaPath, document) {
+  const directory = mkdtempSync(join(tmpdir(), "groovemap-events-test-"));
+  const documentPath = join(directory, "document.json");
+  writeFileSync(documentPath, `${JSON.stringify(document)}\n`, "utf8");
+  try {
+    return spawnSync("jsonschema", ["validate", resolve(root, schemaPath), documentPath, "--format-assertion"], {
+      cwd: root,
+      encoding: "utf8",
+    });
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
+}
+
+test("identity vocabulary carries the closed ADR 0009 sets", () => {
+  assert.deepEqual(validateIdentityVocabulary(identityVocabulary), []);
+  assert.equal(identityVocabulary.native_id_format, "uuid_v7");
+  assert.deepEqual(
+    identityVocabulary.entity_kinds.map((kind) => kind.id),
+    ["release", "master", "artist", "label", "artifact", "owned_copy", "collection_snapshot", "observation"],
+  );
+  assert.deepEqual(
+    identityVocabulary.providers.map((provider) => provider.id),
+    ["discogs", "musicbrainz", "wikidata", "barcode", "catalog_number", "isrc", "matrix"],
+  );
+  assert.deepEqual(identityVocabulary.sources.map((source) => source.id), ["catalog", "user", "inference"]);
+  assert.deepEqual(identityVocabulary.provider_aliases.unique_on, ["provider", "entity_kind", "external_id"]);
+  assert.equal(identityVocabulary.provider_aliases.unique_scope, "currently_valid_row");
+});
+
+test("identity vocabulary rejects a reopened closed set and a closed alias interval", () => {
+  const extraProvider = structuredClone(identityVocabulary);
+  extraProvider.providers.push({ id: "spotify", label: "Spotify", kind: "catalog", description: "Not a decided provider." });
+  assert.match(validateIdentityVocabulary(extraProvider).join("\n"), /providers must be the closed ADR 0009 set/);
+
+  const relocatedKind = structuredClone(identityVocabulary);
+  relocatedKind.entity_kinds.find((kind) => kind.id === "owned_copy").native_table = "catalog_items";
+  assert.match(validateIdentityVocabulary(relocatedKind).join("\n"), /owned_copy must live in owned_copies/);
+
+  const providerMinted = structuredClone(identityVocabulary);
+  providerMinted.entity_kinds.find((kind) => kind.id === "release").user_creatable = true;
+  assert.match(validateIdentityVocabulary(providerMinted).join("\n"), /release misstates whether a user can create it/);
+
+  const closedInterval = structuredClone(identityVocabulary);
+  closedInterval.provider_aliases.required.push("valid_to");
+  assert.match(validateIdentityVocabulary(closedInterval).join("\n"), /open alias interval must leave valid_to unset/);
+});
+
+test("event vocabulary carries the closed ADR 0010 version 1 types in order", () => {
+  assert.deepEqual(validateEventVocabulary(eventVocabulary), []);
+  assert.equal(eventVocabulary.event_types.length, 16);
+  assert.deepEqual(
+    eventVocabulary.event_types.map((type) => type.id),
+    [
+      "search.query",
+      "search.result_impression",
+      "recommendation.shown",
+      "recommendation.opened",
+      "recommendation.saved",
+      "recommendation.dismissed",
+      "recommendation.hidden",
+      "collection.item_added",
+      "collection.item_removed",
+      "collection.item_updated",
+      "wantlist.item_added",
+      "wantlist.item_removed",
+      "consent.granted",
+      "consent.revoked",
+      "account.export_requested",
+      "account.erasure_requested",
+    ],
+  );
+  assert.deepEqual(eventVocabulary.consent_purposes, ["product_analytics", "model_training"]);
+  for (const type of eventVocabulary.event_types) {
+    assert.equal(type.id, `${type.surface}.${type.verb}`);
+    assert.ok(type.payload_schema.slice("#/$defs/".length) in eventVocabulary.$defs);
+  }
+});
+
+test("event vocabulary enforces the past-tense naming rule and its closed exceptions", () => {
+  const presentTense = structuredClone(eventVocabulary);
+  presentTense.event_types.push({
+    id: "collection.item_add",
+    surface: "collection",
+    verb: "item_add",
+    schema_version: 1,
+    description: "Present tense names an intention, not an occurrence.",
+    payload_schema: "#/$defs/wantlist_item_change",
+  });
+  const presentTenseErrors = validateEventVocabulary(presentTense).join("\n");
+  assert.match(presentTenseErrors, /collection\.item_add does not name something that happened/);
+
+  const grownNouns = structuredClone(eventVocabulary);
+  grownNouns.naming_rule.nouns_of_record.push("summary");
+  assert.match(validateEventVocabulary(grownNouns).join("\n"), /nouns of record are closed and cannot grow/);
+
+  const unusedIrregular = structuredClone(eventVocabulary);
+  unusedIrregular.naming_rule.irregular_past_tense.push("sung");
+  assert.match(validateEventVocabulary(unusedIrregular).join("\n"), /unused irregular past tense: sung/);
+
+  const danglingPayload = structuredClone(eventVocabulary);
+  danglingPayload.event_types[0].payload_schema = "#/$defs/absent";
+  assert.match(validateEventVocabulary(danglingPayload).join("\n"), /payload schema that is not defined/);
+
+  const undeclaredSurface = structuredClone(eventVocabulary);
+  undeclaredSurface.event_types[0].surface = "browse";
+  const undeclaredErrors = validateEventVocabulary(undeclaredSurface).join("\n");
+  assert.match(undeclaredErrors, /undeclared surface: browse/);
+});
+
+test("both envelopes declare every ADR 0010 column and stay tied to the vocabulary", () => {
+  assert.deepEqual(validateEventEnvelopeContract(eventEnvelopeSchema, impressionSchema, eventVocabulary), []);
+  for (const column of ["consent_purposes", "idempotency_key", "occurred_at", "recorded_at", "model_version", "feature_version"]) {
+    assert.ok(eventEnvelopeSchema.required.includes(column), `event envelope must require ${column}`);
+  }
+  for (const column of ["policy_id", "candidate_set_id", "position", "propensity"]) {
+    assert.ok(impressionSchema.required.includes(column), `impression must require ${column}`);
+  }
+
+  const optionalConsent = structuredClone(eventEnvelopeSchema);
+  optionalConsent.required = optionalConsent.required.filter((column) => column !== "consent_purposes");
+  assert.match(
+    validateEventEnvelopeContract(optionalConsent, impressionSchema, eventVocabulary).join("\n"),
+    /every event envelope column must be present on the wire/,
+  );
+
+  const driftedEnum = structuredClone(eventEnvelopeSchema);
+  driftedEnum.$defs.eventTypeId.enum = driftedEnum.$defs.eventTypeId.enum.slice(0, 15);
+  assert.match(
+    validateEventEnvelopeContract(driftedEnum, impressionSchema, eventVocabulary).join("\n"),
+    /event_type enumeration has drifted from the vocabulary/,
+  );
+});
+
+test("event fixtures cover every type, both envelopes, and the required rejections", () => {
+  assert.deepEqual(validateEventFixtureSet(eventVocabulary, eventFixtures), []);
+  const valid = eventFixtures.filter((entry) => entry.valid);
+  assert.equal(new Set(valid.filter((entry) => entry.envelope === "event").map((entry) => entry.document.event_type)).size, 16);
+  assert.ok(valid.some((entry) => entry.envelope === "impression"));
+
+  const missingRejection = eventFixtures.filter((entry) => entry.rejection !== "unknown-event-type");
+  assert.match(
+    validateEventFixtureSet(eventVocabulary, missingRejection).join("\n"),
+    /required rejection fixture is missing: unknown-event-type/,
+  );
+
+  const uncoveredType = eventFixtures.filter((entry) => entry.document?.event_type !== "consent.revoked");
+  assert.match(validateEventFixtureSet(eventVocabulary, uncoveredType).join("\n"), /event type has no valid fixture: consent\.revoked/);
+});
+
+test("the envelopes reject an unknown type, a missing consent snapshot, and an unattributable impression", () => {
+  const rejections = {
+    "unknown-event-type": "taxonomy/events/v1/event-envelope.schema.json",
+    "missing-consent-purposes": "taxonomy/events/v1/event-envelope.schema.json",
+    "impression-missing-policy-id": "taxonomy/events/v1/impression.schema.json",
+    "impression-missing-candidate-set-id": "taxonomy/events/v1/impression.schema.json",
+  };
+  for (const [rejection, schemaPath] of Object.entries(rejections)) {
+    const fixture = eventFixtures.find((entry) => entry.rejection === rejection);
+    assert.ok(fixture, `fixture for ${rejection} must exist`);
+    const result = validateDocument(schemaPath, fixture.document);
+    assert.equal(result.error, undefined);
+    assert.equal(result.status, 2, `${rejection} unexpectedly passed:\n${result.stdout}${result.stderr}`);
+  }
+  const accepted = validateDocument("taxonomy/events/v1/event-envelope.schema.json", eventFixtures.find((entry) => entry.name === "event-search-query").document);
+  assert.equal(accepted.status, 0, `${accepted.stdout}${accepted.stderr}`);
+});
+
+test("the identity and events capabilities run as standalone validation modes", () => {
+  for (const [mode, marker] of [["--identity", /identity vocabulary/], ["--events", /event-type vocabulary/]]) {
+    const result = spawnSync(process.execPath, ["scripts/validate.mjs", mode], { cwd: root, encoding: "utf8" });
+    assert.equal(result.status, 0, `${result.stdout}${result.stderr}`);
+    assert.match(result.stdout, marker);
+  }
+});
+
+test("publication handoff carries the identity and event vocabulary digests", () => {
+  const script = readFileSync(resolve(root, "scripts/publication-readiness.mjs"), "utf8");
+  assert.match(script, /identity_vocabulary_sha256: createHash\("sha256"\)/);
+  assert.match(script, /event_types_sha256: createHash\("sha256"\)/);
+  assert.match(script, /event_type_count: eventTypes\.event_types\.length/);
+});
