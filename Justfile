@@ -11,12 +11,15 @@ setup:
     mise install
 
 # Run the complete credential-free local and CI boundary.
-check: syntax-check test policy-check links catalog taxonomy brand license-check audit secret-scan build install-check
+check: lint test policy-check links catalog taxonomy brand license-check audit secret-scan build install-check
 
-syntax-check:
+# Statically validate executable source and the repository recipe contract.
+lint:
     {{tool}} node --check brand/render.mjs
     {{tool}} node --check scripts/build.mjs
     {{tool}} node --check scripts/check-governance.mjs
+    {{tool}} node --check scripts/check-recipes.mjs
+    {{tool}} node --check scripts/check-recipes.test.mjs
     {{tool}} node --check scripts/media-mapper.mjs
     {{tool}} node --check scripts/publication-readiness.mjs
     {{tool}} node --check scripts/tooling.mjs
@@ -26,19 +29,23 @@ syntax-check:
     bash -n scripts/check-secrets.sh
 
 test:
-    {{tool}} node --test scripts/validate.test.mjs
+    {{tool}} node --test scripts/*.test.mjs
 
 coverage:
     mkdir -p coverage
-    {{tool}} node --test --experimental-test-coverage --test-reporter=lcov --test-reporter-destination=coverage/lcov.info scripts/validate.test.mjs
+    {{tool}} node --test --experimental-test-coverage --test-reporter=lcov --test-reporter-destination=coverage/lcov.info scripts/*.test.mjs
 
+# Validate public repository policy and this repository's automation-provider contract.
 policy-check:
     {{tool}} node scripts/check-governance.mjs
+    {{tool}} node scripts/check-recipes.mjs
     {{tool}} node scripts/validate.mjs --policy
 
+# Verify local Markdown references without contacting remote services.
 links:
     {{tool}} node scripts/validate.mjs --links
 
+# Validate the public repository catalog and its closed schema.
 catalog:
     {{tool}} node scripts/validate.mjs --catalog
 
@@ -65,9 +72,11 @@ audit:
 secret-scan:
     @{{tool}} scripts/check-secrets.sh
 
+# Build the deterministic, locally consumable design artifact.
 build:
     {{tool}} node scripts/build.mjs
 
+# Verify the built artifact exactly matches its canonical inputs.
 install-check: build
     {{tool}} node scripts/build.mjs --check
 

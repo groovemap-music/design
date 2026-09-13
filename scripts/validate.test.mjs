@@ -82,6 +82,17 @@ test("publication handoff implementation is local and non-mutating", () => {
   }
 });
 
+test("repository policy leaves canonical asset verification to the brand capability", () => {
+  const result = spawnSync(process.execPath, ["scripts/validate.mjs", "--policy"], {
+    cwd: root,
+    encoding: "utf8",
+  });
+  assert.equal(result.status, 0, result.stderr);
+  assert.doesNotMatch(result.stdout, /byte identity/);
+  assert.match(result.stdout, /immutable CI/);
+  assert.match(result.stdout, /public-content boundary/);
+});
+
 test("catalog schema retains the exact public field boundary", () => {
   assert.deepEqual(validateCatalogContract(schema), []);
   assert.equal(validateCatalogContractEntry, validateCatalogContract);

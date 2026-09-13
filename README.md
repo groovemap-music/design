@@ -24,6 +24,20 @@ Pull requests and pushes to `main` use the reusable GrooveMap CI workflow pinned
 
 The catalog schema is available at [`catalog/repositories.schema.json`](catalog/repositories.schema.json). Its contract is exercised with synthetic data in [`fixtures/catalog-valid.json`](fixtures/catalog-valid.json) and against the canonical catalog. Private operational metadata remains outside this repository.
 
+Repository-specific recipes keep design capabilities visible instead of hiding them behind generic automation names:
+
+| Recipe | Purpose |
+| --- | --- |
+| `policy-check` | Validate public governance, the local recipe-provider contract, immutable CI, and exposure boundaries. |
+| `links` | Verify repository-local Markdown references without contacting remote services. |
+| `catalog` | Validate the canonical public repository catalog and its closed schema. |
+| `taxonomy` | Validate the canonical media vocabulary, schemas, mapper, and conformance fixtures. |
+| `brand` | Prove generated assets match canonical sources and the reviewed checksum manifest. |
+| `brand-render` | Regenerate brand assets explicitly after canonical source changes. |
+| `publication-readiness` | Repeat the full gate and emit an immutable, non-publishing handoff for separately approved infrastructure work. |
+
+The generic `lint`, `test`, `coverage`, `audit`, `license-check`, `secret-scan`, `build`, and `install-check` recipes implement the shared automation capabilities. `brand-render` remains an explicit source-generation command and `publication-readiness` never publishes, tags, changes visibility, or modifies organization settings.
+
 ## Publication handoff
 
 Repository visibility is a separately reviewed infrastructure concern. From a clean review commit, `just publication-readiness` repeats the complete gate and emits the exact commit and catalog SHA-256 that infrastructure must pin. See [PUBLICATION.md](PUBLICATION.md) for the handoff contract.
