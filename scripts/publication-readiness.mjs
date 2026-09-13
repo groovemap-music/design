@@ -32,6 +32,18 @@ const taxonomyBytes = readFileSync(resolve(root, "taxonomy/media/v1/media-taxono
 const taxonomy = JSON.parse(taxonomyBytes.toString("utf8"));
 if (taxonomy.taxonomy_version !== "1") throw new Error("media taxonomy identity changed after validation");
 
+const identityBytes = readFileSync(resolve(root, "taxonomy/identity/v1/identity-vocabulary.json"));
+const identity = JSON.parse(identityBytes.toString("utf8"));
+if (identity.vocabulary_version !== "1" || identity.native_id_format !== "uuid_v7") {
+  throw new Error("identity vocabulary identity changed after validation");
+}
+
+const eventBytes = readFileSync(resolve(root, "taxonomy/events/v1/event-types.json"));
+const eventTypes = JSON.parse(eventBytes.toString("utf8"));
+if (eventTypes.vocabulary_version !== "1" || eventTypes.event_types.length !== 16) {
+  throw new Error("event-type vocabulary identity changed after validation");
+}
+
 const handoff = {
   schema_version: 1,
   design_commit: git("rev-parse", "HEAD"),
@@ -43,6 +55,13 @@ const handoff = {
   media_taxonomy_path: "taxonomy/media/v1/media-taxonomy.json",
   media_taxonomy_sha256: createHash("sha256").update(taxonomyBytes).digest("hex"),
   media_taxonomy_version: taxonomy.taxonomy_version,
+  identity_vocabulary_path: "taxonomy/identity/v1/identity-vocabulary.json",
+  identity_vocabulary_sha256: createHash("sha256").update(identityBytes).digest("hex"),
+  identity_vocabulary_version: identity.vocabulary_version,
+  event_types_path: "taxonomy/events/v1/event-types.json",
+  event_types_sha256: createHash("sha256").update(eventBytes).digest("hex"),
+  event_types_version: eventTypes.vocabulary_version,
+  event_type_count: eventTypes.event_types.length,
   publication_action_performed: false,
 };
 

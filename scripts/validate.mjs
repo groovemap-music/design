@@ -13,7 +13,11 @@ import {
   validateActionReference,
   validateCanonicalCatalog,
   validateCatalogContract,
+  validateEventEnvelopeContract,
+  validateEventFixtureSet,
+  validateEventVocabulary,
   validateFixtureSet,
+  validateIdentityVocabulary,
   validateOrganizationVerification,
   validateTelemetryDecision,
 } from "./validation-policy.mjs";
@@ -24,7 +28,11 @@ export {
   validateActionReference,
   validateCanonicalCatalog,
   validateCatalogContract,
+  validateEventEnvelopeContract,
+  validateEventFixtureSet,
+  validateEventVocabulary,
   validateFixtureSet,
+  validateIdentityVocabulary,
   validateOrganizationVerification,
   validateTelemetryDecision,
 } from "./validation-policy.mjs";
@@ -64,6 +72,7 @@ const REQUIRED_FILES = [
   "docs/adr/0010-first-party-events-consent-and-deletion.md",
   "docs/audits/organization-wide-verification-2026-09-13.md",
   "docs/programs/media-taxonomy.md",
+  "docs/programs/native-identity-and-events.md",
   "fixtures/catalog-valid.json",
   "scripts/build.mjs",
   "scripts/check-governance.mjs",
@@ -76,6 +85,36 @@ const REQUIRED_FILES = [
   "scripts/validate.mjs",
   "scripts/validate.test.mjs",
   "scripts/validation-policy.mjs",
+  "taxonomy/events/README.md",
+  "taxonomy/events/v1/event-envelope.schema.json",
+  "taxonomy/events/v1/event-types.json",
+  "taxonomy/events/v1/event-types.schema.json",
+  "taxonomy/events/v1/fixtures/event-account-erasure-requested.json",
+  "taxonomy/events/v1/fixtures/event-account-export-requested.json",
+  "taxonomy/events/v1/fixtures/event-collection-item-added.json",
+  "taxonomy/events/v1/fixtures/event-collection-item-removed.json",
+  "taxonomy/events/v1/fixtures/event-collection-item-updated.json",
+  "taxonomy/events/v1/fixtures/event-consent-granted.json",
+  "taxonomy/events/v1/fixtures/event-consent-revoked.json",
+  "taxonomy/events/v1/fixtures/event-recommendation-dismissed.json",
+  "taxonomy/events/v1/fixtures/event-recommendation-hidden.json",
+  "taxonomy/events/v1/fixtures/event-recommendation-opened.json",
+  "taxonomy/events/v1/fixtures/event-recommendation-saved.json",
+  "taxonomy/events/v1/fixtures/event-recommendation-shown.json",
+  "taxonomy/events/v1/fixtures/event-search-query.json",
+  "taxonomy/events/v1/fixtures/event-search-result-impression.json",
+  "taxonomy/events/v1/fixtures/event-wantlist-item-added.json",
+  "taxonomy/events/v1/fixtures/event-wantlist-item-removed.json",
+  "taxonomy/events/v1/fixtures/impression-recommendation-shown.json",
+  "taxonomy/events/v1/fixtures/impression-search-result.json",
+  "taxonomy/events/v1/fixtures/invalid-event-missing-consent-purposes.json",
+  "taxonomy/events/v1/fixtures/invalid-event-unknown-type.json",
+  "taxonomy/events/v1/fixtures/invalid-impression-missing-candidate-set-id.json",
+  "taxonomy/events/v1/fixtures/invalid-impression-missing-policy-id.json",
+  "taxonomy/events/v1/impression.schema.json",
+  "taxonomy/identity/README.md",
+  "taxonomy/identity/v1/identity-vocabulary.json",
+  "taxonomy/identity/v1/identity-vocabulary.schema.json",
   "taxonomy/media/README.md",
   "taxonomy/media/v1/media-block.schema.json",
   "taxonomy/media/v1/media-taxonomy.json",
@@ -166,6 +205,94 @@ function checkTaxonomy() {
   runJsonSchema(["validate", blockSchema, ...expectedPaths, "--format-assertion"], "a fixture's expected media block does not satisfy the media block schema");
   rmSync(expectedDirectory, { recursive: true, force: true });
   console.log(`Verified the media taxonomy, its schemas, and ${fixtures.length} conformance fixtures against the reference mapper.`);
+}
+
+function expectJsonSchemaFailure(arguments_, message) {
+  const result = spawnSync("jsonschema", arguments_, { cwd: ROOT, encoding: "utf8" });
+  requireCondition(!result.error, `unable to execute the pinned JSON Schema validator: ${result.error?.message}`);
+  requireCondition(result.status !== 0, message);
+}
+
+function checkIdentity() {
+  const base = resolve(ROOT, "taxonomy/identity/v1");
+  const schemaPath = resolve(base, "identity-vocabulary.schema.json");
+  const vocabularyPath = resolve(base, "identity-vocabulary.json");
+  runJsonSchema(["metaschema", schemaPath], `${relative(ROOT, schemaPath)} is not a valid 2020-12 schema`);
+  runJsonSchema(["validate", schemaPath, vocabularyPath, "--format-assertion"], "the identity vocabulary does not satisfy its schema");
+  const vocabulary = JSON.parse(readFileSync(vocabularyPath, "utf8"));
+  const errors = validateIdentityVocabulary(vocabulary);
+  requireCondition(errors.length === 0, `identity vocabulary:\n- ${errors.join("\n- ")}`);
+  console.log(
+    `Verified the identity vocabulary and its schema: ${vocabulary.entity_kinds.length} entity kinds, ${vocabulary.providers.length} providers, ${vocabulary.sources.length} alias sources.`,
+  );
+}
+
+function checkEvents() {
+  const base = resolve(ROOT, "taxonomy/events/v1");
+  const vocabularySchema = resolve(base, "event-types.schema.json");
+  const envelopeSchema = resolve(base, "event-envelope.schema.json");
+  const impressionSchema = resolve(base, "impression.schema.json");
+  for (const schema of [vocabularySchema, envelopeSchema, impressionSchema]) {
+    runJsonSchema(["metaschema", schema], `${relative(ROOT, schema)} is not a valid 2020-12 schema`);
+  }
+  const vocabularyPath = resolve(base, "event-types.json");
+  runJsonSchema(["validate", vocabularySchema, vocabularyPath, "--format-assertion"], "the event-type vocabulary does not satisfy its schema");
+  const vocabulary = JSON.parse(readFileSync(vocabularyPath, "utf8"));
+  const vocabularyErrors = validateEventVocabulary(vocabulary);
+  requireCondition(vocabularyErrors.length === 0, `event-type vocabulary:\n- ${vocabularyErrors.join("\n- ")}`);
+  const contractErrors = validateEventEnvelopeContract(
+    JSON.parse(readFileSync(envelopeSchema, "utf8")),
+    JSON.parse(readFileSync(impressionSchema, "utf8")),
+    vocabulary,
+  );
+  requireCondition(contractErrors.length === 0, `event envelope contract:\n- ${contractErrors.join("\n- ")}`);
+
+  const fixtureDirectory = resolve(base, "fixtures");
+  const fixtureFiles = sorted(readdirSync(fixtureDirectory).filter((name) => name.endsWith(".json")));
+  requireCondition(fixtureFiles.length > 0, "event conformance fixtures are missing");
+  const fixtures = fixtureFiles.map((file) => ({ file, ...JSON.parse(readFileSync(resolve(fixtureDirectory, file), "utf8")) }));
+  const fixtureErrors = validateEventFixtureSet(vocabulary, fixtures);
+  requireCondition(fixtureErrors.length === 0, `event fixtures:\n- ${fixtureErrors.join("\n- ")}`);
+
+  const expectedDirectory = resolve(ROOT, ".build", "event-fixtures");
+  rmSync(expectedDirectory, { recursive: true, force: true });
+  mkdirSync(expectedDirectory, { recursive: true });
+  const write = (name, value) => {
+    const path = resolve(expectedDirectory, `${name}.json`);
+    writeFileSync(path, `${JSON.stringify(value)}\n`, "utf8");
+    return path;
+  };
+  const schemaFor = { event: envelopeSchema, impression: impressionSchema };
+  const payloads = new Map();
+  const accepted = { event: [], impression: [] };
+  for (const fixture of fixtures) {
+    const path = write(fixture.name, fixture.document);
+    if (fixture.valid === false) {
+      expectJsonSchemaFailure(
+        ["validate", schemaFor[fixture.envelope], path, "--format-assertion"],
+        `fixture ${fixture.name} must be rejected by the ${fixture.envelope} envelope but was accepted`,
+      );
+      continue;
+    }
+    accepted[fixture.envelope].push(path);
+    if (fixture.envelope !== "event") continue;
+    const type = vocabulary.event_types.find((entry) => entry.id === fixture.document.event_type);
+    const group = payloads.get(type.payload_schema) ?? [];
+    group.push(write(`${fixture.name}-payload`, fixture.document.payload));
+    payloads.set(type.payload_schema, group);
+  }
+  for (const [envelope, paths] of Object.entries(accepted)) {
+    runJsonSchema(["validate", schemaFor[envelope], ...paths, "--format-assertion"], `a fixture does not satisfy the ${envelope} envelope schema`);
+  }
+  for (const [reference, paths] of sorted([...payloads.keys()]).map((key) => [key, payloads.get(key)])) {
+    const name = reference.slice("#/$defs/".length);
+    const payloadSchema = write(`${name}.schema`, { $schema: "https://json-schema.org/draft/2020-12/schema", $ref: reference, $defs: vocabulary.$defs });
+    runJsonSchema(["validate", payloadSchema, ...paths, "--format-assertion"], `a fixture payload does not satisfy ${reference}`);
+  }
+  rmSync(expectedDirectory, { recursive: true, force: true });
+  console.log(
+    `Verified the event-type vocabulary, both envelope schemas, and ${fixtures.length} conformance fixtures covering ${vocabulary.event_types.length} event types.`,
+  );
 }
 
 function checkWorkflow() {
@@ -272,6 +399,8 @@ function run(mode) {
     "--assets": checkAssets,
     "--catalog": checkCatalog,
     "--dependencies": checkDependencies,
+    "--events": checkEvents,
+    "--identity": checkIdentity,
     "--license": checkLicense,
     "--links": checkLinks,
     "--policy": checkPolicy,

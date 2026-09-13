@@ -2,7 +2,7 @@
 
 This repository owns GrooveMap's canonical brand sources, generated brand assets, public architecture decisions, and sanitized repository catalog. The editable design tokens and SVG templates live in [`brand/`](brand/); applications and documentation consume the generated assets rather than maintaining independent copies.
 
-The [`catalog/repositories.json`](catalog/repositories.json) catalog describes the public responsibilities and relationships of all 21 organization repositories: 19 public repositories plus the private `infra` and `planning-archive` boundaries. Its deliberately narrow schema excludes provider identifiers, access policy, secret distribution, source-extraction paths, and other operational configuration. Public architecture decisions are indexed in [`docs/`](docs/README.md). The [`taxonomy/media/`](taxonomy/media/README.md) directory owns the canonical media vocabulary, its schemas, and the conformance fixtures that every service vendors under [ADR 0007](docs/adr/0007-canonical-media-taxonomy.md).
+The [`catalog/repositories.json`](catalog/repositories.json) catalog describes the public responsibilities and relationships of all 21 organization repositories: 19 public repositories plus the private `infra` and `planning-archive` boundaries. Its deliberately narrow schema excludes provider identifiers, access policy, secret distribution, source-extraction paths, and other operational configuration. Public architecture decisions are indexed in [`docs/`](docs/README.md). The [`taxonomy/media/`](taxonomy/media/README.md) directory owns the canonical media vocabulary, its schemas, and the conformance fixtures that every service vendors under [ADR 0007](docs/adr/0007-canonical-media-taxonomy.md). The [`taxonomy/identity/`](taxonomy/identity/README.md) directory owns the native identity vocabulary under [ADR 0009](docs/adr/0009-native-identity-and-provider-aliases.md), and [`taxonomy/events/`](taxonomy/events/README.md) owns the first-party event vocabulary, its two envelope schemas, and their conformance fixtures under [ADR 0010](docs/adr/0010-first-party-events-consent-and-deletion.md).
 
 Organization-level ownership is deliberately split: `.github` owns the public profile and
 community-health files, `automation` owns reusable workflows, this repository owns public
@@ -23,7 +23,7 @@ The [brand guide](brand/README.md) documents the source layout, asset reproducti
 
 ## Validation and automation
 
-Install the pinned tools with `just setup`, then run the credential-free `just check` gate. It verifies local links, the public catalog and the media taxonomy through a pinned standards-compliant JSON Schema 2020-12 implementation, the immutable CI caller, license metadata, public-content safety, full-history secret scans, deterministic rendering, the reviewed 12-asset checksum set, and a deterministic package containing the assets and applicable notices.
+Install the pinned tools with `just setup`, then run the credential-free `just check` gate. It verifies local links, the public catalog and the media, identity, and event vocabularies through a pinned standards-compliant JSON Schema 2020-12 implementation, the immutable CI caller, license metadata, public-content safety, full-history secret scans, deterministic rendering, the reviewed 12-asset checksum set, and a deterministic package containing the assets and applicable notices.
 
 Pull requests and pushes to `main` use the reusable GrooveMap CI workflow pinned to an immutable automation commit. Dependabot opens ordinary pull requests, so dependency updates execute the same required job and complete validation graph as contributor pull requests; there is no actor-specific reduced path.
 
@@ -37,6 +37,8 @@ Repository-specific recipes keep design capabilities visible instead of hiding t
 | `links` | Verify repository-local Markdown references without contacting remote services. |
 | `catalog` | Validate the canonical public repository catalog and its closed schema. |
 | `taxonomy` | Validate the canonical media vocabulary, schemas, mapper, and conformance fixtures. |
+| `identity` | Validate the native identity vocabulary and its schema. |
+| `events` | Validate the first-party event vocabulary, both envelope schemas, and the conformance fixtures. |
 | `brand` | Prove generated assets match canonical sources and the reviewed checksum manifest. |
 | `brand-render` | Regenerate brand assets explicitly after canonical source changes. |
 | `publication-readiness` | Repeat the full gate and emit an immutable, non-publishing handoff for separately approved infrastructure work. |
