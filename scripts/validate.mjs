@@ -60,6 +60,8 @@ const REQUIRED_FILES = [
   "docs/adr/0006-opentelemetry-metrics.md",
   "docs/adr/0007-canonical-media-taxonomy.md",
   "docs/adr/0008-victoriametrics-tracing-runtime-alerting.md",
+  "docs/adr/0009-native-identity-and-provider-aliases.md",
+  "docs/adr/0010-first-party-events-consent-and-deletion.md",
   "docs/audits/organization-wide-verification-2026-09-13.md",
   "docs/programs/media-taxonomy.md",
   "fixtures/catalog-valid.json",
