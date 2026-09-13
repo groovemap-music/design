@@ -72,6 +72,7 @@ const REQUIRED_FILES = [
   "docs/adr/0010-first-party-events-consent-and-deletion.md",
   "docs/audits/organization-wide-verification-2026-09-13.md",
   "docs/programs/media-taxonomy.md",
+  "docs/programs/native-identity-and-events.md",
   "fixtures/catalog-valid.json",
   "scripts/build.mjs",
   "scripts/check-governance.mjs",

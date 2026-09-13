@@ -33,7 +33,7 @@ shasum -a 256 taxonomy/identity/v1/identity-vocabulary.json
 The canonical v1 bytes have SHA-256
 `001db32e91c851d49d252c945c1862e47763462acd44fc6ca84df13bae12e3de`.
 No consumer has vendored the vocabulary yet; the first source records are written in wave 1
-of the native identity and first-party events program.
+of the [native identity and first-party events program](../../docs/programs/native-identity-and-events.md).
 Consumer source records are promotion provenance; each consumer remains responsible for
 reviewing and validating its vendored copy.
 

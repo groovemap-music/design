@@ -39,7 +39,7 @@ shasum -a 256 taxonomy/events/v1/event-types.json
 The canonical v1 bytes have SHA-256
 `f64f03164c208477e8ae9c6bc547bba7342f23df96f6b10f21f7fa6f1d21ba74`.
 No consumer has vendored the vocabulary yet; the first source records are written in wave 1
-of the native identity and first-party events program.
+of the [native identity and first-party events program](../../docs/programs/native-identity-and-events.md).
 Consumer source records are promotion provenance; each consumer remains responsible for
 reviewing and validating its vendored copy.
 
