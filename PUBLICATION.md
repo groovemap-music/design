@@ -1,6 +1,10 @@
 # Publication readiness
 
-Public visibility is a separate infrastructure change. This repository's review process prepares immutable evidence; it does not change visibility, publish a release, or mutate organization settings.
+GrooveMap's current publication state is 19 public repositories plus the private `infra`
+and `planning-archive` boundaries. Visibility remains a separately reviewed infrastructure
+concern. This repository's review process prepares immutable evidence for future catalog,
+taxonomy, or brand promotions; it does not change visibility, publish a release, or mutate
+organization settings.
 
 Run the handoff from a clean reviewed commit:
 
@@ -17,4 +21,7 @@ The command first runs the complete credential-free `just check` gate. That gate
 - the sorted source-owned ingestion repository identities; and
 - an explicit statement that no publication action was performed.
 
-Infrastructure must pin those values without copying private operational configuration into this repository. A later reviewer can regenerate the handoff from the same commit and compare it byte-for-byte before authorizing any visibility change.
+Infrastructure may pin those values after its own review without copying private operational
+configuration into this repository. A later reviewer can regenerate the handoff from the
+same commit and compare it byte-for-byte before authorizing any downstream promotion. The
+handoff is provenance, not permission to modify a consumer or its visibility.

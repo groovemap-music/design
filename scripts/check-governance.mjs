@@ -1,11 +1,9 @@
 // SPDX-License-Identifier: MIT
 
-import { createHash } from "node:crypto";
 import { access, readFile } from "node:fs/promises";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { join } from "node:path";
 
-const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+import { ROOT as root, sha256 } from "./tooling.mjs";
 const required = ["README.md", "NOTICE", "TRADEMARKS.md", "CONTRIBUTING.md"];
 const expectedLicenseHash = "9572d39cdc09c0b2cd792a14fef5dcc4ed1b955d9b1ea2a3d0c058221fa5f391";
 
@@ -19,7 +17,7 @@ const contents = Object.fromEntries(await Promise.all(required.map(async (path) 
 ])));
 
 const license = await readFile(join(root, "LICENSE"));
-const licenseHash = createHash("sha256").update(license).digest("hex");
+const licenseHash = sha256(license);
 if (licenseHash !== expectedLicenseHash) {
   fail(`LICENSE must remain the unmodified approved MIT text (got ${licenseHash}).`);
 }

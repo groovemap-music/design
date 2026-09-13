@@ -11,11 +11,12 @@ import { fileURLToPath } from "node:url";
 import {
   extractLinks,
   findExposureIssues,
-  trackedFiles,
   validateActionReference,
   validateCanonicalCatalog,
   validateCatalogContract,
-} from "./validate.mjs";
+  validateFixtureSet,
+} from "./validation-policy.mjs";
+import { trackedFiles, validateCatalogContract as validateCatalogContractEntry } from "./validate.mjs";
 
 import schema from "../catalog/repositories.schema.json" with { type: "json" };
 import fixture from "../fixtures/catalog-valid.json" with { type: "json" };
@@ -81,17 +82,47 @@ test("publication handoff implementation is local and non-mutating", () => {
   }
 });
 
+test("repository policy leaves canonical asset verification to the brand capability", () => {
+  const result = spawnSync(process.execPath, ["scripts/validate.mjs", "--policy"], {
+    cwd: root,
+    encoding: "utf8",
+  });
+  assert.equal(result.status, 0, result.stderr);
+  assert.doesNotMatch(result.stdout, /byte identity/);
+  assert.match(result.stdout, /immutable CI/);
+  assert.match(result.stdout, /public-content boundary/);
+});
+
 test("catalog schema retains the exact public field boundary", () => {
   assert.deepEqual(validateCatalogContract(schema), []);
+  assert.equal(validateCatalogContractEntry, validateCatalogContract);
 });
 
 test("canonical catalog contains the exact sorted 21-repository set and source-owned ingestion relationships", () => {
   assert.deepEqual(validateCanonicalCatalog(catalog), []);
   assert.equal(catalog.repositories.length, 21);
+  assert.equal(catalog.repositories.filter((repository) => repository.publication_status === "public").length, 19);
+  assert.deepEqual(
+    catalog.repositories.filter((repository) => repository.publication_status === "private").map((repository) => repository.name),
+    ["infra", "planning-archive"],
+  );
   assert.equal(catalog.repositories.some((repository) => repository.name === "catalog-ingestion"), false);
   for (const producer of ["discogs-ingestion", "musicbrainz-ingestion"]) {
     assert.ok(catalog.repositories.some((repository) => repository.name === producer));
   }
+});
+
+test("canonical catalog rejects stale publication state and cross-source producer coordination", () => {
+  const stalePublication = structuredClone(catalog);
+  stalePublication.repositories.find((repository) => repository.name === "design").publication_status = "preparing";
+  assert.match(validateCanonicalCatalog(stalePublication).join("\n"), /design must record its current public publication state/);
+
+  const coordinatedSources = structuredClone(catalog);
+  coordinatedSources.repositories.find((repository) => repository.name === "musicbrainz-ingestion").relationships.push({
+    repository: "discogs-ingestion",
+    kind: "coordinates-after",
+  });
+  assert.match(validateCanonicalCatalog(coordinatedSources).join("\n"), /musicbrainz-ingestion must remain independent/);
 });
 
 test("catalog schema rejects private operational metadata fields", async (t) => {
@@ -181,7 +212,6 @@ test("standards validator rejects every declared catalog constraint", async (t) 
   }
 });
 
-import { validateFixtureSet } from "./validate.mjs";
 import { flattenDescriptions, mapDiscogsFormats, mapFixtureInput, mapMusicBrainzRelease, validateTaxonomy } from "./media-mapper.mjs";
 import taxonomy from "../taxonomy/media/v1/media-taxonomy.json" with { type: "json" };
 
