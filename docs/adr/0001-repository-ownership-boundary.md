@@ -1,6 +1,6 @@
 # ADR 0001: Repository ownership boundary
 
-- Status: Accepted
+- Status: Accepted; amended 2026-09-12
 
 ## Context
 
@@ -17,3 +17,19 @@ Cross-repository contracts are versioned or pinned at consumption boundaries. A 
 ## Consequences
 
 Repository READMEs can describe one clear responsibility. Release artifacts have a single owner, and public metadata can stay useful without reproducing access rules, secrets, environment values, or private planning state.
+
+## Amendments
+
+### 2026-09-12: Organization metadata and automation ownership clarified
+
+The `.github` repository owns the public organization profile and shared community-health
+files. Reusable continuous-integration, release, and security implementation remains owned
+exclusively by `automation`; `.github` may call that implementation but does not duplicate
+it.
+
+`design` remains the public authority for architecture decisions, repository metadata,
+brand sources and assets, and the canonical media taxonomy. `infra` consumes immutable
+Design revisions when applying private organization controls and other operational policy;
+it is not the source of those public design contracts. `planning-archive` preserves
+historical planning and research and is not an active architecture-decision or backlog
+source.

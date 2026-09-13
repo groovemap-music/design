@@ -1,6 +1,6 @@
 # ADR 0005: Source-owned catalog ingestion repositories
 
-- Status: Accepted
+- Status: Accepted; amended 2026-09-04 and 2026-09-12
 
 ## Context
 
@@ -28,8 +28,11 @@ record that revision in its initial provenance.
 Each producer owns its source-specific acquisition, parsing, normalization, orchestration,
 tests, contract manifest, generated bindings, deterministic fixtures, image, and release.
 `discogs-ingestion` owns the Discogs extraction rules. `musicbrainz-ingestion` owns the
-MusicBrainz extraction rules. (Superseded 2026-09-04: see Amendments — the two producers do
-not coordinate with each other.)
+MusicBrainz-to-Discogs health coordination behavior.
+
+The following diagram and the health-coordination paragraph in the compatibility section
+preserve the originally accepted decision. The 2026-09-04 amendment supersedes the dotted
+edge and that paragraph; they describe historical intent, not current runtime behavior.
 
 ```mermaid
 flowchart LR
@@ -37,6 +40,7 @@ flowchart LR
     D -->|Discogs v1 events| DS[discogs-sql-loader]
     M[musicbrainz-ingestion] -->|MusicBrainz v1 events| MG[musicbrainz-graph-enricher]
     M -->|MusicBrainz v1 events| MS[musicbrainz-sql-loader]
+    D -. health advisory .-> M
 ```
 
 ### Frozen compatibility boundary
@@ -73,8 +77,11 @@ A file remains complete only after its `file_complete` event is broker-accepted.
 extraction remains complete only after every file succeeds and `extraction_complete` is
 broker-accepted. Producer completion must continue to precede the durable completed marker.
 
-(Superseded 2026-09-04: see Amendments. MusicBrainz no longer polls Discogs health before a
-run; the two extractors run concurrently and independently.)
+Before every initial, periodic, or triggered MusicBrainz run, MusicBrainz continues to poll
+Discogs health. A `running` response delays the run; idle, waiting, completed, or failed
+allows it. Unreachable health retries ten times with escalating delay from five seconds up
+to five minutes and then fails open; an unparseable response fails open immediately. All
+waits remain shutdown-aware. This is scheduling preference, not distributed exclusion.
 
 ### Cutover and rollback
 
@@ -131,3 +138,11 @@ split cleanly, there was nothing left for it to serialize against.
 The mermaid diagram edge `D -. health advisory .-> M` and the "MusicBrainz continues to
 poll Discogs health" paragraph above are superseded by this amendment and should be read as
 historical context only, not current behavior.
+
+### 2026-09-12: Source-owned split completed
+
+Both source repositories now operate as independent public producers. Each publishes only
+its source's v1 events to its matching graph and SQL consumers; services that need a combined
+catalog compose the two source contracts explicitly. The maintained repository catalog
+records no producer-to-producer scheduling relationship. This implementation status does not
+change the frozen wire, deployment-identity, or rollback boundaries above.

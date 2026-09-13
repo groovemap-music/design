@@ -101,10 +101,28 @@ test("catalog schema retains the exact public field boundary", () => {
 test("canonical catalog contains the exact sorted 21-repository set and source-owned ingestion relationships", () => {
   assert.deepEqual(validateCanonicalCatalog(catalog), []);
   assert.equal(catalog.repositories.length, 21);
+  assert.equal(catalog.repositories.filter((repository) => repository.publication_status === "public").length, 19);
+  assert.deepEqual(
+    catalog.repositories.filter((repository) => repository.publication_status === "private").map((repository) => repository.name),
+    ["infra", "planning-archive"],
+  );
   assert.equal(catalog.repositories.some((repository) => repository.name === "catalog-ingestion"), false);
   for (const producer of ["discogs-ingestion", "musicbrainz-ingestion"]) {
     assert.ok(catalog.repositories.some((repository) => repository.name === producer));
   }
+});
+
+test("canonical catalog rejects stale publication state and cross-source producer coordination", () => {
+  const stalePublication = structuredClone(catalog);
+  stalePublication.repositories.find((repository) => repository.name === "design").publication_status = "preparing";
+  assert.match(validateCanonicalCatalog(stalePublication).join("\n"), /design must record its current public publication state/);
+
+  const coordinatedSources = structuredClone(catalog);
+  coordinatedSources.repositories.find((repository) => repository.name === "musicbrainz-ingestion").relationships.push({
+    repository: "discogs-ingestion",
+    kind: "coordinates-after",
+  });
+  assert.match(validateCanonicalCatalog(coordinatedSources).join("\n"), /musicbrainz-ingestion must remain independent/);
 });
 
 test("catalog schema rejects private operational metadata fields", async (t) => {

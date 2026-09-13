@@ -2,6 +2,11 @@
 
 These records describe stable, public boundaries for the GrooveMap organization. They explain ownership and contribution expectations without carrying credentials, provider identifiers, access policy, deployment values, or unpublished planning details.
 
+Accepted records remain historical evidence. When implementation changes or clarifies an
+accepted boundary, the record retains its original decision and adds a dated amendment or
+an explicit supersession. The repository catalog and program status documents describe the
+maintained current state.
+
 - [ADR 0001: Repository ownership boundary](adr/0001-repository-ownership-boundary.md)
 - [ADR 0002: Shared automation boundary](adr/0002-shared-automation-boundary.md)
 - [ADR 0003: AGPL and commercial licensing model](adr/0003-agpl-commercial-licensing.md)
@@ -13,4 +18,4 @@ These records describe stable, public boundaries for the GrooveMap organization.
 
 ## Program rollout plans
 
-- [Media-taxonomy program rollout](programs/media-taxonomy.md) delivers ADR 0007 across the organization in five waves.
+- [Media-taxonomy program rollout](programs/media-taxonomy.md) records the completed delivery of ADR 0007 across the organization in five waves.

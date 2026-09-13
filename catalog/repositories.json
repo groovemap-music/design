@@ -33,7 +33,7 @@
       "commercial_license_available": true,
       "release_units": ["container image", "service distribution"],
       "destination_visibility": "public",
-      "publication_status": "preparing"
+      "publication_status": "public"
     },
     {
       "name": "automation",
@@ -48,12 +48,12 @@
       "commercial_license_available": false,
       "release_units": ["composite actions", "reusable workflows"],
       "destination_visibility": "public",
-      "publication_status": "preparing"
+      "publication_status": "public"
     },
     {
       "name": "catalog-api",
       "url": "https://github.com/groovemap-music/catalog-api",
-      "description": "GrooveMap authentication, catalog search, graph query, recommendation, and analytics API.",
+      "description": "GrooveMap authentication, catalog search, graph query, recommendation, analytics, and operator API.",
       "responsibilities": ["Expose the catalog and graph API", "Coordinate authentication, recommendations, and analytics requests"],
       "relationships": [
         { "repository": "analytics-engine", "kind": "consumes-analytics-from" },
@@ -70,12 +70,12 @@
       "commercial_license_available": true,
       "release_units": ["container image", "operator command-line tools", "service distribution"],
       "destination_visibility": "public",
-      "publication_status": "preparing"
+      "publication_status": "public"
     },
     {
       "name": "database-schema",
       "url": "https://github.com/groovemap-music/database-schema",
-      "description": "Versioned Neo4j and PostgreSQL schemas, migrations, and compatibility policy.",
+      "description": "Versioned Neo4j and PostgreSQL schemas, runnable initialization, and compatibility contracts.",
       "responsibilities": ["Initialize supported databases", "Version persistence schemas and compatibility contracts"],
       "relationships": [
         { "repository": "catalog-api", "kind": "provides-schema-to" },
@@ -92,12 +92,12 @@
       "commercial_license_available": false,
       "release_units": ["container image", "schema package"],
       "destination_visibility": "public",
-      "publication_status": "preparing"
+      "publication_status": "public"
     },
     {
       "name": "deployment",
       "url": "https://github.com/groovemap-music/deployment",
-      "description": "GrooveMap deployment, environment, and whole-stack operations configuration.",
+      "description": "Whole-stack Compose topology, production hardening, runtime configuration promotion, and deployment validation.",
       "responsibilities": ["Compose versioned service releases", "Define stack-level deployment and rollback configuration"],
       "relationships": [
         { "repository": "database-schema", "kind": "deploys-initializer-from" },
@@ -110,22 +110,22 @@
       "commercial_license_available": false,
       "release_units": ["unversioned deployment configuration"],
       "destination_visibility": "public",
-      "publication_status": "preparing"
+      "publication_status": "public"
     },
     {
       "name": "design",
       "url": "https://github.com/groovemap-music/design",
-      "description": "GrooveMap brand sources, public architecture decisions, and repository catalog.",
-      "responsibilities": ["Maintain canonical brand sources and generated assets", "Publish public architecture decisions and repository metadata"],
+      "description": "GrooveMap brand sources, public architecture decisions, repository catalog, and canonical media taxonomy.",
+      "responsibilities": ["Maintain canonical brand sources and generated assets", "Publish public architecture decisions and repository metadata", "Own the provider-neutral media taxonomy and conformance fixtures"],
       "relationships": [{ "repository": ".github", "kind": "provides-public-design-guidance-to" }],
       "homepage": "https://groovemap.music/",
       "languages": ["CSS", "JavaScript", "JSON", "SVG"],
       "topics": ["architecture", "branding", "design-system", "groovemap"],
       "license": "MIT",
       "commercial_license_available": false,
-      "release_units": ["brand asset package", "public architecture documentation"],
+      "release_units": ["brand asset package", "canonical media taxonomy", "public architecture documentation"],
       "destination_visibility": "public",
-      "publication_status": "preparing"
+      "publication_status": "public"
     },
     {
       "name": "discogs-graph-enricher",
@@ -145,12 +145,12 @@
       "commercial_license_available": false,
       "release_units": ["container image", "service distribution"],
       "destination_visibility": "public",
-      "publication_status": "preparing"
+      "publication_status": "public"
     },
     {
       "name": "discogs-ingestion",
       "url": "https://github.com/groovemap-music/discogs-ingestion",
-      "description": "Downloads, parses, normalizes, and publishes the Discogs dataset.",
+      "description": "Downloads, verifies, parses, and normalizes Discogs dumps, then publishes source-owned events.",
       "responsibilities": ["Acquire and normalize Discogs data", "Own and publish the Discogs event contract"],
       "relationships": [
         { "repository": "discogs-graph-enricher", "kind": "publishes-events-to" },
@@ -163,7 +163,7 @@
       "commercial_license_available": false,
       "release_units": ["command-line binary", "container image", "Discogs event contract"],
       "destination_visibility": "public",
-      "publication_status": "preparing"
+      "publication_status": "public"
     },
     {
       "name": "discogs-sql-loader",
@@ -183,7 +183,7 @@
       "commercial_license_available": false,
       "release_units": ["container image", "service distribution"],
       "destination_visibility": "public",
-      "publication_status": "preparing"
+      "publication_status": "public"
     },
     {
       "name": "graph-explorer",
@@ -202,7 +202,7 @@
       "commercial_license_available": true,
       "release_units": ["container image", "web application distribution"],
       "destination_visibility": "public",
-      "publication_status": "preparing"
+      "publication_status": "public"
     },
     {
       "name": "groovemap-music.github.io",
@@ -254,7 +254,7 @@
       "commercial_license_available": false,
       "release_units": ["container image", "Python package", "service distribution"],
       "destination_visibility": "public",
-      "publication_status": "preparing"
+      "publication_status": "public"
     },
     {
       "name": "musicbrainz-graph-enricher",
@@ -274,15 +274,14 @@
       "commercial_license_available": false,
       "release_units": ["container image", "service distribution"],
       "destination_visibility": "public",
-      "publication_status": "preparing"
+      "publication_status": "public"
     },
     {
       "name": "musicbrainz-ingestion",
       "url": "https://github.com/groovemap-music/musicbrainz-ingestion",
-      "description": "Downloads, parses, normalizes, and publishes the MusicBrainz dataset.",
+      "description": "Downloads and verifies MusicBrainz dumps, enriches normalized JSONL, and publishes source-owned events.",
       "responsibilities": ["Acquire and normalize MusicBrainz data", "Own and publish the MusicBrainz event contract"],
       "relationships": [
-        { "repository": "discogs-ingestion", "kind": "coordinates-after" },
         { "repository": "musicbrainz-graph-enricher", "kind": "publishes-events-to" },
         { "repository": "musicbrainz-sql-loader", "kind": "publishes-events-to" }
       ],
@@ -293,7 +292,7 @@
       "commercial_license_available": false,
       "release_units": ["command-line binary", "container image", "MusicBrainz event contract"],
       "destination_visibility": "public",
-      "publication_status": "preparing"
+      "publication_status": "public"
     },
     {
       "name": "musicbrainz-sql-loader",
@@ -313,7 +312,7 @@
       "commercial_license_available": false,
       "release_units": ["container image", "service distribution"],
       "destination_visibility": "public",
-      "publication_status": "preparing"
+      "publication_status": "public"
     },
     {
       "name": "operations-console",
@@ -334,13 +333,13 @@
       "commercial_license_available": true,
       "release_units": ["container image", "web application distribution"],
       "destination_visibility": "public",
-      "publication_status": "preparing"
+      "publication_status": "public"
     },
     {
       "name": "operations-toolkit",
       "url": "https://github.com/groovemap-music/operations-toolkit",
-      "description": "Queue, error, system, and deployment inspection command-line utilities.",
-      "responsibilities": ["Inspect queue and service health", "Provide observational operational diagnostics"],
+      "description": "Credential-conscious, primarily observational queue, error, system, and deployment command-line utilities.",
+      "responsibilities": ["Inspect queue and service health", "Provide observational operational diagnostics", "Requeue individual debug messages through a narrow stateful exception"],
       "relationships": [
         { "repository": "deployment", "kind": "operates" },
         { "repository": "discogs-ingestion", "kind": "composes-contract-from" },
@@ -354,7 +353,7 @@
       "commercial_license_available": false,
       "release_units": ["Python command-line package"],
       "destination_visibility": "public",
-      "publication_status": "preparing"
+      "publication_status": "public"
     },
     {
       "name": "planning-archive",
@@ -387,7 +386,7 @@
       "commercial_license_available": false,
       "release_units": ["groovemap-agent-tools Python package", "groovemap-runtime Python package"],
       "destination_visibility": "public",
-      "publication_status": "preparing"
+      "publication_status": "public"
     }
   ]
 }

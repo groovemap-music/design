@@ -17,6 +17,19 @@ The renderer uses only pinned Node.js standard-library APIs. Given the same trac
 
 `assets.sha256` fixes the reviewed 12-file output set. `just brand` first renders in check mode and then verifies every output byte against that manifest.
 
+## Promotion provenance
+
+The canonical sources and 12 generated outputs remain byte-identical to Design commit
+`59c9fd3c8bbdfa676e0b7bb3d463fc766c1f3c0d`. Public consumer source records pin that
+revision and its asset digests in the organization profile, the Pages site, Graph Explorer,
+and Operations Console. Those records prove which reviewed Design bytes were promoted; they
+do not authorize this repository to modify a consumer.
+
+Private promotion systems pin reviewed Design revisions independently and keep their
+operational configuration outside this public repository. A future source change must
+regenerate the 12 outputs, update `assets.sha256`, pass `just brand`, and be promoted through
+each consumer's own review boundary.
+
 ## Font licensing
 
 The source monorepo contained Space Grotesk TTF files without an adjacent OFL or other font notice. Those binaries are intentionally **not** promoted here. Current SVGs request a system font stack and embed no font software. Space Grotesk may be added only with verified provenance, its required license text, and a deterministic pinned rendering toolchain.
