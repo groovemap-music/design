@@ -153,6 +153,7 @@
       "description": "Downloads, verifies, parses, and normalizes Discogs dumps, then publishes source-owned events.",
       "responsibilities": ["Acquire and normalize Discogs data", "Own and publish the Discogs event contract"],
       "relationships": [
+        { "repository": "deployment", "kind": "deployed-by" },
         { "repository": "discogs-graph-enricher", "kind": "publishes-events-to" },
         { "repository": "discogs-sql-loader", "kind": "publishes-events-to" }
       ],
@@ -240,11 +241,10 @@
     {
       "name": "mcp-server",
       "url": "https://github.com/groovemap-music/mcp-server",
-      "description": "Model Context Protocol integration exposing GrooveMap through the catalog API.",
+      "description": "Client-run Model Context Protocol integration exposing GrooveMap through the catalog API.",
       "responsibilities": ["Expose catalog capabilities as MCP tools", "Translate MCP requests to catalog API calls"],
       "relationships": [
         { "repository": "catalog-api", "kind": "uses-api-from" },
-        { "repository": "deployment", "kind": "deployed-by" },
         { "repository": "python-libraries", "kind": "uses-agent-tools-from" }
       ],
       "homepage": null,
@@ -282,6 +282,7 @@
       "description": "Downloads and verifies MusicBrainz dumps, enriches normalized JSONL, and publishes source-owned events.",
       "responsibilities": ["Acquire and normalize MusicBrainz data", "Own and publish the MusicBrainz event contract"],
       "relationships": [
+        { "repository": "deployment", "kind": "deployed-by" },
         { "repository": "musicbrainz-graph-enricher", "kind": "publishes-events-to" },
         { "repository": "musicbrainz-sql-loader", "kind": "publishes-events-to" }
       ],
