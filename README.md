@@ -26,4 +26,4 @@ The catalog schema is available at [`catalog/repositories.schema.json`](catalog/
 
 ## Publication handoff
 
-The repository stays private until its separately reviewed infrastructure publication change. After a clean review commit, `just publication-readiness` repeats the complete gate and emits the exact commit and catalog SHA-256 that infrastructure must pin. See [PUBLICATION.md](PUBLICATION.md) for the handoff contract.
+Repository visibility is a separately reviewed infrastructure concern. From a clean review commit, `just publication-readiness` repeats the complete gate and emits the exact commit and catalog SHA-256 that infrastructure must pin. See [PUBLICATION.md](PUBLICATION.md) for the handoff contract.

@@ -18,8 +18,11 @@ syntax-check:
     {{tool}} node --check scripts/build.mjs
     {{tool}} node --check scripts/check-governance.mjs
     {{tool}} node --check scripts/media-mapper.mjs
+    {{tool}} node --check scripts/publication-readiness.mjs
+    {{tool}} node --check scripts/tooling.mjs
     {{tool}} node --check scripts/validate.mjs
     {{tool}} node --check scripts/validate.test.mjs
+    {{tool}} node --check scripts/validation-policy.mjs
     bash -n scripts/check-secrets.sh
 
 test:

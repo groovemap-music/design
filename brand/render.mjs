@@ -1,8 +1,9 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { join } from "node:path";
 
-const root = dirname(fileURLToPath(import.meta.url));
+import { ROOT } from "../scripts/tooling.mjs";
+
+const root = join(ROOT, "brand");
 const assetsDir = join(root, "assets");
 const check = process.argv.includes("--check");
 const tokens = JSON.parse(await readFile(join(root, "tokens.json"), "utf8"));

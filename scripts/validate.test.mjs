@@ -11,11 +11,12 @@ import { fileURLToPath } from "node:url";
 import {
   extractLinks,
   findExposureIssues,
-  trackedFiles,
   validateActionReference,
   validateCanonicalCatalog,
   validateCatalogContract,
-} from "./validate.mjs";
+  validateFixtureSet,
+} from "./validation-policy.mjs";
+import { trackedFiles, validateCatalogContract as validateCatalogContractEntry } from "./validate.mjs";
 
 import schema from "../catalog/repositories.schema.json" with { type: "json" };
 import fixture from "../fixtures/catalog-valid.json" with { type: "json" };
@@ -83,6 +84,7 @@ test("publication handoff implementation is local and non-mutating", () => {
 
 test("catalog schema retains the exact public field boundary", () => {
   assert.deepEqual(validateCatalogContract(schema), []);
+  assert.equal(validateCatalogContractEntry, validateCatalogContract);
 });
 
 test("canonical catalog contains the exact sorted 21-repository set and source-owned ingestion relationships", () => {
@@ -181,7 +183,6 @@ test("standards validator rejects every declared catalog constraint", async (t) 
   }
 });
 
-import { validateFixtureSet } from "./validate.mjs";
 import { flattenDescriptions, mapDiscogsFormats, mapFixtureInput, mapMusicBrainzRelease, validateTaxonomy } from "./media-mapper.mjs";
 import taxonomy from "../taxonomy/media/v1/media-taxonomy.json" with { type: "json" };
 
