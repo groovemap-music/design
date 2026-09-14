@@ -23,6 +23,11 @@ maintained current state.
 - [Media-taxonomy program rollout](programs/media-taxonomy.md) records the completed delivery of ADR 0007 across the organization in five waves.
 - [Native identity and first-party events program rollout](programs/native-identity-and-events.md) records the four-wave delivery plan for ADR 0009 and ADR 0010, the artifacts each wave pins, and the gaps it deliberately leaves to their own records.
 
+## Design spikes
+
+- [Shared delivery and batch-processing contract](spikes/gm-design-erl.1-delivery-contract.md)
+  records the bounded GO decision for a shared settlement policy and a Discogs-only batch engine.
+
 ## Verification reports
 
 - [Organization-wide verification — 2026-09-13](audits/organization-wide-verification-2026-09-13.md)
