@@ -1,0 +1,838 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-09-14",
+  "collected_at_utc": "2026-09-15T01:41:38Z",
+  "verdict": "pass",
+  "scope": {
+    "repository_count": 6,
+    "repositories": [
+      "python-libraries",
+      "catalog-api",
+      "discogs-graph-enricher",
+      "discogs-sql-loader",
+      "musicbrainz-graph-enricher",
+      "musicbrainz-sql-loader"
+    ],
+    "additional_code_repositories_used": [],
+    "design_repository_role": "versioned evidence owner; excluded from the implementation and consumer metric population"
+  },
+  "historical_records": [
+    {
+      "path": "verification/organization-wide-v1.json",
+      "sha256": "7c042ba9d044f3fd582a1dd93e1af9b83d75d6cb5f6a3d8e551d3a022f70e514"
+    },
+    {
+      "path": "docs/audits/organization-wide-verification-2026-09-13.md",
+      "sha256": "8a02d82194ac6cfdb69bb010c29a6ef21cb6f801a6a851305198fdf4875bb06b"
+    },
+    {
+      "path": "verification/shared-delivery-rollout-v1.json",
+      "sha256": "a88e3b134b6da2bb26dfe1ab4ee6e9849d812e4085193a80a17a63e4fa286ae9"
+    },
+    {
+      "path": "docs/audits/shared-delivery-rollout-2026-09-14.md",
+      "sha256": "34c4124a7528837644113150c2b8ee7a2184d637ba38466d26fa0ea7698251a5"
+    }
+  ],
+  "tooling": {
+    "name": "repowise",
+    "version": "0.50.0",
+    "output_mode": "native JSON fields and deterministic CLI summaries, sanitized to repository-relative paths",
+    "networked_or_llm_analysis": false,
+    "working_directory": "each named repository root",
+    "configuration": {
+      "enable_onboarding": false,
+      "commit_limit": 500,
+      "editor_files": {
+        "claude_md": false,
+        "agents_md": false
+      },
+      "embedder": "mock",
+      "config_fingerprint": "cdf26e4d92b67a9c9bb40129f477cb54afa7181a915b49b6cc3ee553b3e99d13",
+      "store_format_version": 2,
+      "health_analyzer_version": 11,
+      "docs_enabled": false,
+      "docs_mode": "deterministic",
+      "git_tier": "full"
+    },
+    "commands": {
+      "version": "repowise --version",
+      "initialize": "repowise init . --no-prose --no-editor-setup --no-agents --no-claude-md --no-hook --no-onboarding --no-workspace --commit-limit 500 --progress json",
+      "update": "repowise update . --no-workspace --index-only --no-agents --progress json",
+      "status": "repowise status --no-workspace --format json",
+      "coverage_add": "repowise coverage add coverage.xml",
+      "coverage_status": "repowise coverage status --format json",
+      "health": "repowise health . --no-workspace --scope production --format json",
+      "dead_code": "repowise dead-code --no-workspace --include-internals --include-zombie-packages --format json",
+      "change_risk": "repowise risk HEAD --format json --full",
+      "removed_symbol_search": "repowise search ResilientPostgreSQLPool . --mode symbol --no-workspace --format json --full"
+    },
+    "command_windows": {
+      "initialize_first_started_at_utc": "2026-09-15T01:26:20.456240Z",
+      "initialize_last_finished_at_utc": "2026-09-15T01:26:52.993319Z",
+      "update_started_at_utc": "2026-09-15T01:29:04.832Z",
+      "update_finished_at_utc": "2026-09-15T01:29:12.392Z",
+      "coverage_reingest_started_at_utc": "2026-09-15T01:39:22.866Z",
+      "coverage_reingest_finished_at_utc": "2026-09-15T01:39:29.417Z",
+      "evidence_snapshot_at_utc": "2026-09-15T01:41:38Z"
+    },
+    "editor_setup": {
+      "initialized_with_no_editor_setup": true,
+      "retained_generated_editor_files": false,
+      "note": "The update command emitted untracked VS Code recommendations despite the initialization flags; those generated files were removed before the evidence snapshot."
+    }
+  },
+  "comparison_policy": {
+    "historical_monorepo_baseline_retained_in_source_bead": true,
+    "historical_values_imported_into_this_record": false,
+    "direct_comparison_to_split_repository_averages": false,
+    "reason": "The historical population and the six current repository-scoped production populations differ, so no aggregate delta is valid."
+  },
+  "repositories": [
+    {
+      "name": "python-libraries",
+      "revision": "24704f5fd48d3ef4fff29398585e9924e225b0c5",
+      "tree": "c5b96bdeab082057480a26784ad6065497aaae9a",
+      "revision_state": "main aligned with origin/main; clean before indexing; no tracked files changed by indexing",
+      "index": {
+        "initialized_at_utc": "2026-09-15T01:26:20.456240Z",
+        "completed_at_utc": "2026-09-15T01:26:21.481813Z",
+        "status": "completed",
+        "last_sync_commit": "24704f5fd48d3ef4fff29398585e9924e225b0c5",
+        "total_pages": 154,
+        "completed_pages": 154,
+        "failed_pages": 0,
+        "update_exit_code": 0,
+        "update_outcome": "noop",
+        "degraded": []
+      },
+      "coverage": {
+        "report_generated_at_utc": "2026-09-15T00:38:40Z",
+        "source_command": "just check",
+        "source_evidence": "verification/shared-delivery-rollout-v1.json",
+        "ingested_at_utc": "2026-09-15T01:39:26.978478Z",
+        "ingested_commit": "24704f5fd48d3ef4fff29398585e9924e225b0c5",
+        "format": "cobertura",
+        "mapped_files": 24,
+        "exact_files": 24,
+        "resolved_files": 0,
+        "unmapped_report_files": 0,
+        "covered_lines": 2698,
+        "total_lines": 2883,
+        "line_coverage_pct": 93.58,
+        "branch_coverage_pct": null,
+        "repowise_mapping_partial": false
+      },
+      "health": {
+        "scope": "production",
+        "counts": "everything",
+        "file_count": 40,
+        "average_health": 6.65,
+        "hotspot_health": 3.66,
+        "worst_performer_path": "src/common/postgres_resilient.py",
+        "worst_performer_score": 1.62,
+        "max_ccn": 28,
+        "complexity_files_over_ccn_10": 4,
+        "files_with_duplication": 10,
+        "max_duplication_pct": 41.94,
+        "files_without_mapped_line_coverage": 16,
+        "biomarkers": {
+          "dry_violation": 6,
+          "complex_method": 9,
+          "brain_method": 0,
+          "nested_complexity": 9,
+          "large_method": 2,
+          "function_hotspot": 6,
+          "churn_risk": 2,
+          "untested_hotspot": 1,
+          "coverage_gap": 1,
+          "coverage_gradient": 14
+        },
+        "untested_hotspots": [
+          {
+            "file_path": "src/common/__init__.py",
+            "severity": "critical",
+            "dependents_count": 15,
+            "commit_count_90d": 13,
+            "has_test_file": false,
+            "reached_by_tests": false
+          }
+        ]
+      },
+      "dead_code": {
+        "total_findings": 17,
+        "by_kind": {
+          "unreachable_file": 9,
+          "unused_export": 1,
+          "unused_internal": 7,
+          "zombie_package": 0
+        },
+        "safe_to_delete_count": 0,
+        "resilient_postgresql_pool_matches": 0
+      },
+      "change_risk": {
+        "ref": "HEAD",
+        "working_tree": false,
+        "score": 9.5,
+        "risk_percentile": 95.2,
+        "review_priority": "high",
+        "classification": "Elevated",
+        "baseline_sample_size": 199,
+        "fix_history_density": 0.32,
+        "fix_history_percentile": 13.6,
+        "features": {
+          "lines_added": 1035,
+          "lines_deleted": 71,
+          "files": 12,
+          "directories": 3,
+          "subsystems": 3,
+          "entropy": 2.6189
+        }
+      }
+    },
+    {
+      "name": "catalog-api",
+      "revision": "8eec6ef062584e1ab0b3ea07fa16f32ab18ddbf1",
+      "tree": "17dd4815f8a29d859503d78c2142c5a7c073a70d",
+      "revision_state": "main aligned with origin/main; clean before indexing; no tracked files changed by indexing",
+      "index": {
+        "initialized_at_utc": "2026-09-15T01:26:51.350976Z",
+        "completed_at_utc": "2026-09-15T01:26:52.993319Z",
+        "status": "completed",
+        "last_sync_commit": "8eec6ef062584e1ab0b3ea07fa16f32ab18ddbf1",
+        "total_pages": 504,
+        "completed_pages": 504,
+        "failed_pages": 0,
+        "update_exit_code": 0,
+        "update_outcome": "noop",
+        "degraded": []
+      },
+      "coverage": {
+        "report_generated_at_utc": "2026-09-15T01:36:02Z",
+        "source_command": "just coverage",
+        "source_result": "2593 passed, 3 deselected; suite total 98.57%",
+        "ingested_at_utc": "2026-09-15T01:33:28.263779Z",
+        "ingested_commit": "8eec6ef062584e1ab0b3ea07fa16f32ab18ddbf1",
+        "format": "cobertura",
+        "mapped_files": 52,
+        "exact_files": 0,
+        "resolved_files": 52,
+        "unmapped_report_files": 5,
+        "unmapped_example": "contracts/operations-console/v1/python/catalog_admin_contract.py",
+        "covered_lines": 4682,
+        "total_lines": 4745,
+        "line_coverage_pct": 98.67,
+        "branch_coverage_pct": null,
+        "repowise_mapping_partial": false,
+        "limitation": "Repowise's mapped-file percentage excludes five report paths that did not resolve; use the suite total for the whole report.",
+        "timestamp_note": "The Repowise status timestamp is reproduced verbatim; it predates the coverage.xml filesystem mtime and is not used to order commands."
+      },
+      "health": {
+        "scope": "production",
+        "counts": "everything",
+        "file_count": 104,
+        "average_health": 5.86,
+        "hotspot_health": 4.31,
+        "worst_performer_path": "api/routers/extraction_analysis.py",
+        "worst_performer_score": 2.05,
+        "max_ccn": 41,
+        "complexity_files_over_ccn_10": 27,
+        "files_with_duplication": 39,
+        "max_duplication_pct": 64.54,
+        "files_without_mapped_line_coverage": 52,
+        "biomarkers": {
+          "dry_violation": 30,
+          "complex_method": 63,
+          "brain_method": 5,
+          "nested_complexity": 10,
+          "large_method": 20,
+          "function_hotspot": 58,
+          "churn_risk": 4,
+          "untested_hotspot": 0,
+          "coverage_gap": 0,
+          "coverage_gradient": 17
+        },
+        "untested_hotspots": []
+      },
+      "dead_code": {
+        "total_findings": 23,
+        "by_kind": {
+          "unreachable_file": 7,
+          "unused_export": 6,
+          "unused_internal": 9,
+          "zombie_package": 1
+        },
+        "safe_to_delete_count": 6,
+        "zombie_package_paths": ["performance"],
+        "resilient_postgresql_pool_matches": 0
+      },
+      "change_risk": {
+        "ref": "HEAD",
+        "working_tree": false,
+        "score": 5.7,
+        "risk_percentile": 33.7,
+        "review_priority": "moderate",
+        "classification": "Typical",
+        "baseline_sample_size": 199,
+        "fix_history_density": 0,
+        "fix_history_percentile": null,
+        "features": {
+          "lines_added": 45,
+          "lines_deleted": 3,
+          "files": 4,
+          "directories": 2,
+          "subsystems": 4,
+          "entropy": 0.7417
+        }
+      }
+    },
+    {
+      "name": "discogs-graph-enricher",
+      "revision": "705395fd46be625b3171061cfde747175f7f89e2",
+      "tree": "a63ee882da8edaa45b66adf17b623aa950cbb254",
+      "revision_state": "main aligned with origin/main; clean before indexing; no tracked files changed by indexing",
+      "index": {
+        "initialized_at_utc": "2026-09-15T01:26:33.182644Z",
+        "completed_at_utc": "2026-09-15T01:26:34.092259Z",
+        "status": "completed",
+        "last_sync_commit": "705395fd46be625b3171061cfde747175f7f89e2",
+        "total_pages": 96,
+        "completed_pages": 96,
+        "failed_pages": 0,
+        "update_exit_code": 0,
+        "update_outcome": "noop",
+        "degraded": []
+      },
+      "coverage": {
+        "report_generated_at_utc": "2026-09-15T00:37:44Z",
+        "source_command": "just check",
+        "source_evidence": "verification/shared-delivery-rollout-v1.json",
+        "ingested_at_utc": "2026-09-15T01:39:29.215614Z",
+        "ingested_commit": "705395fd46be625b3171061cfde747175f7f89e2",
+        "format": "cobertura",
+        "mapped_files": 8,
+        "exact_files": 0,
+        "resolved_files": 8,
+        "unmapped_report_files": 1,
+        "unmapped_example": "catalog_contract.py",
+        "covered_lines": 1430,
+        "total_lines": 1507,
+        "line_coverage_pct": 94.89,
+        "branch_coverage_pct": null,
+        "repowise_mapping_partial": false
+      },
+      "health": {
+        "scope": "production",
+        "counts": "everything",
+        "file_count": 19,
+        "average_health": 5.51,
+        "hotspot_health": 2.22,
+        "worst_performer_path": "graphinator/graphinator.py",
+        "worst_performer_score": 1.81,
+        "max_ccn": 34,
+        "complexity_files_over_ccn_10": 3,
+        "files_with_duplication": 4,
+        "max_duplication_pct": 34.04,
+        "files_without_mapped_line_coverage": 11,
+        "biomarkers": {
+          "dry_violation": 3,
+          "complex_method": 15,
+          "brain_method": 2,
+          "nested_complexity": 5,
+          "large_method": 11,
+          "function_hotspot": 10,
+          "churn_risk": 2,
+          "untested_hotspot": 0,
+          "coverage_gap": 0,
+          "coverage_gradient": 6
+        },
+        "untested_hotspots": []
+      },
+      "dead_code": {
+        "total_findings": 4,
+        "by_kind": {
+          "unreachable_file": 4,
+          "unused_export": 0,
+          "unused_internal": 0,
+          "zombie_package": 0
+        },
+        "safe_to_delete_count": 0,
+        "resilient_postgresql_pool_matches": 0
+      },
+      "change_risk": {
+        "ref": "HEAD",
+        "working_tree": false,
+        "score": 8.9,
+        "risk_percentile": 86.2,
+        "review_priority": "high",
+        "classification": "Elevated",
+        "baseline_sample_size": 200,
+        "fix_history_density": 13.812,
+        "fix_history_percentile": 59.5,
+        "features": {
+          "lines_added": 639,
+          "lines_deleted": 1891,
+          "files": 17,
+          "directories": 7,
+          "subsystems": 8,
+          "entropy": 1.7776
+        }
+      }
+    },
+    {
+      "name": "discogs-sql-loader",
+      "revision": "0f7b5d6ed679cf7233fe6118ab407391928a71c9",
+      "tree": "afdde4351abae3c6991d75b74a773d8893f744a8",
+      "revision_state": "main aligned with origin/main; clean before indexing; no tracked files changed by indexing",
+      "index": {
+        "initialized_at_utc": "2026-09-15T01:26:33.506252Z",
+        "completed_at_utc": "2026-09-15T01:26:34.467910Z",
+        "status": "completed",
+        "last_sync_commit": "0f7b5d6ed679cf7233fe6118ab407391928a71c9",
+        "total_pages": 74,
+        "completed_pages": 74,
+        "failed_pages": 0,
+        "update_exit_code": 0,
+        "update_outcome": "noop",
+        "degraded": []
+      },
+      "coverage": {
+        "report_generated_at_utc": "2026-09-15T00:37:17Z",
+        "source_command": "just check",
+        "source_evidence": "verification/shared-delivery-rollout-v1.json",
+        "ingested_at_utc": "2026-09-15T01:39:28.140490Z",
+        "ingested_commit": "0f7b5d6ed679cf7233fe6118ab407391928a71c9",
+        "format": "cobertura",
+        "mapped_files": 9,
+        "exact_files": 0,
+        "resolved_files": 9,
+        "unmapped_report_files": 1,
+        "unmapped_example": "catalog_contract.py",
+        "covered_lines": 1079,
+        "total_lines": 1114,
+        "line_coverage_pct": 96.86,
+        "branch_coverage_pct": null,
+        "repowise_mapping_partial": false
+      },
+      "health": {
+        "scope": "production",
+        "counts": "everything",
+        "file_count": 20,
+        "average_health": 5.37,
+        "hotspot_health": 3.69,
+        "worst_performer_path": "tableinator/tableinator.py",
+        "worst_performer_score": 1.88,
+        "max_ccn": 32,
+        "complexity_files_over_ccn_10": 2,
+        "files_with_duplication": 1,
+        "max_duplication_pct": 7.03,
+        "files_without_mapped_line_coverage": 11,
+        "biomarkers": {
+          "dry_violation": 0,
+          "complex_method": 7,
+          "brain_method": 3,
+          "nested_complexity": 4,
+          "large_method": 7,
+          "function_hotspot": 8,
+          "churn_risk": 2,
+          "untested_hotspot": 0,
+          "coverage_gap": 0,
+          "coverage_gradient": 6
+        },
+        "untested_hotspots": []
+      },
+      "dead_code": {
+        "total_findings": 4,
+        "by_kind": {
+          "unreachable_file": 4,
+          "unused_export": 0,
+          "unused_internal": 0,
+          "zombie_package": 0
+        },
+        "safe_to_delete_count": 0,
+        "resilient_postgresql_pool_matches": 0
+      },
+      "change_risk": {
+        "ref": "HEAD",
+        "working_tree": false,
+        "score": 9.1,
+        "risk_percentile": 92.8,
+        "review_priority": "high",
+        "classification": "Elevated",
+        "baseline_sample_size": 200,
+        "fix_history_density": 12.318,
+        "fix_history_percentile": 66.5,
+        "features": {
+          "lines_added": 941,
+          "lines_deleted": 3100,
+          "files": 18,
+          "directories": 7,
+          "subsystems": 9,
+          "entropy": 1.4802
+        }
+      }
+    },
+    {
+      "name": "musicbrainz-graph-enricher",
+      "revision": "fa8ad811d8989f1bf87dcffdfe24ecb8a15deb93",
+      "tree": "f3e9e3fd9434dd73f2c774bcb17ff4e645af0d2b",
+      "revision_state": "main aligned with origin/main; clean before indexing; no tracked files changed by indexing",
+      "index": {
+        "initialized_at_utc": "2026-09-15T01:26:33.998459Z",
+        "completed_at_utc": "2026-09-15T01:26:34.989186Z",
+        "status": "completed",
+        "last_sync_commit": "fa8ad811d8989f1bf87dcffdfe24ecb8a15deb93",
+        "total_pages": 66,
+        "completed_pages": 66,
+        "failed_pages": 0,
+        "update_exit_code": 0,
+        "update_outcome": "noop",
+        "degraded": []
+      },
+      "coverage": {
+        "report_generated_at_utc": "2026-09-15T00:37:21Z",
+        "source_command": "just check",
+        "source_evidence": "verification/shared-delivery-rollout-v1.json",
+        "ingested_at_utc": "2026-09-15T01:39:28.214842Z",
+        "ingested_commit": "fa8ad811d8989f1bf87dcffdfe24ecb8a15deb93",
+        "format": "cobertura",
+        "mapped_files": 5,
+        "exact_files": 0,
+        "resolved_files": 5,
+        "unmapped_report_files": 1,
+        "unmapped_example": "catalog_contract.py",
+        "covered_lines": 699,
+        "total_lines": 713,
+        "line_coverage_pct": 98.04,
+        "branch_coverage_pct": null,
+        "repowise_mapping_partial": false
+      },
+      "health": {
+        "scope": "production",
+        "counts": "everything",
+        "file_count": 16,
+        "average_health": 5.13,
+        "hotspot_health": 1.9,
+        "worst_performer_path": "brainzgraphinator/brainzgraphinator.py",
+        "worst_performer_score": 1.9,
+        "max_ccn": 16,
+        "complexity_files_over_ccn_10": 1,
+        "files_with_duplication": 1,
+        "max_duplication_pct": 1.67,
+        "files_without_mapped_line_coverage": 11,
+        "biomarkers": {
+          "dry_violation": 0,
+          "complex_method": 6,
+          "brain_method": 1,
+          "nested_complexity": 3,
+          "large_method": 2,
+          "function_hotspot": 7,
+          "churn_risk": 1,
+          "untested_hotspot": 0,
+          "coverage_gap": 0,
+          "coverage_gradient": 1
+        },
+        "untested_hotspots": []
+      },
+      "dead_code": {
+        "total_findings": 4,
+        "by_kind": {
+          "unreachable_file": 4,
+          "unused_export": 0,
+          "unused_internal": 0,
+          "zombie_package": 0
+        },
+        "safe_to_delete_count": 0,
+        "resilient_postgresql_pool_matches": 0
+      },
+      "change_risk": {
+        "ref": "HEAD",
+        "working_tree": false,
+        "score": 9,
+        "risk_percentile": 92.2,
+        "review_priority": "high",
+        "classification": "Elevated",
+        "baseline_sample_size": 102,
+        "fix_history_density": 3.645,
+        "fix_history_percentile": 71.6,
+        "features": {
+          "lines_added": 592,
+          "lines_deleted": 98,
+          "files": 19,
+          "directories": 9,
+          "subsystems": 10,
+          "entropy": 2.9192
+        }
+      }
+    },
+    {
+      "name": "musicbrainz-sql-loader",
+      "revision": "224bf2809c465d638e5cc4e95e815f2b5be79d90",
+      "tree": "cc686c7cd0091222e86366ada4851f88d96b30de",
+      "revision_state": "main aligned with origin/main; clean before indexing; no tracked files changed by indexing",
+      "index": {
+        "initialized_at_utc": "2026-09-15T01:26:34.639762Z",
+        "completed_at_utc": "2026-09-15T01:26:35.582373Z",
+        "status": "completed",
+        "last_sync_commit": "224bf2809c465d638e5cc4e95e815f2b5be79d90",
+        "total_pages": 66,
+        "completed_pages": 66,
+        "failed_pages": 0,
+        "update_exit_code": 0,
+        "update_outcome": "noop",
+        "degraded": []
+      },
+      "coverage": {
+        "report_generated_at_utc": "2026-09-15T00:37:30Z",
+        "source_command": "just check",
+        "source_evidence": "verification/shared-delivery-rollout-v1.json",
+        "ingested_at_utc": "2026-09-15T01:39:28.242023Z",
+        "ingested_commit": "224bf2809c465d638e5cc4e95e815f2b5be79d90",
+        "format": "cobertura",
+        "mapped_files": 5,
+        "exact_files": 0,
+        "resolved_files": 5,
+        "unmapped_report_files": 1,
+        "unmapped_example": "catalog_contract.py",
+        "covered_lines": 764,
+        "total_lines": 801,
+        "line_coverage_pct": 95.38,
+        "branch_coverage_pct": null,
+        "repowise_mapping_partial": false
+      },
+      "health": {
+        "scope": "production",
+        "counts": "everything",
+        "file_count": 17,
+        "average_health": 4.98,
+        "hotspot_health": 1.81,
+        "worst_performer_path": "brainztableinator/brainztableinator.py",
+        "worst_performer_score": 1.81,
+        "max_ccn": 28,
+        "complexity_files_over_ccn_10": 1,
+        "files_with_duplication": 3,
+        "max_duplication_pct": 30.56,
+        "files_without_mapped_line_coverage": 12,
+        "biomarkers": {
+          "dry_violation": 2,
+          "complex_method": 7,
+          "brain_method": 2,
+          "nested_complexity": 3,
+          "large_method": 4,
+          "function_hotspot": 9,
+          "churn_risk": 1,
+          "untested_hotspot": 0,
+          "coverage_gap": 0,
+          "coverage_gradient": 2
+        },
+        "untested_hotspots": []
+      },
+      "dead_code": {
+        "total_findings": 5,
+        "by_kind": {
+          "unreachable_file": 5,
+          "unused_export": 0,
+          "unused_internal": 0,
+          "zombie_package": 0
+        },
+        "safe_to_delete_count": 0,
+        "resilient_postgresql_pool_matches": 0
+      },
+      "change_risk": {
+        "ref": "HEAD",
+        "working_tree": false,
+        "score": 9,
+        "risk_percentile": 92.2,
+        "review_priority": "high",
+        "classification": "Elevated",
+        "baseline_sample_size": 103,
+        "fix_history_density": 8.168,
+        "fix_history_percentile": 70.4,
+        "features": {
+          "lines_added": 634,
+          "lines_deleted": 221,
+          "files": 13,
+          "directories": 6,
+          "subsystems": 8,
+          "entropy": 2.1731
+        }
+      }
+    }
+  ],
+  "removed_surface_attestation": {
+    "repository": "python-libraries",
+    "revision": "24704f5fd48d3ef4fff29398585e9924e225b0c5",
+    "query": "ResilientPostgreSQLPool",
+    "dead_code_match_count": 0,
+    "symbol_search_exact_match": false,
+    "symbol_search_indexed_commit": "24704f5fd48d3ef4fff29398585e9924e225b0c5",
+    "symbol_search_live_head": "24704f5fd48d3ef4fff29398585e9924e225b0c5",
+    "symbol_search_index_behind": false,
+    "literal_source_match_count": 0,
+    "verdict": "no-zombie-surface"
+  },
+  "repowise_recheck_reconciliation": {
+    "source_bead": "gm-design-dg-7oi3",
+    "historical_statement": "The imported portfolio text said a repowise-recheck label marked every bead for a later metric refresh.",
+    "observed_replacement_beads": [
+      {
+        "id": "gm-python-libraries-dg-7oi3-3",
+        "title": "Reconcile the sync/async resilient-pool twins; delete zero-caller pool code",
+        "labels": ["org:groovemap-music", "origin:import", "provider:github", "repo:python-libraries"]
+      },
+      {
+        "id": "gm-catalog-api-dg-7oi3-2",
+        "title": "Consolidate JWT/token validation into a single shared dependency",
+        "labels": ["org:groovemap-music", "origin:import", "provider:github", "repo:catalog-api"]
+      }
+    ],
+    "label_was_attached": false,
+    "clear_operation": "not-applicable",
+    "resolution": "satisfied-by-versioned-evidence-matrix"
+  },
+  "bead_evidence_matrix": [
+    {
+      "id": "gm-python-libraries-dg-7oi3-3",
+      "title": "Reconcile the sync/async resilient-pool twins; delete zero-caller pool code",
+      "kind": "replacement",
+      "repository": "python-libraries",
+      "metric_evidence": "repositories/python-libraries",
+      "rationale": "The refreshed index covers the landed deletion and supplies the exact-symbol and dead-code attestation."
+    },
+    {
+      "id": "gm-catalog-api-dg-7oi3-2",
+      "title": "Consolidate JWT/token validation into a single shared dependency",
+      "kind": "replacement",
+      "repository": "catalog-api",
+      "metric_evidence": "repositories/catalog-api",
+      "rationale": "The refreshed index covers the landed JWT consolidation, clone metrics, current coverage, and current-HEAD risk."
+    },
+    {
+      "id": "gm-python-libraries-0ek",
+      "title": "Publish shared delivery and Discogs batch runtime contracts",
+      "kind": "shared-runtime-epic",
+      "repository": "python-libraries",
+      "metric_evidence": "repositories/python-libraries",
+      "rationale": "Both implementation children landed in the attested runtime head."
+    },
+    {
+      "id": "gm-python-libraries-0ek.1",
+      "title": "Implement the transport-neutral delivery runner",
+      "kind": "shared-runtime-implementation",
+      "repository": "python-libraries",
+      "metric_evidence": "repositories/python-libraries",
+      "rationale": "The production health population includes common.delivery at the landed runtime head."
+    },
+    {
+      "id": "gm-python-libraries-0ek.2",
+      "title": "Implement the optional asynchronous Discogs batch engine",
+      "kind": "shared-runtime-implementation",
+      "repository": "python-libraries",
+      "metric_evidence": "repositories/python-libraries",
+      "rationale": "The production health population includes common.batch at the landed runtime head."
+    },
+    {
+      "id": "gm-discogs-graph-enricher-9l7",
+      "title": "Migrate Discogs graph delivery batching to the shared runtime",
+      "kind": "migration-epic",
+      "repository": "discogs-graph-enricher",
+      "metric_evidence": "repositories/discogs-graph-enricher",
+      "rationale": "The epic metadata points at the indexed landed head."
+    },
+    {
+      "id": "gm-discogs-graph-enricher-9l7.1",
+      "title": "Adapt Discogs graph policy to the shared runtime contracts",
+      "kind": "migration",
+      "repository": "discogs-graph-enricher",
+      "metric_evidence": "repositories/discogs-graph-enricher",
+      "rationale": "Repository-scoped health, clone, coverage, dead-code, churn, and risk evidence applies at the landed head."
+    },
+    {
+      "id": "gm-discogs-graph-enricher-9l7.2",
+      "title": "Replace the Discogs graph queue lifecycle with AsyncBatchEngine",
+      "kind": "migration",
+      "repository": "discogs-graph-enricher",
+      "metric_evidence": "repositories/discogs-graph-enricher",
+      "rationale": "Repository-scoped health, clone, coverage, dead-code, churn, and risk evidence applies at the landed head."
+    },
+    {
+      "id": "gm-discogs-graph-enricher-9l7.3",
+      "title": "Prove the Discogs graph migration against real Neo4j",
+      "kind": "migration-proof",
+      "repository": "discogs-graph-enricher",
+      "metric_evidence": "repositories/discogs-graph-enricher",
+      "rationale": "The proof shares the final repository head; the prior rollout artifact retains its real-engine and image gates."
+    },
+    {
+      "id": "gm-discogs-sql-loader-8gm",
+      "title": "Migrate Discogs SQL delivery batching to the shared runtime",
+      "kind": "migration-epic",
+      "repository": "discogs-sql-loader",
+      "metric_evidence": "repositories/discogs-sql-loader",
+      "rationale": "The epic metadata points at the indexed landed head."
+    },
+    {
+      "id": "gm-discogs-sql-loader-8gm.1",
+      "title": "Adapt Discogs SQL policy to the shared runtime contracts",
+      "kind": "migration",
+      "repository": "discogs-sql-loader",
+      "metric_evidence": "repositories/discogs-sql-loader",
+      "rationale": "Repository-scoped health, clone, coverage, dead-code, churn, and risk evidence applies at the landed head."
+    },
+    {
+      "id": "gm-discogs-sql-loader-8gm.2",
+      "title": "Replace Discogs SQL delivery lifecycles with the shared runtime",
+      "kind": "migration",
+      "repository": "discogs-sql-loader",
+      "metric_evidence": "repositories/discogs-sql-loader",
+      "rationale": "Repository-scoped health, clone, coverage, dead-code, churn, and risk evidence applies at the landed head."
+    },
+    {
+      "id": "gm-discogs-sql-loader-8gm.3",
+      "title": "Prove the Discogs SQL migration against real PostgreSQL",
+      "kind": "migration-proof",
+      "repository": "discogs-sql-loader",
+      "metric_evidence": "repositories/discogs-sql-loader",
+      "rationale": "The proof shares the final repository head; the prior rollout artifact retains its real-engine and image gates."
+    },
+    {
+      "id": "gm-musicbrainz-graph-enricher-20q",
+      "title": "Migrate MusicBrainz graph settlement to the shared delivery runner",
+      "kind": "migration-epic",
+      "repository": "musicbrainz-graph-enricher",
+      "metric_evidence": "repositories/musicbrainz-graph-enricher",
+      "rationale": "The epic metadata points at the indexed landed head."
+    },
+    {
+      "id": "gm-musicbrainz-graph-enricher-20q.1",
+      "title": "Run MusicBrainz graph deliveries through the shared settlement contract",
+      "kind": "migration",
+      "repository": "musicbrainz-graph-enricher",
+      "metric_evidence": "repositories/musicbrainz-graph-enricher",
+      "rationale": "Repository-scoped health, clone, coverage, dead-code, churn, and risk evidence applies at the landed head."
+    },
+    {
+      "id": "gm-musicbrainz-sql-loader-5zt",
+      "title": "Migrate MusicBrainz SQL settlement to the shared delivery runner",
+      "kind": "migration-epic",
+      "repository": "musicbrainz-sql-loader",
+      "metric_evidence": "repositories/musicbrainz-sql-loader",
+      "rationale": "The epic metadata points at the indexed landed head."
+    },
+    {
+      "id": "gm-musicbrainz-sql-loader-5zt.1",
+      "title": "Run MusicBrainz SQL deliveries through the shared settlement contract",
+      "kind": "migration",
+      "repository": "musicbrainz-sql-loader",
+      "metric_evidence": "repositories/musicbrainz-sql-loader",
+      "rationale": "Repository-scoped health, clone, coverage, dead-code, churn, and risk evidence applies at the landed head."
+    }
+  ],
+  "interpretation": {
+    "health_scope": "Per-repository production scope; tests are excluded from the reported health averages.",
+    "clone_mirror_surface": "files_with_duplication, max_duplication_pct, and dry_violation are the native clone/mirror signals.",
+    "change_risk_scope": "Each risk result classifies the single current HEAD commit against that repository's own recent-commit baseline.",
+    "dead_code_caution": "Dead-code findings are triage signals, not deletion authorization; every finding must be verified against runtime and framework entry points.",
+    "coverage_caution": "Mapped-file coverage is reported exactly as Repowise returned it; unmatched report paths are disclosed separately."
+  }
+}

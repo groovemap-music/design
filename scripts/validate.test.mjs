@@ -16,6 +16,7 @@ import {
   validateCatalogContract,
   validateFixtureSet,
   validateOrganizationVerification,
+  validateRepowiseDefectRisk,
   validateSharedDeliveryRollout,
   validateTelemetryDecision,
 } from "./validation-policy.mjs";
@@ -25,6 +26,7 @@ import schema from "../catalog/repositories.schema.json" with { type: "json" };
 import fixture from "../fixtures/catalog-valid.json" with { type: "json" };
 import catalog from "../catalog/repositories.json" with { type: "json" };
 import organizationVerification from "../verification/organization-wide-v1.json" with { type: "json" };
+import repowiseDefectRisk from "../verification/repowise-defect-risk-v1.json" with { type: "json" };
 import sharedDeliveryRollout from "../verification/shared-delivery-rollout-v1.json" with { type: "json" };
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -164,6 +166,38 @@ test("shared-delivery rollout pins the runtime, consumers, gates, and ownership 
   const rewrittenHistory = structuredClone(sharedDeliveryRollout);
   rewrittenHistory.historical_baseline.machine_record.sha256 = "0".repeat(64);
   assert.ok(validateSharedDeliveryRollout(rewrittenHistory).some((error) => /historical machine_record identity/.test(error)));
+});
+
+test("Repowise defect-risk evidence pins indexes, metrics, coverage, beads, and history", () => {
+  assert.deepEqual(validateRepowiseDefectRisk(repowiseDefectRisk), []);
+
+  const staleIndex = structuredClone(repowiseDefectRisk);
+  staleIndex.repositories[0].index.last_sync_commit = "0".repeat(40);
+  assert.ok(validateRepowiseDefectRisk(staleIndex).some((error) => /index completion or freshness/.test(error)));
+
+  const missingCoverage = structuredClone(repowiseDefectRisk);
+  missingCoverage.repositories[1].coverage.mapped_files = 0;
+  assert.ok(validateRepowiseDefectRisk(missingCoverage).some((error) => /indexed coverage evidence/.test(error)));
+
+  const zombiePool = structuredClone(repowiseDefectRisk);
+  zombiePool.removed_surface_attestation.symbol_search_exact_match = true;
+  assert.ok(validateRepowiseDefectRisk(zombiePool).some((error) => /ResilientPostgreSQLPool/.test(error)));
+
+  const mislabeledReplacement = structuredClone(repowiseDefectRisk);
+  mislabeledReplacement.repowise_recheck_reconciliation.observed_replacement_beads[0].labels.push("repowise-recheck");
+  assert.ok(validateRepowiseDefectRisk(mislabeledReplacement).some((error) => /wording/.test(error)));
+
+  const comparedAggregate = structuredClone(repowiseDefectRisk);
+  comparedAggregate.comparison_policy.direct_comparison_to_split_repository_averages = true;
+  assert.ok(validateRepowiseDefectRisk(comparedAggregate).some((error) => /old monorepo aggregate/.test(error)));
+
+  const missingBead = structuredClone(repowiseDefectRisk);
+  missingBead.bead_evidence_matrix.pop();
+  assert.ok(validateRepowiseDefectRisk(missingBead).some((error) => /evidence matrix/.test(error)));
+
+  const rewrittenHistory = structuredClone(repowiseDefectRisk);
+  rewrittenHistory.historical_records[0].sha256 = "0".repeat(64);
+  assert.ok(validateRepowiseDefectRisk(rewrittenHistory).some((error) => /historical evidence identity/.test(error)));
 });
 
 test("canonical catalog rejects deployment ownership that contradicts the active topology", () => {

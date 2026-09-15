@@ -359,6 +359,307 @@ export function validateSharedDeliveryRollout(report) {
   }
   return errors;
 }
+
+export function validateRepowiseDefectRisk(report) {
+  const errors = [];
+  const fullRevision = /^[a-f0-9]{40}$/;
+  const isoTimestamp = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/;
+  const expectedRepositories = [
+    {
+      name: "python-libraries",
+      revision: "24704f5fd48d3ef4fff29398585e9924e225b0c5",
+      tree: "c5b96bdeab082057480a26784ad6065497aaae9a",
+      pages: 154,
+      health: 6.65,
+      hotspot: 3.66,
+      maxCcn: 28,
+      coverage: [24, 2698, 2883, 93.58],
+      deadCode: 17,
+      riskPercentile: 95.2,
+    },
+    {
+      name: "catalog-api",
+      revision: "8eec6ef062584e1ab0b3ea07fa16f32ab18ddbf1",
+      tree: "17dd4815f8a29d859503d78c2142c5a7c073a70d",
+      pages: 504,
+      health: 5.86,
+      hotspot: 4.31,
+      maxCcn: 41,
+      coverage: [52, 4682, 4745, 98.67],
+      deadCode: 23,
+      riskPercentile: 33.7,
+    },
+    {
+      name: "discogs-graph-enricher",
+      revision: "705395fd46be625b3171061cfde747175f7f89e2",
+      tree: "a63ee882da8edaa45b66adf17b623aa950cbb254",
+      pages: 96,
+      health: 5.51,
+      hotspot: 2.22,
+      maxCcn: 34,
+      coverage: [8, 1430, 1507, 94.89],
+      deadCode: 4,
+      riskPercentile: 86.2,
+    },
+    {
+      name: "discogs-sql-loader",
+      revision: "0f7b5d6ed679cf7233fe6118ab407391928a71c9",
+      tree: "afdde4351abae3c6991d75b74a773d8893f744a8",
+      pages: 74,
+      health: 5.37,
+      hotspot: 3.69,
+      maxCcn: 32,
+      coverage: [9, 1079, 1114, 96.86],
+      deadCode: 4,
+      riskPercentile: 92.8,
+    },
+    {
+      name: "musicbrainz-graph-enricher",
+      revision: "fa8ad811d8989f1bf87dcffdfe24ecb8a15deb93",
+      tree: "f3e9e3fd9434dd73f2c774bcb17ff4e645af0d2b",
+      pages: 66,
+      health: 5.13,
+      hotspot: 1.9,
+      maxCcn: 16,
+      coverage: [5, 699, 713, 98.04],
+      deadCode: 4,
+      riskPercentile: 92.2,
+    },
+    {
+      name: "musicbrainz-sql-loader",
+      revision: "224bf2809c465d638e5cc4e95e815f2b5be79d90",
+      tree: "cc686c7cd0091222e86366ada4851f88d96b30de",
+      pages: 66,
+      health: 4.98,
+      hotspot: 1.81,
+      maxCcn: 28,
+      coverage: [5, 764, 801, 95.38],
+      deadCode: 5,
+      riskPercentile: 92.2,
+    },
+  ];
+  const expectedBeads = [
+    "gm-python-libraries-dg-7oi3-3",
+    "gm-catalog-api-dg-7oi3-2",
+    "gm-python-libraries-0ek",
+    "gm-python-libraries-0ek.1",
+    "gm-python-libraries-0ek.2",
+    "gm-discogs-graph-enricher-9l7",
+    "gm-discogs-graph-enricher-9l7.1",
+    "gm-discogs-graph-enricher-9l7.2",
+    "gm-discogs-graph-enricher-9l7.3",
+    "gm-discogs-sql-loader-8gm",
+    "gm-discogs-sql-loader-8gm.1",
+    "gm-discogs-sql-loader-8gm.2",
+    "gm-discogs-sql-loader-8gm.3",
+    "gm-musicbrainz-graph-enricher-20q",
+    "gm-musicbrainz-graph-enricher-20q.1",
+    "gm-musicbrainz-sql-loader-5zt",
+    "gm-musicbrainz-sql-loader-5zt.1",
+  ];
+
+  if (report?.schema_version !== 1) errors.push("Repowise defect-risk evidence must use schema version 1");
+  if (report?.reviewed_on !== "2026-09-14") errors.push("Repowise defect-risk evidence must retain its versioned review date");
+  if (!isoTimestamp.test(report?.collected_at_utc ?? "")) errors.push("Repowise evidence collection timestamp is invalid");
+  if (report?.verdict !== "pass") errors.push("Repowise defect-risk verdict must be pass");
+
+  const tooling = report?.tooling ?? {};
+  if (tooling.name !== "repowise" || tooling.version !== "0.50.0" || tooling.networked_or_llm_analysis !== false) {
+    errors.push("Repowise version and deterministic execution boundary must remain explicit");
+  }
+  const config = tooling.configuration ?? {};
+  if (
+    config.enable_onboarding !== false
+    || config.commit_limit !== 500
+    || config.editor_files?.claude_md !== false
+    || config.editor_files?.agents_md !== false
+    || config.embedder !== "mock"
+    || config.docs_enabled !== false
+    || config.docs_mode !== "deterministic"
+    || config.git_tier !== "full"
+  ) {
+    errors.push("Repowise configuration differs from the recorded no-editor deterministic index");
+  }
+  if (
+    !tooling.commands?.initialize?.includes("--no-editor-setup")
+    || !tooling.commands.initialize.includes("--no-workspace")
+    || !tooling.commands.update?.includes("--index-only")
+    || !tooling.commands.health?.includes("--scope production")
+    || !tooling.commands.dead_code?.includes("--include-zombie-packages")
+    || !tooling.commands.removed_symbol_search?.includes("--mode symbol")
+  ) {
+    errors.push("Repowise command provenance is incomplete");
+  }
+  if (
+    tooling.editor_setup?.initialized_with_no_editor_setup !== true
+    || tooling.editor_setup?.retained_generated_editor_files !== false
+  ) {
+    errors.push("Repowise editor setup must remain disabled and unretained");
+  }
+  for (const [name, timestamp] of Object.entries(tooling.command_windows ?? {})) {
+    if (!isoTimestamp.test(timestamp ?? "")) errors.push(`Repowise command timestamp is invalid: ${name}`);
+  }
+
+  const expectedHistory = new Map([
+    ["verification/organization-wide-v1.json", "7c042ba9d044f3fd582a1dd93e1af9b83d75d6cb5f6a3d8e551d3a022f70e514"],
+    ["docs/audits/organization-wide-verification-2026-09-13.md", "8a02d82194ac6cfdb69bb010c29a6ef21cb6f801a6a851305198fdf4875bb06b"],
+    ["verification/shared-delivery-rollout-v1.json", "a88e3b134b6da2bb26dfe1ab4ee6e9849d812e4085193a80a17a63e4fa286ae9"],
+    ["docs/audits/shared-delivery-rollout-2026-09-14.md", "34c4124a7528837644113150c2b8ee7a2184d637ba38466d26fa0ea7698251a5"],
+  ]);
+  const history = new Map((report?.historical_records ?? []).map((record) => [record.path, record.sha256]));
+  for (const [path, digest] of expectedHistory) {
+    if (history.get(path) !== digest) errors.push(`historical evidence identity changed: ${path}`);
+  }
+
+  const scopeNames = report?.scope?.repositories ?? [];
+  if (
+    report?.scope?.repository_count !== expectedRepositories.length
+    || JSON.stringify(scopeNames) !== JSON.stringify(expectedRepositories.map(({ name }) => name))
+    || !Array.isArray(report?.scope?.additional_code_repositories_used)
+    || report.scope.additional_code_repositories_used.length !== 0
+  ) {
+    errors.push("Repowise repository scope or additional-repository disclosure is incorrect");
+  }
+  if (
+    report?.comparison_policy?.historical_monorepo_baseline_retained_in_source_bead !== true
+    || report?.comparison_policy?.historical_values_imported_into_this_record !== false
+    || report?.comparison_policy?.direct_comparison_to_split_repository_averages !== false
+    || /7\.17|325\/550/.test(JSON.stringify(report))
+  ) {
+    errors.push("the old monorepo aggregate must not be imported or compared with split-repository metrics");
+  }
+
+  const repositories = report?.repositories ?? [];
+  if (JSON.stringify(repositories.map(({ name }) => name)) !== JSON.stringify(expectedRepositories.map(({ name }) => name))) {
+    errors.push("Repowise repository order or inventory is incorrect");
+  }
+  for (const expected of expectedRepositories) {
+    const repository = repositories.find(({ name }) => name === expected.name) ?? {};
+    if (
+      repository.revision !== expected.revision
+      || repository.tree !== expected.tree
+      || !fullRevision.test(repository.revision ?? "")
+      || !fullRevision.test(repository.tree ?? "")
+    ) {
+      errors.push(`${expected.name}: exact commit or tree evidence is missing`);
+    }
+    const index = repository.index ?? {};
+    if (
+      index.status !== "completed"
+      || index.last_sync_commit !== expected.revision
+      || index.total_pages !== expected.pages
+      || index.completed_pages !== expected.pages
+      || index.failed_pages !== 0
+      || index.update_exit_code !== 0
+      || index.update_outcome !== "noop"
+      || !Array.isArray(index.degraded)
+      || index.degraded.length !== 0
+      || !isoTimestamp.test(index.initialized_at_utc ?? "")
+      || !isoTimestamp.test(index.completed_at_utc ?? "")
+    ) {
+      errors.push(`${expected.name}: index completion or freshness evidence is incomplete`);
+    }
+    const coverage = repository.coverage ?? {};
+    if (
+      coverage.ingested_commit !== expected.revision
+      || coverage.format !== "cobertura"
+      || coverage.mapped_files !== expected.coverage[0]
+      || coverage.covered_lines !== expected.coverage[1]
+      || coverage.total_lines !== expected.coverage[2]
+      || coverage.line_coverage_pct !== expected.coverage[3]
+      || !isoTimestamp.test(coverage.ingested_at_utc ?? "")
+      || coverage.mapped_files !== coverage.exact_files + coverage.resolved_files
+      || !Number.isInteger(coverage.unmapped_report_files)
+      || coverage.unmapped_report_files < 0
+    ) {
+      errors.push(`${expected.name}: indexed coverage evidence differs from the captured output`);
+    }
+    const health = repository.health ?? {};
+    if (
+      health.scope !== "production"
+      || health.counts !== "everything"
+      || health.average_health !== expected.health
+      || health.hotspot_health !== expected.hotspot
+      || health.max_ccn !== expected.maxCcn
+      || !Number.isInteger(health.file_count)
+      || health.file_count <= 0
+      || !Number.isInteger(health.complexity_files_over_ccn_10)
+      || !Number.isInteger(health.files_with_duplication)
+      || typeof health.max_duplication_pct !== "number"
+      || !Number.isInteger(health.biomarkers?.function_hotspot)
+      || !Number.isInteger(health.biomarkers?.churn_risk)
+      || !Number.isInteger(health.biomarkers?.untested_hotspot)
+      || health.biomarkers.untested_hotspot !== (health.untested_hotspots ?? []).length
+    ) {
+      errors.push(`${expected.name}: health, complexity, clone, churn, or hotspot evidence is incomplete`);
+    }
+    const deadCode = repository.dead_code ?? {};
+    const deadCodeSum = Object.values(deadCode.by_kind ?? {}).reduce((total, value) => total + value, 0);
+    if (
+      deadCode.total_findings !== expected.deadCode
+      || deadCodeSum !== deadCode.total_findings
+      || deadCode.resilient_postgresql_pool_matches !== 0
+    ) {
+      errors.push(`${expected.name}: dead-code evidence is incomplete or inconsistent`);
+    }
+    const risk = repository.change_risk ?? {};
+    if (
+      risk.ref !== "HEAD"
+      || risk.working_tree !== false
+      || risk.risk_percentile !== expected.riskPercentile
+      || !Number.isInteger(risk.baseline_sample_size)
+      || risk.baseline_sample_size <= 0
+      || typeof risk.features?.entropy !== "number"
+    ) {
+      errors.push(`${expected.name}: current-HEAD defect-risk evidence is incomplete`);
+    }
+  }
+
+  const removed = report?.removed_surface_attestation ?? {};
+  if (
+    removed.repository !== "python-libraries"
+    || removed.revision !== expectedRepositories[0].revision
+    || removed.dead_code_match_count !== 0
+    || removed.symbol_search_exact_match !== false
+    || removed.symbol_search_indexed_commit !== expectedRepositories[0].revision
+    || removed.symbol_search_live_head !== expectedRepositories[0].revision
+    || removed.symbol_search_index_behind !== false
+    || removed.literal_source_match_count !== 0
+    || removed.verdict !== "no-zombie-surface"
+  ) {
+    errors.push("ResilientPostgreSQLPool index-backed removal evidence is incomplete");
+  }
+
+  const reconciliation = report?.repowise_recheck_reconciliation ?? {};
+  if (
+    reconciliation.source_bead !== "gm-design-dg-7oi3"
+    || reconciliation.label_was_attached !== false
+    || reconciliation.clear_operation !== "not-applicable"
+    || reconciliation.resolution !== "satisfied-by-versioned-evidence-matrix"
+    || (reconciliation.observed_replacement_beads ?? []).length !== 2
+    || reconciliation.observed_replacement_beads.some(({ labels }) => labels.includes("repowise-recheck"))
+  ) {
+    errors.push("historical repowise-recheck wording is not reconciled with observed bead labels");
+  }
+
+  const matrix = report?.bead_evidence_matrix ?? [];
+  if (JSON.stringify(matrix.map(({ id }) => id)) !== JSON.stringify(expectedBeads)) {
+    errors.push("affected migration and replacement bead evidence matrix is incomplete");
+  }
+  for (const row of matrix) {
+    if (
+      typeof row.title !== "string"
+      || row.title.length === 0
+      || !scopeNames.includes(row.repository)
+      || row.metric_evidence !== `repositories/${row.repository}`
+      || typeof row.rationale !== "string"
+      || row.rationale.length === 0
+    ) {
+      errors.push(`${row.id ?? "unknown bead"}: metric evidence mapping is invalid`);
+    }
+  }
+  return errors;
+}
 export function validateFixtureSet(taxonomy, fixtures) {
   const errors = [];
   const names = new Set();
