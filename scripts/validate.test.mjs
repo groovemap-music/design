@@ -16,6 +16,7 @@ import {
   validateCatalogContract,
   validateFixtureSet,
   validateOrganizationVerification,
+  validatePortfolioEffectiveness,
   validateRepowiseDefectRisk,
   validateSharedDeliveryRollout,
   validateTargetedDefectAudit,
@@ -27,6 +28,7 @@ import schema from "../catalog/repositories.schema.json" with { type: "json" };
 import fixture from "../fixtures/catalog-valid.json" with { type: "json" };
 import catalog from "../catalog/repositories.json" with { type: "json" };
 import organizationVerification from "../verification/organization-wide-v1.json" with { type: "json" };
+import portfolioEffectiveness from "../verification/portfolio-effectiveness-v1.json" with { type: "json" };
 import repowiseDefectRisk from "../verification/repowise-defect-risk-v1.json" with { type: "json" };
 import sharedDeliveryRollout from "../verification/shared-delivery-rollout-v1.json" with { type: "json" };
 import targetedAuditProtocol from "../verification/targeted-defect-audit-protocol-v1.json" with { type: "json" };
@@ -225,6 +227,30 @@ test("targeted defect audit pins protocol, revisions, real engines, images, muta
   const unfrozenProtocol = structuredClone(targetedAuditProtocol);
   unfrozenProtocol.protocol_state = "draft";
   assert.ok(validateTargetedDefectAudit(targetedAudit, unfrozenProtocol).some((error) => /not the frozen protocol/.test(error)));
+});
+
+test("portfolio effectiveness verdict pins thresholds, landed scope, descopes, and primary evidence", () => {
+  assert.deepEqual(validatePortfolioEffectiveness(portfolioEffectiveness, sharedDeliveryRollout, repowiseDefectRisk, targetedAudit), []);
+
+  const thresholdMiss = structuredClone(portfolioEffectiveness);
+  thresholdMiss.normalized_findings.duplicate_mirror_share_pct = 21;
+  assert.ok(validatePortfolioEffectiveness(thresholdMiss, sharedDeliveryRollout, repowiseDefectRisk, targetedAudit).some((error) => /normalized duplicate threshold/.test(error)));
+
+  const reopenedMolecule = structuredClone(portfolioEffectiveness);
+  reopenedMolecule.linked_landed_molecules[0].status = "open";
+  assert.ok(validatePortfolioEffectiveness(reopenedMolecule, sharedDeliveryRollout, repowiseDefectRisk, targetedAudit).some((error) => /closed state/.test(error)));
+
+  const hiddenDescope = structuredClone(portfolioEffectiveness);
+  hiddenDescope.explicit_descopes.pop();
+  assert.ok(validatePortfolioEffectiveness(hiddenDescope, sharedDeliveryRollout, repowiseDefectRisk, targetedAudit).some((error) => /explicit descopes/.test(error)));
+
+  const promotedRepowise = structuredClone(portfolioEffectiveness);
+  promotedRepowise.methodology.supporting_evidence = "Repowise determines the verdict.";
+  assert.ok(validatePortfolioEffectiveness(promotedRepowise, sharedDeliveryRollout, repowiseDefectRisk, targetedAudit).some((error) => /primary\/supporting evidence/.test(error)));
+
+  const rewrittenSource = structuredClone(portfolioEffectiveness);
+  rewrittenSource.source_records[0].sha256 = "0".repeat(64);
+  assert.ok(validatePortfolioEffectiveness(rewrittenSource, sharedDeliveryRollout, repowiseDefectRisk, targetedAudit).some((error) => /source identity/.test(error)));
 });
 
 test("canonical catalog rejects deployment ownership that contradicts the active topology", () => {

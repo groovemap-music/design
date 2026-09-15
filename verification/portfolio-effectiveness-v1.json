@@ -1,0 +1,407 @@
+{
+  "schema_version": 1,
+  "verdict_id": "gm-design-51u.4",
+  "verdict_title": "Publish the effectiveness verdict and close or extend the portfolio",
+  "reviewed_on": "2026-09-14",
+  "completed_at_utc": "2026-09-15T03:55:35Z",
+  "verdict": "close-portfolio",
+  "portfolio_tracker": {
+    "id": "gm-design-dg-7oi3",
+    "title": "Portfolio: Bug-hunt root-cause remediation — kill the bug supply, not the bugs",
+    "status_before_verdict": "open",
+    "required_action": "append this final evidence and close",
+    "focused_remediation_required": false
+  },
+  "source_records": [
+    {
+      "path": "verification/organization-wide-v1.json",
+      "sha256": "7c042ba9d044f3fd582a1dd93e1af9b83d75d6cb5f6a3d8e551d3a022f70e514",
+      "role": "owner-hive check, pin, provenance, and repository-wide assertion baseline"
+    },
+    {
+      "path": "docs/audits/organization-wide-verification-2026-09-13.md",
+      "sha256": "8a02d82194ac6cfdb69bb010c29a6ef21cb6f801a6a851305198fdf4875bb06b",
+      "role": "sanitized organization-wide narrative baseline"
+    },
+    {
+      "path": "verification/shared-delivery-rollout-v1.json",
+      "sha256": "a88e3b134b6da2bb26dfe1ab4ee6e9849d812e4085193a80a17a63e4fa286ae9",
+      "role": "shared runtime, four-consumer migration, pin, check, and image attestation"
+    },
+    {
+      "path": "docs/audits/shared-delivery-rollout-2026-09-14.md",
+      "sha256": "34c4124a7528837644113150c2b8ee7a2184d637ba38466d26fa0ea7698251a5",
+      "role": "shared-delivery rollout narrative"
+    },
+    {
+      "path": "verification/repowise-defect-risk-v1.json",
+      "sha256": "8ca2ec1cc2ac18690e2f808d21475f291b2add3a96653a9187c03bf5fe7f8f50",
+      "role": "supporting repository-scoped code-health and removal evidence only"
+    },
+    {
+      "path": "docs/audits/repowise-defect-risk-2026-09-14.md",
+      "sha256": "2012f725e69c789f6f3d6300572b19d23244bb3fb210f0b94c0cefb26d862ae7",
+      "role": "supporting metric methodology and limitations"
+    },
+    {
+      "path": "verification/targeted-defect-audit-protocol-v1.json",
+      "sha256": "5f848bab412f305387974e9d51d7e00848289b176dd085d04613fcca0d2d6a8b",
+      "role": "protocol frozen before inspection"
+    },
+    {
+      "path": "verification/targeted-defect-audit-v1.json",
+      "sha256": "2310402404b43e83b479767e053f450b0eb106e36b7b3e10069e31163d22e5f3",
+      "role": "primary controlled effectiveness evidence"
+    },
+    {
+      "path": "docs/audits/targeted-defect-audit-2026-09-14.md",
+      "sha256": "ac28221946260b9a0b8f5429a2bc091442a5225924a398530b2b39cfbf5aaed4",
+      "role": "controlled-audit narrative and exact commands"
+    }
+  ],
+  "methodology": {
+    "primary_evidence": "The pre-frozen targeted audit determines effectiveness using unmutated controls, disposable one-variable mutations, real database engines, producer goldens, Python contract validation, and released-image paths.",
+    "supporting_evidence": "Repowise 0.50.0 supplies repository-scoped health, clone, coverage, churn, hotspot, dead-code, and current-HEAD risk context; it does not determine the verdict.",
+    "finding_unit": "One unique violated invariant with one remediation owner; manifestations are counted separately per production-reachable repository and surface.",
+    "duplicate_unit": "A multi-site cause is one root cause with at least two manifestations.",
+    "threshold_population": "The three frozen causal classes across eight exact repository revisions.",
+    "zero_denominator_rule": "When the controlled audit has zero findings, duplicate share is reported as 0 percent for threshold evaluation while the raw 0/0 counts and denominator limitation remain explicit.",
+    "comparison_rule": "Compare class-specific controlled yield only; do not infer an organization-wide defect rate or compare the old monorepo aggregate with split-repository averages."
+  },
+  "before_after": [
+    {
+      "measure": "duplicate-or-mirror manifestations",
+      "before_raw": {
+        "july_2026_bug_hunt_beads": 114,
+        "august_2026_bug_hunt_beads": 118,
+        "exact_duplicate_finding_count": null
+      },
+      "before_normalized_pct_approx": 40,
+      "after_raw": {
+        "unique_root_causes": 0,
+        "manifestations": 0,
+        "multi_site_causes": 0,
+        "duplicate_manifestations": 0
+      },
+      "after_normalized_pct": 0,
+      "denominator_zero": true,
+      "maximum_allowed_pct": 20,
+      "minimum_relative_reduction_pct": 50,
+      "actual_relative_reduction_pct": 100,
+      "result": "pass"
+    },
+    {
+      "measure": "recurrence in migrated shared delivery, JWT, or removed pool surfaces",
+      "before_raw": {
+        "recurrence_present": true,
+        "exact_combined_finding_count": null
+      },
+      "after_raw": {
+        "shared_delivery_recurrences": 0,
+        "jwt_recurrences": 0,
+        "removed_pool_recurrences": 0
+      },
+      "required": 0,
+      "result": "pass"
+    },
+    {
+      "measure": "database-boundary defects concealed by permissive mocks",
+      "before_raw": {
+        "concealment_present": true,
+        "exact_database_finding_count": null,
+        "august_tests_pinning_buggy_behavior_across_all_classes": 7
+      },
+      "after_raw": {
+        "concealed_defects": 0,
+        "real_database_integration_tests_passed": 23,
+        "real_engine_mutations_killed": 4
+      },
+      "required": 0,
+      "result": "pass"
+    },
+    {
+      "measure": "Rust-to-Python contract mismatch",
+      "before_raw": {
+        "p0_findings": 2,
+        "historical_mutations": [
+          "integer-for-string-identity",
+          "malformed-started-at"
+        ]
+      },
+      "after_raw": {
+        "mismatches": 0,
+        "p0_findings": 0,
+        "p1_findings": 0,
+        "producer_fixtures_validated_in_python": 24,
+        "historical_schema_mutations_killed_before_persistence": 8
+      },
+      "required_mismatches": 0,
+      "result": "pass"
+    }
+  ],
+  "raw_findings": {
+    "unique_root_causes": 0,
+    "manifestations": 0,
+    "multi_site_causes": 0,
+    "p0": 0,
+    "p1": 0,
+    "p2": 0,
+    "p3": 0,
+    "findings": [],
+    "below_threshold_observations": [],
+    "mutation_survivors": 0,
+    "zero_result_classes": 3
+  },
+  "normalized_findings": {
+    "duplicate_mirror_share_pct": 0,
+    "duplicate_mirror_share_numerator": 0,
+    "duplicate_mirror_share_denominator": 0,
+    "denominator_zero": true,
+    "historical_share_pct_approx": 40,
+    "relative_reduction_pct": 100,
+    "threshold_at_most_pct": 20,
+    "required_reduction_pct": 50,
+    "result": "pass"
+  },
+  "effectiveness_revisions": [
+    {
+      "name": "python-libraries",
+      "revision": "24704f5fd48d3ef4fff29398585e9924e225b0c5",
+      "tree": "c5b96bdeab082057480a26784ad6065497aaae9a"
+    },
+    {
+      "name": "catalog-api",
+      "revision": "7e6f21f01cd645f552cdf7ac54ccdecdfb2554df",
+      "tree": "3538e664444d5bb9e078155e0d08886c1434d2bb"
+    },
+    {
+      "name": "discogs-ingestion",
+      "revision": "8df3b3d05b0e4424874e0104c1f45c5d0c674a7b",
+      "tree": "91e9cb47c525d9f7b70893a8bc3c8c6bf4f45cdb"
+    },
+    {
+      "name": "discogs-graph-enricher",
+      "revision": "705395fd46be625b3171061cfde747175f7f89e2",
+      "tree": "a63ee882da8edaa45b66adf17b623aa950cbb254"
+    },
+    {
+      "name": "discogs-sql-loader",
+      "revision": "0f7b5d6ed679cf7233fe6118ab407391928a71c9",
+      "tree": "afdde4351abae3c6991d75b74a773d8893f744a8"
+    },
+    {
+      "name": "musicbrainz-ingestion",
+      "revision": "c649e5defc6e14e2322554bac24363a1ce1f3a57",
+      "tree": "b1235fc29c7a0a6824be58c5d63bd1c700ed25f7"
+    },
+    {
+      "name": "musicbrainz-graph-enricher",
+      "revision": "fa8ad811d8989f1bf87dcffdfe24ecb8a15deb93",
+      "tree": "f3e9e3fd9434dd73f2c774bcb17ff4e645af0d2b"
+    },
+    {
+      "name": "musicbrainz-sql-loader",
+      "revision": "224bf2809c465d638e5cc4e95e815f2b5be79d90",
+      "tree": "cc686c7cd0091222e86366ada4851f88d96b30de"
+    }
+  ],
+  "supporting_index_revisions": [
+    {
+      "name": "python-libraries",
+      "revision": "24704f5fd48d3ef4fff29398585e9924e225b0c5",
+      "tree": "c5b96bdeab082057480a26784ad6065497aaae9a"
+    },
+    {
+      "name": "catalog-api",
+      "revision": "8eec6ef062584e1ab0b3ea07fa16f32ab18ddbf1",
+      "tree": "17dd4815f8a29d859503d78c2142c5a7c073a70d"
+    },
+    {
+      "name": "discogs-graph-enricher",
+      "revision": "705395fd46be625b3171061cfde747175f7f89e2",
+      "tree": "a63ee882da8edaa45b66adf17b623aa950cbb254"
+    },
+    {
+      "name": "discogs-sql-loader",
+      "revision": "0f7b5d6ed679cf7233fe6118ab407391928a71c9",
+      "tree": "afdde4351abae3c6991d75b74a773d8893f744a8"
+    },
+    {
+      "name": "musicbrainz-graph-enricher",
+      "revision": "fa8ad811d8989f1bf87dcffdfe24ecb8a15deb93",
+      "tree": "f3e9e3fd9434dd73f2c774bcb17ff4e645af0d2b"
+    },
+    {
+      "name": "musicbrainz-sql-loader",
+      "revision": "224bf2809c465d638e5cc4e95e815f2b5be79d90",
+      "tree": "cc686c7cd0091222e86366ada4851f88d96b30de"
+    }
+  ],
+  "recurrence_attestations": [
+    {
+      "surface": "shared-delivery",
+      "recurrences": 0,
+      "evidence": "common.delivery and common.batch own settlement; all four consumers pin the exact runtime revision, retain no independent settlement loop, pass owner checks, and kill an injected settlement divergence"
+    },
+    {
+      "surface": "jwt-validation",
+      "recurrences": 0,
+      "evidence": "the catalog API shared validation dependency passes the revocation suite and kills an injected NLQ revocation-state bypass"
+    },
+    {
+      "surface": "resilient-postgresql-pool",
+      "recurrences": 0,
+      "evidence": "the refreshed exact-head index, exact symbol search, literal source sweep, and dead-code read all report no ResilientPostgreSQLPool surface"
+    }
+  ],
+  "database_boundary_assertion": {
+    "concealed_defects": 0,
+    "real_database_tests_passed": 23,
+    "real_engine_mutations_killed": [
+      "malformed-postgresql-query",
+      "malformed-postgresql-parameter",
+      "malformed-neo4j-query",
+      "malformed-neo4j-result-shape"
+    ],
+    "historical_regression_gate_matrix": [
+      {
+        "surface": "catalog credits query and collection upsert",
+        "owner_molecule": "gm-catalog-api-e2w",
+        "gates": ["interface-faithful spec doubles", "real PostgreSQL and Neo4j tier"]
+      },
+      {
+        "surface": "Discogs Genre and Style graph writes",
+        "owner_molecule": "gm-discogs-graph-enricher-8ue",
+        "gates": ["interface-faithful spec doubles", "real Neo4j tier"]
+      },
+      {
+        "surface": "Discogs tableinator upsert and write path",
+        "owner_molecule": "gm-discogs-sql-loader-4fh",
+        "gates": ["interface-faithful spec doubles", "real PostgreSQL tier"]
+      },
+      {
+        "surface": "schema initialization idempotency",
+        "owner_molecule": "gm-database-schema-ot0",
+        "gates": ["real PostgreSQL and Neo4j tier"]
+      },
+      {
+        "surface": "extractor through broker, consumer, and database",
+        "owner_molecule": "gm-deployment-0ak",
+        "gates": ["digest-pinned released-stack fixture smoke"]
+      },
+      {
+        "surface": "malformed query, parameter, and result shape",
+        "owner_molecule": "gm-design-51u",
+        "gates": ["pinned PostgreSQL and Neo4j mutation probes"]
+      }
+    ],
+    "result": "pass"
+  },
+  "rust_python_assertion": {
+    "mismatches": 0,
+    "p0": 0,
+    "p1": 0,
+    "producer_golden_paths_passed": 2,
+    "python_fixture_validations_passed": 24,
+    "released_image_paths_passed": 6,
+    "historical_mutations_rejected_before_persistence": [
+      "integer-for-string-identity",
+      "malformed-started-at"
+    ],
+    "result": "pass"
+  },
+  "owner_hive_assertions": {
+    "organization_wide_repository_verdicts_passed": 21,
+    "shared_runtime_and_consumer_just_checks_passed": 5,
+    "shared_runtime_manifest_and_lock_pins_verified": 8,
+    "independent_consumer_settlement_loops": 0,
+    "database_engine_images_digest_pinned": 2,
+    "released_images_content_addressed": 6,
+    "released_image_gates_passed": 6,
+    "released_stack_assertions_passed": 7,
+    "released_stack_fixture_image": "ghcr.io/groovemap-music/discogs-ingestion@sha256:db418bfc97d2d364ac0e64045b492ad8492b500c84f8ce105a04cadd400ee17c",
+    "external_action_pin_policy": "pass",
+    "result": "pass"
+  },
+  "linked_landed_molecules": [
+    {"uri": "bead://github/groovemap-music/analytics-engine/gm-analytics-engine-fpd", "title": "Make analytics PostgreSQL test fixtures interface-faithful", "status": "closed", "landed_commits": ["35beef17e34ccb67ef98d6120f509e6d8808d749"]},
+    {"uri": "bead://github/groovemap-music/automation/gm-automation-6ab", "title": "Prevent new unspecced database-boundary fixtures across Python services", "status": "closed", "landed_commits": ["b4740aadce8b6cfd00fb54dba418735e329e3d8a"]},
+    {"uri": "bead://github/groovemap-music/catalog-api/gm-catalog-api-e2w", "title": "Harden catalog API test realism and coverage enforcement", "status": "closed", "landed_commits": ["885d8a91edfb63818411713e514f45012114fb68"]},
+    {"uri": "bead://github/groovemap-music/database-schema/gm-database-schema-ot0", "title": "Prove database schema initialization is idempotent on real engines", "status": "closed", "landed_commits": ["5f80d7fd20caa7239ca1bcc67d89b4d64227f30a"]},
+    {"uri": "bead://github/groovemap-music/deployment/gm-deployment-0ak", "title": "Extend released-image smoke tests with the versioned extractor fixture", "status": "closed", "landed_commits": ["14aecf87eb597b718926295799db10f2c9e845fa"]},
+    {"uri": "bead://github/groovemap-music/design/gm-design-erl", "title": "Spike the shared delivery and batch-processing contract", "status": "closed", "landed_commits": ["71b3da38b79a3f80592a8f92fb62569ced603beb"]},
+    {"uri": "bead://github/groovemap-music/discogs-graph-enricher/gm-discogs-graph-enricher-8ue", "title": "Strengthen Discogs graph-enricher database test realism", "status": "closed", "landed_commits": ["622cc56df9beb1828459bd8615b29fc87775839f"]},
+    {"uri": "bead://github/groovemap-music/discogs-ingestion/gm-discogs-ingestion-dmu", "title": "Publish stable Discogs ingestion contracts for cross-repository verification", "status": "closed", "landed_commits": ["d44860a27e7da346a9562f1b5452704df2f931ab"]},
+    {"uri": "bead://github/groovemap-music/discogs-sql-loader/gm-discogs-sql-loader-4fh", "title": "Strengthen Discogs SQL-loader database test realism", "status": "closed", "landed_commits": ["5abe2683e5dc307307d9cf3b01117eb8b7565b2b"]},
+    {"uri": "bead://github/groovemap-music/musicbrainz-graph-enricher/gm-musicbrainz-graph-enricher-w2y", "title": "Make MusicBrainz graph-enricher Neo4j fixtures interface-faithful", "status": "closed", "landed_commits": ["370ef20977f48c60bae596ade3fbb47b009eb52d"]},
+    {"uri": "bead://github/groovemap-music/musicbrainz-ingestion/gm-musicbrainz-ingestion-hdl", "title": "Pin MusicBrainz downloader reliability behavior", "status": "closed", "landed_commits": ["c649e5defc6e14e2322554bac24363a1ce1f3a57"]},
+    {"uri": "bead://github/groovemap-music/musicbrainz-sql-loader/gm-musicbrainz-sql-loader-55p", "title": "Make MusicBrainz SQL-loader PostgreSQL fixtures interface-faithful", "status": "closed", "landed_commits": ["6c820ad724b987dd7b416edbcb61621bedde173b"]},
+    {"uri": "bead://github/groovemap-music/operations-console/gm-operations-console-aho", "title": "Make operations-console database fixtures interface-faithful", "status": "closed", "landed_commits": ["c5daf48211a5e7bb1734ac25a327c7008cabde84"]},
+    {"uri": "bead://github/groovemap-music/operations-toolkit/gm-operations-toolkit-8im", "title": "Enforce an honest operations-toolkit coverage floor", "status": "closed", "landed_commits": ["3575a1f0470cb3baac1a531f31af7fadb45b0d57"]},
+    {"uri": "bead://github/groovemap-music/python-libraries/gm-python-libraries-1hq", "title": "Enforce python-libraries coverage and RabbitMQ integration in CI", "status": "closed", "landed_commits": ["f2593726a2ddac0a3e3b440fa1949499b9484d42"]},
+    {"uri": "bead://github/groovemap-music/catalog-api/gm-catalog-api-dg-7oi3-2", "title": "Consolidate JWT/token validation into a single shared dependency", "status": "closed", "landed_commits": ["3297dc07422ff02351e3b7aa7e6b59b76ebb4c85", "e3239bef151f506d0e2634faef31d4e2852f60cb"]},
+    {"uri": "bead://github/groovemap-music/python-libraries/gm-python-libraries-dg-7oi3-3", "title": "Reconcile the sync/async resilient-pool twins; delete zero-caller pool code", "status": "closed", "landed_commits": ["b7602797b01dcb059f41d26afa4206ff1f098313", "8b296d55b917669da64419dffa3cfd449074bb24", "c73d2e3f2f4a095ca4457b746914fc15efc8dedb"]},
+    {"uri": "bead://github/groovemap-music/python-libraries/gm-python-libraries-0ek", "title": "Publish shared delivery and Discogs batch runtime contracts", "status": "closed", "landed_commits": ["24704f5fd48d3ef4fff29398585e9924e225b0c5"]},
+    {"uri": "bead://github/groovemap-music/discogs-graph-enricher/gm-discogs-graph-enricher-9l7", "title": "Migrate Discogs graph delivery batching to the shared runtime", "status": "closed", "landed_commits": ["705395fd46be625b3171061cfde747175f7f89e2"]},
+    {"uri": "bead://github/groovemap-music/discogs-sql-loader/gm-discogs-sql-loader-8gm", "title": "Migrate Discogs SQL delivery batching to the shared runtime", "status": "closed", "landed_commits": ["0f7b5d6ed679cf7233fe6118ab407391928a71c9"]},
+    {"uri": "bead://github/groovemap-music/musicbrainz-graph-enricher/gm-musicbrainz-graph-enricher-20q", "title": "Migrate MusicBrainz graph settlement to the shared delivery runner", "status": "closed", "landed_commits": ["fa8ad811d8989f1bf87dcffdfe24ecb8a15deb93"]},
+    {"uri": "bead://github/groovemap-music/musicbrainz-sql-loader/gm-musicbrainz-sql-loader-5zt", "title": "Migrate MusicBrainz SQL settlement to the shared delivery runner", "status": "closed", "landed_commits": ["224bf2809c465d638e5cc4e95e815f2b5be79d90"]}
+  ],
+  "superseded_imports": [
+    {"uri": "bead://github/groovemap-music/design/gm-design-dg-7oi3-5", "status": "closed", "resolution": "superseded by seven service-owned fixture molecules plus automation enforcement"},
+    {"uri": "bead://github/groovemap-music/automation/gm-automation-dg-7oi3-7", "status": "closed", "resolution": "superseded by catalog-api, python-libraries, and operations-toolkit owner molecules"},
+    {"uri": "bead://github/groovemap-music/automation/gm-automation-dg-7oi3-8", "status": "closed", "resolution": "superseded by JWT consolidation, the shared-delivery spike and migrations, and producer contracts"},
+    {"uri": "bead://github/groovemap-music/deployment/gm-deployment-dg-7oi3-6", "status": "closed", "resolution": "superseded by service-owned real-database tiers, schema idempotency, producer fixtures, and released-stack smoke"},
+    {"uri": "bead://github/groovemap-music/python-libraries/gm-python-libraries-dg-7oi3-1", "status": "closed", "resolution": "superseded by the GO spike, shared runtime, and four consumer migrations"}
+  ],
+  "explicit_descopes": [
+    {
+      "uri": "bead://github/groovemap-music/deployment/gm-deployment-dg-64dn",
+      "title": "verify Resend transactional email end-to-end against a live account",
+      "status": "in_progress",
+      "reason": "External-account email delivery is unrelated to shared-delivery mirrors, database-test blindness, and Rust-to-Python catalog contracts; it remains independently operator-gated."
+    },
+    {
+      "scope": "generic AMQP, Redis, and HTTP mock replacement",
+      "reason": "The portfolio's mock-blindness class is limited to PostgreSQL and Neo4j database boundaries."
+    },
+    {
+      "scope": "unrelated Repowise health and dead-code candidates",
+      "reason": "Advisory health, complexity, duplication, and dead-code signals do not become defect findings without behavioral evidence."
+    },
+    {
+      "scope": "organization-wide defect-rate inference",
+      "reason": "The controlled eight-repository audit is not statistically interchangeable with the historical monorepo bug-hunt cohorts."
+    },
+    {
+      "scope": "live production publication, credentials, and organization mutations",
+      "reason": "The required released-stack assertions use immutable local image and engine digests and do not require unsafe production changes."
+    }
+  ],
+  "scope_closure": {
+    "closed_landed_molecules": 22,
+    "closed_superseded_imports": 5,
+    "open_scoped_remediation": [],
+    "explicit_descopes": 5,
+    "all_scoped_work_closed_or_descoped": true
+  },
+  "limitations": [
+    "The historical approximately 40 percent mirror share is retained from the imported tracker; exact historical duplicate counts were not available, so no false raw count is reconstructed.",
+    "A zero-finding audit has a zero denominator. The report uses the agreed 0 percent threshold convention while preserving numerator 0, denominator 0, and this limitation.",
+    "The audit is targeted and controlled; it does not estimate an organization-wide defect rate.",
+    "Repowise populations are repository-scoped and the historical metric was monorepo-scoped, so their averages are not directly compared.",
+    "Released images are local content-addressed audit artifacts. They were not pushed or published and do not attest a live production deployment."
+  ],
+  "thresholds": {
+    "duplicate_mirror_share_at_most_20_pct": "pass",
+    "duplicate_mirror_share_at_least_50_pct_below_prior": "pass",
+    "zero_shared_delivery_jwt_pool_recurrence": "pass",
+    "zero_mock_concealed_database_defects": "pass",
+    "all_historical_database_mutations_guarded": "pass",
+    "zero_rust_python_mismatch": "pass",
+    "zero_p0_p1": "pass",
+    "historical_contract_mutations_rejected_before_persistence": "pass",
+    "owner_checks_pins_and_released_stack": "pass",
+    "all_scoped_work_closed_or_descoped": "pass"
+  }
+}
