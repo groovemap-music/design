@@ -23,6 +23,7 @@ import {
   validateIdentifierVocabulary,
   validateIdentityVocabulary,
   validateOrganizationVerification,
+  validatePortfolioEffectiveness,
   validateRepowiseDefectRisk,
   validateSharedDeliveryRollout,
   validateTargetedDefectAudit,
@@ -41,6 +42,7 @@ export {
   validateFixtureSet,
   validateIdentityVocabulary,
   validateOrganizationVerification,
+  validatePortfolioEffectiveness,
   validateRepowiseDefectRisk,
   validateSharedDeliveryRollout,
   validateTargetedDefectAudit,
@@ -83,6 +85,7 @@ const REQUIRED_FILES = [
   "docs/adr/0011-catalog-identifiers-and-manufacturing-credits.md",
   "docs/audits/organization-wide-verification-2026-09-13.md",
   "docs/programs/catalog-identifiers.md",
+  "docs/audits/portfolio-effectiveness-2026-09-14.md",
   "docs/audits/repowise-defect-risk-2026-09-14.md",
   "docs/audits/shared-delivery-rollout-2026-09-14.md",
   "docs/audits/targeted-defect-audit-2026-09-14.md",
@@ -166,6 +169,7 @@ const REQUIRED_FILES = [
   "taxonomy/media/v1/media-taxonomy.json",
   "taxonomy/media/v1/media-taxonomy.schema.json",
   "verification/organization-wide-v1.json",
+  "verification/portfolio-effectiveness-v1.json",
   "verification/repowise-defect-risk-v1.json",
   "verification/shared-delivery-rollout-v1.json",
   "verification/targeted-defect-audit-protocol-v1.json",
@@ -498,16 +502,19 @@ function checkPolicy() {
   const decisionErrors = validateTelemetryDecision(decision);
   requireCondition(decisionErrors.length === 0, `telemetry decision contract:\n- ${decisionErrors.join("\n- ")}`);
   const verification = JSON.parse(readFileSync(resolve(ROOT, "verification/organization-wide-v1.json"), "utf8"));
+  const effectiveness = JSON.parse(readFileSync(resolve(ROOT, "verification/portfolio-effectiveness-v1.json"), "utf8"));
   const repowise = JSON.parse(readFileSync(resolve(ROOT, "verification/repowise-defect-risk-v1.json"), "utf8"));
   const rollout = JSON.parse(readFileSync(resolve(ROOT, "verification/shared-delivery-rollout-v1.json"), "utf8"));
   const targetedProtocol = JSON.parse(readFileSync(resolve(ROOT, "verification/targeted-defect-audit-protocol-v1.json"), "utf8"));
   const targetedAudit = JSON.parse(readFileSync(resolve(ROOT, "verification/targeted-defect-audit-v1.json"), "utf8"));
   const catalog = JSON.parse(readFileSync(resolve(ROOT, "catalog/repositories.json"), "utf8"));
   const verificationErrors = validateOrganizationVerification(verification, catalog);
+  const effectivenessErrors = validatePortfolioEffectiveness(effectiveness, rollout, repowise, targetedAudit);
   const repowiseErrors = validateRepowiseDefectRisk(repowise);
   const rolloutErrors = validateSharedDeliveryRollout(rollout);
   const targetedAuditErrors = validateTargetedDefectAudit(targetedAudit, targetedProtocol);
   requireCondition(verificationErrors.length === 0, `organization verification contract:\n- ${verificationErrors.join("\n- ")}`);
+  requireCondition(effectivenessErrors.length === 0, `portfolio effectiveness contract:\n- ${effectivenessErrors.join("\n- ")}`);
   requireCondition(repowiseErrors.length === 0, `Repowise defect-risk contract:\n- ${repowiseErrors.join("\n- ")}`);
   requireCondition(rolloutErrors.length === 0, `shared-delivery rollout contract:\n- ${rolloutErrors.join("\n- ")}`);
   requireCondition(targetedAuditErrors.length === 0, `targeted defect audit contract:\n- ${targetedAuditErrors.join("\n- ")}`);
@@ -519,6 +526,12 @@ function checkPolicy() {
     requireCondition(
       record.sha256 === sha256(readFileSync(resolve(ROOT, record.path))),
       `historical evidence changed after the targeted defect audit: ${record.path}`,
+    );
+  }
+  for (const record of effectiveness.source_records) {
+    requireCondition(
+      record.sha256 === sha256(readFileSync(resolve(ROOT, record.path))),
+      `source evidence changed after the portfolio effectiveness verdict: ${record.path}`,
     );
   }
   for (const record of repowise.historical_records) {
@@ -540,6 +553,7 @@ function checkPolicy() {
   console.log("Verified the versioned Repowise defect-risk evidence.");
   console.log("Verified the versioned shared-delivery rollout attestation.");
   console.log("Verified the frozen protocol and versioned targeted defect audit.");
+  console.log("Verified the final portfolio effectiveness verdict and preserved evidence.");
 }
 
 function run(mode) {

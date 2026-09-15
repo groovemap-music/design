@@ -805,6 +805,183 @@ export function validateTargetedDefectAudit(report, protocol) {
   }
   return errors;
 }
+
+export function validatePortfolioEffectiveness(report, rollout, repowise, targetedAudit) {
+  const errors = [];
+  const fullRevision = /^[a-f0-9]{40}$/;
+  const expectedSources = new Map([
+    ["verification/organization-wide-v1.json", "7c042ba9d044f3fd582a1dd93e1af9b83d75d6cb5f6a3d8e551d3a022f70e514"],
+    ["docs/audits/organization-wide-verification-2026-09-13.md", "8a02d82194ac6cfdb69bb010c29a6ef21cb6f801a6a851305198fdf4875bb06b"],
+    ["verification/shared-delivery-rollout-v1.json", "a88e3b134b6da2bb26dfe1ab4ee6e9849d812e4085193a80a17a63e4fa286ae9"],
+    ["docs/audits/shared-delivery-rollout-2026-09-14.md", "34c4124a7528837644113150c2b8ee7a2184d637ba38466d26fa0ea7698251a5"],
+    ["verification/repowise-defect-risk-v1.json", "8ca2ec1cc2ac18690e2f808d21475f291b2add3a96653a9187c03bf5fe7f8f50"],
+    ["docs/audits/repowise-defect-risk-2026-09-14.md", "2012f725e69c789f6f3d6300572b19d23244bb3fb210f0b94c0cefb26d862ae7"],
+    ["verification/targeted-defect-audit-protocol-v1.json", "5f848bab412f305387974e9d51d7e00848289b176dd085d04613fcca0d2d6a8b"],
+    ["verification/targeted-defect-audit-v1.json", "2310402404b43e83b479767e053f450b0eb106e36b7b3e10069e31163d22e5f3"],
+    ["docs/audits/targeted-defect-audit-2026-09-14.md", "ac28221946260b9a0b8f5429a2bc091442a5225924a398530b2b39cfbf5aaed4"],
+  ]);
+  const expectedMolecules = [
+    "gm-analytics-engine-fpd", "gm-automation-6ab", "gm-catalog-api-e2w", "gm-database-schema-ot0",
+    "gm-deployment-0ak", "gm-design-erl", "gm-discogs-graph-enricher-8ue", "gm-discogs-ingestion-dmu",
+    "gm-discogs-sql-loader-4fh", "gm-musicbrainz-graph-enricher-w2y", "gm-musicbrainz-ingestion-hdl",
+    "gm-musicbrainz-sql-loader-55p", "gm-operations-console-aho", "gm-operations-toolkit-8im",
+    "gm-python-libraries-1hq", "gm-catalog-api-dg-7oi3-2", "gm-python-libraries-dg-7oi3-3",
+    "gm-python-libraries-0ek", "gm-discogs-graph-enricher-9l7", "gm-discogs-sql-loader-8gm",
+    "gm-musicbrainz-graph-enricher-20q", "gm-musicbrainz-sql-loader-5zt",
+  ];
+  const expectedSuperseded = [
+    "gm-design-dg-7oi3-5", "gm-automation-dg-7oi3-7", "gm-automation-dg-7oi3-8",
+    "gm-deployment-dg-7oi3-6", "gm-python-libraries-dg-7oi3-1",
+  ];
+
+  if (
+    report?.schema_version !== 1 || report?.verdict_id !== "gm-design-51u.4"
+    || report?.reviewed_on !== "2026-09-14" || report?.verdict !== "close-portfolio"
+    || report?.portfolio_tracker?.id !== "gm-design-dg-7oi3"
+    || report?.portfolio_tracker?.focused_remediation_required !== false
+  ) {
+    errors.push("portfolio effectiveness identity, date, tracker, or close verdict is invalid");
+  }
+
+  const sources = new Map((report?.source_records ?? []).map((record) => [record.path, record.sha256]));
+  if (sources.size !== expectedSources.size) errors.push("portfolio effectiveness source-record inventory is incomplete");
+  for (const [path, digest] of expectedSources) {
+    if (sources.get(path) !== digest) errors.push(`portfolio effectiveness source identity changed: ${path}`);
+  }
+
+  if (JSON.stringify(report?.effectiveness_revisions ?? []) !== JSON.stringify(targetedAudit?.repositories ?? [])) {
+    errors.push("portfolio effectiveness revisions differ from the frozen targeted audit");
+  }
+  const supportingIndexes = report?.supporting_index_revisions ?? [];
+  const repowiseRevisions = (repowise?.repositories ?? []).map(({ name, revision, tree }) => ({ name, revision, tree }));
+  if (JSON.stringify(supportingIndexes) !== JSON.stringify(repowiseRevisions)) {
+    errors.push("portfolio supporting index revisions differ from the versioned Repowise evidence");
+  }
+  if ([...(report?.effectiveness_revisions ?? []), ...supportingIndexes].some(({ revision, tree }) => !fullRevision.test(revision ?? "") || !fullRevision.test(tree ?? ""))) {
+    errors.push("portfolio effectiveness revisions and trees must be immutable full hashes");
+  }
+
+  const raw = report?.raw_findings ?? {};
+  const targetedTotals = targetedAudit?.totals ?? {};
+  for (const field of ["unique_root_causes", "manifestations", "multi_site_causes", "p0", "p1", "p2", "p3", "mutation_survivors", "zero_result_classes"]) {
+    if (raw[field] !== targetedTotals[field]) errors.push(`portfolio raw finding total differs from the targeted audit: ${field}`);
+  }
+  if ((raw.findings ?? []).length !== 0 || (raw.below_threshold_observations ?? []).length !== 0) {
+    errors.push("portfolio raw finding lists must preserve the zero-result audit");
+  }
+
+  const normalized = report?.normalized_findings ?? {};
+  if (
+    normalized.duplicate_mirror_share_pct !== 0 || normalized.duplicate_mirror_share_numerator !== 0
+    || normalized.duplicate_mirror_share_denominator !== 0 || normalized.denominator_zero !== true
+    || normalized.historical_share_pct_approx !== 40 || normalized.relative_reduction_pct !== 100
+    || normalized.threshold_at_most_pct !== 20 || normalized.required_reduction_pct !== 50
+    || normalized.result !== "pass"
+  ) {
+    errors.push("portfolio normalized duplicate threshold evidence is invalid");
+  }
+  if ((report?.before_after ?? []).length !== 4 || report.before_after.some(({ result }) => result !== "pass")) {
+    errors.push("portfolio before/after evidence is incomplete or contains a threshold miss");
+  }
+
+  const recurrence = new Map((report?.recurrence_attestations ?? []).map((item) => [item.surface, item.recurrences]));
+  for (const surface of ["shared-delivery", "jwt-validation", "resilient-postgresql-pool"]) {
+    if (recurrence.get(surface) !== 0) errors.push(`portfolio recurrence remains on ${surface}`);
+  }
+  if (
+    report?.database_boundary_assertion?.concealed_defects !== 0
+    || report?.database_boundary_assertion?.real_database_tests_passed !== 23
+    || report?.database_boundary_assertion?.real_engine_mutations_killed?.length !== 4
+    || report?.database_boundary_assertion?.historical_regression_gate_matrix?.length !== 6
+    || report?.database_boundary_assertion?.result !== "pass"
+  ) {
+    errors.push("portfolio database-boundary assertion is incomplete");
+  }
+  const rustPython = report?.rust_python_assertion ?? {};
+  if (
+    rustPython.mismatches !== 0 || rustPython.p0 !== 0 || rustPython.p1 !== 0
+    || rustPython.producer_golden_paths_passed !== 2 || rustPython.python_fixture_validations_passed !== 24
+    || rustPython.released_image_paths_passed !== 6
+    || !sameValues(rustPython.historical_mutations_rejected_before_persistence ?? [], ["integer-for-string-identity", "malformed-started-at"])
+    || rustPython.result !== "pass"
+  ) {
+    errors.push("portfolio Rust-to-Python assertion is incomplete");
+  }
+
+  const owner = report?.owner_hive_assertions ?? {};
+  if (
+    owner.organization_wide_repository_verdicts_passed !== 21
+    || owner.shared_runtime_and_consumer_just_checks_passed !== 5
+    || owner.shared_runtime_manifest_and_lock_pins_verified !== 8
+    || owner.independent_consumer_settlement_loops !== 0
+    || owner.database_engine_images_digest_pinned !== 2
+    || owner.released_images_content_addressed !== 6 || owner.released_image_gates_passed !== 6
+    || owner.released_stack_assertions_passed !== 7
+    || owner.released_stack_fixture_image !== "ghcr.io/groovemap-music/discogs-ingestion@sha256:db418bfc97d2d364ac0e64045b492ad8492b500c84f8ce105a04cadd400ee17c"
+    || owner.external_action_pin_policy !== "pass" || owner.result !== "pass"
+    || rollout?.runtime?.just_check !== "pass" || (rollout?.consumers ?? []).some((consumer) => consumer.just_check !== "pass" || consumer.image_gate !== "pass")
+  ) {
+    errors.push("portfolio owner-hive check, pin, or released-stack assertion is incomplete");
+  }
+
+  const molecules = report?.linked_landed_molecules ?? [];
+  const moleculeIds = molecules.map(({ uri }) => uri?.split("/").at(-1));
+  if (JSON.stringify(moleculeIds) !== JSON.stringify(expectedMolecules)) {
+    errors.push("portfolio linked landed-molecule inventory is incomplete");
+  }
+  for (const molecule of molecules) {
+    if (
+      molecule.status !== "closed" || typeof molecule.title !== "string" || !molecule.title
+      || !Array.isArray(molecule.landed_commits) || molecule.landed_commits.length === 0
+      || molecule.landed_commits.some((commit) => !fullRevision.test(commit))
+    ) {
+      errors.push(`${molecule.uri ?? "unknown molecule"}: closed state or landed commits are invalid`);
+    }
+  }
+
+  const superseded = report?.superseded_imports ?? [];
+  if (
+    JSON.stringify(superseded.map(({ uri }) => uri?.split("/").at(-1))) !== JSON.stringify(expectedSuperseded)
+    || superseded.some((item) => item.status !== "closed" || typeof item.resolution !== "string" || !item.resolution)
+  ) {
+    errors.push("portfolio superseded imported scope is not fully reconciled");
+  }
+  const descopes = report?.explicit_descopes ?? [];
+  if (
+    descopes.length !== 5
+    || descopes[0]?.uri !== "bead://github/groovemap-music/deployment/gm-deployment-dg-64dn"
+    || descopes[0]?.status !== "in_progress"
+    || descopes.some(({ reason }) => typeof reason !== "string" || !reason)
+  ) {
+    errors.push("portfolio explicit descopes are incomplete");
+  }
+  const closure = report?.scope_closure ?? {};
+  if (
+    closure.closed_landed_molecules !== 22 || closure.closed_superseded_imports !== 5
+    || (closure.open_scoped_remediation ?? []).length !== 0 || closure.explicit_descopes !== 5
+    || closure.all_scoped_work_closed_or_descoped !== true
+  ) {
+    errors.push("portfolio scope closure is incomplete");
+  }
+
+  const thresholds = Object.values(report?.thresholds ?? {});
+  if (thresholds.length !== 10 || thresholds.some((value) => value !== "pass")) {
+    errors.push("portfolio has a missing or failed effectiveness threshold");
+  }
+  const methodology = report?.methodology ?? {};
+  if (
+    typeof methodology.primary_evidence !== "string" || !methodology.primary_evidence.includes("targeted audit")
+    || typeof methodology.supporting_evidence !== "string" || !methodology.supporting_evidence.includes("does not determine the verdict")
+    || typeof methodology.zero_denominator_rule !== "string" || !methodology.zero_denominator_rule.includes("0 percent")
+    || typeof methodology.comparison_rule !== "string" || !methodology.comparison_rule.includes("do not infer")
+  ) {
+    errors.push("portfolio methodology does not preserve primary/supporting evidence and comparison limits");
+  }
+  if (!Array.isArray(report?.limitations) || report.limitations.length !== 5) {
+    errors.push("portfolio limitations are incomplete");
+  }
+  return errors;
+}
 export function validateFixtureSet(taxonomy, fixtures) {
   const errors = [];
   const names = new Set();
