@@ -23,6 +23,7 @@ import {
   validateIdentifierVocabulary,
   validateIdentityVocabulary,
   validateOrganizationVerification,
+  validateRepowiseDefectRisk,
   validateSharedDeliveryRollout,
   validateTelemetryDecision,
 } from "./validation-policy.mjs";
@@ -39,6 +40,7 @@ export {
   validateFixtureSet,
   validateIdentityVocabulary,
   validateOrganizationVerification,
+  validateRepowiseDefectRisk,
   validateSharedDeliveryRollout,
   validateTelemetryDecision,
 } from "./validation-policy.mjs";
@@ -79,6 +81,7 @@ const REQUIRED_FILES = [
   "docs/adr/0011-catalog-identifiers-and-manufacturing-credits.md",
   "docs/audits/organization-wide-verification-2026-09-13.md",
   "docs/programs/catalog-identifiers.md",
+  "docs/audits/repowise-defect-risk-2026-09-14.md",
   "docs/audits/shared-delivery-rollout-2026-09-14.md",
   "docs/programs/media-taxonomy.md",
   "docs/programs/native-identity-and-events.md",
@@ -157,6 +160,7 @@ const REQUIRED_FILES = [
   "taxonomy/media/v1/media-taxonomy.json",
   "taxonomy/media/v1/media-taxonomy.schema.json",
   "verification/organization-wide-v1.json",
+  "verification/repowise-defect-risk-v1.json",
   "verification/shared-delivery-rollout-v1.json",
 ];
 
@@ -486,12 +490,21 @@ function checkPolicy() {
   const decisionErrors = validateTelemetryDecision(decision);
   requireCondition(decisionErrors.length === 0, `telemetry decision contract:\n- ${decisionErrors.join("\n- ")}`);
   const verification = JSON.parse(readFileSync(resolve(ROOT, "verification/organization-wide-v1.json"), "utf8"));
+  const repowise = JSON.parse(readFileSync(resolve(ROOT, "verification/repowise-defect-risk-v1.json"), "utf8"));
   const rollout = JSON.parse(readFileSync(resolve(ROOT, "verification/shared-delivery-rollout-v1.json"), "utf8"));
   const catalog = JSON.parse(readFileSync(resolve(ROOT, "catalog/repositories.json"), "utf8"));
   const verificationErrors = validateOrganizationVerification(verification, catalog);
+  const repowiseErrors = validateRepowiseDefectRisk(repowise);
   const rolloutErrors = validateSharedDeliveryRollout(rollout);
   requireCondition(verificationErrors.length === 0, `organization verification contract:\n- ${verificationErrors.join("\n- ")}`);
+  requireCondition(repowiseErrors.length === 0, `Repowise defect-risk contract:\n- ${repowiseErrors.join("\n- ")}`);
   requireCondition(rolloutErrors.length === 0, `shared-delivery rollout contract:\n- ${rolloutErrors.join("\n- ")}`);
+  for (const record of repowise.historical_records) {
+    requireCondition(
+      record.sha256 === sha256(readFileSync(resolve(ROOT, record.path))),
+      `historical evidence changed after the Repowise audit: ${record.path}`,
+    );
+  }
   requireCondition(
     rollout.historical_baseline.machine_record.sha256 === sha256(readFileSync(resolve(ROOT, "verification/organization-wide-v1.json"))),
     "the 2026-09-13 machine-readable verification changed after the rollout audit",
@@ -502,6 +515,7 @@ function checkPolicy() {
   );
   console.log("Verified the amended telemetry decision contract.");
   console.log("Verified the versioned organization-wide verification matrix.");
+  console.log("Verified the versioned Repowise defect-risk evidence.");
   console.log("Verified the versioned shared-delivery rollout attestation.");
 }
 
