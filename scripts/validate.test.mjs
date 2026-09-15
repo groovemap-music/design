@@ -18,6 +18,7 @@ import {
   validateOrganizationVerification,
   validateRepowiseDefectRisk,
   validateSharedDeliveryRollout,
+  validateTargetedDefectAudit,
   validateTelemetryDecision,
 } from "./validation-policy.mjs";
 import { trackedFiles, validateCatalogContract as validateCatalogContractEntry } from "./validate.mjs";
@@ -28,6 +29,8 @@ import catalog from "../catalog/repositories.json" with { type: "json" };
 import organizationVerification from "../verification/organization-wide-v1.json" with { type: "json" };
 import repowiseDefectRisk from "../verification/repowise-defect-risk-v1.json" with { type: "json" };
 import sharedDeliveryRollout from "../verification/shared-delivery-rollout-v1.json" with { type: "json" };
+import targetedAuditProtocol from "../verification/targeted-defect-audit-protocol-v1.json" with { type: "json" };
+import targetedAudit from "../verification/targeted-defect-audit-v1.json" with { type: "json" };
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const schemaPath = resolve(root, "catalog/repositories.schema.json");
@@ -198,6 +201,30 @@ test("Repowise defect-risk evidence pins indexes, metrics, coverage, beads, and 
   const rewrittenHistory = structuredClone(repowiseDefectRisk);
   rewrittenHistory.historical_records[0].sha256 = "0".repeat(64);
   assert.ok(validateRepowiseDefectRisk(rewrittenHistory).some((error) => /historical evidence identity/.test(error)));
+});
+
+test("targeted defect audit pins protocol, revisions, real engines, images, mutations, totals, and history", () => {
+  assert.deepEqual(validateTargetedDefectAudit(targetedAudit, targetedAuditProtocol), []);
+
+  const mutableRevision = structuredClone(targetedAudit);
+  mutableRevision.repositories[0].revision = "main";
+  assert.ok(validateTargetedDefectAudit(mutableRevision, targetedAuditProtocol).some((error) => /exact frozen commit/.test(error)));
+
+  const survivingMutation = structuredClone(targetedAudit);
+  survivingMutation.totals.mutation_survivors = 1;
+  assert.ok(validateTargetedDefectAudit(survivingMutation, targetedAuditProtocol).some((error) => /zero-finding result/.test(error)));
+
+  const missingMutation = structuredClone(targetedAudit);
+  missingMutation.causal_classes[2].protected_mutations.pop();
+  assert.ok(validateTargetedDefectAudit(missingMutation, targetedAuditProtocol).some((error) => /protected mutations/.test(error)));
+
+  const rewrittenHistory = structuredClone(targetedAudit);
+  rewrittenHistory.historical_records[0].sha256 = "0".repeat(64);
+  assert.ok(validateTargetedDefectAudit(rewrittenHistory, targetedAuditProtocol).some((error) => /historical evidence identity/.test(error)));
+
+  const unfrozenProtocol = structuredClone(targetedAuditProtocol);
+  unfrozenProtocol.protocol_state = "draft";
+  assert.ok(validateTargetedDefectAudit(targetedAudit, unfrozenProtocol).some((error) => /not the frozen protocol/.test(error)));
 });
 
 test("canonical catalog rejects deployment ownership that contradicts the active topology", () => {
