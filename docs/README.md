@@ -23,6 +23,7 @@ maintained current state.
 
 - [Media-taxonomy program rollout](programs/media-taxonomy.md) records the completed delivery of ADR 0007 across the organization in five waves.
 - [Native identity and first-party events program rollout](programs/native-identity-and-events.md) records the four-wave delivery plan for ADR 0009 and ADR 0010, the artifacts each wave pins, and the gaps it deliberately leaves to their own records.
+- [Catalog-identifiers program rollout](programs/catalog-identifiers.md) records the five-wave delivery plan for ADR 0011, the artifacts each wave pins, and the gaps it deliberately leaves to their own records.
 
 ## Design spikes
 
