@@ -660,6 +660,151 @@ export function validateRepowiseDefectRisk(report) {
   }
   return errors;
 }
+
+export function validateTargetedDefectAudit(report, protocol) {
+  const errors = [];
+  const fullRevision = /^[a-f0-9]{40}$/;
+  const digest = /^[a-f0-9]{64}$/;
+  const imageDigest = /^sha256:[a-f0-9]{64}$/;
+  const expectedRepositories = [
+    ["python-libraries", "24704f5fd48d3ef4fff29398585e9924e225b0c5", "c5b96bdeab082057480a26784ad6065497aaae9a"],
+    ["catalog-api", "7e6f21f01cd645f552cdf7ac54ccdecdfb2554df", "3538e664444d5bb9e078155e0d08886c1434d2bb"],
+    ["discogs-ingestion", "8df3b3d05b0e4424874e0104c1f45c5d0c674a7b", "91e9cb47c525d9f7b70893a8bc3c8c6bf4f45cdb"],
+    ["discogs-graph-enricher", "705395fd46be625b3171061cfde747175f7f89e2", "a63ee882da8edaa45b66adf17b623aa950cbb254"],
+    ["discogs-sql-loader", "0f7b5d6ed679cf7233fe6118ab407391928a71c9", "afdde4351abae3c6991d75b74a773d8893f744a8"],
+    ["musicbrainz-ingestion", "c649e5defc6e14e2322554bac24363a1ce1f3a57", "b1235fc29c7a0a6824be58c5d63bd1c700ed25f7"],
+    ["musicbrainz-graph-enricher", "fa8ad811d8989f1bf87dcffdfe24ecb8a15deb93", "f3e9e3fd9434dd73f2c774bcb17ff4e645af0d2b"],
+    ["musicbrainz-sql-loader", "224bf2809c465d638e5cc4e95e815f2b5be79d90", "cc686c7cd0091222e86366ada4851f88d96b30de"],
+  ];
+  const expectedClasses = new Map([
+    ["multi-site-implementation-drift", ["reject-settlement-requeues", "nlq-skips-shared-revocation-state"]],
+    ["permissive-mock-blindness", ["malformed-postgresql-query", "malformed-postgresql-parameter", "malformed-neo4j-query", "malformed-neo4j-result-shape"]],
+    ["cross-language-contract-drift", ["integer-for-string-identity", "integer-discogs-artist-id-not-normalized", "malformed-started-at", "purge-veto-excludes-exact-boundary"]],
+  ]);
+  const expectedCommands = [
+    "shared-delivery-control", "catalog-validation-control", "discogs-graph-control", "discogs-sql-control",
+    "musicbrainz-graph-control", "musicbrainz-sql-control", "discogs-producer-golden", "musicbrainz-producer-golden",
+    "source-mutations", "python-contract-validation", "real-database-mutations", "real-database-integration", "released-image-gates",
+  ];
+  const expectedImages = [
+    "discogs-ingestion", "musicbrainz-ingestion", "discogs-graph-enricher", "discogs-sql-loader",
+    "musicbrainz-graph-enricher", "musicbrainz-sql-loader",
+  ];
+  const expectedHistory = new Map([
+    ["verification/organization-wide-v1.json", "7c042ba9d044f3fd582a1dd93e1af9b83d75d6cb5f6a3d8e551d3a022f70e514"],
+    ["docs/audits/organization-wide-verification-2026-09-13.md", "8a02d82194ac6cfdb69bb010c29a6ef21cb6f801a6a851305198fdf4875bb06b"],
+    ["verification/shared-delivery-rollout-v1.json", "a88e3b134b6da2bb26dfe1ab4ee6e9849d812e4085193a80a17a63e4fa286ae9"],
+    ["docs/audits/shared-delivery-rollout-2026-09-14.md", "34c4124a7528837644113150c2b8ee7a2184d637ba38466d26fa0ea7698251a5"],
+    ["verification/repowise-defect-risk-v1.json", "8ca2ec1cc2ac18690e2f808d21475f291b2add3a96653a9187c03bf5fe7f8f50"],
+    ["docs/audits/repowise-defect-risk-2026-09-14.md", "2012f725e69c789f6f3d6300572b19d23244bb3fb210f0b94c0cefb26d862ae7"],
+  ]);
+
+  if (report?.schema_version !== 1 || report?.audit_id !== "gm-design-51u.3" || report?.verdict !== "pass") {
+    errors.push("targeted defect audit identity, schema, or verdict is invalid");
+  }
+  if (protocol?.schema_version !== 1 || protocol?.audit_id !== report?.audit_id || protocol?.protocol_state !== "frozen-before-inspection") {
+    errors.push("targeted defect audit protocol is not the frozen protocol");
+  }
+  if (
+    report?.protocol?.path !== "verification/targeted-defect-audit-protocol-v1.json"
+    || report?.protocol?.sha256 !== "5f848bab412f305387974e9d51d7e00848289b176dd085d04613fcca0d2d6a8b"
+    || report?.protocol?.freeze_commit !== "2e92276661e33c9a852542284b3900ea2084911a"
+    || report?.protocol?.state !== "frozen-before-inspection"
+    || report?.protocol?.frozen_at_utc !== protocol?.frozen_at_utc
+  ) {
+    errors.push("targeted defect audit protocol identity or freeze evidence changed");
+  }
+
+  const repositories = report?.repositories ?? [];
+  const protocolRepositories = protocol?.repositories ?? [];
+  if (JSON.stringify(repositories.map(({ name }) => name)) !== JSON.stringify(expectedRepositories.map(([name]) => name))) {
+    errors.push("targeted defect audit repository order or inventory is incorrect");
+  }
+  for (const [name, revision, tree] of expectedRepositories) {
+    const repository = repositories.find((candidate) => candidate.name === name) ?? {};
+    const frozen = protocolRepositories.find((candidate) => candidate.name === name) ?? {};
+    if (
+      repository.revision !== revision || repository.tree !== tree
+      || frozen.revision !== revision || frozen.tree !== tree
+      || !fullRevision.test(repository.revision ?? "") || !fullRevision.test(repository.tree ?? "")
+    ) {
+      errors.push(`${name}: exact frozen commit or tree evidence is missing`);
+    }
+  }
+
+  const budget = report?.budget ?? {};
+  if (
+    budget.execution_minutes_allowed !== 150 || budget.execution_minutes_used > 150
+    || budget.reviewer_minutes_allowed !== 30 || budget.infrastructure_retries_allowed_per_probe !== 1
+    || budget.scope_expanded !== false
+    || protocol?.severity?.counting_threshold !== "P2"
+    || protocol?.budgets?.execution_minutes !== 150 || protocol?.budgets?.reviewer_minutes !== 30
+  ) {
+    errors.push("targeted defect audit budget, severity threshold, or scope boundary changed");
+  }
+
+  const commands = report?.commands ?? [];
+  if (JSON.stringify(commands.map(({ id }) => id)) !== JSON.stringify(expectedCommands)) {
+    errors.push("targeted defect audit command inventory is incomplete");
+  }
+  if (commands.some((command) => command.exit_code !== 0 || typeof command.command !== "string" || !command.command || typeof command.summary !== "string" || !command.summary)) {
+    errors.push("targeted defect audit contains a failed or incomplete command record");
+  }
+
+  const databases = new Map((report?.database_evidence ?? []).map((item) => [item.engine, item]));
+  const postgresql = databases.get("postgresql") ?? {};
+  const neo4j = databases.get("neo4j") ?? {};
+  if (
+    postgresql.image !== "postgres:18-alpine@sha256:d3e1620b530c944afa6e887d22eb899824da68e19c52024bf98f5220c88a65b2"
+    || postgresql.loopback_only !== true || postgresql.integration_tests_passed !== 14
+    || !sameValues(postgresql.mutation_verdicts ?? [], ["malformed-postgresql-query:killed", "malformed-postgresql-parameter:killed"])
+    || neo4j.image !== "neo4j:2026-community@sha256:dbc377fb9cd8fe8dabc19d3041b197d5ca0ef8bae514cea175b8df265e5b7a76"
+    || neo4j.loopback_only !== true || neo4j.integration_tests_passed !== 9
+    || !sameValues(neo4j.mutation_verdicts ?? [], ["malformed-neo4j-query:killed", "malformed-neo4j-result-shape:killed"])
+  ) {
+    errors.push("targeted defect audit real-engine evidence is incomplete");
+  }
+
+  const images = report?.released_images ?? [];
+  if (
+    JSON.stringify(images.map(({ repository }) => repository)) !== JSON.stringify(expectedImages)
+    || images.some((item) => !imageDigest.test(item.digest ?? "") || typeof item.smoke !== "string" || !item.smoke)
+  ) {
+    errors.push("targeted defect audit released-image evidence is incomplete");
+  }
+
+  const classes = report?.causal_classes ?? [];
+  if (JSON.stringify(classes.map(({ name }) => name)) !== JSON.stringify([...expectedClasses.keys()])) {
+    errors.push("targeted defect audit causal-class inventory is incorrect");
+  }
+  for (const [name, mutations] of expectedClasses) {
+    const causalClass = classes.find((candidate) => candidate.name === name) ?? {};
+    if (
+      causalClass.outcome !== "zero-result-class" || causalClass.unique_root_causes !== 0 || causalClass.manifestations !== 0
+      || !sameValues(causalClass.protected_mutations ?? [], mutations)
+      || (causalClass.multi_site_causes ?? []).length !== 0 || (causalClass.findings ?? []).length !== 0
+    ) {
+      errors.push(`${name}: zero-result evidence or protected mutations are incomplete`);
+    }
+  }
+  const totals = report?.totals ?? {};
+  if (
+    totals.unique_root_causes !== 0 || totals.manifestations !== 0 || totals.multi_site_causes !== 0
+    || totals.p0 !== 0 || totals.p1 !== 0 || totals.p2 !== 0 || totals.p3 !== 0
+    || totals.mutation_survivors !== 0 || totals.zero_result_classes !== 3
+  ) {
+    errors.push("targeted defect audit totals do not match the zero-finding result");
+  }
+
+  const history = new Map((report?.historical_records ?? []).map((record) => [record.path, record.sha256]));
+  if (history.size !== expectedHistory.size) errors.push("targeted defect audit historical evidence inventory is incomplete");
+  for (const [path, expectedDigest] of expectedHistory) {
+    if (history.get(path) !== expectedDigest || !digest.test(history.get(path) ?? "")) {
+      errors.push(`targeted defect audit historical evidence identity changed: ${path}`);
+    }
+  }
+  return errors;
+}
 export function validateFixtureSet(taxonomy, fixtures) {
   const errors = [];
   const names = new Set();
