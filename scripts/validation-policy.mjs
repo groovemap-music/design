@@ -236,6 +236,129 @@ export function validateOrganizationVerification(report, catalog) {
   if (publicMermaid !== 92) errors.push("public repository Mermaid counts differ from the reviewed matrix");
   return errors;
 }
+
+export function validateSharedDeliveryRollout(report) {
+  const errors = [];
+  const fullRevision = /^[a-f0-9]{40}$/;
+  const runtimeRevision = "24704f5fd48d3ef4fff29398585e9924e225b0c5";
+  const expectedConsumers = [
+    {
+      name: "discogs-graph-enricher",
+      revision: "705395fd46be625b3171061cfde747175f7f89e2",
+      tree: "a63ee882da8edaa45b66adf17b623aa950cbb254",
+      delivery_model: "batch",
+      shared_imports: ["common.batch", "common.delivery"],
+      settlement_authorities: ["common.batch.AsyncBatchEngine"],
+    },
+    {
+      name: "discogs-sql-loader",
+      revision: "0f7b5d6ed679cf7233fe6118ab407391928a71c9",
+      tree: "afdde4351abae3c6991d75b74a773d8893f744a8",
+      delivery_model: "batch-and-single",
+      shared_imports: ["common.batch", "common.delivery"],
+      settlement_authorities: ["common.batch.AsyncBatchEngine", "common.delivery.run_delivery"],
+    },
+    {
+      name: "musicbrainz-graph-enricher",
+      revision: "fa8ad811d8989f1bf87dcffdfe24ecb8a15deb93",
+      tree: "f3e9e3fd9434dd73f2c774bcb17ff4e645af0d2b",
+      delivery_model: "single-delivery",
+      shared_imports: ["common.delivery"],
+      settlement_authorities: ["common.delivery.run_delivery"],
+    },
+    {
+      name: "musicbrainz-sql-loader",
+      revision: "224bf2809c465d638e5cc4e95e815f2b5be79d90",
+      tree: "cc686c7cd0091222e86366ada4851f88d96b30de",
+      delivery_model: "single-delivery",
+      shared_imports: ["common.delivery"],
+      settlement_authorities: ["common.delivery.run_delivery"],
+    },
+  ];
+
+  if (report?.schema_version !== 1) errors.push("shared-delivery rollout must use schema version 1");
+  if (report?.reviewed_on !== "2026-09-14") errors.push("shared-delivery rollout must retain its versioned review date");
+  if (report?.verdict !== "pass") errors.push("shared-delivery rollout verdict must be pass");
+
+  const history = report?.historical_baseline ?? {};
+  if (history.status !== "preserved") errors.push("the earlier organization-wide verification must remain preserved history");
+  for (const [kind, path, digest] of [
+    ["machine_record", "verification/organization-wide-v1.json", "7c042ba9d044f3fd582a1dd93e1af9b83d75d6cb5f6a3d8e551d3a022f70e514"],
+    ["narrative", "docs/audits/organization-wide-verification-2026-09-13.md", "8a02d82194ac6cfdb69bb010c29a6ef21cb6f801a6a851305198fdf4875bb06b"],
+  ]) {
+    if (history[kind]?.path !== path || history[kind]?.sha256 !== digest) {
+      errors.push(`historical ${kind} identity must remain immutable`);
+    }
+  }
+
+  const runtime = report?.runtime ?? {};
+  if (runtime.name !== "python-libraries") errors.push("shared runtime owner must be python-libraries");
+  if (runtime.revision !== runtimeRevision || !fullRevision.test(runtime.revision ?? "")) {
+    errors.push("shared runtime must retain the exact full reviewed revision");
+  }
+  if (runtime.tree !== "c5b96bdeab082057480a26784ad6065497aaae9a" || !fullRevision.test(runtime.tree ?? "")) {
+    errors.push("shared runtime must retain the exact reviewed tree");
+  }
+  if (runtime.just_check !== "pass" || runtime.image_gate !== "not-applicable") {
+    errors.push("shared runtime validation evidence is incomplete");
+  }
+  if (!sameValues(runtime.modules ?? [], ["common.delivery", "common.batch"])) {
+    errors.push("shared runtime module inventory is incomplete");
+  }
+  if (!sameValues(runtime.forbidden_imports ?? [], ["aio-pika", "neo4j", "psycopg", "service-code"])) {
+    errors.push("shared runtime forbidden dependency boundary is incomplete");
+  }
+  if (!Array.isArray(runtime.forbidden_import_findings) || runtime.forbidden_import_findings.length !== 0) {
+    errors.push("shared runtime must have no forbidden dependency findings");
+  }
+
+  const consumers = report?.consumers ?? [];
+  if (JSON.stringify(consumers.map((consumer) => consumer.name)) !== JSON.stringify(expectedConsumers.map((consumer) => consumer.name))) {
+    errors.push("shared-delivery consumer order or inventory is incorrect");
+  }
+  for (const expected of expectedConsumers) {
+    const consumer = consumers.find((candidate) => candidate.name === expected.name) ?? {};
+    if (consumer.revision !== expected.revision || !fullRevision.test(consumer.revision ?? "")) {
+      errors.push(`${expected.name}: exact reviewed revision is missing`);
+    }
+    if (consumer.tree !== expected.tree || !fullRevision.test(consumer.tree ?? "")) {
+      errors.push(`${expected.name}: exact reviewed tree is missing`);
+    }
+    if (consumer.just_check !== "pass" || consumer.image_gate !== "pass") {
+      errors.push(`${expected.name}: check and image evidence must pass`);
+    }
+    if (consumer.manifest_runtime_revision !== runtimeRevision || consumer.lock_runtime_revision !== runtimeRevision) {
+      errors.push(`${expected.name}: manifest and lock must share the immutable runtime revision`);
+    }
+    if (consumer.delivery_model !== expected.delivery_model) {
+      errors.push(`${expected.name}: delivery model is incorrect`);
+    }
+    if (!sameValues(consumer.shared_imports ?? [], expected.shared_imports)) {
+      errors.push(`${expected.name}: shared import boundary is incorrect`);
+    }
+    if (!sameValues(consumer.settlement_authorities ?? [], expected.settlement_authorities)) {
+      errors.push(`${expected.name}: settlement authority is incorrect`);
+    }
+    if (consumer.independent_broker_settlement_loop !== false) {
+      errors.push(`${expected.name}: an independent broker-settlement loop remains`);
+    }
+    if (!Array.isArray(consumer.evidence_paths) || consumer.evidence_paths.length === 0) {
+      errors.push(`${expected.name}: source evidence paths are missing`);
+    }
+  }
+
+  const boundary = report?.ownership_boundary ?? {};
+  if (!Array.isArray(boundary.shared_runtime_owns) || boundary.shared_runtime_owns.length !== 2) {
+    errors.push("shared runtime ownership guidance is incomplete");
+  }
+  if (!Array.isArray(boundary.consumers_own) || boundary.consumers_own.length !== 3) {
+    errors.push("service ownership guidance is incomplete");
+  }
+  if (typeof boundary.fix_one_fix_all !== "string" || !boundary.fix_one_fix_all.includes("common.delivery or common.batch")) {
+    errors.push("fix-one-fix-all guidance must name common.delivery and common.batch");
+  }
+  return errors;
+}
 export function validateFixtureSet(taxonomy, fixtures) {
   const errors = [];
   const names = new Set();

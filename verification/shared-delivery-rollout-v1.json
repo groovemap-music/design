@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-09-14",
+  "verdict": "pass",
+  "historical_baseline": {
+    "status": "preserved",
+    "machine_record": {
+      "path": "verification/organization-wide-v1.json",
+      "sha256": "7c042ba9d044f3fd582a1dd93e1af9b83d75d6cb5f6a3d8e551d3a022f70e514"
+    },
+    "narrative": {
+      "path": "docs/audits/organization-wide-verification-2026-09-13.md",
+      "sha256": "8a02d82194ac6cfdb69bb010c29a6ef21cb6f801a6a851305198fdf4875bb06b"
+    }
+  },
+  "runtime": {
+    "name": "python-libraries",
+    "revision": "24704f5fd48d3ef4fff29398585e9924e225b0c5",
+    "tree": "c5b96bdeab082057480a26784ad6065497aaae9a",
+    "just_check": "pass",
+    "image_gate": "not-applicable",
+    "modules": ["common.delivery", "common.batch"],
+    "forbidden_imports": ["aio-pika", "neo4j", "psycopg", "service-code"],
+    "forbidden_import_findings": [],
+    "evidence_paths": [
+      "src/common/delivery.py",
+      "src/common/batch.py",
+      "tests/test_delivery.py",
+      "tests/test_batch.py"
+    ]
+  },
+  "consumers": [
+    {
+      "name": "discogs-graph-enricher",
+      "revision": "705395fd46be625b3171061cfde747175f7f89e2",
+      "tree": "a63ee882da8edaa45b66adf17b623aa950cbb254",
+      "just_check": "pass",
+      "image_gate": "pass",
+      "manifest_runtime_revision": "24704f5fd48d3ef4fff29398585e9924e225b0c5",
+      "lock_runtime_revision": "24704f5fd48d3ef4fff29398585e9924e225b0c5",
+      "delivery_model": "batch",
+      "shared_imports": ["common.batch", "common.delivery"],
+      "settlement_authorities": ["common.batch.AsyncBatchEngine"],
+      "independent_broker_settlement_loop": false,
+      "evidence_paths": [
+        "graphinator/batch_processor.py",
+        "graphinator/batch_projection.py",
+        "tests/test_batch_processor.py",
+        "docs/shared-batch-runtime-migration.md"
+      ]
+    },
+    {
+      "name": "discogs-sql-loader",
+      "revision": "0f7b5d6ed679cf7233fe6118ab407391928a71c9",
+      "tree": "afdde4351abae3c6991d75b74a773d8893f744a8",
+      "just_check": "pass",
+      "image_gate": "pass",
+      "manifest_runtime_revision": "24704f5fd48d3ef4fff29398585e9924e225b0c5",
+      "lock_runtime_revision": "24704f5fd48d3ef4fff29398585e9924e225b0c5",
+      "delivery_model": "batch-and-single",
+      "shared_imports": ["common.batch", "common.delivery"],
+      "settlement_authorities": ["common.batch.AsyncBatchEngine", "common.delivery.run_delivery"],
+      "independent_broker_settlement_loop": false,
+      "evidence_paths": [
+        "tableinator/batch_processor.py",
+        "tableinator/tableinator.py",
+        "tests/test_batch_processor.py",
+        "docs/shared-delivery-runtime.md"
+      ]
+    },
+    {
+      "name": "musicbrainz-graph-enricher",
+      "revision": "fa8ad811d8989f1bf87dcffdfe24ecb8a15deb93",
+      "tree": "f3e9e3fd9434dd73f2c774bcb17ff4e645af0d2b",
+      "just_check": "pass",
+      "image_gate": "pass",
+      "manifest_runtime_revision": "24704f5fd48d3ef4fff29398585e9924e225b0c5",
+      "lock_runtime_revision": "24704f5fd48d3ef4fff29398585e9924e225b0c5",
+      "delivery_model": "single-delivery",
+      "shared_imports": ["common.delivery"],
+      "settlement_authorities": ["common.delivery.run_delivery"],
+      "independent_broker_settlement_loop": false,
+      "evidence_paths": [
+        "brainzgraphinator/brainzgraphinator.py",
+        "tests/test_delivery_contract.py",
+        "tests/integration/test_real_neo4j_delivery.py",
+        "README.md"
+      ]
+    },
+    {
+      "name": "musicbrainz-sql-loader",
+      "revision": "224bf2809c465d638e5cc4e95e815f2b5be79d90",
+      "tree": "cc686c7cd0091222e86366ada4851f88d96b30de",
+      "just_check": "pass",
+      "image_gate": "pass",
+      "manifest_runtime_revision": "24704f5fd48d3ef4fff29398585e9924e225b0c5",
+      "lock_runtime_revision": "24704f5fd48d3ef4fff29398585e9924e225b0c5",
+      "delivery_model": "single-delivery",
+      "shared_imports": ["common.delivery"],
+      "settlement_authorities": ["common.delivery.run_delivery"],
+      "independent_broker_settlement_loop": false,
+      "evidence_paths": [
+        "brainztableinator/brainztableinator.py",
+        "brainztableinator/_record_processing.py",
+        "tests/test_delivery_contract.py",
+        "tests/integration/test_delivery_postgres.py"
+      ]
+    }
+  ],
+  "ownership_boundary": {
+    "shared_runtime_owns": [
+      "common.delivery owns transport-neutral terminal settlement and cancellation semantics.",
+      "common.batch owns Discogs queues, backpressure, concurrency, retry accounting, poison isolation, cancellation restoration, bounded drain, and post-submit settlement."
+    ],
+    "consumers_own": [
+      "Consumers own serialization and validation.",
+      "Consumers own database transactions and concrete exception classification.",
+      "Consumers own telemetry policy, QoS, control and completion state, and purge or maintenance policy."
+    ],
+    "fix_one_fix_all": "Fix transport-neutral settlement, retry, queue, concurrency, cancellation, and drain defects once in common.delivery or common.batch; consumers then pin the reviewed runtime revision."
+  }
+}

@@ -32,5 +32,8 @@ maintained current state.
 
 ## Verification reports
 
+- [Shared-delivery rollout verification — 2026-09-14](audits/shared-delivery-rollout-2026-09-14.md)
+  records the exact shared-runtime and four-consumer trees, immutable pins, validation and image
+  gates, delivery-model boundaries, and fix-one-fix-all ownership guidance.
 - [Organization-wide verification — 2026-09-13](audits/organization-wide-verification-2026-09-13.md)
   records the final sanitized 21-repository maintenance matrix and diagram audit.
