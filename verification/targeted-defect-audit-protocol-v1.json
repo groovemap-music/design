@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "audit_id": "gm-design-51u.3",
+  "audit_title": "Run the controlled third targeted defect audit",
+  "frozen_at_utc": "2026-09-15T02:25:49Z",
+  "protocol_state": "frozen-before-inspection",
+  "repositories": [
+    {
+      "name": "python-libraries",
+      "role": "shared delivery and Discogs batch runtime",
+      "revision": "24704f5fd48d3ef4fff29398585e9924e225b0c5",
+      "tree": "c5b96bdeab082057480a26784ad6065497aaae9a"
+    },
+    {
+      "name": "catalog-api",
+      "role": "recovered shared token-validation remediation",
+      "revision": "7e6f21f01cd645f552cdf7ac54ccdecdfb2554df",
+      "tree": "3538e664444d5bb9e078155e0d08886c1434d2bb"
+    },
+    {
+      "name": "discogs-ingestion",
+      "role": "Rust producer",
+      "revision": "8df3b3d05b0e4424874e0104c1f45c5d0c674a7b",
+      "tree": "91e9cb47c525d9f7b70893a8bc3c8c6bf4f45cdb"
+    },
+    {
+      "name": "discogs-graph-enricher",
+      "role": "Python Neo4j consumer",
+      "revision": "705395fd46be625b3171061cfde747175f7f89e2",
+      "tree": "a63ee882da8edaa45b66adf17b623aa950cbb254"
+    },
+    {
+      "name": "discogs-sql-loader",
+      "role": "Python PostgreSQL consumer",
+      "revision": "0f7b5d6ed679cf7233fe6118ab407391928a71c9",
+      "tree": "afdde4351abae3c6991d75b74a773d8893f744a8"
+    },
+    {
+      "name": "musicbrainz-ingestion",
+      "role": "Rust producer",
+      "revision": "c649e5defc6e14e2322554bac24363a1ce1f3a57",
+      "tree": "b1235fc29c7a0a6824be58c5d63bd1c700ed25f7"
+    },
+    {
+      "name": "musicbrainz-graph-enricher",
+      "role": "Python Neo4j consumer",
+      "revision": "fa8ad811d8989f1bf87dcffdfe24ecb8a15deb93",
+      "tree": "f3e9e3fd9434dd73f2c774bcb17ff4e645af0d2b"
+    },
+    {
+      "name": "musicbrainz-sql-loader",
+      "role": "Python PostgreSQL consumer",
+      "revision": "224bf2809c465d638e5cc4e95e815f2b5be79d90",
+      "tree": "cc686c7cd0091222e86366ada4851f88d96b30de"
+    }
+  ],
+  "surfaces": [
+    {
+      "causal_class": "multi-site-implementation-drift",
+      "inspection_surfaces": [
+        "common.delivery and common.batch settlement ownership",
+        "four consumer delivery and validation adapters",
+        "catalog-api shared access-token validation dependency"
+      ],
+      "required_mutation_probe": "introduce one sibling-local settlement or token-validation divergence and require the repository contract test to kill it"
+    },
+    {
+      "causal_class": "permissive-mock-blindness",
+      "inspection_surfaces": [
+        "Discogs and MusicBrainz PostgreSQL query, parameter, and result contracts",
+        "Discogs and MusicBrainz Neo4j query, parameter, and result contracts",
+        "released database integration or released-stack evidence"
+      ],
+      "required_mutation_probe": "malform a query, parameter, or result shape and require a real PostgreSQL or Neo4j boundary to reject it"
+    },
+    {
+      "causal_class": "cross-language-contract-drift",
+      "inspection_surfaces": [
+        "Discogs Rust golden fixtures and Python consumer contract validation",
+        "MusicBrainz Rust golden fixtures and Python consumer contract validation",
+        "integer/string identity equivalence",
+        "started_at and purge-boundary semantics",
+        "released producer and consumer image paths"
+      ],
+      "required_mutation_probe": "mutate identity type and started_at boundary independently and require Python validation or released-path tests to reject each mutation"
+    }
+  ],
+  "severity": {
+    "counting_threshold": "P2",
+    "publish_below_threshold": true,
+    "levels": {
+      "P0": "organization-wide security, irreversible data destruction, or complete critical-path outage",
+      "P1": "silent data loss or corruption, cross-service contract break, or repeatable multi-service outage",
+      "P2": "service-local incorrect result, settlement, validation, or reliability failure with production reachability",
+      "P3": "non-production, diagnostic, documentation, or maintainability-only discrepancy"
+    }
+  },
+  "budgets": {
+    "execution_minutes": 150,
+    "reviewer_minutes": 30,
+    "maximum_infrastructure_retries_per_probe": 1,
+    "inspection_rule": "Run every planned probe once; retry only an infrastructure-only failure; do not expand the repository or causal-class scope."
+  },
+  "classification_rules": {
+    "unique_root_cause": "One violated invariant with one remediation owner, independent of the number of repositories, paths, or inputs where it appears.",
+    "manifestation": "One distinct production-reachable repository and surface where a root cause produces an observable invalid result, settlement, validation decision, or data-boundary effect.",
+    "multi_site_cause": "A unique root cause with two or more manifestations.",
+    "confirmed_finding": "The frozen revision fails an unmutated required probe or released-stack check and the behavior meets P2 or higher.",
+    "below_threshold_observation": "The frozen revision shows a discrepancy that is not production-reachable or is P3; publish it but exclude it from the finding count.",
+    "protected_mutation": "The unmutated probe passes and its one-variable disposable mutation is rejected by the specified test or real boundary.",
+    "surviving_mutation": "The mutated behavior passes the required boundary; count it as a candidate root cause and classify severity before any remediation.",
+    "inconclusive": "The required real-engine, released-image, fixture, or mutation evidence cannot run after the one allowed infrastructure retry; acceptance is blocked.",
+    "zero_result_class": "All unmutated probes pass, all required mutations are killed, and no P2-or-higher production discrepancy remains in the class."
+  },
+  "counting_rules": {
+    "count_only_frozen_revisions": true,
+    "count_unique_root_causes_separately_from_manifestations": true,
+    "identify_every_multi_site_cause": true,
+    "publish_zero_result_classes": true,
+    "deduplicate_by_invariant_and_owner": true
+  },
+  "stop_conditions": [
+    "Stop and escalate if a required mutation, real-engine, released-image, or golden-fixture path is unavailable after its allowed infrastructure retry.",
+    "Stop and escalate before remediation if any mutation survives or any unmutated probe produces a P2-or-higher finding.",
+    "Stop inspection when the frozen probes are complete or the 150-minute execution budget is reached."
+  ]
+}

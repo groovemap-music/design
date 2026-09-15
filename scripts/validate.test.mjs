@@ -16,6 +16,10 @@ import {
   validateCatalogContract,
   validateFixtureSet,
   validateOrganizationVerification,
+  validatePortfolioEffectiveness,
+  validateRepowiseDefectRisk,
+  validateSharedDeliveryRollout,
+  validateTargetedDefectAudit,
   validateTelemetryDecision,
 } from "./validation-policy.mjs";
 import { trackedFiles, validateCatalogContract as validateCatalogContractEntry } from "./validate.mjs";
@@ -24,6 +28,11 @@ import schema from "../catalog/repositories.schema.json" with { type: "json" };
 import fixture from "../fixtures/catalog-valid.json" with { type: "json" };
 import catalog from "../catalog/repositories.json" with { type: "json" };
 import organizationVerification from "../verification/organization-wide-v1.json" with { type: "json" };
+import portfolioEffectiveness from "../verification/portfolio-effectiveness-v1.json" with { type: "json" };
+import repowiseDefectRisk from "../verification/repowise-defect-risk-v1.json" with { type: "json" };
+import sharedDeliveryRollout from "../verification/shared-delivery-rollout-v1.json" with { type: "json" };
+import targetedAuditProtocol from "../verification/targeted-defect-audit-protocol-v1.json" with { type: "json" };
+import targetedAudit from "../verification/targeted-defect-audit-v1.json" with { type: "json" };
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const schemaPath = resolve(root, "catalog/repositories.schema.json");
@@ -146,6 +155,102 @@ test("organization verification pins the final repository and diagram evidence",
   const missingDiagram = structuredClone(organizationVerification);
   missingDiagram.diagram_audit.maintained_mermaid -= 1;
   assert.ok(validateOrganizationVerification(missingDiagram, catalog).some((error) => /94 \+ 6 Mermaid baseline/.test(error)));
+});
+
+test("shared-delivery rollout pins the runtime, consumers, gates, and ownership boundary", () => {
+  assert.deepEqual(validateSharedDeliveryRollout(sharedDeliveryRollout), []);
+
+  const mutablePin = structuredClone(sharedDeliveryRollout);
+  mutablePin.consumers[0].manifest_runtime_revision = "main";
+  assert.ok(validateSharedDeliveryRollout(mutablePin).some((error) => /manifest and lock/.test(error)));
+
+  const leakedBatchDependency = structuredClone(sharedDeliveryRollout);
+  leakedBatchDependency.consumers.find((consumer) => consumer.name === "musicbrainz-sql-loader").shared_imports.push("common.batch");
+  assert.ok(validateSharedDeliveryRollout(leakedBatchDependency).some((error) => /shared import boundary/.test(error)));
+
+  const rewrittenHistory = structuredClone(sharedDeliveryRollout);
+  rewrittenHistory.historical_baseline.machine_record.sha256 = "0".repeat(64);
+  assert.ok(validateSharedDeliveryRollout(rewrittenHistory).some((error) => /historical machine_record identity/.test(error)));
+});
+
+test("Repowise defect-risk evidence pins indexes, metrics, coverage, beads, and history", () => {
+  assert.deepEqual(validateRepowiseDefectRisk(repowiseDefectRisk), []);
+
+  const staleIndex = structuredClone(repowiseDefectRisk);
+  staleIndex.repositories[0].index.last_sync_commit = "0".repeat(40);
+  assert.ok(validateRepowiseDefectRisk(staleIndex).some((error) => /index completion or freshness/.test(error)));
+
+  const missingCoverage = structuredClone(repowiseDefectRisk);
+  missingCoverage.repositories[1].coverage.mapped_files = 0;
+  assert.ok(validateRepowiseDefectRisk(missingCoverage).some((error) => /indexed coverage evidence/.test(error)));
+
+  const zombiePool = structuredClone(repowiseDefectRisk);
+  zombiePool.removed_surface_attestation.symbol_search_exact_match = true;
+  assert.ok(validateRepowiseDefectRisk(zombiePool).some((error) => /ResilientPostgreSQLPool/.test(error)));
+
+  const mislabeledReplacement = structuredClone(repowiseDefectRisk);
+  mislabeledReplacement.repowise_recheck_reconciliation.observed_replacement_beads[0].labels.push("repowise-recheck");
+  assert.ok(validateRepowiseDefectRisk(mislabeledReplacement).some((error) => /wording/.test(error)));
+
+  const comparedAggregate = structuredClone(repowiseDefectRisk);
+  comparedAggregate.comparison_policy.direct_comparison_to_split_repository_averages = true;
+  assert.ok(validateRepowiseDefectRisk(comparedAggregate).some((error) => /old monorepo aggregate/.test(error)));
+
+  const missingBead = structuredClone(repowiseDefectRisk);
+  missingBead.bead_evidence_matrix.pop();
+  assert.ok(validateRepowiseDefectRisk(missingBead).some((error) => /evidence matrix/.test(error)));
+
+  const rewrittenHistory = structuredClone(repowiseDefectRisk);
+  rewrittenHistory.historical_records[0].sha256 = "0".repeat(64);
+  assert.ok(validateRepowiseDefectRisk(rewrittenHistory).some((error) => /historical evidence identity/.test(error)));
+});
+
+test("targeted defect audit pins protocol, revisions, real engines, images, mutations, totals, and history", () => {
+  assert.deepEqual(validateTargetedDefectAudit(targetedAudit, targetedAuditProtocol), []);
+
+  const mutableRevision = structuredClone(targetedAudit);
+  mutableRevision.repositories[0].revision = "main";
+  assert.ok(validateTargetedDefectAudit(mutableRevision, targetedAuditProtocol).some((error) => /exact frozen commit/.test(error)));
+
+  const survivingMutation = structuredClone(targetedAudit);
+  survivingMutation.totals.mutation_survivors = 1;
+  assert.ok(validateTargetedDefectAudit(survivingMutation, targetedAuditProtocol).some((error) => /zero-finding result/.test(error)));
+
+  const missingMutation = structuredClone(targetedAudit);
+  missingMutation.causal_classes[2].protected_mutations.pop();
+  assert.ok(validateTargetedDefectAudit(missingMutation, targetedAuditProtocol).some((error) => /protected mutations/.test(error)));
+
+  const rewrittenHistory = structuredClone(targetedAudit);
+  rewrittenHistory.historical_records[0].sha256 = "0".repeat(64);
+  assert.ok(validateTargetedDefectAudit(rewrittenHistory, targetedAuditProtocol).some((error) => /historical evidence identity/.test(error)));
+
+  const unfrozenProtocol = structuredClone(targetedAuditProtocol);
+  unfrozenProtocol.protocol_state = "draft";
+  assert.ok(validateTargetedDefectAudit(targetedAudit, unfrozenProtocol).some((error) => /not the frozen protocol/.test(error)));
+});
+
+test("portfolio effectiveness verdict pins thresholds, landed scope, descopes, and primary evidence", () => {
+  assert.deepEqual(validatePortfolioEffectiveness(portfolioEffectiveness, sharedDeliveryRollout, repowiseDefectRisk, targetedAudit), []);
+
+  const thresholdMiss = structuredClone(portfolioEffectiveness);
+  thresholdMiss.normalized_findings.duplicate_mirror_share_pct = 21;
+  assert.ok(validatePortfolioEffectiveness(thresholdMiss, sharedDeliveryRollout, repowiseDefectRisk, targetedAudit).some((error) => /normalized duplicate threshold/.test(error)));
+
+  const reopenedMolecule = structuredClone(portfolioEffectiveness);
+  reopenedMolecule.linked_landed_molecules[0].status = "open";
+  assert.ok(validatePortfolioEffectiveness(reopenedMolecule, sharedDeliveryRollout, repowiseDefectRisk, targetedAudit).some((error) => /closed state/.test(error)));
+
+  const hiddenDescope = structuredClone(portfolioEffectiveness);
+  hiddenDescope.explicit_descopes.pop();
+  assert.ok(validatePortfolioEffectiveness(hiddenDescope, sharedDeliveryRollout, repowiseDefectRisk, targetedAudit).some((error) => /explicit descopes/.test(error)));
+
+  const promotedRepowise = structuredClone(portfolioEffectiveness);
+  promotedRepowise.methodology.supporting_evidence = "Repowise determines the verdict.";
+  assert.ok(validatePortfolioEffectiveness(promotedRepowise, sharedDeliveryRollout, repowiseDefectRisk, targetedAudit).some((error) => /primary\/supporting evidence/.test(error)));
+
+  const rewrittenSource = structuredClone(portfolioEffectiveness);
+  rewrittenSource.source_records[0].sha256 = "0".repeat(64);
+  assert.ok(validatePortfolioEffectiveness(rewrittenSource, sharedDeliveryRollout, repowiseDefectRisk, targetedAudit).some((error) => /source identity/.test(error)));
 });
 
 test("canonical catalog rejects deployment ownership that contradicts the active topology", () => {

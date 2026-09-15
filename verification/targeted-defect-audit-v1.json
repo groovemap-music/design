@@ -1,0 +1,317 @@
+{
+  "schema_version": 1,
+  "audit_id": "gm-design-51u.3",
+  "audit_title": "Run the controlled third targeted defect audit",
+  "completed_at_utc": "2026-09-15T02:59:30Z",
+  "verdict": "pass",
+  "protocol": {
+    "path": "verification/targeted-defect-audit-protocol-v1.json",
+    "sha256": "5f848bab412f305387974e9d51d7e00848289b176dd085d04613fcca0d2d6a8b",
+    "freeze_commit": "2e92276661e33c9a852542284b3900ea2084911a",
+    "frozen_at_utc": "2026-09-15T02:25:49Z",
+    "state": "frozen-before-inspection"
+  },
+  "budget": {
+    "execution_minutes_allowed": 150,
+    "execution_minutes_used": 34,
+    "reviewer_minutes_allowed": 30,
+    "infrastructure_retries_allowed_per_probe": 1,
+    "scope_expanded": false
+  },
+  "historical_comparator": {
+    "source_bead": "gm-design-dg-7oi3",
+    "july_2026_bug_hunt_beads": 114,
+    "august_2026_bug_hunt_beads": 118,
+    "mirrored_service_share_approx_pct": 40,
+    "cross_language_p0_findings": 2,
+    "comparison_rule": "Compare class-specific controlled yield only; do not infer an organization-wide defect rate from this targeted population."
+  },
+  "repositories": [
+    {
+      "name": "python-libraries",
+      "revision": "24704f5fd48d3ef4fff29398585e9924e225b0c5",
+      "tree": "c5b96bdeab082057480a26784ad6065497aaae9a"
+    },
+    {
+      "name": "catalog-api",
+      "revision": "7e6f21f01cd645f552cdf7ac54ccdecdfb2554df",
+      "tree": "3538e664444d5bb9e078155e0d08886c1434d2bb"
+    },
+    {
+      "name": "discogs-ingestion",
+      "revision": "8df3b3d05b0e4424874e0104c1f45c5d0c674a7b",
+      "tree": "91e9cb47c525d9f7b70893a8bc3c8c6bf4f45cdb"
+    },
+    {
+      "name": "discogs-graph-enricher",
+      "revision": "705395fd46be625b3171061cfde747175f7f89e2",
+      "tree": "a63ee882da8edaa45b66adf17b623aa950cbb254"
+    },
+    {
+      "name": "discogs-sql-loader",
+      "revision": "0f7b5d6ed679cf7233fe6118ab407391928a71c9",
+      "tree": "afdde4351abae3c6991d75b74a773d8893f744a8"
+    },
+    {
+      "name": "musicbrainz-ingestion",
+      "revision": "c649e5defc6e14e2322554bac24363a1ce1f3a57",
+      "tree": "b1235fc29c7a0a6824be58c5d63bd1c700ed25f7"
+    },
+    {
+      "name": "musicbrainz-graph-enricher",
+      "revision": "fa8ad811d8989f1bf87dcffdfe24ecb8a15deb93",
+      "tree": "f3e9e3fd9434dd73f2c774bcb17ff4e645af0d2b"
+    },
+    {
+      "name": "musicbrainz-sql-loader",
+      "revision": "224bf2809c465d638e5cc4e95e815f2b5be79d90",
+      "tree": "cc686c7cd0091222e86366ada4851f88d96b30de"
+    }
+  ],
+  "commands": [
+    {
+      "id": "shared-delivery-control",
+      "repository": "python-libraries",
+      "command": "uv run pytest -q tests/test_delivery.py tests/test_batch.py",
+      "exit_code": 0,
+      "summary": "28 passed"
+    },
+    {
+      "id": "catalog-validation-control",
+      "repository": "catalog-api",
+      "command": "uv run pytest -q tests/test_nlq_token_revocation.py",
+      "exit_code": 0,
+      "summary": "11 passed"
+    },
+    {
+      "id": "discogs-graph-control",
+      "repository": "discogs-graph-enricher",
+      "command": "uv run pytest -q tests/test_batch_processor.py tests/test_graphinator.py -k 'settlement or nack_callback_uses_requeue_false or missing_id'",
+      "exit_code": 0,
+      "summary": "14 passed"
+    },
+    {
+      "id": "discogs-sql-control",
+      "repository": "discogs-sql-loader",
+      "command": "uv run pytest -q tests/test_batch_processor.py tests/test_tableinator.py -k 'settlement or nack_callback_uses_requeue_false or missing_id or purge or extraction_complete'",
+      "exit_code": 0,
+      "summary": "34 passed"
+    },
+    {
+      "id": "musicbrainz-graph-control",
+      "repository": "musicbrainz-graph-enricher",
+      "command": "uv run pytest -q tests/test_delivery_contract.py",
+      "exit_code": 0,
+      "summary": "10 passed"
+    },
+    {
+      "id": "musicbrainz-sql-control",
+      "repository": "musicbrainz-sql-loader",
+      "command": "uv run pytest -q tests/test_delivery_contract.py tests/test_record_processing.py tests/test_persistence_native_id.py",
+      "exit_code": 0,
+      "summary": "31 passed"
+    },
+    {
+      "id": "discogs-producer-golden",
+      "repository": "discogs-ingestion",
+      "command": "mise exec -- python contracts/generate.py --check && cargo test --all-features --locked --test contract_media_fixture_test --test extractor_smoke_fixture_test",
+      "exit_code": 0,
+      "summary": "generated contract current; media and extractor event-stream golden tests passed"
+    },
+    {
+      "id": "musicbrainz-producer-golden",
+      "repository": "musicbrainz-ingestion",
+      "command": "mise exec -- python contracts/generate.py --check && cargo test --all-features --locked test_contract_fixture_media_matches_the_mapper",
+      "exit_code": 0,
+      "summary": "generated contract current; media golden test passed"
+    },
+    {
+      "id": "source-mutations",
+      "repository": "design",
+      "command": "python3 scripts/audit-disposable-mutations.py --python-libraries $WORKSPACE/python-libraries --catalog-api $WORKSPACE/catalog-api --musicbrainz-graph-enricher $WORKSPACE/musicbrainz-graph-enricher --discogs-sql-loader $WORKSPACE/discogs-sql-loader",
+      "exit_code": 0,
+      "summary": "4 mutations killed; 0 survived"
+    },
+    {
+      "id": "python-contract-validation",
+      "repository": "each matching Python consumer",
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run python $DESIGN/scripts/audit-catalog-fixtures.py $PRODUCER/contracts/catalog-events/v1 $SOURCE",
+      "exit_code": 0,
+      "summary": "6 fixtures validated in each of 4 consumer environments; 8 schema mutations killed"
+    },
+    {
+      "id": "real-database-mutations",
+      "repository": "design",
+      "command": "uv run python $DESIGN/scripts/audit-real-database-mutations.py {postgresql|neo4j}",
+      "exit_code": 0,
+      "summary": "malformed PostgreSQL query/parameter and Neo4j query/result-shape mutations killed"
+    },
+    {
+      "id": "real-database-integration",
+      "repository": "each of 4 consumers",
+      "command": "just test-integration",
+      "exit_code": 0,
+      "summary": "Discogs PostgreSQL 11, MusicBrainz PostgreSQL 3, Discogs Neo4j 6, MusicBrainz Neo4j 3 passed"
+    },
+    {
+      "id": "released-image-gates",
+      "repository": "both producers and all 4 consumers",
+      "command": "just image",
+      "exit_code": 0,
+      "summary": "6 local images built; consumer import/non-root smokes and producer runtime smokes passed"
+    }
+  ],
+  "database_evidence": [
+    {
+      "engine": "postgresql",
+      "image": "postgres:18-alpine@sha256:d3e1620b530c944afa6e887d22eb899824da68e19c52024bf98f5220c88a65b2",
+      "repositories": [
+        "discogs-sql-loader",
+        "musicbrainz-sql-loader"
+      ],
+      "loopback_only": true,
+      "integration_tests_passed": 14,
+      "mutation_verdicts": [
+        "malformed-postgresql-query:killed",
+        "malformed-postgresql-parameter:killed"
+      ]
+    },
+    {
+      "engine": "neo4j",
+      "image": "neo4j:2026-community@sha256:dbc377fb9cd8fe8dabc19d3041b197d5ca0ef8bae514cea175b8df265e5b7a76",
+      "repositories": [
+        "discogs-graph-enricher",
+        "musicbrainz-graph-enricher"
+      ],
+      "loopback_only": true,
+      "integration_tests_passed": 9,
+      "mutation_verdicts": [
+        "malformed-neo4j-query:killed",
+        "malformed-neo4j-result-shape:killed"
+      ]
+    }
+  ],
+  "released_images": [
+    {
+      "repository": "discogs-ingestion",
+      "image": "discogs-ingestion:local",
+      "digest": "sha256:2351af73b545f4a4556c5d003ec1926425961dd150c13450edf96fadeda556bc",
+      "smoke": "--help plus embedded extractor-smoke/v1 manifest presence"
+    },
+    {
+      "repository": "musicbrainz-ingestion",
+      "image": "musicbrainz-ingestion:local",
+      "digest": "sha256:3190d7c171eb6320262284dc0c62ef18f7b7e0f6fac5e6aa654da6f10848a736",
+      "smoke": "--help"
+    },
+    {
+      "repository": "discogs-graph-enricher",
+      "image": "discogs-graph-enricher:local",
+      "digest": "sha256:4cf9e75ae3be904054fcdac294def20b39dbbb6bcdd763acfc6e12a1b1f8912f",
+      "smoke": "package import and 1000:1000 runtime identity"
+    },
+    {
+      "repository": "discogs-sql-loader",
+      "image": "discogs-sql-loader:local",
+      "digest": "sha256:cbb1e905943fc64cb5f3c47d29ccfefcad234532b7665ef91a7a4843cd222187",
+      "smoke": "package import and 1000:1000 runtime identity"
+    },
+    {
+      "repository": "musicbrainz-graph-enricher",
+      "image": "musicbrainz-graph-enricher:local",
+      "digest": "sha256:3e15410715cd5c71cee032077441d100f187f8a1782e74986800d16d6027e176",
+      "smoke": "package import and 1000:1000 runtime identity"
+    },
+    {
+      "repository": "musicbrainz-sql-loader",
+      "image": "musicbrainz-sql-loader:local",
+      "digest": "sha256:1fc99dc1ed6d6af296f612a8be3f983c26793dc8b7d013437bd06f46451f0482",
+      "smoke": "package import and 1000:1000 runtime identity"
+    }
+  ],
+  "causal_classes": [
+    {
+      "name": "multi-site-implementation-drift",
+      "outcome": "zero-result-class",
+      "unique_root_causes": 0,
+      "manifestations": 0,
+      "multi_site_causes": [],
+      "findings": [],
+      "below_threshold_observations": [],
+      "protected_mutations": [
+        "reject-settlement-requeues",
+        "nlq-skips-shared-revocation-state"
+      ],
+      "evidence": "shared runtime and all consumer controls passed; a local settlement divergence and an NLQ revocation bypass were each killed"
+    },
+    {
+      "name": "permissive-mock-blindness",
+      "outcome": "zero-result-class",
+      "unique_root_causes": 0,
+      "manifestations": 0,
+      "multi_site_causes": [],
+      "findings": [],
+      "below_threshold_observations": [],
+      "protected_mutations": [
+        "malformed-postgresql-query",
+        "malformed-postgresql-parameter",
+        "malformed-neo4j-query",
+        "malformed-neo4j-result-shape"
+      ],
+      "evidence": "23 real-engine integration tests passed and every malformed boundary probe was rejected by its pinned engine"
+    },
+    {
+      "name": "cross-language-contract-drift",
+      "outcome": "zero-result-class",
+      "unique_root_causes": 0,
+      "manifestations": 0,
+      "multi_site_causes": [],
+      "findings": [],
+      "below_threshold_observations": [],
+      "protected_mutations": [
+        "integer-for-string-identity",
+        "integer-discogs-artist-id-not-normalized",
+        "malformed-started-at",
+        "purge-veto-excludes-exact-boundary"
+      ],
+      "evidence": "both producer goldens, four Python consumer fixture validations, exact-boundary purge control, identity coercion, and six released-image gates passed"
+    }
+  ],
+  "totals": {
+    "unique_root_causes": 0,
+    "manifestations": 0,
+    "multi_site_causes": 0,
+    "p0": 0,
+    "p1": 0,
+    "p2": 0,
+    "p3": 0,
+    "mutation_survivors": 0,
+    "zero_result_classes": 3
+  },
+  "historical_records": [
+    {
+      "path": "verification/organization-wide-v1.json",
+      "sha256": "7c042ba9d044f3fd582a1dd93e1af9b83d75d6cb5f6a3d8e551d3a022f70e514"
+    },
+    {
+      "path": "docs/audits/organization-wide-verification-2026-09-13.md",
+      "sha256": "8a02d82194ac6cfdb69bb010c29a6ef21cb6f801a6a851305198fdf4875bb06b"
+    },
+    {
+      "path": "verification/shared-delivery-rollout-v1.json",
+      "sha256": "a88e3b134b6da2bb26dfe1ab4ee6e9849d812e4085193a80a17a63e4fa286ae9"
+    },
+    {
+      "path": "docs/audits/shared-delivery-rollout-2026-09-14.md",
+      "sha256": "34c4124a7528837644113150c2b8ee7a2184d637ba38466d26fa0ea7698251a5"
+    },
+    {
+      "path": "verification/repowise-defect-risk-v1.json",
+      "sha256": "8ca2ec1cc2ac18690e2f808d21475f291b2add3a96653a9187c03bf5fe7f8f50"
+    },
+    {
+      "path": "docs/audits/repowise-defect-risk-2026-09-14.md",
+      "sha256": "2012f725e69c789f6f3d6300572b19d23244bb3fb210f0b94c0cefb26d862ae7"
+    }
+  ]
+}

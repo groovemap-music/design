@@ -236,6 +236,752 @@ export function validateOrganizationVerification(report, catalog) {
   if (publicMermaid !== 92) errors.push("public repository Mermaid counts differ from the reviewed matrix");
   return errors;
 }
+
+export function validateSharedDeliveryRollout(report) {
+  const errors = [];
+  const fullRevision = /^[a-f0-9]{40}$/;
+  const runtimeRevision = "24704f5fd48d3ef4fff29398585e9924e225b0c5";
+  const expectedConsumers = [
+    {
+      name: "discogs-graph-enricher",
+      revision: "705395fd46be625b3171061cfde747175f7f89e2",
+      tree: "a63ee882da8edaa45b66adf17b623aa950cbb254",
+      delivery_model: "batch",
+      shared_imports: ["common.batch", "common.delivery"],
+      settlement_authorities: ["common.batch.AsyncBatchEngine"],
+    },
+    {
+      name: "discogs-sql-loader",
+      revision: "0f7b5d6ed679cf7233fe6118ab407391928a71c9",
+      tree: "afdde4351abae3c6991d75b74a773d8893f744a8",
+      delivery_model: "batch-and-single",
+      shared_imports: ["common.batch", "common.delivery"],
+      settlement_authorities: ["common.batch.AsyncBatchEngine", "common.delivery.run_delivery"],
+    },
+    {
+      name: "musicbrainz-graph-enricher",
+      revision: "fa8ad811d8989f1bf87dcffdfe24ecb8a15deb93",
+      tree: "f3e9e3fd9434dd73f2c774bcb17ff4e645af0d2b",
+      delivery_model: "single-delivery",
+      shared_imports: ["common.delivery"],
+      settlement_authorities: ["common.delivery.run_delivery"],
+    },
+    {
+      name: "musicbrainz-sql-loader",
+      revision: "224bf2809c465d638e5cc4e95e815f2b5be79d90",
+      tree: "cc686c7cd0091222e86366ada4851f88d96b30de",
+      delivery_model: "single-delivery",
+      shared_imports: ["common.delivery"],
+      settlement_authorities: ["common.delivery.run_delivery"],
+    },
+  ];
+
+  if (report?.schema_version !== 1) errors.push("shared-delivery rollout must use schema version 1");
+  if (report?.reviewed_on !== "2026-09-14") errors.push("shared-delivery rollout must retain its versioned review date");
+  if (report?.verdict !== "pass") errors.push("shared-delivery rollout verdict must be pass");
+
+  const history = report?.historical_baseline ?? {};
+  if (history.status !== "preserved") errors.push("the earlier organization-wide verification must remain preserved history");
+  for (const [kind, path, digest] of [
+    ["machine_record", "verification/organization-wide-v1.json", "7c042ba9d044f3fd582a1dd93e1af9b83d75d6cb5f6a3d8e551d3a022f70e514"],
+    ["narrative", "docs/audits/organization-wide-verification-2026-09-13.md", "8a02d82194ac6cfdb69bb010c29a6ef21cb6f801a6a851305198fdf4875bb06b"],
+  ]) {
+    if (history[kind]?.path !== path || history[kind]?.sha256 !== digest) {
+      errors.push(`historical ${kind} identity must remain immutable`);
+    }
+  }
+
+  const runtime = report?.runtime ?? {};
+  if (runtime.name !== "python-libraries") errors.push("shared runtime owner must be python-libraries");
+  if (runtime.revision !== runtimeRevision || !fullRevision.test(runtime.revision ?? "")) {
+    errors.push("shared runtime must retain the exact full reviewed revision");
+  }
+  if (runtime.tree !== "c5b96bdeab082057480a26784ad6065497aaae9a" || !fullRevision.test(runtime.tree ?? "")) {
+    errors.push("shared runtime must retain the exact reviewed tree");
+  }
+  if (runtime.just_check !== "pass" || runtime.image_gate !== "not-applicable") {
+    errors.push("shared runtime validation evidence is incomplete");
+  }
+  if (!sameValues(runtime.modules ?? [], ["common.delivery", "common.batch"])) {
+    errors.push("shared runtime module inventory is incomplete");
+  }
+  if (!sameValues(runtime.forbidden_imports ?? [], ["aio-pika", "neo4j", "psycopg", "service-code"])) {
+    errors.push("shared runtime forbidden dependency boundary is incomplete");
+  }
+  if (!Array.isArray(runtime.forbidden_import_findings) || runtime.forbidden_import_findings.length !== 0) {
+    errors.push("shared runtime must have no forbidden dependency findings");
+  }
+
+  const consumers = report?.consumers ?? [];
+  if (JSON.stringify(consumers.map((consumer) => consumer.name)) !== JSON.stringify(expectedConsumers.map((consumer) => consumer.name))) {
+    errors.push("shared-delivery consumer order or inventory is incorrect");
+  }
+  for (const expected of expectedConsumers) {
+    const consumer = consumers.find((candidate) => candidate.name === expected.name) ?? {};
+    if (consumer.revision !== expected.revision || !fullRevision.test(consumer.revision ?? "")) {
+      errors.push(`${expected.name}: exact reviewed revision is missing`);
+    }
+    if (consumer.tree !== expected.tree || !fullRevision.test(consumer.tree ?? "")) {
+      errors.push(`${expected.name}: exact reviewed tree is missing`);
+    }
+    if (consumer.just_check !== "pass" || consumer.image_gate !== "pass") {
+      errors.push(`${expected.name}: check and image evidence must pass`);
+    }
+    if (consumer.manifest_runtime_revision !== runtimeRevision || consumer.lock_runtime_revision !== runtimeRevision) {
+      errors.push(`${expected.name}: manifest and lock must share the immutable runtime revision`);
+    }
+    if (consumer.delivery_model !== expected.delivery_model) {
+      errors.push(`${expected.name}: delivery model is incorrect`);
+    }
+    if (!sameValues(consumer.shared_imports ?? [], expected.shared_imports)) {
+      errors.push(`${expected.name}: shared import boundary is incorrect`);
+    }
+    if (!sameValues(consumer.settlement_authorities ?? [], expected.settlement_authorities)) {
+      errors.push(`${expected.name}: settlement authority is incorrect`);
+    }
+    if (consumer.independent_broker_settlement_loop !== false) {
+      errors.push(`${expected.name}: an independent broker-settlement loop remains`);
+    }
+    if (!Array.isArray(consumer.evidence_paths) || consumer.evidence_paths.length === 0) {
+      errors.push(`${expected.name}: source evidence paths are missing`);
+    }
+  }
+
+  const boundary = report?.ownership_boundary ?? {};
+  if (!Array.isArray(boundary.shared_runtime_owns) || boundary.shared_runtime_owns.length !== 2) {
+    errors.push("shared runtime ownership guidance is incomplete");
+  }
+  if (!Array.isArray(boundary.consumers_own) || boundary.consumers_own.length !== 3) {
+    errors.push("service ownership guidance is incomplete");
+  }
+  if (typeof boundary.fix_one_fix_all !== "string" || !boundary.fix_one_fix_all.includes("common.delivery or common.batch")) {
+    errors.push("fix-one-fix-all guidance must name common.delivery and common.batch");
+  }
+  return errors;
+}
+
+export function validateRepowiseDefectRisk(report) {
+  const errors = [];
+  const fullRevision = /^[a-f0-9]{40}$/;
+  const isoTimestamp = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/;
+  const expectedRepositories = [
+    {
+      name: "python-libraries",
+      revision: "24704f5fd48d3ef4fff29398585e9924e225b0c5",
+      tree: "c5b96bdeab082057480a26784ad6065497aaae9a",
+      pages: 154,
+      health: 6.65,
+      hotspot: 3.66,
+      maxCcn: 28,
+      coverage: [24, 2698, 2883, 93.58],
+      deadCode: 17,
+      riskPercentile: 95.2,
+    },
+    {
+      name: "catalog-api",
+      revision: "8eec6ef062584e1ab0b3ea07fa16f32ab18ddbf1",
+      tree: "17dd4815f8a29d859503d78c2142c5a7c073a70d",
+      pages: 504,
+      health: 5.86,
+      hotspot: 4.31,
+      maxCcn: 41,
+      coverage: [52, 4682, 4745, 98.67],
+      deadCode: 23,
+      riskPercentile: 33.7,
+    },
+    {
+      name: "discogs-graph-enricher",
+      revision: "705395fd46be625b3171061cfde747175f7f89e2",
+      tree: "a63ee882da8edaa45b66adf17b623aa950cbb254",
+      pages: 96,
+      health: 5.51,
+      hotspot: 2.22,
+      maxCcn: 34,
+      coverage: [8, 1430, 1507, 94.89],
+      deadCode: 4,
+      riskPercentile: 86.2,
+    },
+    {
+      name: "discogs-sql-loader",
+      revision: "0f7b5d6ed679cf7233fe6118ab407391928a71c9",
+      tree: "afdde4351abae3c6991d75b74a773d8893f744a8",
+      pages: 74,
+      health: 5.37,
+      hotspot: 3.69,
+      maxCcn: 32,
+      coverage: [9, 1079, 1114, 96.86],
+      deadCode: 4,
+      riskPercentile: 92.8,
+    },
+    {
+      name: "musicbrainz-graph-enricher",
+      revision: "fa8ad811d8989f1bf87dcffdfe24ecb8a15deb93",
+      tree: "f3e9e3fd9434dd73f2c774bcb17ff4e645af0d2b",
+      pages: 66,
+      health: 5.13,
+      hotspot: 1.9,
+      maxCcn: 16,
+      coverage: [5, 699, 713, 98.04],
+      deadCode: 4,
+      riskPercentile: 92.2,
+    },
+    {
+      name: "musicbrainz-sql-loader",
+      revision: "224bf2809c465d638e5cc4e95e815f2b5be79d90",
+      tree: "cc686c7cd0091222e86366ada4851f88d96b30de",
+      pages: 66,
+      health: 4.98,
+      hotspot: 1.81,
+      maxCcn: 28,
+      coverage: [5, 764, 801, 95.38],
+      deadCode: 5,
+      riskPercentile: 92.2,
+    },
+  ];
+  const expectedBeads = [
+    "gm-python-libraries-dg-7oi3-3",
+    "gm-catalog-api-dg-7oi3-2",
+    "gm-python-libraries-0ek",
+    "gm-python-libraries-0ek.1",
+    "gm-python-libraries-0ek.2",
+    "gm-discogs-graph-enricher-9l7",
+    "gm-discogs-graph-enricher-9l7.1",
+    "gm-discogs-graph-enricher-9l7.2",
+    "gm-discogs-graph-enricher-9l7.3",
+    "gm-discogs-sql-loader-8gm",
+    "gm-discogs-sql-loader-8gm.1",
+    "gm-discogs-sql-loader-8gm.2",
+    "gm-discogs-sql-loader-8gm.3",
+    "gm-musicbrainz-graph-enricher-20q",
+    "gm-musicbrainz-graph-enricher-20q.1",
+    "gm-musicbrainz-sql-loader-5zt",
+    "gm-musicbrainz-sql-loader-5zt.1",
+  ];
+
+  if (report?.schema_version !== 1) errors.push("Repowise defect-risk evidence must use schema version 1");
+  if (report?.reviewed_on !== "2026-09-14") errors.push("Repowise defect-risk evidence must retain its versioned review date");
+  if (!isoTimestamp.test(report?.collected_at_utc ?? "")) errors.push("Repowise evidence collection timestamp is invalid");
+  if (report?.verdict !== "pass") errors.push("Repowise defect-risk verdict must be pass");
+
+  const tooling = report?.tooling ?? {};
+  if (tooling.name !== "repowise" || tooling.version !== "0.50.0" || tooling.networked_or_llm_analysis !== false) {
+    errors.push("Repowise version and deterministic execution boundary must remain explicit");
+  }
+  const config = tooling.configuration ?? {};
+  if (
+    config.enable_onboarding !== false
+    || config.commit_limit !== 500
+    || config.editor_files?.claude_md !== false
+    || config.editor_files?.agents_md !== false
+    || config.embedder !== "mock"
+    || config.docs_enabled !== false
+    || config.docs_mode !== "deterministic"
+    || config.git_tier !== "full"
+  ) {
+    errors.push("Repowise configuration differs from the recorded no-editor deterministic index");
+  }
+  if (
+    !tooling.commands?.initialize?.includes("--no-editor-setup")
+    || !tooling.commands.initialize.includes("--no-workspace")
+    || !tooling.commands.update?.includes("--index-only")
+    || !tooling.commands.health?.includes("--scope production")
+    || !tooling.commands.dead_code?.includes("--include-zombie-packages")
+    || !tooling.commands.removed_symbol_search?.includes("--mode symbol")
+  ) {
+    errors.push("Repowise command provenance is incomplete");
+  }
+  if (
+    tooling.editor_setup?.initialized_with_no_editor_setup !== true
+    || tooling.editor_setup?.retained_generated_editor_files !== false
+  ) {
+    errors.push("Repowise editor setup must remain disabled and unretained");
+  }
+  for (const [name, timestamp] of Object.entries(tooling.command_windows ?? {})) {
+    if (!isoTimestamp.test(timestamp ?? "")) errors.push(`Repowise command timestamp is invalid: ${name}`);
+  }
+
+  const expectedHistory = new Map([
+    ["verification/organization-wide-v1.json", "7c042ba9d044f3fd582a1dd93e1af9b83d75d6cb5f6a3d8e551d3a022f70e514"],
+    ["docs/audits/organization-wide-verification-2026-09-13.md", "8a02d82194ac6cfdb69bb010c29a6ef21cb6f801a6a851305198fdf4875bb06b"],
+    ["verification/shared-delivery-rollout-v1.json", "a88e3b134b6da2bb26dfe1ab4ee6e9849d812e4085193a80a17a63e4fa286ae9"],
+    ["docs/audits/shared-delivery-rollout-2026-09-14.md", "34c4124a7528837644113150c2b8ee7a2184d637ba38466d26fa0ea7698251a5"],
+  ]);
+  const history = new Map((report?.historical_records ?? []).map((record) => [record.path, record.sha256]));
+  for (const [path, digest] of expectedHistory) {
+    if (history.get(path) !== digest) errors.push(`historical evidence identity changed: ${path}`);
+  }
+
+  const scopeNames = report?.scope?.repositories ?? [];
+  if (
+    report?.scope?.repository_count !== expectedRepositories.length
+    || JSON.stringify(scopeNames) !== JSON.stringify(expectedRepositories.map(({ name }) => name))
+    || !Array.isArray(report?.scope?.additional_code_repositories_used)
+    || report.scope.additional_code_repositories_used.length !== 0
+  ) {
+    errors.push("Repowise repository scope or additional-repository disclosure is incorrect");
+  }
+  if (
+    report?.comparison_policy?.historical_monorepo_baseline_retained_in_source_bead !== true
+    || report?.comparison_policy?.historical_values_imported_into_this_record !== false
+    || report?.comparison_policy?.direct_comparison_to_split_repository_averages !== false
+    || /7\.17|325\/550/.test(JSON.stringify(report))
+  ) {
+    errors.push("the old monorepo aggregate must not be imported or compared with split-repository metrics");
+  }
+
+  const repositories = report?.repositories ?? [];
+  if (JSON.stringify(repositories.map(({ name }) => name)) !== JSON.stringify(expectedRepositories.map(({ name }) => name))) {
+    errors.push("Repowise repository order or inventory is incorrect");
+  }
+  for (const expected of expectedRepositories) {
+    const repository = repositories.find(({ name }) => name === expected.name) ?? {};
+    if (
+      repository.revision !== expected.revision
+      || repository.tree !== expected.tree
+      || !fullRevision.test(repository.revision ?? "")
+      || !fullRevision.test(repository.tree ?? "")
+    ) {
+      errors.push(`${expected.name}: exact commit or tree evidence is missing`);
+    }
+    const index = repository.index ?? {};
+    if (
+      index.status !== "completed"
+      || index.last_sync_commit !== expected.revision
+      || index.total_pages !== expected.pages
+      || index.completed_pages !== expected.pages
+      || index.failed_pages !== 0
+      || index.update_exit_code !== 0
+      || index.update_outcome !== "noop"
+      || !Array.isArray(index.degraded)
+      || index.degraded.length !== 0
+      || !isoTimestamp.test(index.initialized_at_utc ?? "")
+      || !isoTimestamp.test(index.completed_at_utc ?? "")
+    ) {
+      errors.push(`${expected.name}: index completion or freshness evidence is incomplete`);
+    }
+    const coverage = repository.coverage ?? {};
+    if (
+      coverage.ingested_commit !== expected.revision
+      || coverage.format !== "cobertura"
+      || coverage.mapped_files !== expected.coverage[0]
+      || coverage.covered_lines !== expected.coverage[1]
+      || coverage.total_lines !== expected.coverage[2]
+      || coverage.line_coverage_pct !== expected.coverage[3]
+      || !isoTimestamp.test(coverage.ingested_at_utc ?? "")
+      || coverage.mapped_files !== coverage.exact_files + coverage.resolved_files
+      || !Number.isInteger(coverage.unmapped_report_files)
+      || coverage.unmapped_report_files < 0
+    ) {
+      errors.push(`${expected.name}: indexed coverage evidence differs from the captured output`);
+    }
+    const health = repository.health ?? {};
+    if (
+      health.scope !== "production"
+      || health.counts !== "everything"
+      || health.average_health !== expected.health
+      || health.hotspot_health !== expected.hotspot
+      || health.max_ccn !== expected.maxCcn
+      || !Number.isInteger(health.file_count)
+      || health.file_count <= 0
+      || !Number.isInteger(health.complexity_files_over_ccn_10)
+      || !Number.isInteger(health.files_with_duplication)
+      || typeof health.max_duplication_pct !== "number"
+      || !Number.isInteger(health.biomarkers?.function_hotspot)
+      || !Number.isInteger(health.biomarkers?.churn_risk)
+      || !Number.isInteger(health.biomarkers?.untested_hotspot)
+      || health.biomarkers.untested_hotspot !== (health.untested_hotspots ?? []).length
+    ) {
+      errors.push(`${expected.name}: health, complexity, clone, churn, or hotspot evidence is incomplete`);
+    }
+    const deadCode = repository.dead_code ?? {};
+    const deadCodeSum = Object.values(deadCode.by_kind ?? {}).reduce((total, value) => total + value, 0);
+    if (
+      deadCode.total_findings !== expected.deadCode
+      || deadCodeSum !== deadCode.total_findings
+      || deadCode.resilient_postgresql_pool_matches !== 0
+    ) {
+      errors.push(`${expected.name}: dead-code evidence is incomplete or inconsistent`);
+    }
+    const risk = repository.change_risk ?? {};
+    if (
+      risk.ref !== "HEAD"
+      || risk.working_tree !== false
+      || risk.risk_percentile !== expected.riskPercentile
+      || !Number.isInteger(risk.baseline_sample_size)
+      || risk.baseline_sample_size <= 0
+      || typeof risk.features?.entropy !== "number"
+    ) {
+      errors.push(`${expected.name}: current-HEAD defect-risk evidence is incomplete`);
+    }
+  }
+
+  const removed = report?.removed_surface_attestation ?? {};
+  if (
+    removed.repository !== "python-libraries"
+    || removed.revision !== expectedRepositories[0].revision
+    || removed.dead_code_match_count !== 0
+    || removed.symbol_search_exact_match !== false
+    || removed.symbol_search_indexed_commit !== expectedRepositories[0].revision
+    || removed.symbol_search_live_head !== expectedRepositories[0].revision
+    || removed.symbol_search_index_behind !== false
+    || removed.literal_source_match_count !== 0
+    || removed.verdict !== "no-zombie-surface"
+  ) {
+    errors.push("ResilientPostgreSQLPool index-backed removal evidence is incomplete");
+  }
+
+  const reconciliation = report?.repowise_recheck_reconciliation ?? {};
+  if (
+    reconciliation.source_bead !== "gm-design-dg-7oi3"
+    || reconciliation.label_was_attached !== false
+    || reconciliation.clear_operation !== "not-applicable"
+    || reconciliation.resolution !== "satisfied-by-versioned-evidence-matrix"
+    || (reconciliation.observed_replacement_beads ?? []).length !== 2
+    || reconciliation.observed_replacement_beads.some(({ labels }) => labels.includes("repowise-recheck"))
+  ) {
+    errors.push("historical repowise-recheck wording is not reconciled with observed bead labels");
+  }
+
+  const matrix = report?.bead_evidence_matrix ?? [];
+  if (JSON.stringify(matrix.map(({ id }) => id)) !== JSON.stringify(expectedBeads)) {
+    errors.push("affected migration and replacement bead evidence matrix is incomplete");
+  }
+  for (const row of matrix) {
+    if (
+      typeof row.title !== "string"
+      || row.title.length === 0
+      || !scopeNames.includes(row.repository)
+      || row.metric_evidence !== `repositories/${row.repository}`
+      || typeof row.rationale !== "string"
+      || row.rationale.length === 0
+    ) {
+      errors.push(`${row.id ?? "unknown bead"}: metric evidence mapping is invalid`);
+    }
+  }
+  return errors;
+}
+
+export function validateTargetedDefectAudit(report, protocol) {
+  const errors = [];
+  const fullRevision = /^[a-f0-9]{40}$/;
+  const digest = /^[a-f0-9]{64}$/;
+  const imageDigest = /^sha256:[a-f0-9]{64}$/;
+  const expectedRepositories = [
+    ["python-libraries", "24704f5fd48d3ef4fff29398585e9924e225b0c5", "c5b96bdeab082057480a26784ad6065497aaae9a"],
+    ["catalog-api", "7e6f21f01cd645f552cdf7ac54ccdecdfb2554df", "3538e664444d5bb9e078155e0d08886c1434d2bb"],
+    ["discogs-ingestion", "8df3b3d05b0e4424874e0104c1f45c5d0c674a7b", "91e9cb47c525d9f7b70893a8bc3c8c6bf4f45cdb"],
+    ["discogs-graph-enricher", "705395fd46be625b3171061cfde747175f7f89e2", "a63ee882da8edaa45b66adf17b623aa950cbb254"],
+    ["discogs-sql-loader", "0f7b5d6ed679cf7233fe6118ab407391928a71c9", "afdde4351abae3c6991d75b74a773d8893f744a8"],
+    ["musicbrainz-ingestion", "c649e5defc6e14e2322554bac24363a1ce1f3a57", "b1235fc29c7a0a6824be58c5d63bd1c700ed25f7"],
+    ["musicbrainz-graph-enricher", "fa8ad811d8989f1bf87dcffdfe24ecb8a15deb93", "f3e9e3fd9434dd73f2c774bcb17ff4e645af0d2b"],
+    ["musicbrainz-sql-loader", "224bf2809c465d638e5cc4e95e815f2b5be79d90", "cc686c7cd0091222e86366ada4851f88d96b30de"],
+  ];
+  const expectedClasses = new Map([
+    ["multi-site-implementation-drift", ["reject-settlement-requeues", "nlq-skips-shared-revocation-state"]],
+    ["permissive-mock-blindness", ["malformed-postgresql-query", "malformed-postgresql-parameter", "malformed-neo4j-query", "malformed-neo4j-result-shape"]],
+    ["cross-language-contract-drift", ["integer-for-string-identity", "integer-discogs-artist-id-not-normalized", "malformed-started-at", "purge-veto-excludes-exact-boundary"]],
+  ]);
+  const expectedCommands = [
+    "shared-delivery-control", "catalog-validation-control", "discogs-graph-control", "discogs-sql-control",
+    "musicbrainz-graph-control", "musicbrainz-sql-control", "discogs-producer-golden", "musicbrainz-producer-golden",
+    "source-mutations", "python-contract-validation", "real-database-mutations", "real-database-integration", "released-image-gates",
+  ];
+  const expectedImages = [
+    "discogs-ingestion", "musicbrainz-ingestion", "discogs-graph-enricher", "discogs-sql-loader",
+    "musicbrainz-graph-enricher", "musicbrainz-sql-loader",
+  ];
+  const expectedHistory = new Map([
+    ["verification/organization-wide-v1.json", "7c042ba9d044f3fd582a1dd93e1af9b83d75d6cb5f6a3d8e551d3a022f70e514"],
+    ["docs/audits/organization-wide-verification-2026-09-13.md", "8a02d82194ac6cfdb69bb010c29a6ef21cb6f801a6a851305198fdf4875bb06b"],
+    ["verification/shared-delivery-rollout-v1.json", "a88e3b134b6da2bb26dfe1ab4ee6e9849d812e4085193a80a17a63e4fa286ae9"],
+    ["docs/audits/shared-delivery-rollout-2026-09-14.md", "34c4124a7528837644113150c2b8ee7a2184d637ba38466d26fa0ea7698251a5"],
+    ["verification/repowise-defect-risk-v1.json", "8ca2ec1cc2ac18690e2f808d21475f291b2add3a96653a9187c03bf5fe7f8f50"],
+    ["docs/audits/repowise-defect-risk-2026-09-14.md", "2012f725e69c789f6f3d6300572b19d23244bb3fb210f0b94c0cefb26d862ae7"],
+  ]);
+
+  if (report?.schema_version !== 1 || report?.audit_id !== "gm-design-51u.3" || report?.verdict !== "pass") {
+    errors.push("targeted defect audit identity, schema, or verdict is invalid");
+  }
+  if (protocol?.schema_version !== 1 || protocol?.audit_id !== report?.audit_id || protocol?.protocol_state !== "frozen-before-inspection") {
+    errors.push("targeted defect audit protocol is not the frozen protocol");
+  }
+  if (
+    report?.protocol?.path !== "verification/targeted-defect-audit-protocol-v1.json"
+    || report?.protocol?.sha256 !== "5f848bab412f305387974e9d51d7e00848289b176dd085d04613fcca0d2d6a8b"
+    || report?.protocol?.freeze_commit !== "2e92276661e33c9a852542284b3900ea2084911a"
+    || report?.protocol?.state !== "frozen-before-inspection"
+    || report?.protocol?.frozen_at_utc !== protocol?.frozen_at_utc
+  ) {
+    errors.push("targeted defect audit protocol identity or freeze evidence changed");
+  }
+
+  const repositories = report?.repositories ?? [];
+  const protocolRepositories = protocol?.repositories ?? [];
+  if (JSON.stringify(repositories.map(({ name }) => name)) !== JSON.stringify(expectedRepositories.map(([name]) => name))) {
+    errors.push("targeted defect audit repository order or inventory is incorrect");
+  }
+  for (const [name, revision, tree] of expectedRepositories) {
+    const repository = repositories.find((candidate) => candidate.name === name) ?? {};
+    const frozen = protocolRepositories.find((candidate) => candidate.name === name) ?? {};
+    if (
+      repository.revision !== revision || repository.tree !== tree
+      || frozen.revision !== revision || frozen.tree !== tree
+      || !fullRevision.test(repository.revision ?? "") || !fullRevision.test(repository.tree ?? "")
+    ) {
+      errors.push(`${name}: exact frozen commit or tree evidence is missing`);
+    }
+  }
+
+  const budget = report?.budget ?? {};
+  if (
+    budget.execution_minutes_allowed !== 150 || budget.execution_minutes_used > 150
+    || budget.reviewer_minutes_allowed !== 30 || budget.infrastructure_retries_allowed_per_probe !== 1
+    || budget.scope_expanded !== false
+    || protocol?.severity?.counting_threshold !== "P2"
+    || protocol?.budgets?.execution_minutes !== 150 || protocol?.budgets?.reviewer_minutes !== 30
+  ) {
+    errors.push("targeted defect audit budget, severity threshold, or scope boundary changed");
+  }
+
+  const commands = report?.commands ?? [];
+  if (JSON.stringify(commands.map(({ id }) => id)) !== JSON.stringify(expectedCommands)) {
+    errors.push("targeted defect audit command inventory is incomplete");
+  }
+  if (commands.some((command) => command.exit_code !== 0 || typeof command.command !== "string" || !command.command || typeof command.summary !== "string" || !command.summary)) {
+    errors.push("targeted defect audit contains a failed or incomplete command record");
+  }
+
+  const databases = new Map((report?.database_evidence ?? []).map((item) => [item.engine, item]));
+  const postgresql = databases.get("postgresql") ?? {};
+  const neo4j = databases.get("neo4j") ?? {};
+  if (
+    postgresql.image !== "postgres:18-alpine@sha256:d3e1620b530c944afa6e887d22eb899824da68e19c52024bf98f5220c88a65b2"
+    || postgresql.loopback_only !== true || postgresql.integration_tests_passed !== 14
+    || !sameValues(postgresql.mutation_verdicts ?? [], ["malformed-postgresql-query:killed", "malformed-postgresql-parameter:killed"])
+    || neo4j.image !== "neo4j:2026-community@sha256:dbc377fb9cd8fe8dabc19d3041b197d5ca0ef8bae514cea175b8df265e5b7a76"
+    || neo4j.loopback_only !== true || neo4j.integration_tests_passed !== 9
+    || !sameValues(neo4j.mutation_verdicts ?? [], ["malformed-neo4j-query:killed", "malformed-neo4j-result-shape:killed"])
+  ) {
+    errors.push("targeted defect audit real-engine evidence is incomplete");
+  }
+
+  const images = report?.released_images ?? [];
+  if (
+    JSON.stringify(images.map(({ repository }) => repository)) !== JSON.stringify(expectedImages)
+    || images.some((item) => !imageDigest.test(item.digest ?? "") || typeof item.smoke !== "string" || !item.smoke)
+  ) {
+    errors.push("targeted defect audit released-image evidence is incomplete");
+  }
+
+  const classes = report?.causal_classes ?? [];
+  if (JSON.stringify(classes.map(({ name }) => name)) !== JSON.stringify([...expectedClasses.keys()])) {
+    errors.push("targeted defect audit causal-class inventory is incorrect");
+  }
+  for (const [name, mutations] of expectedClasses) {
+    const causalClass = classes.find((candidate) => candidate.name === name) ?? {};
+    if (
+      causalClass.outcome !== "zero-result-class" || causalClass.unique_root_causes !== 0 || causalClass.manifestations !== 0
+      || !sameValues(causalClass.protected_mutations ?? [], mutations)
+      || (causalClass.multi_site_causes ?? []).length !== 0 || (causalClass.findings ?? []).length !== 0
+    ) {
+      errors.push(`${name}: zero-result evidence or protected mutations are incomplete`);
+    }
+  }
+  const totals = report?.totals ?? {};
+  if (
+    totals.unique_root_causes !== 0 || totals.manifestations !== 0 || totals.multi_site_causes !== 0
+    || totals.p0 !== 0 || totals.p1 !== 0 || totals.p2 !== 0 || totals.p3 !== 0
+    || totals.mutation_survivors !== 0 || totals.zero_result_classes !== 3
+  ) {
+    errors.push("targeted defect audit totals do not match the zero-finding result");
+  }
+
+  const history = new Map((report?.historical_records ?? []).map((record) => [record.path, record.sha256]));
+  if (history.size !== expectedHistory.size) errors.push("targeted defect audit historical evidence inventory is incomplete");
+  for (const [path, expectedDigest] of expectedHistory) {
+    if (history.get(path) !== expectedDigest || !digest.test(history.get(path) ?? "")) {
+      errors.push(`targeted defect audit historical evidence identity changed: ${path}`);
+    }
+  }
+  return errors;
+}
+
+export function validatePortfolioEffectiveness(report, rollout, repowise, targetedAudit) {
+  const errors = [];
+  const fullRevision = /^[a-f0-9]{40}$/;
+  const expectedSources = new Map([
+    ["verification/organization-wide-v1.json", "7c042ba9d044f3fd582a1dd93e1af9b83d75d6cb5f6a3d8e551d3a022f70e514"],
+    ["docs/audits/organization-wide-verification-2026-09-13.md", "8a02d82194ac6cfdb69bb010c29a6ef21cb6f801a6a851305198fdf4875bb06b"],
+    ["verification/shared-delivery-rollout-v1.json", "a88e3b134b6da2bb26dfe1ab4ee6e9849d812e4085193a80a17a63e4fa286ae9"],
+    ["docs/audits/shared-delivery-rollout-2026-09-14.md", "34c4124a7528837644113150c2b8ee7a2184d637ba38466d26fa0ea7698251a5"],
+    ["verification/repowise-defect-risk-v1.json", "8ca2ec1cc2ac18690e2f808d21475f291b2add3a96653a9187c03bf5fe7f8f50"],
+    ["docs/audits/repowise-defect-risk-2026-09-14.md", "2012f725e69c789f6f3d6300572b19d23244bb3fb210f0b94c0cefb26d862ae7"],
+    ["verification/targeted-defect-audit-protocol-v1.json", "5f848bab412f305387974e9d51d7e00848289b176dd085d04613fcca0d2d6a8b"],
+    ["verification/targeted-defect-audit-v1.json", "2310402404b43e83b479767e053f450b0eb106e36b7b3e10069e31163d22e5f3"],
+    ["docs/audits/targeted-defect-audit-2026-09-14.md", "ac28221946260b9a0b8f5429a2bc091442a5225924a398530b2b39cfbf5aaed4"],
+  ]);
+  const expectedMolecules = [
+    "gm-analytics-engine-fpd", "gm-automation-6ab", "gm-catalog-api-e2w", "gm-database-schema-ot0",
+    "gm-deployment-0ak", "gm-design-erl", "gm-discogs-graph-enricher-8ue", "gm-discogs-ingestion-dmu",
+    "gm-discogs-sql-loader-4fh", "gm-musicbrainz-graph-enricher-w2y", "gm-musicbrainz-ingestion-hdl",
+    "gm-musicbrainz-sql-loader-55p", "gm-operations-console-aho", "gm-operations-toolkit-8im",
+    "gm-python-libraries-1hq", "gm-catalog-api-dg-7oi3-2", "gm-python-libraries-dg-7oi3-3",
+    "gm-python-libraries-0ek", "gm-discogs-graph-enricher-9l7", "gm-discogs-sql-loader-8gm",
+    "gm-musicbrainz-graph-enricher-20q", "gm-musicbrainz-sql-loader-5zt",
+  ];
+  const expectedSuperseded = [
+    "gm-design-dg-7oi3-5", "gm-automation-dg-7oi3-7", "gm-automation-dg-7oi3-8",
+    "gm-deployment-dg-7oi3-6", "gm-python-libraries-dg-7oi3-1",
+  ];
+
+  if (
+    report?.schema_version !== 1 || report?.verdict_id !== "gm-design-51u.4"
+    || report?.reviewed_on !== "2026-09-14" || report?.verdict !== "close-portfolio"
+    || report?.portfolio_tracker?.id !== "gm-design-dg-7oi3"
+    || report?.portfolio_tracker?.focused_remediation_required !== false
+  ) {
+    errors.push("portfolio effectiveness identity, date, tracker, or close verdict is invalid");
+  }
+
+  const sources = new Map((report?.source_records ?? []).map((record) => [record.path, record.sha256]));
+  if (sources.size !== expectedSources.size) errors.push("portfolio effectiveness source-record inventory is incomplete");
+  for (const [path, digest] of expectedSources) {
+    if (sources.get(path) !== digest) errors.push(`portfolio effectiveness source identity changed: ${path}`);
+  }
+
+  if (JSON.stringify(report?.effectiveness_revisions ?? []) !== JSON.stringify(targetedAudit?.repositories ?? [])) {
+    errors.push("portfolio effectiveness revisions differ from the frozen targeted audit");
+  }
+  const supportingIndexes = report?.supporting_index_revisions ?? [];
+  const repowiseRevisions = (repowise?.repositories ?? []).map(({ name, revision, tree }) => ({ name, revision, tree }));
+  if (JSON.stringify(supportingIndexes) !== JSON.stringify(repowiseRevisions)) {
+    errors.push("portfolio supporting index revisions differ from the versioned Repowise evidence");
+  }
+  if ([...(report?.effectiveness_revisions ?? []), ...supportingIndexes].some(({ revision, tree }) => !fullRevision.test(revision ?? "") || !fullRevision.test(tree ?? ""))) {
+    errors.push("portfolio effectiveness revisions and trees must be immutable full hashes");
+  }
+
+  const raw = report?.raw_findings ?? {};
+  const targetedTotals = targetedAudit?.totals ?? {};
+  for (const field of ["unique_root_causes", "manifestations", "multi_site_causes", "p0", "p1", "p2", "p3", "mutation_survivors", "zero_result_classes"]) {
+    if (raw[field] !== targetedTotals[field]) errors.push(`portfolio raw finding total differs from the targeted audit: ${field}`);
+  }
+  if ((raw.findings ?? []).length !== 0 || (raw.below_threshold_observations ?? []).length !== 0) {
+    errors.push("portfolio raw finding lists must preserve the zero-result audit");
+  }
+
+  const normalized = report?.normalized_findings ?? {};
+  if (
+    normalized.duplicate_mirror_share_pct !== 0 || normalized.duplicate_mirror_share_numerator !== 0
+    || normalized.duplicate_mirror_share_denominator !== 0 || normalized.denominator_zero !== true
+    || normalized.historical_share_pct_approx !== 40 || normalized.relative_reduction_pct !== 100
+    || normalized.threshold_at_most_pct !== 20 || normalized.required_reduction_pct !== 50
+    || normalized.result !== "pass"
+  ) {
+    errors.push("portfolio normalized duplicate threshold evidence is invalid");
+  }
+  if ((report?.before_after ?? []).length !== 4 || report.before_after.some(({ result }) => result !== "pass")) {
+    errors.push("portfolio before/after evidence is incomplete or contains a threshold miss");
+  }
+
+  const recurrence = new Map((report?.recurrence_attestations ?? []).map((item) => [item.surface, item.recurrences]));
+  for (const surface of ["shared-delivery", "jwt-validation", "resilient-postgresql-pool"]) {
+    if (recurrence.get(surface) !== 0) errors.push(`portfolio recurrence remains on ${surface}`);
+  }
+  if (
+    report?.database_boundary_assertion?.concealed_defects !== 0
+    || report?.database_boundary_assertion?.real_database_tests_passed !== 23
+    || report?.database_boundary_assertion?.real_engine_mutations_killed?.length !== 4
+    || report?.database_boundary_assertion?.historical_regression_gate_matrix?.length !== 6
+    || report?.database_boundary_assertion?.result !== "pass"
+  ) {
+    errors.push("portfolio database-boundary assertion is incomplete");
+  }
+  const rustPython = report?.rust_python_assertion ?? {};
+  if (
+    rustPython.mismatches !== 0 || rustPython.p0 !== 0 || rustPython.p1 !== 0
+    || rustPython.producer_golden_paths_passed !== 2 || rustPython.python_fixture_validations_passed !== 24
+    || rustPython.released_image_paths_passed !== 6
+    || !sameValues(rustPython.historical_mutations_rejected_before_persistence ?? [], ["integer-for-string-identity", "malformed-started-at"])
+    || rustPython.result !== "pass"
+  ) {
+    errors.push("portfolio Rust-to-Python assertion is incomplete");
+  }
+
+  const owner = report?.owner_hive_assertions ?? {};
+  if (
+    owner.organization_wide_repository_verdicts_passed !== 21
+    || owner.shared_runtime_and_consumer_just_checks_passed !== 5
+    || owner.shared_runtime_manifest_and_lock_pins_verified !== 8
+    || owner.independent_consumer_settlement_loops !== 0
+    || owner.database_engine_images_digest_pinned !== 2
+    || owner.released_images_content_addressed !== 6 || owner.released_image_gates_passed !== 6
+    || owner.released_stack_assertions_passed !== 7
+    || owner.released_stack_fixture_image !== "ghcr.io/groovemap-music/discogs-ingestion@sha256:db418bfc97d2d364ac0e64045b492ad8492b500c84f8ce105a04cadd400ee17c"
+    || owner.external_action_pin_policy !== "pass" || owner.result !== "pass"
+    || rollout?.runtime?.just_check !== "pass" || (rollout?.consumers ?? []).some((consumer) => consumer.just_check !== "pass" || consumer.image_gate !== "pass")
+  ) {
+    errors.push("portfolio owner-hive check, pin, or released-stack assertion is incomplete");
+  }
+
+  const molecules = report?.linked_landed_molecules ?? [];
+  const moleculeIds = molecules.map(({ uri }) => uri?.split("/").at(-1));
+  if (JSON.stringify(moleculeIds) !== JSON.stringify(expectedMolecules)) {
+    errors.push("portfolio linked landed-molecule inventory is incomplete");
+  }
+  for (const molecule of molecules) {
+    if (
+      molecule.status !== "closed" || typeof molecule.title !== "string" || !molecule.title
+      || !Array.isArray(molecule.landed_commits) || molecule.landed_commits.length === 0
+      || molecule.landed_commits.some((commit) => !fullRevision.test(commit))
+    ) {
+      errors.push(`${molecule.uri ?? "unknown molecule"}: closed state or landed commits are invalid`);
+    }
+  }
+
+  const superseded = report?.superseded_imports ?? [];
+  if (
+    JSON.stringify(superseded.map(({ uri }) => uri?.split("/").at(-1))) !== JSON.stringify(expectedSuperseded)
+    || superseded.some((item) => item.status !== "closed" || typeof item.resolution !== "string" || !item.resolution)
+  ) {
+    errors.push("portfolio superseded imported scope is not fully reconciled");
+  }
+  const descopes = report?.explicit_descopes ?? [];
+  if (
+    descopes.length !== 5
+    || descopes[0]?.uri !== "bead://github/groovemap-music/deployment/gm-deployment-dg-64dn"
+    || descopes[0]?.status !== "in_progress"
+    || descopes.some(({ reason }) => typeof reason !== "string" || !reason)
+  ) {
+    errors.push("portfolio explicit descopes are incomplete");
+  }
+  const closure = report?.scope_closure ?? {};
+  if (
+    closure.closed_landed_molecules !== 22 || closure.closed_superseded_imports !== 5
+    || (closure.open_scoped_remediation ?? []).length !== 0 || closure.explicit_descopes !== 5
+    || closure.all_scoped_work_closed_or_descoped !== true
+  ) {
+    errors.push("portfolio scope closure is incomplete");
+  }
+
+  const thresholds = Object.values(report?.thresholds ?? {});
+  if (thresholds.length !== 10 || thresholds.some((value) => value !== "pass")) {
+    errors.push("portfolio has a missing or failed effectiveness threshold");
+  }
+  const methodology = report?.methodology ?? {};
+  if (
+    typeof methodology.primary_evidence !== "string" || !methodology.primary_evidence.includes("targeted audit")
+    || typeof methodology.supporting_evidence !== "string" || !methodology.supporting_evidence.includes("does not determine the verdict")
+    || typeof methodology.zero_denominator_rule !== "string" || !methodology.zero_denominator_rule.includes("0 percent")
+    || typeof methodology.comparison_rule !== "string" || !methodology.comparison_rule.includes("do not infer")
+  ) {
+    errors.push("portfolio methodology does not preserve primary/supporting evidence and comparison limits");
+  }
+  if (!Array.isArray(report?.limitations) || report.limitations.length !== 5) {
+    errors.push("portfolio limitations are incomplete");
+  }
+  return errors;
+}
 export function validateFixtureSet(taxonomy, fixtures) {
   const errors = [];
   const names = new Set();
