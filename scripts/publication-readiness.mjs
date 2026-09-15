@@ -44,6 +44,18 @@ if (eventTypes.vocabulary_version !== "1" || eventTypes.event_types.length !== 1
   throw new Error("event-type vocabulary identity changed after validation");
 }
 
+const identifierBytes = readFileSync(resolve(root, "taxonomy/identifiers/v1/identifier-types.json"));
+const identifierTypes = JSON.parse(identifierBytes.toString("utf8"));
+if (identifierTypes.vocabulary_version !== "1" || identifierTypes.identifier_types.length !== 7) {
+  throw new Error("identifier vocabulary identity changed after validation");
+}
+
+const companyRoleBytes = readFileSync(resolve(root, "taxonomy/company-roles/v1/company-roles.json"));
+const companyRoles = JSON.parse(companyRoleBytes.toString("utf8"));
+if (companyRoles.vocabulary_version !== "1" || companyRoles.role_categories.length !== 9) {
+  throw new Error("company-role vocabulary identity changed after validation");
+}
+
 const handoff = {
   schema_version: 1,
   design_commit: git("rev-parse", "HEAD"),
@@ -62,6 +74,14 @@ const handoff = {
   event_types_sha256: createHash("sha256").update(eventBytes).digest("hex"),
   event_types_version: eventTypes.vocabulary_version,
   event_type_count: eventTypes.event_types.length,
+  identifier_types_path: "taxonomy/identifiers/v1/identifier-types.json",
+  identifier_types_sha256: createHash("sha256").update(identifierBytes).digest("hex"),
+  identifier_types_version: identifierTypes.vocabulary_version,
+  identifier_type_count: identifierTypes.identifier_types.length,
+  company_roles_path: "taxonomy/company-roles/v1/company-roles.json",
+  company_roles_sha256: createHash("sha256").update(companyRoleBytes).digest("hex"),
+  company_roles_version: companyRoles.vocabulary_version,
+  company_role_category_count: companyRoles.role_categories.length,
   publication_action_performed: false,
 };
 
