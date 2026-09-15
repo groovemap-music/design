@@ -70,6 +70,7 @@ const REQUIRED_FILES = [
   "docs/adr/0008-victoriametrics-tracing-runtime-alerting.md",
   "docs/adr/0009-native-identity-and-provider-aliases.md",
   "docs/adr/0010-first-party-events-consent-and-deletion.md",
+  "docs/adr/0011-catalog-identifiers-and-manufacturing-credits.md",
   "docs/audits/organization-wide-verification-2026-09-13.md",
   "docs/programs/media-taxonomy.md",
   "docs/programs/native-identity-and-events.md",
