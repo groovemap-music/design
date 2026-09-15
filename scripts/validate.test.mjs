@@ -16,6 +16,7 @@ import {
   validateCatalogContract,
   validateFixtureSet,
   validateOrganizationVerification,
+  validateSharedDeliveryRollout,
   validateTelemetryDecision,
 } from "./validation-policy.mjs";
 import { trackedFiles, validateCatalogContract as validateCatalogContractEntry } from "./validate.mjs";
@@ -24,6 +25,7 @@ import schema from "../catalog/repositories.schema.json" with { type: "json" };
 import fixture from "../fixtures/catalog-valid.json" with { type: "json" };
 import catalog from "../catalog/repositories.json" with { type: "json" };
 import organizationVerification from "../verification/organization-wide-v1.json" with { type: "json" };
+import sharedDeliveryRollout from "../verification/shared-delivery-rollout-v1.json" with { type: "json" };
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const schemaPath = resolve(root, "catalog/repositories.schema.json");
@@ -146,6 +148,22 @@ test("organization verification pins the final repository and diagram evidence",
   const missingDiagram = structuredClone(organizationVerification);
   missingDiagram.diagram_audit.maintained_mermaid -= 1;
   assert.ok(validateOrganizationVerification(missingDiagram, catalog).some((error) => /94 \+ 6 Mermaid baseline/.test(error)));
+});
+
+test("shared-delivery rollout pins the runtime, consumers, gates, and ownership boundary", () => {
+  assert.deepEqual(validateSharedDeliveryRollout(sharedDeliveryRollout), []);
+
+  const mutablePin = structuredClone(sharedDeliveryRollout);
+  mutablePin.consumers[0].manifest_runtime_revision = "main";
+  assert.ok(validateSharedDeliveryRollout(mutablePin).some((error) => /manifest and lock/.test(error)));
+
+  const leakedBatchDependency = structuredClone(sharedDeliveryRollout);
+  leakedBatchDependency.consumers.find((consumer) => consumer.name === "musicbrainz-sql-loader").shared_imports.push("common.batch");
+  assert.ok(validateSharedDeliveryRollout(leakedBatchDependency).some((error) => /shared import boundary/.test(error)));
+
+  const rewrittenHistory = structuredClone(sharedDeliveryRollout);
+  rewrittenHistory.historical_baseline.machine_record.sha256 = "0".repeat(64);
+  assert.ok(validateSharedDeliveryRollout(rewrittenHistory).some((error) => /historical machine_record identity/.test(error)));
 });
 
 test("canonical catalog rejects deployment ownership that contradicts the active topology", () => {
