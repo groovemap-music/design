@@ -496,3 +496,312 @@ export function validateEventFixtureSet(vocabulary, fixtures) {
   }
   return errors;
 }
+
+// ---------------------------------------------------------------------------
+// ADR 0011: catalog identifiers and manufacturing credits.
+//
+// The two mappers below are the reference implementation the conformance
+// fixtures are proved against. Every vendored mapper (the Rust Discogs
+// producer, the shared Python runtime) must reproduce these blocks byte for
+// byte after canonical JSON serialisation.
+// ---------------------------------------------------------------------------
+
+const IDENTIFIER_TYPES_V1 = ["barcode", "matrix_runout", "label_code", "rights_society", "asin", "other", "catalog_number"];
+const IDENTIFIER_ALIAS_NAMESPACES = [
+  ["barcode", "barcode"],
+  ["catalog_number", "catalog_number"],
+  ["matrix", "matrix_runout"],
+];
+const IDENTIFIER_NORMALIZATIONS = ["digits_only", "upper_collapse_space", "collapse_space"];
+const REQUIRED_IDENTIFIER_FIXTURES = [
+  "discogs-barcode-and-catalogue-number",
+  "discogs-matrix-runout-inscriptions",
+  "discogs-label-code-and-rights-society",
+  "discogs-mapped-to-other",
+  "discogs-unmapped-type",
+  "discogs-no-identifiers",
+  "discogs-malformed-entries",
+  "discogs-duplicate-alias-values",
+];
+const COMPANY_ROLE_CATEGORIES = [
+  "manufacturing",
+  "mastering",
+  "lacquer",
+  "pressing",
+  "distribution",
+  "marketing",
+  "rights",
+  "recording_facility",
+  "other",
+];
+const REQUIRED_COMPANY_FIXTURES = [
+  "discogs-pressing-and-transfer-master",
+  "discogs-rights-holders",
+  "discogs-distribution-and-marketing",
+  "discogs-recording-facilities",
+  "discogs-manufacturing-and-print",
+  "discogs-unmapped-role",
+  "discogs-no-companies",
+  "discogs-malformed-entries",
+];
+const ALIAS_KEY_SEPARATOR = " ";
+
+function compareByCodePoint(left, right) {
+  const leftPoints = Array.from(left);
+  const rightPoints = Array.from(right);
+  const length = Math.min(leftPoints.length, rightPoints.length);
+  for (let index = 0; index < length; index += 1) {
+    const difference = leftPoints[index].codePointAt(0) - rightPoints[index].codePointAt(0);
+    if (difference !== 0) return difference;
+  }
+  return leftPoints.length - rightPoints.length;
+}
+
+function sortedUniqueByCodePoint(values) {
+  return [...new Set(values)].sort(compareByCodePoint);
+}
+
+function isSortedByCodePoint(values) {
+  return JSON.stringify(values) === JSON.stringify([...values].sort(compareByCodePoint));
+}
+
+// An upstream name we do not control must never resolve to an inherited
+// Object.prototype member, or a genuinely unknown Discogs string would be
+// treated as mapped instead of landing in `unmapped`.
+function ownGet(map, key) {
+  return Object.hasOwn(map ?? {}, key) ? map[key] : undefined;
+}
+
+function isPlainEntry(value) {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function trimmedString(value) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+export function normalizeIdentifierValue(normalization, value) {
+  if (normalization === "digits_only") return [...value].filter((character) => character >= "0" && character <= "9").join("");
+  const collapsed = value.trim().replace(/\s+/g, " ");
+  return normalization === "upper_collapse_space" ? collapsed.toUpperCase() : collapsed;
+}
+
+export function mapIdentifierBlock(vocabulary, input) {
+  const items = [];
+  const unmapped = [];
+  const types = vocabulary?.discogs?.types ?? {};
+  const absentCatalogNumber = vocabulary?.discogs?.absent_catalog_number ?? "none";
+
+  for (const entry of Array.isArray(input?.identifiers) ? input.identifiers : []) {
+    if (!isPlainEntry(entry)) continue;
+    const rawType = trimmedString(entry.type);
+    const value = trimmedString(entry.value);
+    if (rawType === "" || value === "") continue;
+    const mapped = ownGet(types, rawType);
+    if (mapped === undefined) unmapped.push(rawType);
+    const description = trimmedString(entry.description);
+    items.push({
+      type: mapped ?? vocabulary.unmapped_type,
+      value,
+      description: description === "" ? null : description,
+      source: { provider: "discogs", type: rawType, field: "identifiers" },
+    });
+  }
+
+  for (const entry of Array.isArray(input?.labels) ? input.labels : []) {
+    if (!isPlainEntry(entry)) continue;
+    const catalogNumber = trimmedString(entry.catno);
+    if (catalogNumber === "" || catalogNumber.toLowerCase() === absentCatalogNumber) continue;
+    items.push({
+      type: "catalog_number",
+      value: catalogNumber,
+      description: null,
+      source: { provider: "discogs", type: null, field: "labels[].catno" },
+    });
+  }
+
+  const namespaces = new Map((vocabulary?.alias_namespaces ?? []).map((namespace) => [namespace.type, namespace]));
+  const aliases = new Map();
+  for (const item of items) {
+    const namespace = namespaces.get(item.type);
+    if (namespace === undefined) continue;
+    const externalId = normalizeIdentifierValue(namespace.normalization, item.value);
+    if (externalId === "") continue;
+    aliases.set(`${namespace.provider}${ALIAS_KEY_SEPARATOR}${externalId}`, { provider: namespace.provider, external_id: externalId });
+  }
+
+  return {
+    identifiers_version: vocabulary.vocabulary_version,
+    items,
+    types: sortedUniqueByCodePoint(items.map((item) => item.type)),
+    aliases: [...aliases.keys()].sort(compareByCodePoint).map((key) => aliases.get(key)),
+    unmapped: { types: sortedUniqueByCodePoint(unmapped) },
+  };
+}
+
+export function mapCompanyBlock(vocabulary, input) {
+  const items = [];
+  const unmapped = [];
+  const roles = vocabulary?.discogs?.roles ?? {};
+
+  for (const entry of Array.isArray(input?.companies) ? input.companies : []) {
+    if (!isPlainEntry(entry)) continue;
+    const name = trimmedString(entry.name);
+    const role = trimmedString(entry.entity_type_name);
+    if (name === "" || role === "") continue;
+    const category = ownGet(roles, role);
+    if (category === undefined) unmapped.push(role);
+    const catalogNumber = trimmedString(entry.catno);
+    const entityType = trimmedString(entry.entity_type) || (Number.isInteger(entry.entity_type) ? String(entry.entity_type) : "");
+    items.push({
+      name,
+      discogs_id: Number.isInteger(entry.id) && entry.id > 0 ? entry.id : null,
+      role,
+      role_category: category ?? vocabulary.unmapped_category,
+      catno: catalogNumber === "" ? null : catalogNumber,
+      source: { provider: "discogs", entity_type: /^[0-9]+$/.test(entityType) ? entityType : null },
+    });
+  }
+
+  return {
+    companies_version: vocabulary.vocabulary_version,
+    items,
+    role_categories: sortedUniqueByCodePoint(items.map((item) => item.role_category)),
+    unmapped: { roles: sortedUniqueByCodePoint(unmapped) },
+  };
+}
+
+export function validateIdentifierVocabulary(vocabulary) {
+  const errors = [];
+  if (vocabulary?.vocabulary_version !== "1") errors.push("the identifier vocabulary must declare vocabulary_version 1");
+  if (vocabulary?.license !== "MIT") errors.push("the identifier vocabulary must declare MIT license metadata");
+  if (vocabulary?.unmapped_type !== "other") errors.push("an unrecognised identifier type must fall to other");
+
+  const declared = vocabulary?.identifier_types ?? [];
+  if (!sameSequence(declared.map((type) => type.id), IDENTIFIER_TYPES_V1)) {
+    errors.push("identifier types must be the closed ADR 0011 set in declaration order");
+  }
+  const aliasTypes = declared.filter((type) => type.alias_provider !== null).map((type) => type.id);
+  if (!sameValues(aliasTypes, IDENTIFIER_ALIAS_NAMESPACES.map(([, type]) => type))) {
+    errors.push("exactly barcode, catalog_number, and matrix_runout may mint provider aliases");
+  }
+
+  const namespaces = vocabulary?.alias_namespaces ?? [];
+  if (!sameSequence(namespaces.map((namespace) => [namespace.provider, namespace.type]), IDENTIFIER_ALIAS_NAMESPACES)) {
+    errors.push("the alias namespaces must be the closed ADR 0009 providers in declaration order");
+  }
+  const normalizations = new Set((vocabulary?.normalizations ?? []).map((normalization) => normalization.id));
+  if (!sameValues([...normalizations], IDENTIFIER_NORMALIZATIONS)) errors.push("the declared normalizations must be the closed ADR 0011 set");
+  for (const namespace of namespaces) {
+    const type = declared.find((entry) => entry.id === namespace.type);
+    if (type?.alias_provider !== namespace.provider) errors.push(`alias namespace ${namespace.provider} disagrees with the type that declares it`);
+    if (!normalizations.has(namespace.normalization)) errors.push(`alias namespace ${namespace.provider} names an undeclared normalization`);
+    if (namespace.alias_source !== "catalog") errors.push(`alias namespace ${namespace.provider} must mint catalog-sourced aliases`);
+  }
+
+  const mapping = vocabulary?.discogs?.types ?? {};
+  const keys = Object.keys(mapping);
+  if (!isSortedByCodePoint(keys)) errors.push("the raw Discogs identifier type strings must be sorted");
+  const targets = new Set();
+  for (const key of keys) {
+    const target = mapping[key];
+    if (!IDENTIFIER_TYPES_V1.includes(target)) errors.push(`raw identifier type ${key} maps to an undeclared type: ${target}`);
+    if (target === "catalog_number") errors.push("no raw identifier type maps to catalog_number: it is lifted from the label entries");
+    targets.add(target);
+  }
+  for (const type of IDENTIFIER_TYPES_V1) {
+    if (type === "catalog_number" || targets.has(type)) continue;
+    errors.push(`identifier type carries no raw Discogs string: ${type}`);
+  }
+  return errors;
+}
+
+export function validateCompanyRoleVocabulary(vocabulary) {
+  const errors = [];
+  if (vocabulary?.vocabulary_version !== "1") errors.push("the company-role vocabulary must declare vocabulary_version 1");
+  if (vocabulary?.license !== "MIT") errors.push("the company-role vocabulary must declare MIT license metadata");
+  if (vocabulary?.unmapped_category !== "other") errors.push("an unrecognised company role must fall to other");
+  if (!sameSequence((vocabulary?.role_categories ?? []).map((category) => category.id), COMPANY_ROLE_CATEGORIES)) {
+    errors.push("role categories must be the closed ADR 0011 set in declaration order");
+  }
+  if (vocabulary?.discogs?.excluded_field !== "labels") {
+    errors.push("the vocabulary must record that the issuing-label relation is not a company credit");
+  }
+
+  const mapping = vocabulary?.discogs?.roles ?? {};
+  const keys = Object.keys(mapping);
+  if (!isSortedByCodePoint(keys)) errors.push("the raw Discogs company role strings must be sorted");
+  const targets = new Set();
+  for (const key of keys) {
+    const target = mapping[key];
+    if (!COMPANY_ROLE_CATEGORIES.includes(target)) errors.push(`raw company role ${key} maps to an undeclared category: ${target}`);
+    targets.add(target);
+  }
+  for (const category of COMPANY_ROLE_CATEGORIES) {
+    if (!targets.has(category)) errors.push(`role category carries no raw Discogs role: ${category}`);
+  }
+  if (Object.hasOwn(mapping, "Label")) errors.push("the issuing label is not a company credit and must not be mapped as one");
+  return errors;
+}
+
+function validateBlockFixtureSet(fixtures, map, required, subject) {
+  const errors = [];
+  const names = new Set();
+  for (const fixture of fixtures) {
+    for (const field of ["name", "provider", "description", "input", "expected"]) {
+      if (!(field in fixture)) errors.push(`fixture ${fixture.name ?? "?"} is missing ${field}`);
+    }
+    if (names.has(fixture.name)) errors.push(`duplicate fixture name ${fixture.name}`);
+    names.add(fixture.name);
+    if (fixture.file !== undefined && fixture.file !== `${fixture.name}.json`) errors.push(`fixture ${fixture.name} does not match its file name`);
+    if (fixture.provider !== "discogs") errors.push(`fixture ${fixture.name} names a provider outside version 1: ${fixture.provider}`);
+    let actual;
+    try {
+      actual = map(fixture.input);
+    } catch (error) {
+      errors.push(`fixture ${fixture.name}: ${error.message}`);
+      continue;
+    }
+    if (JSON.stringify(actual) !== JSON.stringify(fixture.expected)) {
+      errors.push(`fixture ${fixture.name} expected ${subject} differs from the reference mapper`);
+    }
+  }
+  for (const name of required) {
+    if (!names.has(name)) errors.push(`required conformance fixture is missing: ${name}`);
+  }
+  return errors;
+}
+
+export function validateIdentifierFixtureSet(vocabulary, fixtures) {
+  const errors = validateBlockFixtureSet(
+    fixtures,
+    (input) => mapIdentifierBlock(vocabulary, input),
+    REQUIRED_IDENTIFIER_FIXTURES,
+    "identifiers block",
+  );
+  if (!fixtures.some((fixture) => (fixture.expected?.unmapped?.types ?? []).length > 0)) {
+    errors.push("no fixture proves that an unrecognised raw identifier type is preserved");
+  }
+  const minted = new Set(fixtures.flatMap((fixture) => (fixture.expected?.aliases ?? []).map((alias) => alias.provider)));
+  for (const [provider] of IDENTIFIER_ALIAS_NAMESPACES) {
+    if (!minted.has(provider)) errors.push(`no fixture mints an alias in the ${provider} namespace`);
+  }
+  return errors;
+}
+
+export function validateCompanyFixtureSet(vocabulary, fixtures) {
+  const errors = validateBlockFixtureSet(
+    fixtures,
+    (input) => mapCompanyBlock(vocabulary, input),
+    REQUIRED_COMPANY_FIXTURES,
+    "companies block",
+  );
+  if (!fixtures.some((fixture) => (fixture.expected?.unmapped?.roles ?? []).length > 0)) {
+    errors.push("no fixture proves that an unrecognised raw company role is preserved");
+  }
+  const covered = new Set(fixtures.flatMap((fixture) => fixture.expected?.role_categories ?? []));
+  for (const category of COMPANY_ROLE_CATEGORIES) {
+    if (!covered.has(category)) errors.push(`role category has no conformance fixture: ${category}`);
+  }
+  return errors;
+}
