@@ -11,7 +11,7 @@ setup:
     mise install
 
 # Run the complete credential-free local and CI boundary.
-check: lint test policy-check links catalog taxonomy identity events brand license-check audit secret-scan build install-check
+check: lint test policy-check links catalog taxonomy identity events identifiers company-roles brand license-check audit secret-scan build install-check
 
 # Statically validate executable source and the repository recipe contract.
 lint:
@@ -60,6 +60,14 @@ identity:
 # Validate the first-party event vocabulary, both envelope schemas, and the conformance fixtures.
 events:
     {{tool}} node scripts/validate.mjs --events
+
+# Validate the catalog identifier vocabulary, both schemas, and the conformance fixtures.
+identifiers:
+    {{tool}} node scripts/validate.mjs --identifiers
+
+# Validate the company-role vocabulary, both schemas, and the conformance fixtures.
+company-roles:
+    {{tool}} node scripts/validate.mjs --company-roles
 
 # Verify that tracked brand assets match their canonical sources.
 brand:

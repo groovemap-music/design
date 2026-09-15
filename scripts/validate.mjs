@@ -13,10 +13,14 @@ import {
   validateActionReference,
   validateCanonicalCatalog,
   validateCatalogContract,
+  validateCompanyFixtureSet,
+  validateCompanyRoleVocabulary,
   validateEventEnvelopeContract,
   validateEventFixtureSet,
   validateEventVocabulary,
   validateFixtureSet,
+  validateIdentifierFixtureSet,
+  validateIdentifierVocabulary,
   validateIdentityVocabulary,
   validateOrganizationVerification,
   validateTelemetryDecision,
@@ -70,6 +74,7 @@ const REQUIRED_FILES = [
   "docs/adr/0008-victoriametrics-tracing-runtime-alerting.md",
   "docs/adr/0009-native-identity-and-provider-aliases.md",
   "docs/adr/0010-first-party-events-consent-and-deletion.md",
+  "docs/adr/0011-catalog-identifiers-and-manufacturing-credits.md",
   "docs/audits/organization-wide-verification-2026-09-13.md",
   "docs/programs/media-taxonomy.md",
   "docs/programs/native-identity-and-events.md",
@@ -85,6 +90,20 @@ const REQUIRED_FILES = [
   "scripts/validate.mjs",
   "scripts/validate.test.mjs",
   "scripts/validation-policy.mjs",
+  "taxonomy/company-roles/README.md",
+  "taxonomy/company-roles/v1/company-block.schema.json",
+  "taxonomy/company-roles/v1/company-roles.json",
+  "taxonomy/company-roles/v1/company-roles.schema.json",
+  "taxonomy/company-roles/v1/fixtures/discogs-company-catalogue-number.json",
+  "taxonomy/company-roles/v1/fixtures/discogs-distribution-and-marketing.json",
+  "taxonomy/company-roles/v1/fixtures/discogs-issuing-label-excluded.json",
+  "taxonomy/company-roles/v1/fixtures/discogs-malformed-entries.json",
+  "taxonomy/company-roles/v1/fixtures/discogs-manufacturing-and-print.json",
+  "taxonomy/company-roles/v1/fixtures/discogs-no-companies.json",
+  "taxonomy/company-roles/v1/fixtures/discogs-pressing-and-transfer-master.json",
+  "taxonomy/company-roles/v1/fixtures/discogs-recording-facilities.json",
+  "taxonomy/company-roles/v1/fixtures/discogs-rights-holders.json",
+  "taxonomy/company-roles/v1/fixtures/discogs-unmapped-role.json",
   "taxonomy/events/README.md",
   "taxonomy/events/v1/event-envelope.schema.json",
   "taxonomy/events/v1/event-types.json",
@@ -112,6 +131,20 @@ const REQUIRED_FILES = [
   "taxonomy/events/v1/fixtures/invalid-impression-missing-candidate-set-id.json",
   "taxonomy/events/v1/fixtures/invalid-impression-missing-policy-id.json",
   "taxonomy/events/v1/impression.schema.json",
+  "taxonomy/identifiers/README.md",
+  "taxonomy/identifiers/v1/fixtures/discogs-absent-catalogue-number.json",
+  "taxonomy/identifiers/v1/fixtures/discogs-asin-and-isrc.json",
+  "taxonomy/identifiers/v1/fixtures/discogs-barcode-and-catalogue-number.json",
+  "taxonomy/identifiers/v1/fixtures/discogs-duplicate-alias-values.json",
+  "taxonomy/identifiers/v1/fixtures/discogs-label-code-and-rights-society.json",
+  "taxonomy/identifiers/v1/fixtures/discogs-malformed-entries.json",
+  "taxonomy/identifiers/v1/fixtures/discogs-mapped-to-other.json",
+  "taxonomy/identifiers/v1/fixtures/discogs-matrix-runout-inscriptions.json",
+  "taxonomy/identifiers/v1/fixtures/discogs-no-identifiers.json",
+  "taxonomy/identifiers/v1/fixtures/discogs-unmapped-type.json",
+  "taxonomy/identifiers/v1/identifier-block.schema.json",
+  "taxonomy/identifiers/v1/identifier-types.json",
+  "taxonomy/identifiers/v1/identifier-types.schema.json",
   "taxonomy/identity/README.md",
   "taxonomy/identity/v1/identity-vocabulary.json",
   "taxonomy/identity/v1/identity-vocabulary.schema.json",
@@ -295,6 +328,67 @@ function checkEvents() {
   );
 }
 
+function checkIdentifiers() {
+  const base = resolve(ROOT, "taxonomy/identifiers/v1");
+  const vocabularySchema = resolve(base, "identifier-types.schema.json");
+  const blockSchema = resolve(base, "identifier-block.schema.json");
+  const vocabularyPath = resolve(base, "identifier-types.json");
+  for (const schema of [vocabularySchema, blockSchema]) {
+    runJsonSchema(["metaschema", schema], `${relative(ROOT, schema)} is not a valid 2020-12 schema`);
+  }
+  runJsonSchema(["validate", vocabularySchema, vocabularyPath, "--format-assertion"], "the identifier vocabulary does not satisfy its schema");
+  const vocabulary = JSON.parse(readFileSync(vocabularyPath, "utf8"));
+  const errors = validateIdentifierVocabulary(vocabulary);
+  requireCondition(errors.length === 0, `identifier vocabulary:\n- ${errors.join("\n- ")}`);
+  const fixtures = readFixtures(resolve(base, "fixtures"), "identifier conformance fixtures are missing");
+  const fixtureErrors = validateIdentifierFixtureSet(vocabulary, fixtures);
+  requireCondition(fixtureErrors.length === 0, `identifier fixtures:\n- ${fixtureErrors.join("\n- ")}`);
+  validateExpectedBlocks("identifier-fixtures", blockSchema, fixtures, "a fixture's expected identifiers block does not satisfy the block schema");
+  console.log(
+    `Verified the identifier vocabulary, its schemas, and ${fixtures.length} conformance fixtures covering ${vocabulary.identifier_types.length} types and ${vocabulary.alias_namespaces.length} alias namespaces.`,
+  );
+}
+
+function checkCompanyRoles() {
+  const base = resolve(ROOT, "taxonomy/company-roles/v1");
+  const vocabularySchema = resolve(base, "company-roles.schema.json");
+  const blockSchema = resolve(base, "company-block.schema.json");
+  const vocabularyPath = resolve(base, "company-roles.json");
+  for (const schema of [vocabularySchema, blockSchema]) {
+    runJsonSchema(["metaschema", schema], `${relative(ROOT, schema)} is not a valid 2020-12 schema`);
+  }
+  runJsonSchema(["validate", vocabularySchema, vocabularyPath, "--format-assertion"], "the company-role vocabulary does not satisfy its schema");
+  const vocabulary = JSON.parse(readFileSync(vocabularyPath, "utf8"));
+  const errors = validateCompanyRoleVocabulary(vocabulary);
+  requireCondition(errors.length === 0, `company-role vocabulary:\n- ${errors.join("\n- ")}`);
+  const fixtures = readFixtures(resolve(base, "fixtures"), "company-role conformance fixtures are missing");
+  const fixtureErrors = validateCompanyFixtureSet(vocabulary, fixtures);
+  requireCondition(fixtureErrors.length === 0, `company-role fixtures:\n- ${fixtureErrors.join("\n- ")}`);
+  validateExpectedBlocks("company-fixtures", blockSchema, fixtures, "a fixture's expected companies block does not satisfy the block schema");
+  console.log(
+    `Verified the company-role vocabulary, its schemas, and ${fixtures.length} conformance fixtures covering ${Object.keys(vocabulary.discogs.roles).length} raw roles across ${vocabulary.role_categories.length} categories.`,
+  );
+}
+
+function readFixtures(directory, message) {
+  const files = sorted(readdirSync(directory).filter((name) => name.endsWith(".json")));
+  requireCondition(files.length > 0, message);
+  return files.map((file) => ({ file, ...JSON.parse(readFileSync(resolve(directory, file), "utf8")) }));
+}
+
+function validateExpectedBlocks(name, blockSchema, fixtures, message) {
+  const expectedDirectory = resolve(ROOT, ".build", name);
+  rmSync(expectedDirectory, { recursive: true, force: true });
+  mkdirSync(expectedDirectory, { recursive: true });
+  const paths = fixtures.map((fixture) => {
+    const path = resolve(expectedDirectory, `${fixture.name}.json`);
+    writeFileSync(path, `${JSON.stringify(fixture.expected)}\n`, "utf8");
+    return path;
+  });
+  runJsonSchema(["validate", blockSchema, ...paths, "--format-assertion"], message);
+  rmSync(expectedDirectory, { recursive: true, force: true });
+}
+
 function checkWorkflow() {
   const workflowPath = resolve(ROOT, ".github/workflows/ci.yml");
   const workflow = readFileSync(workflowPath, "utf8");
@@ -398,8 +492,10 @@ function run(mode) {
   const checks = {
     "--assets": checkAssets,
     "--catalog": checkCatalog,
+    "--company-roles": checkCompanyRoles,
     "--dependencies": checkDependencies,
     "--events": checkEvents,
+    "--identifiers": checkIdentifiers,
     "--identity": checkIdentity,
     "--license": checkLicense,
     "--links": checkLinks,

@@ -619,3 +619,145 @@ test("publication handoff carries the identity and event vocabulary digests", ()
   assert.match(script, /event_types_sha256: createHash\("sha256"\)/);
   assert.match(script, /event_type_count: eventTypes\.event_types\.length/);
 });
+
+import {
+  mapCompanyBlock,
+  mapIdentifierBlock,
+  normalizeIdentifierValue,
+  validateCompanyFixtureSet,
+  validateCompanyRoleVocabulary,
+  validateIdentifierFixtureSet,
+  validateIdentifierVocabulary,
+} from "./validation-policy.mjs";
+import identifierVocabulary from "../taxonomy/identifiers/v1/identifier-types.json" with { type: "json" };
+import companyRoleVocabulary from "../taxonomy/company-roles/v1/company-roles.json" with { type: "json" };
+
+function loadFixtures(directory) {
+  const base = resolve(root, directory);
+  return readdirSync(base)
+    .filter((name) => name.endsWith(".json"))
+    .sort()
+    .map((file) => ({ file, ...JSON.parse(readFileSync(join(base, file), "utf8")) }));
+}
+
+const identifierFixtures = loadFixtures("taxonomy/identifiers/v1/fixtures");
+const companyFixtures = loadFixtures("taxonomy/company-roles/v1/fixtures");
+
+test("identifier vocabulary carries the closed ADR 0011 types and alias namespaces", () => {
+  assert.deepEqual(validateIdentifierVocabulary(identifierVocabulary), []);
+  assert.deepEqual(
+    identifierVocabulary.identifier_types.map((type) => type.id),
+    ["barcode", "matrix_runout", "label_code", "rights_society", "asin", "other", "catalog_number"],
+  );
+  assert.deepEqual(
+    identifierVocabulary.alias_namespaces.map((namespace) => [namespace.provider, namespace.type, namespace.normalization]),
+    [
+      ["barcode", "barcode", "digits_only"],
+      ["catalog_number", "catalog_number", "upper_collapse_space"],
+      ["matrix", "matrix_runout", "collapse_space"],
+    ],
+  );
+  for (const namespace of identifierVocabulary.alias_namespaces) assert.equal(namespace.alias_source, "catalog");
+  assert.equal(identifierVocabulary.discogs.catalog_number_field, "labels[].catno");
+});
+
+test("identifier vocabulary rejects a widened alias set and an unsorted raw mapping", () => {
+  const widened = structuredClone(identifierVocabulary);
+  widened.identifier_types.find((type) => type.id === "asin").alias_provider = "barcode";
+  assert.match(validateIdentifierVocabulary(widened).join("\n"), /may mint provider aliases/);
+
+  const unsorted = structuredClone(identifierVocabulary);
+  unsorted.discogs.types = { Barcode: "barcode", ASIN: "asin", "Label Code": "label_code", "Matrix / Runout": "matrix_runout", "Rights Society": "rights_society", Other: "other" };
+  assert.match(validateIdentifierVocabulary(unsorted).join("\n"), /must be sorted/);
+
+  const minted = structuredClone(identifierVocabulary);
+  minted.discogs.types["Catalogue Number"] = "catalog_number";
+  assert.match(validateIdentifierVocabulary(minted).join("\n"), /lifted from the label entries/);
+});
+
+test("company-role vocabulary maps every closed category and excludes the issuing label", () => {
+  assert.deepEqual(validateCompanyRoleVocabulary(companyRoleVocabulary), []);
+  assert.deepEqual(
+    companyRoleVocabulary.role_categories.map((category) => category.id),
+    ["manufacturing", "mastering", "lacquer", "pressing", "distribution", "marketing", "rights", "recording_facility", "other"],
+  );
+  assert.equal(companyRoleVocabulary.discogs.roles["Pressed By"], "pressing");
+  assert.equal(companyRoleVocabulary.discogs.roles["Lacquer Cut At"], "lacquer");
+  assert.equal(companyRoleVocabulary.discogs.roles["Glass Mastered At"], "lacquer");
+  assert.equal(companyRoleVocabulary.discogs.roles["Mastered At"], "mastering");
+  assert.equal(companyRoleVocabulary.discogs.roles.Label, undefined);
+});
+
+test("company-role vocabulary rejects an undeclared category and a mapped issuing label", () => {
+  const undeclared = structuredClone(companyRoleVocabulary);
+  undeclared.discogs.roles["Pressed By"] = "plant";
+  assert.match(validateCompanyRoleVocabulary(undeclared).join("\n"), /maps to an undeclared category/);
+
+  const labelled = structuredClone(companyRoleVocabulary);
+  labelled.discogs.roles.Label = "rights";
+  assert.match(validateCompanyRoleVocabulary(labelled).join("\n"), /not a company credit/);
+});
+
+test("identifier normalization keeps digits, case, and whitespace exactly as each namespace declares", () => {
+  assert.equal(normalizeIdentifierValue("digits_only", "5 012394-144777"), "5012394144777");
+  assert.equal(normalizeIdentifierValue("upper_collapse_space", "  fac   73 "), "FAC 73");
+  assert.equal(normalizeIdentifierValue("collapse_space", " PB 41447  A2 "), "PB 41447 A2");
+});
+
+test("the reference mappers preserve unknown upstream strings and skip malformed entries", () => {
+  const identifiers = mapIdentifierBlock(identifierVocabulary, {
+    identifiers: [
+      null,
+      "Barcode",
+      { type: "constructor", value: "inherited" },
+      { type: "Barcode", value: " 5012394144777 " },
+      { type: "Barcode", value: "  " },
+    ],
+    labels: [{ catno: "none" }, { catno: "SP-1234" }],
+  });
+  assert.deepEqual(identifiers.unmapped.types, ["constructor"]);
+  assert.deepEqual(identifiers.items.map((item) => item.type), ["other", "barcode", "catalog_number"]);
+  assert.deepEqual(identifiers.aliases, [
+    { provider: "barcode", external_id: "5012394144777" },
+    { provider: "catalog_number", external_id: "SP-1234" },
+  ]);
+
+  const companies = mapCompanyBlock(companyRoleVocabulary, {
+    companies: [
+      null,
+      { name: "Damont" },
+      { name: "Sarm West", entity_type_name: "hasOwnProperty", entity_type: "99", id: 1 },
+      { name: "Damont", entity_type_name: "Pressed By", entity_type: "plant", id: 0 },
+    ],
+  });
+  assert.deepEqual(companies.unmapped.roles, ["hasOwnProperty"]);
+  assert.deepEqual(companies.items.map((item) => item.role_category), ["other", "pressing"]);
+  assert.deepEqual(companies.items.at(-1).source, { provider: "discogs", entity_type: null });
+  assert.equal(companies.items.at(-1).discogs_id, null);
+});
+
+test("identifier and company fixtures agree with the reference mappers and cover the required cases", () => {
+  assert.deepEqual(validateIdentifierFixtureSet(identifierVocabulary, identifierFixtures), []);
+  assert.deepEqual(validateCompanyFixtureSet(companyRoleVocabulary, companyFixtures), []);
+  assert.ok(identifierFixtures.length >= 8);
+  assert.ok(companyFixtures.length >= 8);
+  const drifted = identifierFixtures.map((fixture) => structuredClone(fixture));
+  drifted[0].expected.aliases = [];
+  assert.match(validateIdentifierFixtureSet(identifierVocabulary, drifted).join("\n"), /differs from the reference mapper/);
+});
+
+test("the identifier and company-role capabilities run as standalone validation modes", () => {
+  for (const [mode, marker] of [["--identifiers", /identifier vocabulary/], ["--company-roles", /company-role vocabulary/]]) {
+    const result = spawnSync(process.execPath, ["scripts/validate.mjs", mode], { cwd: root, encoding: "utf8" });
+    assert.equal(result.status, 0, `${result.stdout}${result.stderr}`);
+    assert.match(result.stdout, marker);
+  }
+});
+
+test("publication handoff carries the identifier and company-role vocabulary digests", () => {
+  const script = readFileSync(resolve(root, "scripts/publication-readiness.mjs"), "utf8");
+  assert.match(script, /identifier_types_sha256: createHash\("sha256"\)/);
+  assert.match(script, /company_roles_sha256: createHash\("sha256"\)/);
+  assert.match(script, /identifier_type_count: identifierTypes\.identifier_types\.length/);
+  assert.match(script, /company_role_category_count: companyRoles\.role_categories\.length/);
+});
