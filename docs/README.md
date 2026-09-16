@@ -24,7 +24,7 @@ maintained current state.
 
 - [Media-taxonomy program rollout](programs/media-taxonomy.md) records the completed delivery of ADR 0007 across the organization in five waves.
 - [Native identity and first-party events program rollout](programs/native-identity-and-events.md) records the four-wave delivery plan for ADR 0009 and ADR 0010, the artifacts each wave pins, and the gaps it deliberately leaves to their own records.
-- [Catalog-identifiers program rollout](programs/catalog-identifiers.md) records the five-wave delivery plan for ADR 0011, the artifacts each wave pins, and the gaps it deliberately leaves to their own records.
+- [Catalog-identifiers program rollout](programs/catalog-identifiers.md) records the delivery of ADR 0011 across the organization in five waves, complete except mcp-server's company-credit surface in wave 4.
 - [Neo4j to PostgreSQL graph-migration program](programs/neo4j-to-postgresql-graph.md) records the six-phase plan for ADR 0012, the entry and exit criteria of each phase, and the feasibility questions that gate everything after phase 1.
 
 ## Design spikes
