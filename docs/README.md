@@ -18,6 +18,7 @@ maintained current state.
 - [ADR 0009: Native identity and provider aliases](adr/0009-native-identity-and-provider-aliases.md)
 - [ADR 0010: First-party events, consent, and deletion closure](adr/0010-first-party-events-consent-and-deletion.md)
 - [ADR 0011: Catalog identifiers, manufacturing credits, and release country](adr/0011-catalog-identifiers-and-manufacturing-credits.md)
+- [ADR 0012: PostgreSQL SQL/PGQ as the catalog graph engine](adr/0012-postgresql-property-graph-migration.md)
 
 ## Program rollout plans
 

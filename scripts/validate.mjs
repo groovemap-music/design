@@ -83,6 +83,7 @@ const REQUIRED_FILES = [
   "docs/adr/0009-native-identity-and-provider-aliases.md",
   "docs/adr/0010-first-party-events-consent-and-deletion.md",
   "docs/adr/0011-catalog-identifiers-and-manufacturing-credits.md",
+  "docs/adr/0012-postgresql-property-graph-migration.md",
   "docs/audits/organization-wide-verification-2026-09-13.md",
   "docs/programs/catalog-identifiers.md",
   "docs/audits/portfolio-effectiveness-2026-09-14.md",
