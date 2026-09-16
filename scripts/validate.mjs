@@ -92,6 +92,7 @@ const REQUIRED_FILES = [
   "docs/audits/targeted-defect-audit-2026-09-14.md",
   "docs/programs/media-taxonomy.md",
   "docs/programs/native-identity-and-events.md",
+  "docs/programs/neo4j-to-postgresql-graph.md",
   "fixtures/catalog-valid.json",
   "scripts/build.mjs",
   "scripts/audit-catalog-fixtures.py",
