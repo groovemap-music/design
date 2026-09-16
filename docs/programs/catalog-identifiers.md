@@ -33,7 +33,7 @@ earlier wave publishes, so a wave begins when the artifacts it pins exist at a r
 The two vocabulary digests at the commit that published this program:
 
 ```text
-2df8a691173f779b2d2076f31e8abd01d160e51f4f371de99f1f8e1cb12f26a5  taxonomy/identifiers/v1/identifier-types.json
+87b844a20f35d45e7ba176df58d6ccf3d7bc88beecda90457b1a2afb3432fb34  taxonomy/identifiers/v1/identifier-types.json
 03ab8689ba14768dceffb756a71475c01797caea8d18ba9943cd5f69b3d705de  taxonomy/company-roles/v1/company-roles.json
 ```
 
@@ -60,8 +60,15 @@ publication handoff prints both vocabulary digests. Pins: none.
   Regenerate fixtures and document both additive fields. Pins: both vocabulary digests.
 - **musicbrainz-ingestion.** Widen the release field whitelist with `country`, the
   release-event list (date and area per event), and the catalogue numbers carried inside
-  `label-info`; `barcode` already passes and keeps passing. Regenerate fixtures and document
-  the three additive fields. Pins: neither vocabulary — this is a whitelist change only.
+  `label-info`; `barcode` already passes and keeps passing. Compute the additive `identifiers`
+  block at the normalization boundary, before the content hash is recomputed: map the
+  release's `barcode` and each `label-info[].catalog-number` through the identifier
+  vocabulary's `musicbrainz` section exactly as `discogs-ingestion` maps its own raw
+  `identifiers` list, and derive `aliases` the same way, so a MusicBrainz barcode mints the
+  same `barcode` alias a Discogs one does. Add a data-quality rule that surfaces
+  `unmapped.types`. Regenerate fixtures and document the four additive fields. Pins: the
+  identifier vocabulary digest; the company-role vocabulary is not pinned — MusicBrainz
+  manufacturing relations remain out of scope (see Explicit non-goals).
 - **python-libraries.** Vendor both vocabularies; add `common.identifiers` with the reference
   mapper for both blocks, the alias-normalization rules (`digits_only`,
   `upper_collapse_space`, `collapse_space`), and typed accessors for the identifiers and

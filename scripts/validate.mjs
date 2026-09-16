@@ -158,6 +158,8 @@ const REQUIRED_FILES = [
   "taxonomy/identifiers/v1/fixtures/discogs-matrix-runout-inscriptions.json",
   "taxonomy/identifiers/v1/fixtures/discogs-no-identifiers.json",
   "taxonomy/identifiers/v1/fixtures/discogs-unmapped-type.json",
+  "taxonomy/identifiers/v1/fixtures/musicbrainz-absent-barcode-and-malformed-label-info.json",
+  "taxonomy/identifiers/v1/fixtures/musicbrainz-barcode-and-catalogue-number.json",
   "taxonomy/identifiers/v1/identifier-block.schema.json",
   "taxonomy/identifiers/v1/identifier-types.json",
   "taxonomy/identifiers/v1/identifier-types.schema.json",

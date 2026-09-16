@@ -1259,6 +1259,7 @@ const IDENTIFIER_ALIAS_NAMESPACES = [
   ["matrix", "matrix_runout"],
 ];
 const IDENTIFIER_NORMALIZATIONS = ["digits_only", "upper_collapse_space", "collapse_space"];
+const IDENTIFIER_PROVIDERS = ["discogs", "musicbrainz"];
 const REQUIRED_IDENTIFIER_FIXTURES = [
   "discogs-barcode-and-catalogue-number",
   "discogs-matrix-runout-inscriptions",
@@ -1385,6 +1386,62 @@ export function mapIdentifierBlock(vocabulary, input) {
   };
 }
 
+// MusicBrainz carries no free-form typed identifiers list: a release resource exposes at
+// most one barcode (a scalar `barcode` field) and, per label-info entry, at most one
+// catalogue number (`label-info[].catalog-number`). Both are looked up through
+// `vocabulary.musicbrainz.types` by the MusicBrainz field name itself, exactly as the Discogs
+// mapper looks up its raw `identifiers[].type` strings, so an upstream field the vocabulary
+// does not (yet) recognise still lands in `unmapped` rather than being silently dropped.
+export function mapMusicBrainzIdentifierBlock(vocabulary, input) {
+  const items = [];
+  const unmapped = [];
+  const types = vocabulary?.musicbrainz?.types ?? {};
+
+  const barcode = trimmedString(input?.barcode);
+  if (barcode !== "") {
+    const mapped = ownGet(types, "barcode");
+    if (mapped === undefined) unmapped.push("barcode");
+    items.push({
+      type: mapped ?? vocabulary.unmapped_type,
+      value: barcode,
+      description: null,
+      source: { provider: "musicbrainz", type: null, field: "barcode" },
+    });
+  }
+
+  for (const entry of Array.isArray(input?.["label-info"]) ? input["label-info"] : []) {
+    if (!isPlainEntry(entry)) continue;
+    const catalogNumber = trimmedString(entry["catalog-number"]);
+    if (catalogNumber === "") continue;
+    const mapped = ownGet(types, "catalog-number");
+    if (mapped === undefined) unmapped.push("catalog-number");
+    items.push({
+      type: mapped ?? vocabulary.unmapped_type,
+      value: catalogNumber,
+      description: null,
+      source: { provider: "musicbrainz", type: null, field: "label-info[].catalog-number" },
+    });
+  }
+
+  const namespaces = new Map((vocabulary?.alias_namespaces ?? []).map((namespace) => [namespace.type, namespace]));
+  const aliases = new Map();
+  for (const item of items) {
+    const namespace = namespaces.get(item.type);
+    if (namespace === undefined) continue;
+    const externalId = normalizeIdentifierValue(namespace.normalization, item.value);
+    if (externalId === "") continue;
+    aliases.set(`${namespace.provider}${ALIAS_KEY_SEPARATOR}${externalId}`, { provider: namespace.provider, external_id: externalId });
+  }
+
+  return {
+    identifiers_version: vocabulary.vocabulary_version,
+    items,
+    types: sortedUniqueByCodePoint(items.map((item) => item.type)),
+    aliases: [...aliases.keys()].sort(compareByCodePoint).map((key) => aliases.get(key)),
+    unmapped: { types: sortedUniqueByCodePoint(unmapped) },
+  };
+}
+
 export function mapCompanyBlock(vocabulary, input) {
   const items = [];
   const unmapped = [];
@@ -1459,6 +1516,18 @@ export function validateIdentifierVocabulary(vocabulary) {
     if (type === "catalog_number" || targets.has(type)) continue;
     errors.push(`identifier type carries no raw Discogs string: ${type}`);
   }
+
+  if (vocabulary?.musicbrainz?.barcode_field !== "barcode") errors.push("the MusicBrainz vocabulary must record the release barcode field");
+  if (vocabulary?.musicbrainz?.catalog_number_field !== "label-info[].catalog-number") {
+    errors.push("the MusicBrainz vocabulary must record the release label-info catalogue number field");
+  }
+  const musicbrainzMapping = vocabulary?.musicbrainz?.types ?? {};
+  const musicbrainzKeys = Object.keys(musicbrainzMapping);
+  if (!isSortedByCodePoint(musicbrainzKeys)) errors.push("the raw MusicBrainz identifier field names must be sorted");
+  for (const key of musicbrainzKeys) {
+    const target = musicbrainzMapping[key];
+    if (!IDENTIFIER_TYPES_V1.includes(target)) errors.push(`raw MusicBrainz field ${key} maps to an undeclared type: ${target}`);
+  }
   return errors;
 }
 
@@ -1490,7 +1559,7 @@ export function validateCompanyRoleVocabulary(vocabulary) {
   return errors;
 }
 
-function validateBlockFixtureSet(fixtures, map, required, subject) {
+function validateBlockFixtureSet(fixtures, mapForProvider, allowedProviders, required, subject) {
   const errors = [];
   const names = new Set();
   for (const fixture of fixtures) {
@@ -1500,10 +1569,10 @@ function validateBlockFixtureSet(fixtures, map, required, subject) {
     if (names.has(fixture.name)) errors.push(`duplicate fixture name ${fixture.name}`);
     names.add(fixture.name);
     if (fixture.file !== undefined && fixture.file !== `${fixture.name}.json`) errors.push(`fixture ${fixture.name} does not match its file name`);
-    if (fixture.provider !== "discogs") errors.push(`fixture ${fixture.name} names a provider outside version 1: ${fixture.provider}`);
+    if (!allowedProviders.includes(fixture.provider)) errors.push(`fixture ${fixture.name} names a provider outside version 1: ${fixture.provider}`);
     let actual;
     try {
-      actual = map(fixture.input);
+      actual = mapForProvider(fixture.provider)(fixture.input);
     } catch (error) {
       errors.push(`fixture ${fixture.name}: ${error.message}`);
       continue;
@@ -1519,12 +1588,9 @@ function validateBlockFixtureSet(fixtures, map, required, subject) {
 }
 
 export function validateIdentifierFixtureSet(vocabulary, fixtures) {
-  const errors = validateBlockFixtureSet(
-    fixtures,
-    (input) => mapIdentifierBlock(vocabulary, input),
-    REQUIRED_IDENTIFIER_FIXTURES,
-    "identifiers block",
-  );
+  const mapForProvider = (provider) =>
+    provider === "musicbrainz" ? (input) => mapMusicBrainzIdentifierBlock(vocabulary, input) : (input) => mapIdentifierBlock(vocabulary, input);
+  const errors = validateBlockFixtureSet(fixtures, mapForProvider, IDENTIFIER_PROVIDERS, REQUIRED_IDENTIFIER_FIXTURES, "identifiers block");
   if (!fixtures.some((fixture) => (fixture.expected?.unmapped?.types ?? []).length > 0)) {
     errors.push("no fixture proves that an unrecognised raw identifier type is preserved");
   }
@@ -1532,13 +1598,17 @@ export function validateIdentifierFixtureSet(vocabulary, fixtures) {
   for (const [provider] of IDENTIFIER_ALIAS_NAMESPACES) {
     if (!minted.has(provider)) errors.push(`no fixture mints an alias in the ${provider} namespace`);
   }
+  if (fixtures.filter((fixture) => fixture.provider === "musicbrainz").length < 2) {
+    errors.push("at least two MusicBrainz conformance fixtures are required");
+  }
   return errors;
 }
 
 export function validateCompanyFixtureSet(vocabulary, fixtures) {
   const errors = validateBlockFixtureSet(
     fixtures,
-    (input) => mapCompanyBlock(vocabulary, input),
+    () => (input) => mapCompanyBlock(vocabulary, input),
+    ["discogs"],
     REQUIRED_COMPANY_FIXTURES,
     "companies block",
   );
