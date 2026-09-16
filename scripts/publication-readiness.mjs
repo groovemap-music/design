@@ -40,7 +40,7 @@ if (identity.vocabulary_version !== "1" || identity.native_id_format !== "uuid_v
 
 const eventBytes = readFileSync(resolve(root, "taxonomy/events/v1/event-types.json"));
 const eventTypes = JSON.parse(eventBytes.toString("utf8"));
-if (eventTypes.vocabulary_version !== "1" || eventTypes.event_types.length !== 16) {
+if (eventTypes.vocabulary_version !== "1" || eventTypes.event_types.length !== 21) {
   throw new Error("event-type vocabulary identity changed after validation");
 }
 

@@ -30,8 +30,8 @@
     },
     "surfaces": {
       "type": "array",
-      "minItems": 6,
-      "maxItems": 6,
+      "minItems": 7,
+      "maxItems": 7,
       "uniqueItems": true,
       "items": {
         "type": "object",
@@ -46,8 +46,8 @@
     },
     "event_types": {
       "type": "array",
-      "minItems": 16,
-      "maxItems": 16,
+      "minItems": 21,
+      "maxItems": 21,
       "uniqueItems": true,
       "items": {
         "type": "object",
@@ -71,7 +71,7 @@
     }
   },
   "$defs": {
-    "surfaceId": { "enum": ["search", "recommendation", "collection", "wantlist", "consent", "account"] },
+    "surfaceId": { "enum": ["search", "recommendation", "fit", "collection", "wantlist", "consent", "account"] },
     "eventTypeId": {
       "enum": [
         "search.query",
@@ -81,6 +81,11 @@
         "recommendation.saved",
         "recommendation.dismissed",
         "recommendation.hidden",
+        "fit.shown",
+        "fit.opened",
+        "fit.saved",
+        "fit.dismissed",
+        "fit.hidden",
         "collection.item_added",
         "collection.item_removed",
         "collection.item_updated",
