@@ -18,12 +18,14 @@ maintained current state.
 - [ADR 0009: Native identity and provider aliases](adr/0009-native-identity-and-provider-aliases.md)
 - [ADR 0010: First-party events, consent, and deletion closure](adr/0010-first-party-events-consent-and-deletion.md)
 - [ADR 0011: Catalog identifiers, manufacturing credits, and release country](adr/0011-catalog-identifiers-and-manufacturing-credits.md)
+- [ADR 0012: PostgreSQL SQL/PGQ as the catalog graph engine](adr/0012-postgresql-property-graph-migration.md)
 
 ## Program rollout plans
 
 - [Media-taxonomy program rollout](programs/media-taxonomy.md) records the completed delivery of ADR 0007 across the organization in five waves.
 - [Native identity and first-party events program rollout](programs/native-identity-and-events.md) records the four-wave delivery plan for ADR 0009 and ADR 0010, the artifacts each wave pins, and the gaps it deliberately leaves to their own records.
 - [Catalog-identifiers program rollout](programs/catalog-identifiers.md) records the five-wave delivery plan for ADR 0011, the artifacts each wave pins, and the gaps it deliberately leaves to their own records.
+- [Neo4j to PostgreSQL graph-migration program](programs/neo4j-to-postgresql-graph.md) records the six-phase plan for ADR 0012, the entry and exit criteria of each phase, and the feasibility questions that gate everything after phase 1.
 
 ## Design spikes
 
