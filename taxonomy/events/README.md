@@ -1,6 +1,6 @@
 # First-party event vocabulary
 
-[`v1/event-types.json`](v1/event-types.json) is the closed version 1 event-type vocabulary that [ADR 0010](../../docs/adr/0010-first-party-events-consent-and-deletion.md) makes authoritative for every producer and every reader of the `activity` schema. It names the six surfaces, the sixteen event types those surfaces emit, the two consent purposes an envelope can snapshot, and the payload schema each type carries as an inline `$defs` entry.
+[`v1/event-types.json`](v1/event-types.json) is the version 1 event-type vocabulary that [ADR 0010](../../docs/adr/0010-first-party-events-consent-and-deletion.md) makes authoritative for every producer and every reader of the `activity` schema. ADR 0010 closes the naming rule, not the set: adding a type is additive within version 1 and requires a new surface or a new verb under that rule. It currently names seven surfaces, the twenty-one event types those surfaces emit, the two consent purposes an envelope can snapshot, and the payload schema each type carries as an inline `$defs` entry.
 
 Three schemas accompany it:
 
@@ -37,7 +37,10 @@ shasum -a 256 taxonomy/events/v1/event-types.json
 ## Current promotion record
 
 The canonical v1 bytes have SHA-256
-`f64f03164c208477e8ae9c6bc547bba7342f23df96f6b10f21f7fa6f1d21ba74`.
+`920a63d1eda5e909e6d6bd4850df005a17e592fbfc6f8f3152a15833f74fa8ad`.
+This digest reflects the `fit` surface added after wave 0 published; see
+[the program's addendum](../../docs/programs/native-identity-and-events.md#post-wave-0-addition-the-fit-surface)
+for the consumers that must re-vendor and in what order.
 No consumer has vendored the vocabulary yet; the first source records are written in wave 1
 of the [native identity and first-party events program](../../docs/programs/native-identity-and-events.md).
 Consumer source records are promotion provenance; each consumer remains responsible for

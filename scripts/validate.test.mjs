@@ -592,7 +592,7 @@ test("identity vocabulary rejects a reopened closed set and a closed alias inter
 
 test("event vocabulary carries the closed ADR 0010 version 1 types in order", () => {
   assert.deepEqual(validateEventVocabulary(eventVocabulary), []);
-  assert.equal(eventVocabulary.event_types.length, 16);
+  assert.equal(eventVocabulary.event_types.length, 21);
   assert.deepEqual(
     eventVocabulary.event_types.map((type) => type.id),
     [
@@ -603,6 +603,11 @@ test("event vocabulary carries the closed ADR 0010 version 1 types in order", ()
       "recommendation.saved",
       "recommendation.dismissed",
       "recommendation.hidden",
+      "fit.shown",
+      "fit.opened",
+      "fit.saved",
+      "fit.dismissed",
+      "fit.hidden",
       "collection.item_added",
       "collection.item_removed",
       "collection.item_updated",
@@ -679,7 +684,7 @@ test("both envelopes declare every ADR 0010 column and stay tied to the vocabula
 test("event fixtures cover every type, both envelopes, and the required rejections", () => {
   assert.deepEqual(validateEventFixtureSet(eventVocabulary, eventFixtures), []);
   const valid = eventFixtures.filter((entry) => entry.valid);
-  assert.equal(new Set(valid.filter((entry) => entry.envelope === "event").map((entry) => entry.document.event_type)).size, 16);
+  assert.equal(new Set(valid.filter((entry) => entry.envelope === "event").map((entry) => entry.document.event_type)).size, 21);
   assert.ok(valid.some((entry) => entry.envelope === "impression"));
 
   const missingRejection = eventFixtures.filter((entry) => entry.rejection !== "unknown-event-type");
