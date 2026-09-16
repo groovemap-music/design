@@ -115,6 +115,33 @@ subject link, no user subgraph in Neo4j, and no user-keyed Redis key, and so an 
 returns JSON Lines. Update the runbook and the architecture documentation. Pins: the released
 images from waves 1 to 3.
 
+## Post-wave-0 addition: the fit surface
+
+`catalog-api` had no `fit` surface in the vocabulary when it needed one, and aliased fit
+impressions to `recommendation` (`SURFACE_FIT = SURFACE_RECOMMENDATION`, policy id
+`cratefit_v0`); `graph-explorer` posts the fit pane's outcome events under the same
+`recommendation` terms for the same reason. This addition closes that gap additively, within
+version 1: `taxonomy/events/v1/event-types.json` now declares a `fit` surface with its own
+`fit.shown`, `fit.opened`, `fit.saved`, `fit.dismissed`, and `fit.hidden` event types, mirroring
+the `recommendation` surface's structure and payload schemas. No existing surface, type, or
+payload schema changed.
+
+The vocabulary's SHA-256 moved to
+`920a63d1eda5e909e6d6bd4850df005a17e592fbfc6f8f3152a15833f74fa8ad` as a result; `just
+publication-readiness` prints the same value as `event_types_sha256`. Consumers re-vendor in
+this order, because each is where the `recommendation` alias for fit currently lives or is
+consumed:
+
+1. **python-libraries** — bump the vendored copy in `common.events` first, since
+   `catalog-api` and `graph-explorer` both pin a `groovemap-runtime` revision rather than the
+   vocabulary directly.
+2. **catalog-api** — promote the runtime revision, retire the `SURFACE_FIT =
+   SURFACE_RECOMMENDATION` alias and the `cratefit_v0` policy id's borrowed surface, and emit
+   `fit.*` events under the new `fit` surface instead.
+3. **graph-explorer** — promote the routes contract once `catalog-api` publishes it, and post
+   the fit pane's outcome events as `fit.opened` / `fit.saved` / `fit.dismissed` / `fit.hidden`
+   instead of the borrowed `recommendation.*` terms.
+
 ## Explicit non-goals of this program
 
 Three adjacent gaps were found while planning. Each is real, each is out of scope here, and
