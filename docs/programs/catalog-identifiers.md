@@ -1,7 +1,7 @@
 # Catalog-identifiers program rollout
 
-**Status: waves 0 to 3 and 5 completed 2026-09-15. Wave 4 open: `mcp-server` has not yet
-surfaced company credits in release details.**
+**Status (2026-09-21): waves 0–4 implemented; wave 5's released-image, disposable
+identifier-lookup smoke passed. This records release verification, not a production rollout.**
 
 This document preserves the rollout plan for
 [ADR 0011](../adr/0011-catalog-identifiers-and-manufacturing-credits.md). The decision and
@@ -10,31 +10,25 @@ repository in five waves. The planned wave sections below remain as execution hi
 status section records the maintained result rather than rewriting those sections into
 retrospective prose.
 
-| Wave | Repositories (revision or tag) | Completed result |
+| Wave | Implemented evidence | Released / smoke-tested evidence |
 | --- | --- | --- |
-| 0 | design (`d06e1571f6acce6a246e4c0b6be866ecbea44c72`) | Published ADR 0011, `taxonomy/identifiers/v1`, `taxonomy/company-roles/v1` with their schemas and fixtures, and this plan. |
-| 1 | discogs-ingestion (`84dd280206cb830533d0d6691764218700d6f785`), python-libraries (`381e71b4b5d2e4251cb349962a6d100ff2db964a`), database-schema (`03e8aba11f72d26237f7dfbbecf234ae9437e85e`), musicbrainz-ingestion (`d24d03a46415a8d3ddd6d2832c767ac742a7dd4c`) | `discogs-ingestion` attached the `identifiers` and `companies` blocks and vendored both vocabularies; `python-libraries` shipped `common.identifiers`; `database-schema` added the `idx_releases_identifiers`/`idx_releases_companies` GIN indexes, the `Company` uniqueness constraint, the `CREDITED_TO` edge, and the `Release.country` index. `musicbrainz-ingestion` widened the release field whitelist (`country`, `release-events`, `label-info[].catalog-number`) but does not itself compute the additive `identifiers` block — see the implementation note below the table. |
-| 2 | discogs-sql-loader `v0.3.0` (`fa13a00525e1041d422c80b898a5391acd7b6b26`), musicbrainz-sql-loader `v0.3.0` (`2c6436e41ae5b5b4fad10a8258c8939235dbbf51`), discogs-graph-enricher `v0.3.0` (`79077febc908db217ff87b3c8db21f903794acfc`), musicbrainz-graph-enricher `v0.3.0` (`306bfdcc9b902ada04cb6ff339061f2ff99c9a18`) | Both SQL loaders mint `barcode`/`catalog_number` aliases through `common.identifiers`; both graph enrichers merge `Company` nodes and `CREDITED_TO` edges and write `Release.country`/`mb_country`. `musicbrainz-sql-loader` additionally assembles the `identifiers` block itself, from the raw fields `musicbrainz-ingestion` widened in wave 1, via `common.identifiers` — see the note below. |
-| 3 | catalog-api `v0.3.0` (`a28ecb6afe14f3eefd365e114aa6c143b81cec24`) | Published `GET /api/lookup/{provider}/{value}` for the `barcode` and `catalog_number` providers, the `country` search facet, and the `identifiers`/`companies`/`country` blocks on release detail (`api/routers/lookup.py`, `api/queries/search_queries.py`, `api/routers/explore.py`). |
-| 4 | graph-explorer `v0.2.0` (`9a739075a102e927753811c61151a2c2132f5d74`), mcp-server `v0.2.2` (`a1595ade2b18968fa2ffddd79d554ed5d6414977`) | `graph-explorer` promoted the routes contract, added barcode/catalogue-number lookup to search, and renders company credits on the release view (`explore/static/js/app.js`'s `_releaseCredits`). `mcp-server`'s `v0.2.0` added the `lookup_release` tool, but `get_release_details` documents only the ADR 0007 media block — the CHANGELOG's `v0.2.0` feature list and the tool docstring show no company-credit surfacing was added. **Open.** |
-| 5 | deployment (`a57c353db9d30e6e6832a64231a63bd74ce5ce14`) | Extended the smoke stack (`tests/deploy/test_media_smoke.py`, `scripts/smoke_media.py`) to assert a minted `barcode` alias row, its resolution to the release's native id, and `GET /api/lookup/barcode/{value}` resolving to that release after ingestion. |
+| 0 | design (`d06e1571f6acce6a246e4c0b6be866ecbea44c72`) published ADR 0011, both v1 vocabularies, schemas, fixtures, and this plan; the additive MusicBrainz source followed at `5bfdf1005c5d95c99143e8c2acd189e127e1cb10`. | Published source artifacts; no image or runtime smoke for this wave. |
+| 1 | discogs-ingestion (`84dd280206cb830533d0d6691764218700d6f785`, re-vendor `f2970659f5ee64f6fd0cd0a4bbd958421dbc47f0`) attaches `identifiers`/`companies`; python-libraries (`381e71b4b5d2e4251cb349962a6d100ff2db964a`, follow-on `7abcb3ba9f467d9bdcd5b3df0b1a342a2efda73b`) ships `common.identifiers`; database-schema (`03e8aba11f72d26237f7dfbbecf234ae9437e85e`) adds the GIN indexes, Company constraint, `CREDITED_TO`, and country index. musicbrainz-ingestion (`d24d03a46415a8d3ddd6d2832c767ac742a7dd4c`, producer follow-on `ae01d967e72e18c82cac2e844daa1dfeb81a32a6`) now computes the additive `identifiers` block before the content hash. | Producer code merged; the digest-pinned deployment smoke below verifies the released Discogs lookup path, not every producer path. |
+| 2 | discogs-sql-loader `v0.3.0` (`fa13a00525e1041d422c80b898a5391acd7b6b26`), musicbrainz-sql-loader `v0.3.0` (`2c6436e41ae5b5b4fad10a8258c8939235dbbf51`, transition `55cbb8ef209e54aac0a65b94d95eec74b4494ead`), discogs-graph-enricher `v0.3.0` (`79077febc908db217ff87b3c8db21f903794acfc`), musicbrainz-graph-enricher `v0.3.0` (`306bfdcc9b902ada04cb6ff339061f2ff99c9a18`). Both SQL loaders mint barcode/catalogue-number aliases; graph enrichers project credits and country. The MusicBrainz loader now consumes the producer block unchanged and synthesizes one only for legacy events lacking it. | The released `discogs-sql-loader:v0.3.0` and `discogs-graph-enricher:v0.3.0` digests were exercised in wave 5; MusicBrainz's transition is merged and tested in its repository, not claimed as part of that smoke. |
+| 3 | catalog-api (`a28ecb6afe14f3eefd365e114aa6c143b81cec24`) published `GET /api/lookup/{provider}/{value}`, the country search facet, and identifier/company/country release detail. | Released `catalog-api:v0.4.0` digest was exercised by the wave-5 lookup smoke. |
+| 4 | graph-explorer `v0.2.0` (`9a739075a102e927753811c61151a2c2132f5d74`) implements lookup and release-view credits. mcp-server (`a1595ade2b18968fa2ffddd79d554ed5d6414977`, completion `c5865c10ec2ed9e62dd98d1bc88525eb956caf94`) provides `lookup_release` and documents/tests unchanged `companies` pass-through in `docs/tools.md` and `tests/test_server.py`. **Complete.** | MCP completion is merged test/doc evidence; no separate client-image smoke is claimed here. |
+| 5 | deployment (`a57c353db9d30e6e6832a64231a63bd74ce5ce14`, verification `36b89a9b2e76b677bedaa05064a5c326cb89c10b`) extended `tests/deploy/test_media_smoke.py` and `scripts/smoke_media.py` to assert alias minting, native-id resolution, and HTTP lookup. | `docs/maintenance.md` records the 2026-09-21 disposable, digest-pinned GHCR smoke: **15/15 PASS**, including barcode `5 012394 144777` → normalized `5012394144777` → Discogs release `999000001`; containers, volumes, and network were torn down, with no production Compose change. |
 
-**Implementation note (MusicBrainz identifiers, waves 1 and 2).** The wave-1 text below asks
-`musicbrainz-ingestion` to compute the additive `identifiers` block itself, mapped through the
-identifier vocabulary's `musicbrainz` section, at the normalization boundary before the content
-hash is recomputed — exactly as `discogs-ingestion` does for Discogs events. In the delivered
-system, `musicbrainz-ingestion` widened the field whitelist only (`country`, `release-events`,
-`label-info[].catalog-number`, alongside the pre-existing `barcode`); `musicbrainz-sql-loader`
-builds a minimal `identifiers` block from those same raw fields and validates it with
-`common.identifiers.alias_refs_for_release` itself, in wave 2, rather than consuming a block
-`musicbrainz-ingestion` already published on the event
-(`contracts/catalog-events/v1/source.json`'s `migration_transform` in `musicbrainz-sql-loader`
-records the promoted producer revision as carrying `country`, `release_events`, and
-`catalog_numbers` — not an `identifiers` block). The observable outcome the plan wanted — a
-MusicBrainz barcode minting the same `barcode` alias a Discogs one does — is delivered and is
-asserted end to end by the wave-5 smoke stack, but the block is not covered by the producer's
-content hash the way the plan intended. That gap is real and is left to its own record rather
-than reopening this one.
+**Implementation note (MusicBrainz identifiers, waves 1 and 2).** The initial wave-1 delivery
+only widened raw fields, and the initial wave-2 loader assembled the block downstream. The
+merged follow-ons closed that gap: `musicbrainz-ingestion` attaches the vocabulary-mapped
+block before recomputing the content hash (`src/musicbrainz/jsonl_parser.rs`,
+`src/musicbrainz/identifiers.rs`; `ae01d967e72e18c82cac2e844daa1dfeb81a32a6`), and
+`musicbrainz-sql-loader` promotes that producer contract and passes its block to
+`alias_refs_for_release`, building a compatibility block only when the event omits it
+(`contracts/catalog-events/v1/source.json`, `brainztableinator/_record_processing.py`;
+`55cbb8ef209e54aac0a65b94d95eec74b4494ead`). The wave-5 disposable smoke below covers
+the Discogs barcode path; it does not establish a released MusicBrainz-path smoke result.
 
 ## Artifacts every wave pins
 
@@ -167,21 +161,37 @@ as a result, on design main commit `5bfdf1005c5d95c99143e8c2acd189e127e1cb10` (m
 The company-role vocabulary digest is unchanged
 (`03ab8689ba14768dceffb756a71475c01797caea8d18ba9943cd5f69b3d705de`).
 
-As of this record, `discogs-ingestion` and `python-libraries` still pin the pre-addition
-digest (`2df8a691173f779b2d2076f31e8abd01d160e51f4f371de99f1f8e1cb12f26a5`, design commit
-`d06e1571f6acce6a246e4c0b6be866ecbea44c72`) — harmless today, since neither consumes the new
-`musicbrainz` section. A future re-vendoring should pick up the addition in this order,
-mirroring the events program's fit-surface sequencing:
+The following sequence is complete, superseding the original future-tense consumer-pin
+proposal. The merged source records and consumer revisions are:
 
-1. **python-libraries** — bump the vendored copy first; `common.identifiers.alias_refs_for_release`
-   already validates any well-formed `identifiers` block regardless of which vocabulary section
-   produced it, so this re-vendoring is a digest bump with no mapper change required.
-2. **discogs-ingestion** — bump the vendored copy; its own Discogs-only mapping is unaffected
-   by the addition.
-3. **musicbrainz-ingestion** — vendor the vocabulary for the first time and compute the
-   additive `identifiers` block itself at the normalization boundary, closing the wave-1 gap
-   this record's completed-result table notes: today that block is instead assembled
-   downstream, in `musicbrainz-sql-loader`.
+1. **python-libraries** already pinned design commit
+   `5bfdf1005c5d95c99143e8c2acd189e127e1cb10` and identifier digest
+   `87b844a20f35d45e7ba176df58d6ccf3d7bc88beecda90457b1a2afb3432fb34` in its
+   identifier source record before the later runtime follow-on
+   `7abcb3ba9f467d9bdcd5b3df0b1a342a2efda73b`,
+   which added MusicBrainz-source validation coverage. It was not awaiting a digest bump.
+2. **discogs-ingestion** re-vendored the identifier vocabulary at
+   `f2970659f5ee64f6fd0cd0a4bbd958421dbc47f0`:
+   `contracts/catalog-events/vocab/source.json` pins that same design commit and digest;
+   the separate company-role source remains at the original design commit and unchanged digest.
+3. **musicbrainz-ingestion** at
+   `ae01d967e72e18c82cac2e844daa1dfeb81a32a6`
+   vendors the identifier vocabulary under `contracts/catalog-events/vocab/identifiers-source.json`
+   at the same design commit and digest, and publishes the producer-owned block. The loader's
+   `55cbb8ef209e54aac0a65b94d95eec74b4494ead`
+   promotion consumes it while retaining the explicit legacy fallback.
+
+The merged MCP completion is
+`c5865c10ec2ed9e62dd98d1bc88525eb956caf94`:
+`docs/tools.md` describes the top-level `companies` block, and `tests/test_server.py` asserts
+unchanged pass-through and a company-credit docstring. The released-image evidence is in
+deployment's `docs/maintenance.md` at `36b89a9b2e76b677bedaa05064a5c326cb89c10b`:
+GHCR index digests `sha256:09f55827f972ec289baad7128acca061739fd9d4d350f23f3d6d22afeafee7e6`
+(`discogs-sql-loader:v0.3.0`), `sha256:e95fabb7633859c94e0913f9122ccbaed18a04a017c486886c38840c230ff80d`
+(`discogs-graph-enricher:v0.3.0`), and
+`sha256:4889f1ce04568a335bdfe698e11a3c8133238e0b0b61c91447ea4448a3e3ae43`
+(`catalog-api:v0.4.0`) passed the 15/15 disposable barcode-lookup smoke. That record also
+documents teardown and explicitly says no live Compose project was changed.
 
 ## Explicit non-goals of this program
 
