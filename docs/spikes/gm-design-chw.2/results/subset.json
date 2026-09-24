@@ -1,0 +1,16 @@
+{
+  "dump_releases": 19417067,
+  "id_at_cut": 25802761,
+  "pre_cut_releases": 13845524,
+  "post_cut_releases": 994823,
+  "dropped_no_date": 2584617,
+  "dropped_catalogued_after_cut": 1992103,
+  "eligible_artists": 769668,
+  "seed_rate": 0.1,
+  "seed_artists": 77538,
+  "subset_releases": 1417486,
+  "subset_pre_cut_releases": 1348067,
+  "subset_post_cut_releases": 69419,
+  "subset_artist_refs": 1092879,
+  "subset_labels": 157845
+}

@@ -1,0 +1,4310 @@
+{
+ "bootstrap_test": {
+  "all": {
+   "frp128_w01111_seed1": {
+    "recall_at_10": 0.3151055504701768,
+    "vs_heuristic": {
+     "reference_recall_at_10": 0.009164144626909336,
+     "relative_gain": 33.38461125383265,
+     "relative_gain_ci95": [
+      27.317855248256375,
+      41.72083130001578
+     ]
+    },
+    "vs_heuristic_all_artists": {
+     "reference_recall_at_10": 0.1798833708397236,
+     "relative_gain": 0.751721401479275,
+     "relative_gain_ci95": [
+      0.6767247952233916,
+      0.8259720839968876
+     ]
+    }
+   },
+   "frp128_w0111_seed1": {
+    "recall_at_10": 0.3024734312929348,
+    "vs_heuristic": {
+     "reference_recall_at_10": 0.009164144626909336,
+     "relative_gain": 32.00618263975891,
+     "relative_gain_ci95": [
+      26.227483682431334,
+      40.150568163481644
+     ]
+    },
+    "vs_heuristic_all_artists": {
+     "reference_recall_at_10": 0.1798833708397236,
+     "relative_gain": 0.6814974607210309,
+     "relative_gain_ci95": [
+      0.6110720241308646,
+      0.7508921869867143
+     ]
+    }
+   },
+   "fused[frp128_w01111_seed1]@0.8": {
+    "recall_at_10": 0.3155760971028302,
+    "vs_heuristic": {
+     "reference_recall_at_10": 0.009164144626909336,
+     "relative_gain": 33.4359577408001,
+     "relative_gain_ci95": [
+      27.435415589508256,
+      41.761212903586596
+     ]
+    },
+    "vs_heuristic_all_artists": {
+     "reference_recall_at_10": 0.1798833708397236,
+     "relative_gain": 0.754337244347111,
+     "relative_gain_ci95": [
+      0.6847468871762252,
+      0.8225329807657272
+     ]
+    }
+   },
+   "fused[frp128_w0111_seed1]@0.8": {
+    "recall_at_10": 0.2989772812413802,
+    "vs_heuristic": {
+     "reference_recall_at_10": 0.009164144626909336,
+     "relative_gain": 31.62467948874047,
+     "relative_gain_ci95": [
+      25.863839409396594,
+      39.81433491353422
+     ]
+    },
+    "vs_heuristic_all_artists": {
+     "reference_recall_at_10": 0.1798833708397236,
+     "relative_gain": 0.6620618117489552,
+     "relative_gain_ci95": [
+      0.6001788196261425,
+      0.7290046479308262
+     ]
+    }
+   },
+   "fused[n2v128_nohub_p1q1_seed1]@0.4": {
+    "recall_at_10": 0.21823567592377724,
+    "vs_heuristic": {
+     "reference_recall_at_10": 0.009164144626909336,
+     "relative_gain": 22.814080288841815,
+     "relative_gain_ci95": [
+      18.43065790864566,
+      28.604930236714846
+     ]
+    },
+    "vs_heuristic_all_artists": {
+     "reference_recall_at_10": 0.1798833708397236,
+     "relative_gain": 0.21320650655488094,
+     "relative_gain_ci95": [
+      0.17892558252895666,
+      0.24566673763951188
+     ]
+    }
+   },
+   "heuristic": {
+    "recall_at_10": 0.009164144626909336,
+    "vs_heuristic": {
+     "reference_recall_at_10": 0.009164144626909336,
+     "relative_gain": 0.0,
+     "relative_gain_ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "vs_heuristic_all_artists": {
+     "reference_recall_at_10": 0.1798833708397236,
+     "relative_gain": -0.9490550761633514,
+     "relative_gain_ci95": [
+      -0.959209636705512,
+      -0.93804368070951
+     ]
+    }
+   },
+   "heuristic_all_artists": {
+    "recall_at_10": 0.1798833708397236,
+    "vs_heuristic": {
+     "reference_recall_at_10": 0.009164144626909336,
+     "relative_gain": 18.629041024900367,
+     "relative_gain_ci95": [
+      15.140404924976318,
+      23.51559442619767
+     ]
+    },
+    "vs_heuristic_all_artists": {
+     "reference_recall_at_10": 0.1798833708397236,
+     "relative_gain": 0.0,
+     "relative_gain_ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "n2v128_nohub_p1q1_seed1": {
+    "recall_at_10": 0.10598357744372089,
+    "vs_heuristic": {
+     "reference_recall_at_10": 0.009164144626909336,
+     "relative_gain": 10.565026716461206,
+     "relative_gain_ci95": [
+      8.484630284027828,
+      13.57873237109975
+     ]
+    },
+    "vs_heuristic_all_artists": {
+     "reference_recall_at_10": 0.1798833708397236,
+     "relative_gain": -0.4108205947610776,
+     "relative_gain_ci95": [
+      -0.45597214367183836,
+      -0.36312239261531465
+     ]
+    }
+   }
+  },
+  "novel": {
+   "frp128_w01111_seed1": {
+    "recall_at_10": 0.011472771126168,
+    "vs_heuristic": {
+     "reference_recall_at_10": 0.007921779502620147,
+     "relative_gain": 0.44825681178999655,
+     "relative_gain_ci95": [
+      -0.026765463001603387,
+      1.1795105746157988
+     ]
+    },
+    "vs_heuristic_all_artists": {
+     "reference_recall_at_10": 0.031149909272482682,
+     "relative_gain": -0.6316916679977987,
+     "relative_gain_ci95": [
+      -0.7308991369398717,
+      -0.5125956407741504
+     ]
+    }
+   },
+   "frp128_w0111_seed1": {
+    "recall_at_10": 0.013106422887600097,
+    "vs_heuristic": {
+     "reference_recall_at_10": 0.007921779502620147,
+     "relative_gain": 0.6544796384783389,
+     "relative_gain_ci95": [
+      0.13780704194509608,
+      1.4652468363613582
+     ]
+    },
+    "vs_heuristic_all_artists": {
+     "reference_recall_at_10": 0.031149909272482682,
+     "relative_gain": -0.5792468359072206,
+     "relative_gain_ci95": [
+      -0.677891570145342,
+      -0.46241422458457343
+     ]
+    }
+   },
+   "fused[frp128_w01111_seed1]@0.8": {
+    "recall_at_10": 0.017746629082654248,
+    "vs_heuristic": {
+     "reference_recall_at_10": 0.007921779502620147,
+     "relative_gain": 1.2402326493415412,
+     "relative_gain_ci95": [
+      0.5769366523375679,
+      2.2730005186981557
+     ]
+    },
+    "vs_heuristic_all_artists": {
+     "reference_recall_at_10": 0.031149909272482682,
+     "relative_gain": -0.4302831212952736,
+     "relative_gain_ci95": [
+      -0.5442245608732282,
+      -0.30467932525909996
+     ]
+    }
+   },
+   "fused[frp128_w0111_seed1]@0.8": {
+    "recall_at_10": 0.01877409845902325,
+    "vs_heuristic": {
+     "reference_recall_at_10": 0.007921779502620147,
+     "relative_gain": 1.3699344891906766,
+     "relative_gain_ci95": [
+      0.680826292833101,
+      2.5044898977618772
+     ]
+    },
+    "vs_heuristic_all_artists": {
+     "reference_recall_at_10": 0.031149909272482682,
+     "relative_gain": -0.39729845455415247,
+     "relative_gain_ci95": [
+      -0.5179384896593908,
+      -0.27372354316824327
+     ]
+    }
+   },
+   "fused[n2v128_nohub_p1q1_seed1]@0.4": {
+    "recall_at_10": 0.03502312339096867,
+    "vs_heuristic": {
+     "reference_recall_at_10": 0.007921779502620147,
+     "relative_gain": 3.4211181817651815,
+     "relative_gain_ci95": [
+      2.2604882596388727,
+      5.351412300457376
+     ]
+    },
+    "vs_heuristic_all_artists": {
+     "reference_recall_at_10": 0.031149909272482682,
+     "relative_gain": 0.12434110432249379,
+     "relative_gain_ci95": [
+      -0.027978830182073713,
+      0.2935984272565008
+     ]
+    }
+   },
+   "heuristic": {
+    "recall_at_10": 0.007921779502620147,
+    "vs_heuristic": {
+     "reference_recall_at_10": 0.007921779502620147,
+     "relative_gain": 0.0,
+     "relative_gain_ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "vs_heuristic_all_artists": {
+     "reference_recall_at_10": 0.031149909272482682,
+     "relative_gain": -0.7456885208452881,
+     "relative_gain_ci95": [
+      -0.8223805042917508,
+      -0.6510071211961896
+     ]
+    }
+   },
+   "heuristic_all_artists": {
+    "recall_at_10": 0.031149909272482682,
+    "vs_heuristic": {
+     "reference_recall_at_10": 0.007921779502620147,
+     "relative_gain": 2.9321858506892013,
+     "relative_gain_ci95": [
+      1.8653882677257143,
+      4.630013521731193
+     ]
+    },
+    "vs_heuristic_all_artists": {
+     "reference_recall_at_10": 0.031149909272482682,
+     "relative_gain": 0.0,
+     "relative_gain_ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "n2v128_nohub_p1q1_seed1": {
+    "recall_at_10": 0.010934841799451266,
+    "vs_heuristic": {
+     "reference_recall_at_10": 0.007921779502620147,
+     "relative_gain": 0.38035169949309267,
+     "relative_gain_ci95": [
+      -0.06735153788761715,
+      1.0546258972508307
+     ]
+    },
+    "vs_heuristic_all_artists": {
+     "reference_recall_at_10": 0.031149909272482682,
+     "relative_gain": -0.6489607175481912,
+     "relative_gain_ci95": [
+      -0.7490689106022954,
+      -0.5315498787597728
+     ]
+    }
+   }
+  }
+ },
+ "eval_wall_s": 325.9,
+ "fusion_selection": {
+  "frp128_w01111_seed1": {
+   "alpha": 0.8,
+   "dev_recall_at_10_by_alpha": {
+    "0.1": 0.2085373549109068,
+    "0.2": 0.22979398390719066,
+    "0.3": 0.24880202618573555,
+    "0.4": 0.27315207105487843,
+    "0.5": 0.2925797017039765,
+    "0.6": 0.30258590403130015,
+    "0.7": 0.3108127047860255,
+    "0.8": 0.3176127508215385,
+    "0.9": 0.3172591354532606
+   }
+  },
+  "frp128_w0111_seed1": {
+   "alpha": 0.8,
+   "dev_recall_at_10_by_alpha": {
+    "0.1": 0.20250034129055483,
+    "0.2": 0.21961329170867083,
+    "0.3": 0.23539437940676802,
+    "0.4": 0.2526857595614206,
+    "0.5": 0.27069637156550164,
+    "0.6": 0.287590535790201,
+    "0.7": 0.29591691478322474,
+    "0.8": 0.3008171441031013,
+    "0.9": 0.3006361309771526
+   }
+  },
+  "n2v128_nohub_p1q1_seed1": {
+   "alpha": 0.4,
+   "dev_recall_at_10_by_alpha": {
+    "0.1": 0.19513668539065823,
+    "0.2": 0.20726330783378308,
+    "0.3": 0.21565574046364983,
+    "0.4": 0.21875032625401444,
+    "0.5": 0.21533238550651201,
+    "0.6": 0.21339294953699178,
+    "0.7": 0.19580655869272173,
+    "0.8": 0.1672793835521371,
+    "0.9": 0.13347763189768796
+   }
+  }
+ },
+ "gate": {
+  "dev_recall_at_10": 0.3176127508215385,
+  "families": {
+   "heuristic": {
+    "digital": {
+     "best_recall_at_10": 0.33173216324728716,
+     "delta_points": 32.86282088942473,
+     "queries": 1223,
+     "reference_recall_at_10": 0.0031039543530398633
+    },
+    "grooved_other": {
+     "best_recall_at_10": 0.5,
+     "delta_points": 50.0,
+     "queries": 4,
+     "reference_recall_at_10": 0.0
+    },
+    "optical": {
+     "best_recall_at_10": 0.28441947091209585,
+     "delta_points": 27.03404772795922,
+     "queries": 1781,
+     "reference_recall_at_10": 0.014078993632503665
+    },
+    "shellac": {
+     "best_recall_at_10": 0.36296296296296293,
+     "delta_points": 36.29629629629629,
+     "queries": 9,
+     "reference_recall_at_10": 0.0
+    },
+    "tape": {
+     "best_recall_at_10": 0.33073469196213606,
+     "delta_points": 32.33686806505282,
+     "queries": 158,
+     "reference_recall_at_10": 0.007366011311607865
+    },
+    "video": {
+     "best_recall_at_10": 0.0,
+     "delta_points": 0.0,
+     "queries": 1,
+     "reference_recall_at_10": 0.0
+    },
+    "vinyl": {
+     "best_recall_at_10": 0.33660355539152254,
+     "delta_points": 32.80409190399703,
+     "queries": 1545,
+     "reference_recall_at_10": 0.0085626363515522
+    }
+   },
+   "heuristic_all_artists": {
+    "digital": {
+     "best_recall_at_10": 0.33173216324728716,
+     "delta_points": 9.45266566822944,
+     "queries": 1223,
+     "reference_recall_at_10": 0.23720550656499276
+    },
+    "grooved_other": {
+     "best_recall_at_10": 0.5,
+     "delta_points": 25.0,
+     "queries": 4,
+     "reference_recall_at_10": 0.25
+    },
+    "optical": {
+     "best_recall_at_10": 0.28441947091209585,
+     "delta_points": 14.246427483196387,
+     "queries": 1781,
+     "reference_recall_at_10": 0.141955196080132
+    },
+    "shellac": {
+     "best_recall_at_10": 0.36296296296296293,
+     "delta_points": 1.9444444444444375,
+     "queries": 9,
+     "reference_recall_at_10": 0.34351851851851856
+    },
+    "tape": {
+     "best_recall_at_10": 0.33073469196213606,
+     "delta_points": 10.16936029526926,
+     "queries": 158,
+     "reference_recall_at_10": 0.22904108900944345
+    },
+    "video": {
+     "best_recall_at_10": 0.0,
+     "delta_points": 0.0,
+     "queries": 1,
+     "reference_recall_at_10": 0.0
+    },
+    "vinyl": {
+     "best_recall_at_10": 0.33660355539152254,
+     "delta_points": 16.441928596985573,
+     "queries": 1545,
+     "reference_recall_at_10": 0.1721842694216668
+    }
+   }
+  },
+  "selected_on_dev": "fused[frp128_w01111_seed1]@0.8",
+  "vs_heuristic": {
+   "meets_10pct": true,
+   "no_family_regresses_over_2_points": true,
+   "relative_gain": 33.4359577408001,
+   "relative_gain_ci95": [
+    27.435415589508256,
+    41.761212903586596
+   ],
+   "worst_family_delta_points": 0.0
+  },
+  "vs_heuristic_all_artists": {
+   "meets_10pct": true,
+   "no_family_regresses_over_2_points": true,
+   "relative_gain": 0.754337244347111,
+   "relative_gain_ci95": [
+    0.6847468871762252,
+    0.8225329807657272
+   ],
+   "worst_family_delta_points": 0.0
+  }
+ },
+ "ground_truth": {
+  "gt_pairs_in_retrievable_catalog": 37839,
+  "gt_pairs_total": 154365,
+  "mean_relevant_per_query": 5.622436849925705,
+  "median_relevant_per_query": 2.0,
+  "queries_with_novel": 4200,
+  "query_artists_eligible": 77538,
+  "query_artists_with_relevant": 6730,
+  "query_family_counts": {
+   "digital": 1784,
+   "grooved_other": 6,
+   "optical": 2503,
+   "shellac": 11,
+   "tape": 211,
+   "video": 1,
+   "vinyl": 2214
+  },
+  "retrievable_catalog_artists": 220699
+ },
+ "split": {
+  "dev": {
+   "frp128_w01111_seed1": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.2977996410603912,
+      "recall_at_20": 0.32671767905846955,
+      "recommended_share": 0.2546540567446491
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.004902936784469886
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.3003906376987058,
+      "recall_at_20": 0.3264475356520461,
+      "recommended_share": 0.32665505226480834
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.007068193130910901
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.4190251572327044,
+      "recall_at_20": 0.48427672955974843,
+      "recommended_share": 0.049253359880537584
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.3385015707138049,
+      "recall_at_20": 0.37411931213805605,
+      "recommended_share": 0.35340965654554507
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.5891089108910891,
+      "precision_at_10": 0.09092409240924093,
+      "precision_at_20": 0.054290429042904285,
+      "queries": 606,
+      "recall_at_10": 0.3190584145498449,
+      "recall_at_20": 0.35498101325761106
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.43243243243243246,
+      "precision_at_10": 0.058648648648648646,
+      "precision_at_20": 0.03175675675675676,
+      "queries": 370,
+      "recall_at_10": 0.29704547439841555,
+      "recall_at_20": 0.310965465818407
+     },
+     "51+": {
+      "hit_rate_at_20": 0.7131782945736435,
+      "precision_at_10": 0.18624031007751937,
+      "precision_at_20": 0.12848837209302325,
+      "queries": 516,
+      "recall_at_10": 0.28620957865308294,
+      "recall_at_20": 0.33357482042700226
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.5338491295938105,
+      "precision_at_10": 0.07969052224371374,
+      "precision_at_20": 0.043326885880077375,
+      "queries": 517,
+      "recall_at_10": 0.3546224807181236,
+      "recall_at_20": 0.3758270176383278
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.14691956012487598
+    },
+    "novel": {
+     "hit_rate_at_20": 0.03251387787470262,
+     "precision_at_10": 0.0026962727993655833,
+     "precision_at_20": 0.001942902458366376,
+     "queries": 1261,
+     "recall_at_10": 0.008124093826384259,
+     "recall_at_20": 0.012722669312618931
+    },
+    "overall": {
+     "hit_rate_at_20": 0.5778994524639124,
+     "precision_at_10": 0.10657043305126929,
+     "precision_at_20": 0.06637630662020906,
+     "recall_at_10": 0.3157193578202491,
+     "recall_at_20": 0.34674111092397786
+    },
+    "queries": 2009
+   },
+   "frp128_w0111_seed1": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.29353061340818826,
+      "recall_at_20": 0.32459419045164234,
+      "recommended_share": 0.25756595321055253
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.0038576406172224987
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.2848172245385174,
+      "recall_at_20": 0.3116199407183234,
+      "recommended_share": 0.32936784469885516
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.006147336983573917
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.38095238095238093,
+      "recall_at_20": 0.4249775381850854,
+      "recommended_share": 0.050124440019910406
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.3252301530957044,
+      "recall_at_20": 0.36040262850929666,
+      "recommended_share": 0.3492533598805376
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.5726072607260726,
+      "precision_at_10": 0.08976897689768977,
+      "precision_at_20": 0.05330033003300331,
+      "queries": 606,
+      "recall_at_10": 0.3086392551753856,
+      "recall_at_20": 0.3452778420809858
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.42702702702702705,
+      "precision_at_10": 0.055945945945945944,
+      "precision_at_20": 0.030810810810810812,
+      "queries": 370,
+      "recall_at_10": 0.28530158765452884,
+      "recall_at_20": 0.3017460815990228
+     },
+     "51+": {
+      "hit_rate_at_20": 0.7034883720930233,
+      "precision_at_10": 0.18197674418604654,
+      "precision_at_20": 0.12403100775193798,
+      "queries": 516,
+      "recall_at_10": 0.27734029848219016,
+      "recall_at_20": 0.3255551402473555
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.5125725338491296,
+      "precision_at_10": 0.07756286266924566,
+      "precision_at_20": 0.0425531914893617,
+      "queries": 517,
+      "recall_at_10": 0.336634923465576,
+      "recall_at_20": 0.35496305192426536
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.13496209769867556
+    },
+    "novel": {
+     "hit_rate_at_20": 0.04361617763679619,
+     "precision_at_10": 0.0026962727993655833,
+     "precision_at_20": 0.002616970658207772,
+     "queries": 1261,
+     "recall_at_10": 0.0070850467425314645,
+     "recall_at_20": 0.01569746474700526
+    },
+    "overall": {
+     "hit_rate_at_20": 0.5639621702339472,
+     "precision_at_10": 0.10408163265306122,
+     "precision_at_20": 0.06455948232951718,
+     "recall_at_10": 0.3035066329103894,
+     "recall_at_20": 0.33468729353170557
+    },
+    "queries": 2009
+   },
+   "fused[frp128_w01111_seed1]@0.1": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.25237186907355397,
+      "recall_at_20": 0.2850249892016881,
+      "recommended_share": 0.25624688899950226
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.004479840716774514
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.15798147022994702,
+      "recall_at_20": 0.1853650308298388,
+      "recommended_share": 0.33735689397710306
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.004728720756595321
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.3866801437556155,
+      "recall_at_20": 0.40038185085354894,
+      "recommended_share": 0.0435788949726232
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.21098294719583255,
+      "recall_at_20": 0.2389581909667244,
+      "recommended_share": 0.3507715281234445
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.4240924092409241,
+      "precision_at_10": 0.057095709570957096,
+      "precision_at_20": 0.034323432343234324,
+      "queries": 606,
+      "recall_at_10": 0.21147380123346918,
+      "recall_at_20": 0.23551960537369318
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.35405405405405405,
+      "precision_at_10": 0.041081081081081085,
+      "precision_at_20": 0.023243243243243242,
+      "queries": 370,
+      "recall_at_10": 0.21943508928803046,
+      "recall_at_20": 0.238222626825568
+     },
+     "51+": {
+      "hit_rate_at_20": 0.5368217054263565,
+      "precision_at_10": 0.09689922480620156,
+      "precision_at_20": 0.07044573643410854,
+      "queries": 516,
+      "recall_at_10": 0.15732701500534593,
+      "recall_at_20": 0.20016707416697158
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.41779497098646035,
+      "precision_at_10": 0.0516441005802708,
+      "precision_at_20": 0.031044487427466152,
+      "queries": 517,
+      "recall_at_10": 0.24840754291914835,
+      "recall_at_20": 0.2752979548701324
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.1447265279860806
+    },
+    "novel": {
+     "hit_rate_at_20": 0.07930214115781126,
+     "precision_at_10": 0.0056304520222046,
+     "precision_at_20": 0.004678826328310864,
+     "queries": 1261,
+     "recall_at_10": 0.02493550977099921,
+     "recall_at_20": 0.039173478591582205
+    },
+    "overall": {
+     "hit_rate_at_20": 0.4385266301642608,
+     "precision_at_10": 0.06296665007466401,
+     "precision_at_20": 0.04071677451468392,
+     "recall_at_10": 0.2085373549109068,
+     "recall_at_20": 0.23717396999498955
+    },
+    "queries": 2009
+   },
+   "fused[frp128_w01111_seed1]@0.2": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.26792330789208757,
+      "recall_at_20": 0.2977431133466485,
+      "recommended_share": 0.25764061722249876
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.004330512692882031
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.18511155315793676,
+      "recall_at_20": 0.2129294236956648,
+      "recommended_share": 0.3374315579890493
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.004728720756595321
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.3920709793351303,
+      "recall_at_20": 0.4313791554357592,
+      "recommended_share": 0.04420109507217521
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.23206901044936615,
+      "recall_at_20": 0.2611873643866581,
+      "recommended_share": 0.348780487804878
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.46864686468646866,
+      "precision_at_10": 0.06584158415841584,
+      "precision_at_20": 0.03902640264026403,
+      "queries": 606,
+      "recall_at_10": 0.23486766612245283,
+      "recall_at_20": 0.26039071488662774
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.3783783783783784,
+      "precision_at_10": 0.04621621621621622,
+      "precision_at_20": 0.025810810810810814,
+      "queries": 370,
+      "recall_at_10": 0.2373692872222284,
+      "recall_at_20": 0.2556903992933405
+     },
+     "51+": {
+      "hit_rate_at_20": 0.5833333333333334,
+      "precision_at_10": 0.11531007751937984,
+      "precision_at_20": 0.08013565891472868,
+      "queries": 516,
+      "recall_at_10": 0.1796551364644922,
+      "recall_at_20": 0.22303788930864438
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.4410058027079304,
+      "precision_at_10": 0.057253384912959386,
+      "precision_at_20": 0.033752417794970985,
+      "queries": 517,
+      "recall_at_10": 0.2684673526333406,
+      "recall_at_20": 0.29505467569068305
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.14416920783510573
+    },
+    "novel": {
+     "hit_rate_at_20": 0.08009516256938938,
+     "precision_at_10": 0.0054718477398889775,
+     "precision_at_20": 0.0049563838223632035,
+     "queries": 1261,
+     "recall_at_10": 0.022650297510044076,
+     "recall_at_20": 0.039001069553951814
+    },
+    "overall": {
+     "hit_rate_at_20": 0.47436535589845696,
+     "precision_at_10": 0.07272274763563961,
+     "precision_at_20": 0.045793927327028375,
+     "recall_at_10": 0.22979398390719066,
+     "recall_at_20": 0.2588516869961055
+    },
+    "queries": 2009
+   },
+   "fused[frp128_w01111_seed1]@0.3": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.2792513538997093,
+      "recall_at_20": 0.31627293768854176,
+      "recommended_share": 0.2597560975609756
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.004380288700846192
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.20912879745621343,
+      "recall_at_20": 0.2446272142622911,
+      "recommended_share": 0.3360378297660528
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.00510204081632653
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.3994833782569632,
+      "recall_at_20": 0.43643306379155433,
+      "recommended_share": 0.044698855151816826
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.25314347323129144,
+      "recall_at_20": 0.28148283824663706,
+      "recommended_share": 0.3471627675460428
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.5132013201320133,
+      "precision_at_10": 0.07244224422442244,
+      "precision_at_20": 0.0433993399339934,
+      "queries": 606,
+      "recall_at_10": 0.2519874680932881,
+      "recall_at_20": 0.2853954068424976
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.40540540540540543,
+      "precision_at_10": 0.05027027027027028,
+      "precision_at_20": 0.028513513513513514,
+      "queries": 370,
+      "recall_at_10": 0.25920326405620525,
+      "recall_at_20": 0.27838130448424564
+     },
+     "51+": {
+      "hit_rate_at_20": 0.627906976744186,
+      "precision_at_10": 0.1296511627906977,
+      "precision_at_20": 0.08924418604651162,
+      "queries": 516,
+      "recall_at_10": 0.2047903803123593,
+      "recall_at_20": 0.24811229534450413
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.4700193423597679,
+      "precision_at_10": 0.061895551257253385,
+      "precision_at_20": 0.03646034816247583,
+      "queries": 517,
+      "recall_at_10": 0.2815509110263768,
+      "recall_at_20": 0.31563435391059336
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.14344876959116262
+    },
+    "novel": {
+     "hit_rate_at_20": 0.08009516256938938,
+     "precision_at_10": 0.0056304520222046,
+     "precision_at_20": 0.00499603489294211,
+     "queries": 1261,
+     "recall_at_10": 0.022681766613678125,
+     "recall_at_20": 0.03833722039859266
+    },
+    "overall": {
+     "hit_rate_at_20": 0.5116973618715779,
+     "precision_at_10": 0.0803384768541563,
+     "precision_at_20": 0.0506470881035341,
+     "recall_at_10": 0.24880202618573555,
+     "recall_at_20": 0.28230940994288967
+    },
+    "queries": 2009
+   },
+   "fused[frp128_w01111_seed1]@0.4": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.2981636939448261,
+      "recall_at_20": 0.33431114562424197,
+      "recommended_share": 0.2610751617720259
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.004255848680935789
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.24020534024798776,
+      "recall_at_20": 0.27224763140631086,
+      "recommended_share": 0.3349925335988054
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.005052264808362369
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.4112758310871518,
+      "recall_at_20": 0.44856244384546273,
+      "recommended_share": 0.04529616724738676
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.27593443508650284,
+      "recall_at_20": 0.3043025576865996,
+      "recommended_share": 0.3464410154305625
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.5412541254125413,
+      "precision_at_10": 0.07953795379537955,
+      "precision_at_20": 0.04744224422442244,
+      "queries": 606,
+      "recall_at_10": 0.27708117827458983,
+      "recall_at_20": 0.3064884601484914
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.41621621621621624,
+      "precision_at_10": 0.05432432432432433,
+      "precision_at_20": 0.03,
+      "queries": 370,
+      "recall_at_10": 0.2735650434179846,
+      "recall_at_20": 0.2893369029398441
+     },
+     "51+": {
+      "hit_rate_at_20": 0.6531007751937985,
+      "precision_at_10": 0.1439922480620155,
+      "precision_at_20": 0.1,
+      "queries": 516,
+      "recall_at_10": 0.22540719416519528,
+      "recall_at_20": 0.27421356732549496
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.5106382978723404,
+      "precision_at_10": 0.06905222437137332,
+      "precision_at_20": 0.04013539651837524,
+      "queries": 517,
+      "recall_at_10": 0.3159035560173196,
+      "recall_at_20": 0.34593688235141967
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.1429820706029479
+    },
+    "novel": {
+     "hit_rate_at_20": 0.07771609833465504,
+     "precision_at_10": 0.005947660586835844,
+     "precision_at_20": 0.004678826328310864,
+     "queries": 1261,
+     "recall_at_10": 0.023803379991204177,
+     "recall_at_20": 0.03640700483039137
+    },
+    "overall": {
+     "hit_rate_at_20": 0.5390741662518665,
+     "precision_at_10": 0.08875062220009956,
+     "precision_at_20": 0.05584868093578895,
+     "recall_at_10": 0.27315207105487843,
+     "recall_at_20": 0.30519175204249255
+    },
+    "queries": 2009
+   },
+   "fused[frp128_w01111_seed1]@0.5": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.30995893475076214,
+      "recall_at_20": 0.3464553709780599,
+      "recommended_share": 0.2626182180189149
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.004355400696864111
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.26661426312894204,
+      "recall_at_20": 0.2986483914731103,
+      "recommended_share": 0.3342210054753609
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.004803384768541563
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.416329739442947,
+      "recall_at_20": 0.4344115004492363,
+      "recommended_share": 0.045644599303135885
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.2954828363107209,
+      "recall_at_20": 0.32300700880140243,
+      "recommended_share": 0.34512195121951217
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.566006600660066,
+      "precision_at_10": 0.08481848184818482,
+      "precision_at_20": 0.05033003300330033,
+      "queries": 606,
+      "recall_at_10": 0.2967792234130834,
+      "recall_at_20": 0.32889110267444444
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.44324324324324327,
+      "precision_at_10": 0.05756756756756757,
+      "precision_at_20": 0.031486486486486484,
+      "queries": 370,
+      "recall_at_10": 0.2900011223540635,
+      "recall_at_20": 0.30734292844586963
+     },
+     "51+": {
+      "hit_rate_at_20": 0.6744186046511628,
+      "precision_at_10": 0.1575581395348837,
+      "precision_at_20": 0.10736434108527132,
+      "queries": 516,
+      "recall_at_10": 0.25101454642374205,
+      "recall_at_20": 0.2949458952627861
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.5183752417794971,
+      "precision_at_10": 0.07369439071566732,
+      "precision_at_20": 0.04216634429400387,
+      "queries": 517,
+      "recall_at_10": 0.3309874083352145,
+      "recall_at_20": 0.3588990196123964
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.14319049927729624
+    },
+    "novel": {
+     "hit_rate_at_20": 0.07454401268834258,
+     "precision_at_10": 0.0056304520222046,
+     "precision_at_20": 0.004321966693100714,
+     "queries": 1261,
+     "recall_at_10": 0.021082875982040374,
+     "recall_at_20": 0.034100990566372245
+    },
+    "overall": {
+     "hit_rate_at_20": 0.5589845694375312,
+     "precision_at_10": 0.09561971129915381,
+     "precision_at_20": 0.059407665505226484,
+     "recall_at_10": 0.2925797017039765,
+     "recall_at_20": 0.3239262154509167
+    },
+    "queries": 2009
+   },
+   "fused[frp128_w01111_seed1]@0.6": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.3135611768009135,
+      "recall_at_20": 0.3453096621224654,
+      "recommended_share": 0.26174713787954207
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.004355400696864111
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.2813336839394538,
+      "recall_at_20": 0.31496602662389916,
+      "recommended_share": 0.3341961174713788
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.005027376804380289
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.43519766397124887,
+      "recall_at_20": 0.4532794249775382,
+      "recommended_share": 0.04631657541065207
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.30513034133354405,
+      "recall_at_20": 0.3377668123905787,
+      "recommended_share": 0.3447984071677451
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.5808580858085809,
+      "precision_at_10": 0.08877887788778878,
+      "precision_at_20": 0.053052805280528054,
+      "queries": 606,
+      "recall_at_10": 0.311838893299486,
+      "recall_at_20": 0.3411016147959169
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.44054054054054054,
+      "precision_at_10": 0.05891891891891892,
+      "precision_at_20": 0.03175675675675676,
+      "queries": 370,
+      "recall_at_10": 0.29620446855740973,
+      "recall_at_20": 0.3096209207238619
+     },
+     "51+": {
+      "hit_rate_at_20": 0.689922480620155,
+      "precision_at_10": 0.1691860465116279,
+      "precision_at_20": 0.11540697674418604,
+      "queries": 516,
+      "recall_at_10": 0.2650359237166941,
+      "recall_at_20": 0.30646439903535877
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.5377176015473888,
+      "precision_at_10": 0.07485493230174081,
+      "precision_at_20": 0.04458413926499033,
+      "queries": 517,
+      "recall_at_10": 0.33378437496196833,
+      "recall_at_20": 0.3740381358153424
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.14318143716102022
+    },
+    "novel": {
+     "hit_rate_at_20": 0.06978588421887391,
+     "precision_at_10": 0.005233941316415544,
+     "precision_at_20": 0.004044409199048375,
+     "queries": 1261,
+     "recall_at_10": 0.017786160581835683,
+     "recall_at_20": 0.030656697173625246
+    },
+    "overall": {
+     "hit_rate_at_20": 0.571926331508213,
+     "precision_at_10": 0.10034843205574913,
+     "precision_at_20": 0.06296665007466401,
+     "recall_at_10": 0.30258590403130015,
+     "recall_at_20": 0.3348833575674125
+    },
+    "queries": 2009
+   },
+   "fused[frp128_w01111_seed1]@0.7": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.3100479295261063,
+      "recall_at_20": 0.3413018995507445,
+      "recommended_share": 0.25905923344947734
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.004230960676953708
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.2895201467215104,
+      "recall_at_20": 0.3191896709904469,
+      "recommended_share": 0.3344449975111996
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.005052264808362369
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.43519766397124887,
+      "recall_at_20": 0.44384546271338726,
+      "recommended_share": 0.046764559482329514
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.3239464075648824,
+      "recall_at_20": 0.35873371884661254,
+      "recommended_share": 0.34676455948232954
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.5924092409240924,
+      "precision_at_10": 0.09174917491749175,
+      "precision_at_20": 0.05453795379537955,
+      "queries": 606,
+      "recall_at_10": 0.32011153698737377,
+      "recall_at_20": 0.35201490001658464
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.44324324324324327,
+      "precision_at_10": 0.05945945945945946,
+      "precision_at_20": 0.032432432432432434,
+      "queries": 370,
+      "recall_at_10": 0.2972598096127508,
+      "recall_at_20": 0.3134336620366032
+     },
+     "51+": {
+      "hit_rate_at_20": 0.6996124031007752,
+      "precision_at_10": 0.17713178294573645,
+      "precision_at_20": 0.12286821705426357,
+      "queries": 516,
+      "recall_at_10": 0.27548829769031374,
+      "recall_at_20": 0.31842028216746715
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.5415860735009671,
+      "precision_at_10": 0.07872340425531915,
+      "precision_at_20": 0.045164410058027085,
+      "queries": 517,
+      "recall_at_10": 0.3448685519068803,
+      "recall_at_20": 0.3742984376014
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.14403327609096553
+    },
+    "novel": {
+     "hit_rate_at_20": 0.06582077716098335,
+     "precision_at_10": 0.004520222045995242,
+     "precision_at_20": 0.0038065027755749404,
+     "queries": 1261,
+     "recall_at_10": 0.016144102754210844,
+     "recall_at_20": 0.026906912829541326
+    },
+    "overall": {
+     "hit_rate_at_20": 0.5793927327028372,
+     "precision_at_10": 0.1043802887008462,
+     "precision_at_20": 0.06560477849676456,
+     "recall_at_10": 0.3108127047860255,
+     "recall_at_20": 0.34201525246487324
+    },
+    "queries": 2009
+   },
+   "fused[frp128_w01111_seed1]@0.8": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.3085536726451935,
+      "recall_at_20": 0.3366379632691611,
+      "recommended_share": 0.25831259333001494
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.004280736684917869
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.29745015719798723,
+      "recall_at_20": 0.3265323636787941,
+      "recommended_share": 0.3312593330014933
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.005500248880039821
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.44148697214734955,
+      "recall_at_20": 0.44654088050314467,
+      "recommended_share": 0.04763563962170234
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.3365634026294384,
+      "recall_at_20": 0.3725947104773804,
+      "recommended_share": 0.34917869586859135
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.6039603960396039,
+      "precision_at_10": 0.09290429042904291,
+      "precision_at_20": 0.055693069306930694,
+      "queries": 606,
+      "recall_at_10": 0.32529605269169143,
+      "recall_at_20": 0.36184490383218887
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.44054054054054054,
+      "precision_at_10": 0.06027027027027027,
+      "precision_at_20": 0.032432432432432434,
+      "queries": 370,
+      "recall_at_10": 0.30423436658730774,
+      "recall_at_20": 0.3132969181498593
+     },
+     "51+": {
+      "hit_rate_at_20": 0.7054263565891473,
+      "precision_at_10": 0.18372093023255814,
+      "precision_at_20": 0.12635658914728684,
+      "queries": 516,
+      "recall_at_10": 0.28348213978829784,
+      "recall_at_20": 0.3262429114115173
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.5454545454545454,
+      "precision_at_10": 0.07988394584139266,
+      "precision_at_20": 0.045454545454545456,
+      "queries": 517,
+      "recall_at_10": 0.3522458582229019,
+      "recall_at_20": 0.37847242724698693
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.14514791639291524
+    },
+    "novel": {
+     "hit_rate_at_20": 0.05154639175257732,
+     "precision_at_10": 0.0037272006344171295,
+     "precision_at_20": 0.003013481363996828,
+     "queries": 1261,
+     "recall_at_10": 0.012520906921650962,
+     "recall_at_20": 0.021382663818639003
+    },
+    "overall": {
+     "hit_rate_at_20": 0.584868093578895,
+     "precision_at_10": 0.10686908909905427,
+     "precision_at_20": 0.06692384270781483,
+     "recall_at_10": 0.3176127508215385,
+     "recall_at_20": 0.3480385558052711
+    },
+    "queries": 2009
+   },
+   "fused[frp128_w01111_seed1]@0.9": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.30263036491707296,
+      "recall_at_20": 0.33307667260894,
+      "recommended_share": 0.25587356893977103
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.004504728720756595
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.2961810687375014,
+      "recall_at_20": 0.32703010208695343,
+      "recommended_share": 0.329318068690891
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.006470881035340966
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.42261904761904767,
+      "recall_at_20": 0.4819182389937107,
+      "recommended_share": 0.048332503733200596
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.34333297546811725,
+      "recall_at_20": 0.3716904274963928,
+      "recommended_share": 0.35144350423096066
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.594059405940594,
+      "precision_at_10": 0.09092409240924093,
+      "precision_at_20": 0.054867986798679866,
+      "queries": 606,
+      "recall_at_10": 0.3203795049606417,
+      "recall_at_20": 0.3574130215683322
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.43513513513513513,
+      "precision_at_10": 0.05891891891891892,
+      "precision_at_20": 0.03216216216216216,
+      "queries": 370,
+      "recall_at_10": 0.29823595058889174,
+      "recall_at_20": 0.31202080687374806
+     },
+     "51+": {
+      "hit_rate_at_20": 0.7093023255813954,
+      "precision_at_10": 0.18662790697674417,
+      "precision_at_20": 0.12839147286821706,
+      "queries": 516,
+      "recall_at_10": 0.2882651786891961,
+      "recall_at_20": 0.33070909570461043
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.539651837524178,
+      "precision_at_10": 0.08007736943907157,
+      "precision_at_20": 0.04458413926499033,
+      "queries": 517,
+      "recall_at_10": 0.356153750866415,
+      "recall_at_20": 0.3794102386296726
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.14613568706700075
+    },
+    "novel": {
+     "hit_rate_at_20": 0.040444091990483745,
+     "precision_at_10": 0.0029341792228390166,
+     "precision_at_20": 0.002458366375892149,
+     "queries": 1261,
+     "recall_at_10": 0.009642399403968186,
+     "recall_at_20": 0.016284130424110366
+    },
+    "overall": {
+     "hit_rate_at_20": 0.5803882528621205,
+     "precision_at_10": 0.10681931309109009,
+     "precision_at_20": 0.06692384270781485,
+     "recall_at_10": 0.3172591354532606,
+     "recall_at_20": 0.3478551400541642
+    },
+    "queries": 2009
+   },
+   "fused[frp128_w0111_seed1]@0.1": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.24516384503039232,
+      "recall_at_20": 0.2841666205099439,
+      "recommended_share": 0.25923344947735194
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.004206072672971628
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.1567199675081994,
+      "recall_at_20": 0.1786303343926756,
+      "recommended_share": 0.3374315579890493
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.00467894474863116
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.3489442946990117,
+      "recall_at_20": 0.35995058400718777,
+      "recommended_share": 0.04340467894474863
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.2032492343259197,
+      "recall_at_20": 0.2352837934563954,
+      "recommended_share": 0.3481831757093081
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.41914191419141916,
+      "precision_at_10": 0.05528052805280528,
+      "precision_at_20": 0.033250825082508255,
+      "queries": 606,
+      "recall_at_10": 0.2047083794855198,
+      "recall_at_20": 0.23056855623947575
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.34864864864864864,
+      "precision_at_10": 0.041081081081081085,
+      "precision_at_20": 0.02283783783783784,
+      "queries": 370,
+      "recall_at_10": 0.21702196187490305,
+      "recall_at_20": 0.23175544535838652
+     },
+     "51+": {
+      "hit_rate_at_20": 0.5329457364341085,
+      "precision_at_10": 0.09554263565891474,
+      "precision_at_20": 0.0686046511627907,
+      "queries": 516,
+      "recall_at_10": 0.15161841166008558,
+      "recall_at_20": 0.19484839521529457
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.4119922630560928,
+      "precision_at_10": 0.05106382978723405,
+      "precision_at_20": 0.030367504835589944,
+      "queries": 517,
+      "recall_at_10": 0.24030305875083438,
+      "recall_at_20": 0.27180202936972764
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.14306816070757003
+    },
+    "novel": {
+     "hit_rate_at_20": 0.07930214115781126,
+     "precision_at_10": 0.00626486915146709,
+     "precision_at_20": 0.004599524187153053,
+     "queries": 1261,
+     "recall_at_10": 0.02712076134982265,
+     "recall_at_20": 0.039456154442784434
+    },
+    "overall": {
+     "hit_rate_at_20": 0.4335490293678447,
+     "precision_at_10": 0.061921353907416626,
+     "precision_at_20": 0.039671478347436534,
+     "recall_at_10": 0.20250034129055483,
+     "recall_at_20": 0.23222373368788773
+    },
+    "queries": 2009
+   },
+   "fused[frp128_w0111_seed1]@0.2": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.26080131479268276,
+      "recall_at_20": 0.2896402943578898,
+      "recommended_share": 0.26226978596316575
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.004156296665007466
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.17015636918638902,
+      "recall_at_20": 0.2033421469856014,
+      "recommended_share": 0.33770532603285214
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.004778496764559483
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.370507637017071,
+      "recall_at_20": 0.38420934411500446,
+      "recommended_share": 0.04492284718765555
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.22531703357680175,
+      "recall_at_20": 0.2537564419594579,
+      "recommended_share": 0.34350423096067695
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.4405940594059406,
+      "precision_at_10": 0.061551155115511555,
+      "precision_at_20": 0.03638613861386139,
+      "queries": 606,
+      "recall_at_10": 0.22332638082607142,
+      "recall_at_20": 0.24527750407037738
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.37027027027027026,
+      "precision_at_10": 0.04351351351351352,
+      "precision_at_20": 0.02527027027027027,
+      "queries": 370,
+      "recall_at_10": 0.22541321026615144,
+      "recall_at_20": 0.25147659507953624
+     },
+     "51+": {
+      "hit_rate_at_20": 0.5755813953488372,
+      "precision_at_10": 0.10891472868217054,
+      "precision_at_20": 0.07635658914728682,
+      "queries": 516,
+      "recall_at_10": 0.16750721791752007,
+      "recall_at_20": 0.21445877189981366
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.43133462282398455,
+      "precision_at_10": 0.05609284332688588,
+      "precision_at_20": 0.033172147001934243,
+      "queries": 517,
+      "recall_at_10": 0.26311548165996906,
+      "recall_at_20": 0.2877153247343108
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.14110621253381303
+    },
+    "novel": {
+     "hit_rate_at_20": 0.07771609833465504,
+     "precision_at_10": 0.005947660586835844,
+     "precision_at_20": 0.00471847739888977,
+     "queries": 1261,
+     "recall_at_10": 0.024375868785342456,
+     "recall_at_20": 0.037733059045492554
+    },
+    "overall": {
+     "hit_rate_at_20": 0.45993031358885017,
+     "precision_at_10": 0.06898954703832752,
+     "precision_at_20": 0.043777999004479845,
+     "recall_at_10": 0.21961329170867083,
+     "recall_at_20": 0.24942461763764043
+    },
+    "queries": 2009
+   },
+   "fused[frp128_w0111_seed1]@0.3": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.26719953869133795,
+      "recall_at_20": 0.30193843905625617,
+      "recommended_share": 0.26321553011448484
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.004056744649079144
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.19363486009973718,
+      "recall_at_20": 0.22495376006227166,
+      "recommended_share": 0.33795420607267296
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.004952712792434047
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.3732030548068284,
+      "recall_at_20": 0.38420934411500446,
+      "recommended_share": 0.04631657541065207
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.24179008887730574,
+      "recall_at_20": 0.2722904250234446,
+      "recommended_share": 0.34094076655052263
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.48514851485148514,
+      "precision_at_10": 0.06765676567656766,
+      "precision_at_20": 0.04075907590759076,
+      "queries": 606,
+      "recall_at_10": 0.24130198077240522,
+      "recall_at_20": 0.2682355122500321
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.3918918918918919,
+      "precision_at_10": 0.046486486486486484,
+      "precision_at_20": 0.027432432432432433,
+      "queries": 370,
+      "recall_at_10": 0.23567366302660422,
+      "recall_at_20": 0.2634240095269507
+     },
+     "51+": {
+      "hit_rate_at_20": 0.6085271317829457,
+      "precision_at_10": 0.12054263565891474,
+      "precision_at_20": 0.08507751937984497,
+      "queries": 516,
+      "recall_at_10": 0.1890155864840424,
+      "recall_at_20": 0.23564424781503815
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.4506769825918762,
+      "precision_at_10": 0.059767891682785304,
+      "precision_at_20": 0.03491295938104449,
+      "queries": 517,
+      "recall_at_10": 0.2745590134129786,
+      "recall_at_20": 0.29861914796888833
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.1392031681158501
+    },
+    "novel": {
+     "hit_rate_at_20": 0.07771609833465504,
+     "precision_at_10": 0.005868358445678033,
+     "precision_at_20": 0.004599524187153053,
+     "queries": 1261,
+     "recall_at_10": 0.023886246555271468,
+     "recall_at_20": 0.03636737697005631
+    },
+    "overall": {
+     "hit_rate_at_20": 0.49079143852663015,
+     "precision_at_10": 0.07531110004977601,
+     "precision_at_20": 0.048183175709308114,
+     "recall_at_10": 0.23539437940676802,
+     "recall_at_20": 0.2667974790049608
+    },
+    "queries": 2009
+   },
+   "fused[frp128_w0111_seed1]@0.4": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.27825495344785034,
+      "recall_at_20": 0.31611208406469005,
+      "recommended_share": 0.2645345943255351
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.0037332005973120955
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.21591429930156145,
+      "recall_at_20": 0.24446442444596395,
+      "recommended_share": 0.3368093578894973
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.005176704828272772
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.39240790655884994,
+      "recall_at_20": 0.41992362982929016,
+      "recommended_share": 0.046739671478347435
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.2588793008440013,
+      "recall_at_20": 0.2867305299731633,
+      "recommended_share": 0.3404927824788452
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.5066006600660066,
+      "precision_at_10": 0.07376237623762377,
+      "precision_at_20": 0.04372937293729373,
+      "queries": 606,
+      "recall_at_10": 0.2581772816131982,
+      "recall_at_20": 0.285539132798917
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.4081081081081081,
+      "precision_at_10": 0.05108108108108109,
+      "precision_at_20": 0.028648648648648647,
+      "queries": 370,
+      "recall_at_10": 0.25644363629657746,
+      "recall_at_20": 0.27545103655397774
+     },
+     "51+": {
+      "hit_rate_at_20": 0.6298449612403101,
+      "precision_at_10": 0.13217054263565892,
+      "precision_at_20": 0.09195736434108527,
+      "queries": 516,
+      "recall_at_10": 0.20586203750280016,
+      "recall_at_20": 0.2508780222657585
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.4816247582205029,
+      "precision_at_10": 0.06479690522243714,
+      "precision_at_20": 0.03752417794970987,
+      "queries": 517,
+      "recall_at_10": 0.29029265284355377,
+      "recall_at_20": 0.31949880023151933
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.13746777284899342
+    },
+    "novel": {
+     "hit_rate_at_20": 0.07850911974623315,
+     "precision_at_10": 0.006106264869151467,
+     "precision_at_20": 0.004678826328310864,
+     "queries": 1261,
+     "recall_at_10": 0.024430989612901126,
+     "recall_at_20": 0.036391985809098144
+    },
+    "overall": {
+     "hit_rate_at_20": 0.5136884021901443,
+     "precision_at_10": 0.08227974116475859,
+     "precision_at_20": 0.05174216027874565,
+     "recall_at_10": 0.2526857595614206,
+     "recall_at_20": 0.283517937884491
+    },
+    "queries": 2009
+   },
+   "fused[frp128_w0111_seed1]@0.5": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.2962617288075669,
+      "recall_at_20": 0.330628477114939,
+      "recommended_share": 0.2650074664011946
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.0037332005973120955
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.23907401971760928,
+      "recall_at_20": 0.27350317607366914,
+      "recommended_share": 0.336112493777999
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.004952712792434047
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.3758984725965858,
+      "recall_at_20": 0.42261904761904767,
+      "recommended_share": 0.04763563962170234
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.2741785540562752,
+      "recall_at_20": 0.3040663991339263,
+      "recommended_share": 0.340119462419114
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.5247524752475248,
+      "precision_at_10": 0.07904290429042904,
+      "precision_at_20": 0.04686468646864687,
+      "queries": 606,
+      "recall_at_10": 0.2740756130976351,
+      "recall_at_20": 0.3042337636997527
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.4189189189189189,
+      "precision_at_10": 0.05324324324324324,
+      "precision_at_20": 0.030135135135135136,
+      "queries": 370,
+      "recall_at_10": 0.26561781047075167,
+      "recall_at_20": 0.29205452315746433
+     },
+     "51+": {
+      "hit_rate_at_20": 0.6472868217054264,
+      "precision_at_10": 0.14670542635658915,
+      "precision_at_20": 0.1000968992248062,
+      "queries": 516,
+      "recall_at_10": 0.23084008832910566,
+      "recall_at_20": 0.27688235195828886
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.5087040618955513,
+      "precision_at_10": 0.06943907156673114,
+      "precision_at_20": 0.04013539651837524,
+      "queries": 517,
+      "recall_at_10": 0.31014915567878004,
+      "recall_at_20": 0.3387633230502008
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.13625344926800756
+    },
+    "novel": {
+     "hit_rate_at_20": 0.08326724821570182,
+     "precision_at_10": 0.0055511498810467885,
+     "precision_at_20": 0.0049563838223632035,
+     "queries": 1261,
+     "recall_at_10": 0.020727862842764046,
+     "recall_at_20": 0.038219421545145765
+    },
+    "overall": {
+     "hit_rate_at_20": 0.5326032852165257,
+     "precision_at_10": 0.08919860627177702,
+     "precision_at_20": 0.05572424091587855,
+     "recall_at_10": 0.27069637156550164,
+     "recall_at_20": 0.30385155101928457
+    },
+    "queries": 2009
+   },
+   "fused[frp128_w0111_seed1]@0.6": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.30993016821130037,
+      "recall_at_20": 0.3393262998750391,
+      "recommended_share": 0.2662020905923345
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.003782976605276257
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.25670695320152026,
+      "recall_at_20": 0.29418683545890617,
+      "recommended_share": 0.3368342458934793
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.004977600796416127
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.38488319856244385,
+      "recall_at_20": 0.4249775381850854,
+      "recommended_share": 0.04758586361373818
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.2937080203796717,
+      "recall_at_20": 0.3214610291781509,
+      "recommended_share": 0.33787954206072673
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.5445544554455446,
+      "precision_at_10": 0.08382838283828384,
+      "precision_at_20": 0.04983498349834983,
+      "queries": 606,
+      "recall_at_10": 0.2917898020989528,
+      "recall_at_20": 0.3212363216285743
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.43513513513513513,
+      "precision_at_10": 0.05621621621621622,
+      "precision_at_20": 0.031216216216216217,
+      "queries": 370,
+      "recall_at_10": 0.28124844110138225,
+      "recall_at_20": 0.30034924645218763
+     },
+     "51+": {
+      "hit_rate_at_20": 0.6724806201550387,
+      "precision_at_10": 0.15872093023255815,
+      "precision_at_20": 0.10755813953488372,
+      "queries": 516,
+      "recall_at_10": 0.248574226871471,
+      "recall_at_20": 0.2955995437234256
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.5203094777562862,
+      "precision_at_10": 0.07311411992263057,
+      "precision_at_20": 0.04226305609284333,
+      "queries": 517,
+      "recall_at_10": 0.326148050401079,
+      "recall_at_20": 0.3552902465887297
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.1348533523033634
+    },
+    "novel": {
+     "hit_rate_at_20": 0.07216494845360824,
+     "precision_at_10": 0.005154639175257732,
+     "precision_at_20": 0.004242664551942903,
+     "queries": 1261,
+     "recall_at_10": 0.019630299180767394,
+     "recall_at_20": 0.031741034525521634
+    },
+    "overall": {
+     "hit_rate_at_20": 0.5510204081632653,
+     "precision_at_10": 0.09522150323544053,
+     "precision_at_20": 0.05928322548531608,
+     "recall_at_10": 0.287590535790201,
+     "recall_at_20": 0.31956836940860445
+    },
+    "queries": 2009
+   },
+   "fused[frp128_w0111_seed1]@0.7": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.303040680107533,
+      "recall_at_20": 0.34132174598727494,
+      "recommended_share": 0.2645345943255351
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.004056744649079144
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.27508058027811444,
+      "recall_at_20": 0.30330090774026025,
+      "recommended_share": 0.3368591338974614
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.005027376804380289
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.4061096136567835,
+      "recall_at_20": 0.4249775381850854,
+      "recommended_share": 0.048506719761075165
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.30297848297144636,
+      "recall_at_20": 0.3331219692749183,
+      "recommended_share": 0.33802887008461924
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.5643564356435643,
+      "precision_at_10": 0.08811881188118811,
+      "precision_at_20": 0.0518976897689769,
+      "queries": 606,
+      "recall_at_10": 0.30692364512200715,
+      "recall_at_20": 0.33548534201575664
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.43783783783783786,
+      "precision_at_10": 0.05567567567567568,
+      "precision_at_20": 0.03189189189189189,
+      "queries": 370,
+      "recall_at_10": 0.27763518498812617,
+      "recall_at_20": 0.30474435584729703
+     },
+     "51+": {
+      "hit_rate_at_20": 0.6744186046511628,
+      "precision_at_10": 0.16550387596899227,
+      "precision_at_20": 0.11327519379844962,
+      "queries": 516,
+      "recall_at_10": 0.26157547261191677,
+      "recall_at_20": 0.3032553449308524
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.5145067698259188,
+      "precision_at_10": 0.07543520309477757,
+      "precision_at_20": 0.04294003868471954,
+      "queries": 517,
+      "recall_at_10": 0.33037406294430627,
+      "recall_at_20": 0.35778441317864096
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.13422806628031844
+    },
+    "novel": {
+     "hit_rate_at_20": 0.07137192704203013,
+     "precision_at_10": 0.004916732751784298,
+     "precision_at_20": 0.004044409199048375,
+     "queries": 1261,
+     "recall_at_10": 0.016778714251466365,
+     "recall_at_20": 0.029188294722058784
+    },
+    "overall": {
+     "hit_rate_at_20": 0.5564957690393231,
+     "precision_at_10": 0.09875559980089597,
+     "precision_at_20": 0.06167247386759582,
+     "recall_at_10": 0.29591691478322474,
+     "recall_at_20": 0.32728413565093367
+    },
+    "queries": 2009
+   },
+   "fused[frp128_w0111_seed1]@0.8": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.3043268653607197,
+      "recall_at_20": 0.33369887109547375,
+      "recommended_share": 0.262045793927327
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.003957192633150822
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.282252604290891,
+      "recall_at_20": 0.31099606577067795,
+      "recommended_share": 0.3351418616226979
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.005550024888003982
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.3872416891284816,
+      "recall_at_20": 0.4061096136567835,
+      "recommended_share": 0.04878048780487805
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.31036982742491365,
+      "recall_at_20": 0.34768427733851126,
+      "recommended_share": 0.3414883026381284
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.5742574257425742,
+      "precision_at_10": 0.0900990099009901,
+      "precision_at_20": 0.05272277227722772,
+      "queries": 606,
+      "recall_at_10": 0.3109073427584271,
+      "recall_at_20": 0.34037618416266785
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.43513513513513513,
+      "precision_at_10": 0.05702702702702703,
+      "precision_at_20": 0.032027027027027026,
+      "queries": 370,
+      "recall_at_10": 0.281519783872725,
+      "recall_at_20": 0.30387439247733367
+     },
+     "51+": {
+      "hit_rate_at_20": 0.6841085271317829,
+      "precision_at_10": 0.17403100775193797,
+      "precision_at_20": 0.11841085271317829,
+      "queries": 516,
+      "recall_at_10": 0.26851156158390044,
+      "recall_at_20": 0.31067751098297147
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.5203094777562862,
+      "precision_at_10": 0.07620889748549323,
+      "precision_at_20": 0.044003868471953575,
+      "queries": 517,
+      "recall_at_10": 0.33504353381300345,
+      "recall_at_20": 0.364650668113205
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.13425072157100848
+    },
+    "novel": {
+     "hit_rate_at_20": 0.06582077716098335,
+     "precision_at_10": 0.003965107057890563,
+     "precision_at_20": 0.0037272006344171295,
+     "queries": 1261,
+     "recall_at_10": 0.012020637461464069,
+     "recall_at_20": 0.0234683790836197
+    },
+    "overall": {
+     "hit_rate_at_20": 0.5629666500746641,
+     "precision_at_10": 0.10199104031856646,
+     "precision_at_20": 0.06353907416625187,
+     "recall_at_10": 0.3008171441031013,
+     "recall_at_20": 0.33227251563012966
+    },
+    "queries": 2009
+   },
+   "fused[frp128_w0111_seed1]@0.9": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.2970344959940469,
+      "recall_at_20": 0.3332210943591158,
+      "recommended_share": 0.2601294176207068
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.003882528621204579
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.28190670394484096,
+      "recall_at_20": 0.31465488041809964,
+      "recommended_share": 0.33325037332005975
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.005699352911896466
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.38095238095238093,
+      "recall_at_20": 0.4061096136567835,
+      "recommended_share": 0.04955201592832255
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.3168129323992843,
+      "recall_at_20": 0.3588672144871944,
+      "recommended_share": 0.34427575908412145
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.5759075907590759,
+      "precision_at_10": 0.08993399339933994,
+      "precision_at_20": 0.053217821782178217,
+      "queries": 606,
+      "recall_at_10": 0.3077778549327972,
+      "recall_at_20": 0.34934451001991385
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.42702702702702705,
+      "precision_at_10": 0.05621621621621622,
+      "precision_at_20": 0.031486486486486484,
+      "queries": 370,
+      "recall_at_10": 0.28212269447563565,
+      "recall_at_20": 0.30151757137051255
+     },
+     "51+": {
+      "hit_rate_at_20": 0.7054263565891473,
+      "precision_at_10": 0.17887596899224806,
+      "precision_at_20": 0.12306201550387597,
+      "queries": 516,
+      "recall_at_10": 0.2731399657387982,
+      "recall_at_20": 0.32287264190444515
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.5203094777562862,
+      "precision_at_10": 0.0769825918762089,
+      "precision_at_20": 0.043617021276595745,
+      "queries": 517,
+      "recall_at_10": 0.3329574231462657,
+      "recall_at_20": 0.3627155562435009
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.1346630478615671
+    },
+    "novel": {
+     "hit_rate_at_20": 0.052339413164155434,
+     "precision_at_10": 0.0032513877874702623,
+     "precision_at_20": 0.003013481363996828,
+     "queries": 1261,
+     "recall_at_10": 0.009361558721893657,
+     "recall_at_20": 0.019310529363241964
+    },
+    "overall": {
+     "hit_rate_at_20": 0.5674464907914385,
+     "precision_at_10": 0.10323544051767049,
+     "precision_at_20": 0.06468392234942759,
+     "recall_at_10": 0.3006361309771526,
+     "recall_at_20": 0.33717794936771583
+    },
+    "queries": 2009
+   },
+   "fused[n2v128_nohub_p1q1_seed1]@0.1": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.2333521388586776,
+      "recall_at_20": 0.27532227840798706,
+      "recommended_share": 0.244449975111996
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.004106520657043305
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.1518159940920132,
+      "recall_at_20": 0.17591155626178934,
+      "recommended_share": 0.34026879044300645
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.16666666666666666,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.004355400696864111
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.33726415094339623,
+      "recall_at_20": 0.39027403414195866,
+      "recommended_share": 0.03904927824788452
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.1977572047568721,
+      "recall_at_20": 0.2318658654995103,
+      "recommended_share": 0.3646839223494276
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.4240924092409241,
+      "precision_at_10": 0.054290429042904285,
+      "precision_at_20": 0.033993399339934,
+      "queries": 606,
+      "recall_at_10": 0.1949722374047208,
+      "recall_at_20": 0.23426916534295272
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.327027027027027,
+      "precision_at_10": 0.037567567567567565,
+      "precision_at_20": 0.021216216216216218,
+      "queries": 370,
+      "recall_at_10": 0.19927304412598532,
+      "recall_at_20": 0.21432023417317536
+     },
+     "51+": {
+      "hit_rate_at_20": 0.5445736434108527,
+      "precision_at_10": 0.09651162790697675,
+      "precision_at_20": 0.0688953488372093,
+      "queries": 516,
+      "recall_at_10": 0.15599465347151065,
+      "recall_at_20": 0.1975776929382663
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.4081237911025145,
+      "precision_at_10": 0.04912959381044488,
+      "precision_at_20": 0.029497098646034815,
+      "queries": 517,
+      "recall_at_10": 0.23143550786200687,
+      "recall_at_20": 0.262510069449141
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.1388769319299136
+    },
+    "novel": {
+     "hit_rate_at_20": 0.09674861221252974,
+     "precision_at_10": 0.0065820777160983356,
+     "precision_at_20": 0.005709754163362411,
+     "queries": 1261,
+     "recall_at_10": 0.02873528371176769,
+     "recall_at_20": 0.04776388624761176
+    },
+    "overall": {
+     "hit_rate_at_20": 0.4330512692882031,
+     "precision_at_10": 0.06072672971627675,
+     "precision_at_20": 0.03944748631159781,
+     "recall_at_10": 0.19513668539065823,
+     "recall_at_20": 0.22843872389410427
+    },
+    "queries": 2009
+   },
+   "fused[n2v128_nohub_p1q1_seed1]@0.2": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.24245633565362693,
+      "recall_at_20": 0.28206951769045047,
+      "recommended_share": 0.24218516674962667
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.003832752613240418
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.16419865914468043,
+      "recall_at_20": 0.19309774415583023,
+      "recommended_share": 0.34094076655052263
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.16666666666666666,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.004380288700846192
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.3588274932614555,
+      "recall_at_20": 0.3741015274034142,
+      "recommended_share": 0.03870084619213539
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.21146690397269916,
+      "recall_at_20": 0.2435774471891503,
+      "recommended_share": 0.3670233947237432
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.4504950495049505,
+      "precision_at_10": 0.060726072607260734,
+      "precision_at_20": 0.036963696369636964,
+      "queries": 606,
+      "recall_at_10": 0.2173962889705443,
+      "recall_at_20": 0.2469112281752542
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.33513513513513515,
+      "precision_at_10": 0.037567567567567565,
+      "precision_at_20": 0.022567567567567566,
+      "queries": 370,
+      "recall_at_10": 0.1971816670346082,
+      "recall_at_20": 0.2155661504190916
+     },
+     "51+": {
+      "hit_rate_at_20": 0.5755813953488372,
+      "precision_at_10": 0.1060077519379845,
+      "precision_at_20": 0.0755813953488372,
+      "queries": 516,
+      "recall_at_10": 0.1720291613489245,
+      "recall_at_20": 0.2167898832300131
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.42166344294003866,
+      "precision_at_10": 0.05067698259187622,
+      "precision_at_20": 0.030754352030947778,
+      "queries": 517,
+      "recall_at_10": 0.23776706047015522,
+      "recall_at_20": 0.2724442375580012
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.13194441297876294
+    },
+    "novel": {
+     "hit_rate_at_20": 0.10943695479777954,
+     "precision_at_10": 0.007613005551149881,
+     "precision_at_20": 0.006502775574940525,
+     "queries": 1261,
+     "recall_at_10": 0.03316605020287378,
+     "recall_at_20": 0.053271421871639295
+    },
+    "overall": {
+     "hit_rate_at_20": 0.4539571926331508,
+     "precision_at_10": 0.06550522648083623,
+     "precision_at_20": 0.04263315082130414,
+     "recall_at_10": 0.20726330783378308,
+     "recall_at_20": 0.23997258859802953
+    },
+    "queries": 2009
+   },
+   "fused[n2v128_nohub_p1q1_seed1]@0.3": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.2441704126287405,
+      "recall_at_20": 0.2847280666473047,
+      "recommended_share": 0.2393230462916874
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.0035092085614733697
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.17735805286251494,
+      "recall_at_20": 0.20645327090922516,
+      "recommended_share": 0.3394723743155799
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.16666666666666666,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.004056744649079144
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.3615229110512129,
+      "recall_at_20": 0.3741015274034142,
+      "recommended_share": 0.038003982080637135
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.2208164713317872,
+      "recall_at_20": 0.25715669551922893,
+      "recommended_share": 0.3724738675958188
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.46534653465346537,
+      "precision_at_10": 0.0627062706270627,
+      "precision_at_20": 0.03886138613861386,
+      "queries": 606,
+      "recall_at_10": 0.22208739614882336,
+      "recall_at_20": 0.254687871375213
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.35135135135135137,
+      "precision_at_10": 0.039459459459459466,
+      "precision_at_20": 0.024594594594594593,
+      "queries": 370,
+      "recall_at_10": 0.19796871782165898,
+      "recall_at_20": 0.22842972828266944
+     },
+     "51+": {
+      "hit_rate_at_20": 0.6027131782945736,
+      "precision_at_10": 0.11220930232558139,
+      "precision_at_20": 0.07906976744186046,
+      "queries": 516,
+      "recall_at_10": 0.18508092635956344,
+      "recall_at_20": 0.22896237864550525
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.4274661508704062,
+      "precision_at_10": 0.0539651837524178,
+      "precision_at_20": 0.03123791102514507,
+      "queries": 517,
+      "recall_at_10": 0.25129059367453954,
+      "recall_at_20": 0.28108152225911565
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.12572780121341737
+    },
+    "novel": {
+     "hit_rate_at_20": 0.11181601903251388,
+     "precision_at_10": 0.008247422680412371,
+     "precision_at_20": 0.006780333068992863,
+     "queries": 1261,
+     "recall_at_10": 0.03405113112916788,
+     "recall_at_20": 0.05302981140685187
+    },
+    "overall": {
+     "hit_rate_at_20": 0.4698855151816824,
+     "precision_at_10": 0.0688899950223992,
+     "precision_at_20": 0.04459930313588851,
+     "recall_at_10": 0.21565574046364983,
+     "recall_at_20": 0.2500366271314138
+    },
+    "queries": 2009
+   },
+   "fused[n2v128_nohub_p1q1_seed1]@0.4": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.24376669360750738,
+      "recall_at_20": 0.2830443905830703,
+      "recommended_share": 0.23504230960676953
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.0035092085614733697
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.18250634846145644,
+      "recall_at_20": 0.21995578752710254,
+      "recommended_share": 0.3384519661523146
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.0038078646092583376
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.37095687331536387,
+      "recall_at_20": 0.3885893980233603,
+      "recommended_share": 0.03750622200099552
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.22364622688931377,
+      "recall_at_20": 0.2591389571663183,
+      "recommended_share": 0.3782976605276257
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.47854785478547857,
+      "precision_at_10": 0.06452145214521453,
+      "precision_at_20": 0.04026402640264027,
+      "queries": 606,
+      "recall_at_10": 0.22489134039036535,
+      "recall_at_20": 0.2635769579223881
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.34594594594594597,
+      "precision_at_10": 0.04135135135135135,
+      "precision_at_20": 0.024189189189189192,
+      "queries": 370,
+      "recall_at_10": 0.20351023336317453,
+      "recall_at_20": 0.22670631655925771
+     },
+     "51+": {
+      "hit_rate_at_20": 0.6104651162790697,
+      "precision_at_10": 0.11763565891472869,
+      "precision_at_20": 0.0814922480620155,
+      "queries": 516,
+      "recall_at_10": 0.1941771712593656,
+      "recall_at_20": 0.23277213144123735
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.43520309477756286,
+      "precision_at_10": 0.053771760154738876,
+      "precision_at_20": 0.03249516441005803,
+      "queries": 517,
+      "recall_at_10": 0.2469846159643065,
+      "recall_at_20": 0.28917302778775855
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.12057145705236544
+    },
+    "novel": {
+     "hit_rate_at_20": 0.10626486915146709,
+     "precision_at_10": 0.008247422680412371,
+     "precision_at_20": 0.0065820777160983356,
+     "queries": 1261,
+     "recall_at_10": 0.033466331348345736,
+     "recall_at_20": 0.04920731436380096
+    },
+    "overall": {
+     "hit_rate_at_20": 0.476854156296665,
+     "precision_at_10": 0.07112991538078646,
+     "precision_at_20": 0.0458934793429567,
+     "recall_at_10": 0.21875032625401444,
+     "recall_at_20": 0.2554613483413849
+    },
+    "queries": 2009
+   },
+   "fused[n2v128_nohub_p1q1_seed1]@0.5": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.23390031918142049,
+      "recall_at_20": 0.2771699749488412,
+      "recommended_share": 0.23310104529616724
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.0037332005973120955
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.18258117825570033,
+      "recall_at_20": 0.22995298177388337,
+      "recommended_share": 0.3374564459930314
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.16666666666666666,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.00390741662518666
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.3544474393530997,
+      "recall_at_20": 0.3697214734950584,
+      "recommended_share": 0.036933797909407665
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.22338120344116966,
+      "recall_at_20": 0.26292536076462353,
+      "recommended_share": 0.3814584370333499
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.48514851485148514,
+      "precision_at_10": 0.06534653465346535,
+      "precision_at_20": 0.04108910891089109,
+      "queries": 606,
+      "recall_at_10": 0.22112065655006827,
+      "recall_at_20": 0.26948916840652637
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.34594594594594597,
+      "precision_at_10": 0.039459459459459466,
+      "precision_at_20": 0.024054054054054055,
+      "queries": 370,
+      "recall_at_10": 0.1951556150085562,
+      "recall_at_20": 0.2210539734069146
+     },
+     "51+": {
+      "hit_rate_at_20": 0.6085271317829457,
+      "precision_at_10": 0.1182170542635659,
+      "precision_at_20": 0.08246124031007752,
+      "queries": 516,
+      "recall_at_10": 0.19768965006660436,
+      "recall_at_20": 0.24434968789577077
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.43520309477756286,
+      "precision_at_10": 0.05319148936170213,
+      "precision_at_20": 0.03249516441005803,
+      "queries": 517,
+      "recall_at_10": 0.24059614627796444,
+      "recall_at_20": 0.2852853669852041
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.1161899238329127
+    },
+    "novel": {
+     "hit_rate_at_20": 0.10626486915146709,
+     "precision_at_10": 0.007850911974623315,
+     "precision_at_20": 0.006423473433782712,
+     "queries": 1261,
+     "recall_at_10": 0.0300264315266061,
+     "recall_at_20": 0.0476679314940725
+    },
+    "overall": {
+     "hit_rate_at_20": 0.47834743653558986,
+     "precision_at_10": 0.07103036336485814,
+     "precision_at_20": 0.04636635141861623,
+     "recall_at_10": 0.21533238550651201,
+     "recall_at_20": 0.25817689392756676
+    },
+    "queries": 2009
+   },
+   "fused[n2v128_nohub_p1q1_seed1]@0.6": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.21991417912240016,
+      "recall_at_20": 0.26028469679919614,
+      "recommended_share": 0.23130910900945745
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.25,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.0037332005973120955
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.18940752774361816,
+      "recall_at_20": 0.2339332804573418,
+      "recommended_share": 0.3352911896465903
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.16666666666666666,
+      "recall_at_20": 0.16666666666666666,
+      "recommended_share": 0.004206072672971628
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.3508535489667565,
+      "recall_at_20": 0.3634321653189578,
+      "recommended_share": 0.03661025385764062
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.22295033583361176,
+      "recall_at_20": 0.26613648912982996,
+      "recommended_share": 0.3854156296665007
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.48184818481848185,
+      "precision_at_10": 0.066006600660066,
+      "precision_at_20": 0.04092409240924093,
+      "queries": 606,
+      "recall_at_10": 0.22765196421590703,
+      "recall_at_20": 0.27118415945716173
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.327027027027027,
+      "precision_at_10": 0.03648648648648649,
+      "precision_at_20": 0.022027027027027028,
+      "queries": 370,
+      "recall_at_10": 0.18564028799322918,
+      "recall_at_20": 0.20751800487094607
+     },
+     "51+": {
+      "hit_rate_at_20": 0.622093023255814,
+      "precision_at_10": 0.12189922480620155,
+      "precision_at_20": 0.08556201550387596,
+      "queries": 516,
+      "recall_at_10": 0.20461129055614197,
+      "recall_at_20": 0.2550377636224691
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.4158607350096712,
+      "precision_at_10": 0.05067698259187621,
+      "precision_at_20": 0.030947775628626693,
+      "queries": 517,
+      "recall_at_10": 0.22530563408222984,
+      "recall_at_20": 0.272420395077679
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.11314505276417201
+    },
+    "novel": {
+     "hit_rate_at_20": 0.10150674068199841,
+     "precision_at_10": 0.00753370340999207,
+     "precision_at_20": 0.006225218080888184,
+     "queries": 1261,
+     "recall_at_10": 0.027289146968293952,
+     "recall_at_20": 0.043599037366175854
+    },
+    "overall": {
+     "hit_rate_at_20": 0.4723743155798905,
+     "precision_at_10": 0.07098058735689397,
+     "precision_at_20": 0.04634146341463415,
+     "recall_at_10": 0.21339294953699178,
+     "recall_at_20": 0.25562971265188855
+    },
+    "queries": 2009
+   },
+   "fused[n2v128_nohub_p1q1_seed1]@0.7": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.1838625587963186,
+      "recall_at_20": 0.2307584652622596,
+      "recommended_share": 0.2313339970134395
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.25,
+      "recall_at_20": 0.25,
+      "recommended_share": 0.003708312593330015
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.17545470670469904,
+      "recall_at_20": 0.22162506318262168,
+      "recommended_share": 0.33235440517670484
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.16666666666666666,
+      "recall_at_20": 0.23809523809523808,
+      "recommended_share": 0.004206072672971628
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.3084007187780773,
+      "recall_at_20": 0.3422057502246182,
+      "recommended_share": 0.03541562966650075
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.21879164612792085,
+      "recall_at_20": 0.2664832951762463,
+      "recommended_share": 0.38927327028372327
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.4752475247524752,
+      "precision_at_10": 0.06353135313531354,
+      "precision_at_20": 0.040181518151815185,
+      "queries": 606,
+      "recall_at_10": 0.21829479892902162,
+      "recall_at_20": 0.2659328040977038
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.2891891891891892,
+      "precision_at_10": 0.02837837837837838,
+      "precision_at_20": 0.01891891891891892,
+      "queries": 370,
+      "recall_at_10": 0.14244398244398243,
+      "recall_at_20": 0.18584166584166587
+     },
+     "51+": {
+      "hit_rate_at_20": 0.6182170542635659,
+      "precision_at_10": 0.1251937984496124,
+      "precision_at_20": 0.0878875968992248,
+      "queries": 516,
+      "recall_at_10": 0.20705728174034874,
+      "recall_at_20": 0.2599138222975919
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.36363636363636365,
+      "precision_at_10": 0.043907156673114116,
+      "precision_at_20": 0.0269825918762089,
+      "queries": 517,
+      "recall_at_10": 0.1964079253005752,
+      "recall_at_20": 0.23757637599768314
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.11116951141600098
+    },
+    "novel": {
+     "hit_rate_at_20": 0.08961141950832673,
+     "precision_at_10": 0.0067406819984139575,
+     "precision_at_20": 0.005233941316415544,
+     "queries": 1261,
+     "recall_at_10": 0.022214136728731772,
+     "recall_at_20": 0.03606499065687141
+    },
+    "overall": {
+     "hit_rate_at_20": 0.4489795918367347,
+     "precision_at_10": 0.06784469885515182,
+     "precision_at_20": 0.0451219512195122,
+     "recall_at_10": 0.19580655869272173,
+     "recall_at_20": 0.24233908130462142
+    },
+    "queries": 2009
+   },
+   "fused[n2v128_nohub_p1q1_seed1]@0.8": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.13766317984292895,
+      "recall_at_20": 0.17538507104094986,
+      "recommended_share": 0.22999004479840718
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.25,
+      "recall_at_20": 0.25,
+      "recommended_share": 0.0037332005973120955
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.1573952160216818,
+      "recall_at_20": 0.19101457685534745,
+      "recommended_share": 0.33076157292185165
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.07142857142857142,
+      "recall_at_20": 0.14285714285714285,
+      "recommended_share": 0.004803384768541563
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.212151841868823,
+      "recall_at_20": 0.2593216531895777,
+      "recommended_share": 0.035863613738178195
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.19926604922989724,
+      "recall_at_20": 0.24257475948643933,
+      "recommended_share": 0.39106520657043303
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.4389438943894389,
+      "precision_at_10": 0.057920792079207924,
+      "precision_at_20": 0.037541254125412545,
+      "queries": 606,
+      "recall_at_10": 0.1960747106198244,
+      "recall_at_20": 0.23973568128416797
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.1972972972972973,
+      "precision_at_10": 0.01783783783783784,
+      "precision_at_20": 0.011756756756756758,
+      "queries": 370,
+      "recall_at_10": 0.08542883542883543,
+      "recall_at_20": 0.10848546348546349
+     },
+     "51+": {
+      "hit_rate_at_20": 0.6124031007751938,
+      "precision_at_10": 0.12403100775193798,
+      "precision_at_20": 0.087984496124031,
+      "queries": 516,
+      "recall_at_10": 0.20427167833199406,
+      "recall_at_20": 0.2551177523813479
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.3152804642166344,
+      "precision_at_10": 0.03713733075435203,
+      "precision_at_20": 0.022340425531914895,
+      "queries": 517,
+      "recall_at_10": 0.1551840460206031,
+      "recall_at_20": 0.18579423746251597
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.11089764792772056
+    },
+    "novel": {
+     "hit_rate_at_20": 0.08564631245043616,
+     "precision_at_10": 0.006344171292624901,
+     "precision_at_20": 0.0049563838223632035,
+     "queries": 1261,
+     "recall_at_10": 0.01985284553026039,
+     "recall_at_20": 0.03202941259864768
+    },
+    "overall": {
+     "hit_rate_at_20": 0.40716774514683923,
+     "precision_at_10": 0.06217023394723743,
+     "precision_at_20": 0.04183673469387755,
+     "recall_at_10": 0.1672793835521371,
+     "recall_at_20": 0.20563256612480016
+    },
+    "queries": 2009
+   },
+   "fused[n2v128_nohub_p1q1_seed1]@0.9": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.09037772602594268,
+      "recall_at_20": 0.11401826597117719,
+      "recommended_share": 0.22272274763563962
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.25,
+      "recall_at_20": 0.25,
+      "recommended_share": 0.0038576406172224987
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.1349109942950425,
+      "recall_at_20": 0.1721269676215419,
+      "recommended_share": 0.32772523643603785
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.14285714285714285,
+      "recall_at_20": 0.14285714285714285,
+      "recommended_share": 0.006122448979591836
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.18867924528301888,
+      "recall_at_20": 0.220125786163522,
+      "recommended_share": 0.03551518168242907
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.16332317790009915,
+      "recall_at_20": 0.20392067828223184,
+      "recommended_share": 0.39980089596814333
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.39603960396039606,
+      "precision_at_10": 0.05148514851485148,
+      "precision_at_20": 0.03424092409240924,
+      "queries": 606,
+      "recall_at_10": 0.16506933603395046,
+      "recall_at_20": 0.21081243975557726
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.11621621621621622,
+      "precision_at_10": 0.010270270270270271,
+      "precision_at_20": 0.007432432432432433,
+      "queries": 370,
+      "recall_at_10": 0.0437933537933538,
+      "recall_at_20": 0.057301422301422295
+     },
+     "51+": {
+      "hit_rate_at_20": 0.5930232558139535,
+      "precision_at_10": 0.12306201550387597,
+      "precision_at_20": 0.08546511627906977,
+      "queries": 516,
+      "recall_at_10": 0.1960077291618387,
+      "recall_at_20": 0.23405062954421094
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.24177949709864605,
+      "precision_at_10": 0.025531914893617023,
+      "precision_at_20": 0.017117988394584137,
+      "queries": 517,
+      "recall_at_10": 0.09822246749483846,
+      "recall_at_20": 0.13035056666839218
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.11252429779926507
+    },
+    "novel": {
+     "hit_rate_at_20": 0.07057890563045202,
+     "precision_at_10": 0.0056304520222046,
+     "precision_at_20": 0.004242664551942903,
+     "queries": 1261,
+     "recall_at_10": 0.01586969126548825,
+     "recall_at_20": 0.023775691713268054
+    },
+    "overall": {
+     "hit_rate_at_20": 0.3554006968641115,
+     "precision_at_10": 0.055599800895968145,
+     "precision_at_20": 0.03805375808860129,
+     "recall_at_10": 0.13347763189768796,
+     "recall_at_20": 0.16780250500536473
+    },
+    "queries": 2009
+   },
+   "heuristic": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.0030067793814596883,
+      "recall_at_20": 0.003563820379677157,
+      "recommended_share": 0.06207068193130911
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.0,
+      "recall_at_20": 0.0,
+      "recommended_share": 0.0
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.016754053345573405,
+      "recall_at_20": 0.02108363252553615,
+      "recommended_share": 0.3294425087108014
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.0,
+      "recall_at_20": 0.07142857142857142,
+      "recommended_share": 0.003758088601294176
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.0,
+      "recall_at_20": 0.0,
+      "recommended_share": 0.0015430562468889996
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.009173302588551202,
+      "recall_at_20": 0.012037609438149232,
+      "recommended_share": 0.6031856645097063
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.041254125412541254,
+      "precision_at_10": 0.003795379537953796,
+      "precision_at_20": 0.0024752475247524753,
+      "queries": 606,
+      "recall_at_10": 0.007623743816958727,
+      "recall_at_20": 0.008770308596589399
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.04864864864864865,
+      "precision_at_10": 0.004594594594594595,
+      "precision_at_20": 0.0031081081081081085,
+      "queries": 370,
+      "recall_at_10": 0.016225888578829756,
+      "recall_at_20": 0.01906093111975465
+     },
+     "51+": {
+      "hit_rate_at_20": 0.13178294573643412,
+      "precision_at_10": 0.01957364341085271,
+      "precision_at_20": 0.013856589147286822,
+      "queries": 516,
+      "recall_at_10": 0.011946031314050667,
+      "recall_at_20": 0.014576902000166592
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.04448742746615087,
+      "precision_at_10": 0.004061895551257254,
+      "precision_at_20": 0.003191489361702128,
+      "queries": 517,
+      "recall_at_10": 0.006058896508606373,
+      "recall_at_20": 0.010693753999006978
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.002147721557415303
+    },
+    "novel": {
+     "hit_rate_at_20": 0.03330689928628073,
+     "precision_at_10": 0.0028548770816812057,
+     "precision_at_20": 0.0018239492466296592,
+     "queries": 1261,
+     "recall_at_10": 0.010966619267856307,
+     "recall_at_20": 0.012240090591357953
+    },
+    "overall": {
+     "hit_rate_at_20": 0.0666998506719761,
+     "precision_at_10": 0.008063713290194126,
+     "precision_at_20": 0.005699352911896467,
+     "recall_at_10": 0.009915464997632472,
+     "recall_at_20": 0.012651918254561953
+    },
+    "queries": 2009
+   },
+   "heuristic_all_artists": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.21966141281546842,
+      "recall_at_20": 0.2558617814617799,
+      "recommended_share": 0.24671478347436535
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.005002488800398208
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.1345614947415785,
+      "recall_at_20": 0.15503924980986492,
+      "recommended_share": 0.3358636137381782
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.3333333333333333,
+      "recall_at_20": 0.3333333333333333,
+      "recommended_share": 0.004156296665007466
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.3160377358490566,
+      "recall_at_20": 0.3435534591194968,
+      "recommended_share": 0.04171229467396715
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.17554728103045392,
+      "recall_at_20": 0.20798467871238843,
+      "recommended_share": 0.3630164260826282
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.37293729372937295,
+      "precision_at_10": 0.0462046204620462,
+      "precision_at_20": 0.028712871287128718,
+      "queries": 606,
+      "recall_at_10": 0.17629554250194995,
+      "recall_at_20": 0.20546651144264452
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.3216216216216216,
+      "precision_at_10": 0.03540540540540541,
+      "precision_at_20": 0.02040540540540541,
+      "queries": 370,
+      "recall_at_10": 0.1898843697373109,
+      "recall_at_20": 0.2058807232336644
+     },
+     "51+": {
+      "hit_rate_at_20": 0.4748062015503876,
+      "precision_at_10": 0.08042635658914729,
+      "precision_at_20": 0.057848837209302326,
+      "queries": 516,
+      "recall_at_10": 0.12979833917046546,
+      "recall_at_20": 0.17222554865131634
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.3713733075435203,
+      "precision_at_10": 0.046034816247582204,
+      "precision_at_20": 0.026789168278529982,
+      "queries": 517,
+      "recall_at_10": 0.2169690346189379,
+      "recall_at_20": 0.2416568494905052
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.14230694294038487
+    },
+    "novel": {
+     "hit_rate_at_20": 0.07454401268834258,
+     "precision_at_10": 0.0056304520222046,
+     "precision_at_20": 0.004401268834258526,
+     "queries": 1261,
+     "recall_at_10": 0.025144866397123572,
+     "recall_at_20": 0.03643320373942136
+    },
+    "overall": {
+     "hit_rate_at_20": 0.3892483822797412,
+     "precision_at_10": 0.0529616724738676,
+     "precision_at_20": 0.034171229467396716,
+     "recall_at_10": 0.1773226727072861,
+     "recall_at_20": 0.20631834137449914
+    },
+    "queries": 2009
+   },
+   "n2v128_nohub_p1q1_seed1": {
+    "by_query_family": {
+     "digital": {
+      "queries": 561,
+      "recall_at_10": 0.06622427158898363,
+      "recall_at_20": 0.08431430879664464,
+      "recommended_share": 0.20632155301144847
+     },
+     "grooved_other": {
+      "queries": 2,
+      "recall_at_10": 0.0,
+      "recall_at_20": 0.0,
+      "recommended_share": 0.004106520657043305
+     },
+     "optical": {
+      "queries": 722,
+      "recall_at_10": 0.10679648603878031,
+      "recall_at_20": 0.1408440869385045,
+      "recommended_share": 0.3310851169736187
+     },
+     "shellac": {
+      "queries": 2,
+      "recall_at_10": 0.07142857142857142,
+      "recall_at_20": 0.14285714285714285,
+      "recommended_share": 0.008038825286212047
+     },
+     "tape": {
+      "queries": 53,
+      "recall_at_10": 0.12735849056603774,
+      "recall_at_20": 0.15723270440251574,
+      "recommended_share": 0.034892981582877056
+     },
+     "vinyl": {
+      "queries": 669,
+      "recall_at_10": 0.1338048145036705,
+      "recall_at_20": 0.17160899029387583,
+      "recommended_share": 0.4109009457441513
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.334983498349835,
+      "precision_at_10": 0.041584158415841586,
+      "precision_at_20": 0.028135313531353137,
+      "queries": 606,
+      "recall_at_10": 0.1293594487762422,
+      "recall_at_20": 0.1705583119707463
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.062162162162162166,
+      "precision_at_10": 0.005675675675675676,
+      "precision_at_20": 0.0035135135135135136,
+      "queries": 370,
+      "recall_at_10": 0.024345774345774347,
+      "recall_at_20": 0.02986379236379236
+     },
+     "51+": {
+      "hit_rate_at_20": 0.5794573643410853,
+      "precision_at_10": 0.11375968992248063,
+      "precision_at_20": 0.0812015503875969,
+      "queries": 516,
+      "recall_at_10": 0.1818018738167613,
+      "recall_at_20": 0.22507781607626048
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.17408123791102514,
+      "precision_at_10": 0.01760154738878143,
+      "precision_at_20": 0.012475822050290136,
+      "queries": 517,
+      "recall_at_10": 0.05697800381323745,
+      "recall_at_20": 0.08098090291284835
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.11539698865876148
+    },
+    "novel": {
+     "hit_rate_at_20": 0.061855670103092786,
+     "precision_at_10": 0.003965107057890563,
+     "precision_at_20": 0.0035685963521015066,
+     "queries": 1261,
+     "recall_at_10": 0.012629244215762595,
+     "recall_at_20": 0.020485265651034257
+    },
+    "overall": {
+     "hit_rate_at_20": 0.30612244897959184,
+     "precision_at_10": 0.04733698357391738,
+     "precision_at_20": 0.03320059731209557,
+     "recall_at_10": 0.1048617010090751,
+     "recall_at_20": 0.13559742166758013
+    },
+    "queries": 2009
+   }
+  },
+  "test": {
+   "frp128_w01111_seed1": {
+    "by_query_family": {
+     "digital": {
+      "queries": 1223,
+      "recall_at_10": 0.3181422557641278,
+      "recall_at_20": 0.3504261438067308,
+      "recommended_share": 0.24449269222622325
+     },
+     "grooved_other": {
+      "queries": 4,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.004448210124973522
+     },
+     "optical": {
+      "queries": 1781,
+      "recall_at_10": 0.2891402699966811,
+      "recall_at_20": 0.3143074423423516,
+      "recommended_share": 0.32577843677187035
+     },
+     "shellac": {
+      "queries": 9,
+      "recall_at_10": 0.34444444444444444,
+      "recall_at_20": 0.36296296296296293,
+      "recommended_share": 0.008377462402033468
+     },
+     "tape": {
+      "queries": 158,
+      "recall_at_10": 0.32500236581505093,
+      "recall_at_20": 0.37808965243990833,
+      "recommended_share": 0.04863376403304385
+     },
+     "video": {
+      "queries": 1,
+      "recall_at_10": 0.0,
+      "recall_at_20": 0.0,
+      "recommended_share": 0.003992798135988138
+     },
+     "vinyl": {
+      "queries": 1545,
+      "recall_at_10": 0.34117548887204485,
+      "recall_at_20": 0.37408101981185016,
+      "recommended_share": 0.3639906799406905
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.5786764705882353,
+      "precision_at_10": 0.09955882352941177,
+      "precision_at_20": 0.05764705882352942,
+      "queries": 1360,
+      "recall_at_10": 0.323426821334311,
+      "recall_at_20": 0.35526000209974223
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.4386792452830189,
+      "precision_at_10": 0.05766509433962264,
+      "precision_at_20": 0.03136792452830189,
+      "queries": 848,
+      "recall_at_10": 0.3013409037700474,
+      "recall_at_20": 0.32019561212947273
+     },
+     "51+": {
+      "hit_rate_at_20": 0.7060782681099084,
+      "precision_at_10": 0.18368026644462948,
+      "precision_at_20": 0.12339716902581181,
+      "queries": 1201,
+      "recall_at_10": 0.2859581656946901,
+      "recall_at_20": 0.3283008168568127
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.5304878048780488,
+      "precision_at_10": 0.07865853658536585,
+      "precision_at_20": 0.04352134146341464,
+      "queries": 1312,
+      "recall_at_10": 0.34205791414536485,
+      "recall_at_20": 0.367640223370706
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.2829011459046031
+    },
+    "novel": {
+     "hit_rate_at_20": 0.041850969717591016,
+     "precision_at_10": 0.0031303164341612796,
+     "precision_at_20": 0.0023817625042531474,
+     "queries": 2939,
+     "recall_at_10": 0.011472771126168,
+     "recall_at_20": 0.016510720576749096
+    },
+    "overall": {
+     "hit_rate_at_20": 0.5725481889430205,
+     "precision_at_10": 0.10762550307138319,
+     "precision_at_20": 0.06572760008472782,
+     "recall_at_10": 0.3151055504701768,
+     "recall_at_20": 0.34554389664241486
+    },
+    "queries": 4721
+   },
+   "frp128_w0111_seed1": {
+    "by_query_family": {
+     "digital": {
+      "queries": 1223,
+      "recall_at_10": 0.31386657520755207,
+      "recall_at_20": 0.33580540277108817,
+      "recommended_share": 0.2491103579750053
+     },
+     "grooved_other": {
+      "queries": 4,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.004077525947892396
+     },
+     "optical": {
+      "queries": 1781,
+      "recall_at_10": 0.27159368577256143,
+      "recall_at_20": 0.29866472718995224,
+      "recommended_share": 0.3327684812539716
+     },
+     "shellac": {
+      "queries": 9,
+      "recall_at_10": 0.34444444444444444,
+      "recall_at_20": 0.35454545454545455,
+      "recommended_share": 0.007191273035373862
+     },
+     "tape": {
+      "queries": 158,
+      "recall_at_10": 0.314628101646685,
+      "recall_at_20": 0.33988043258175227,
+      "recommended_share": 0.04961872484643084
+     },
+     "video": {
+      "queries": 1,
+      "recall_at_10": 0.0,
+      "recall_at_20": 0.0,
+      "recommended_share": 0.0037809786062274944
+     },
+     "vinyl": {
+      "queries": 1545,
+      "recall_at_10": 0.327248319245308,
+      "recall_at_20": 0.36226131483656104,
+      "recommended_share": 0.3531984748993857
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.5573529411764706,
+      "precision_at_10": 0.09433823529411765,
+      "precision_at_20": 0.05584558823529412,
+      "queries": 1360,
+      "recall_at_10": 0.2985695720973543,
+      "recall_at_20": 0.33271726240795374
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.43042452830188677,
+      "precision_at_10": 0.05872641509433963,
+      "precision_at_20": 0.031132075471698117,
+      "queries": 848,
+      "recall_at_10": 0.29998460152931117,
+      "recall_at_20": 0.3143215213792028
+     },
+     "51+": {
+      "hit_rate_at_20": 0.6994171523730225,
+      "precision_at_10": 0.17477102414654455,
+      "precision_at_20": 0.11765195670274772,
+      "queries": 1201,
+      "recall_at_10": 0.27238340800496014,
+      "recall_at_20": 0.31440632120531525
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.5152439024390244,
+      "precision_at_10": 0.07660060975609756,
+      "precision_at_20": 0.0421875,
+      "queries": 1312,
+      "recall_at_10": 0.33567304570939815,
+      "recall_at_20": 0.3540819487833033
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.24861009791616637
+    },
+    "novel": {
+     "hit_rate_at_20": 0.05341953045253488,
+     "precision_at_10": 0.0038448451854372237,
+     "precision_at_20": 0.003011228308948622,
+     "queries": 2939,
+     "recall_at_10": 0.013106422887600097,
+     "recall_at_20": 0.020189515282147266
+    },
+    "overall": {
+     "hit_rate_at_20": 0.5589917390383393,
+     "precision_at_10": 0.10347384028807456,
+     "precision_at_20": 0.06333403939843253,
+     "recall_at_10": 0.3024734312929348,
+     "recall_at_20": 0.33069214903106514
+    },
+    "queries": 4721
+   },
+   "fused[frp128_w01111_seed1]@0.8": {
+    "by_query_family": {
+     "digital": {
+      "queries": 1223,
+      "recall_at_10": 0.33173216324728716,
+      "recall_at_20": 0.362127512671758,
+      "recommended_share": 0.24832662571489092
+     },
+     "grooved_other": {
+      "queries": 4,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.004204617665748782
+     },
+     "optical": {
+      "queries": 1781,
+      "recall_at_10": 0.28441947091209585,
+      "recall_at_20": 0.31479647561597013,
+      "recommended_share": 0.3330332556661724
+     },
+     "shellac": {
+      "queries": 9,
+      "recall_at_10": 0.36296296296296293,
+      "recall_at_20": 0.36296296296296293,
+      "recommended_share": 0.007127727176445668
+     },
+     "tape": {
+      "queries": 158,
+      "recall_at_10": 0.33073469196213606,
+      "recall_at_20": 0.3736542495867839,
+      "recommended_share": 0.04826307985596272
+     },
+     "video": {
+      "queries": 1,
+      "recall_at_10": 0.0,
+      "recall_at_20": 0.0,
+      "recommended_share": 0.0035162041940266895
+     },
+     "vinyl": {
+      "queries": 1545,
+      "recall_at_10": 0.33660355539152254,
+      "recall_at_20": 0.37426708850524937,
+      "recommended_share": 0.35528489726752804
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.5860294117647059,
+      "precision_at_10": 0.09882352941176471,
+      "precision_at_20": 0.05878676470588236,
+      "queries": 1360,
+      "recall_at_10": 0.31632060002277296,
+      "recall_at_20": 0.3598022878824649
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.4481132075471698,
+      "precision_at_10": 0.06025943396226415,
+      "precision_at_20": 0.032193396226415094,
+      "queries": 848,
+      "recall_at_10": 0.3113425940783415,
+      "recall_at_20": 0.3263837145145091
+     },
+     "51+": {
+      "hit_rate_at_20": 0.7060782681099084,
+      "precision_at_10": 0.17960033305578685,
+      "precision_at_20": 0.12218984179850124,
+      "queries": 1201,
+      "recall_at_10": 0.27817776436880054,
+      "recall_at_20": 0.322759978037468
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.5426829268292683,
+      "precision_at_10": 0.08048780487804878,
+      "precision_at_20": 0.04481707317073171,
+      "queries": 1312,
+      "recall_at_10": 0.3517749417729627,
+      "recall_at_20": 0.37526061422266527
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.27628126996497493
+    },
+    "novel": {
+     "hit_rate_at_20": 0.061245321537938074,
+     "precision_at_10": 0.004831575365770671,
+     "precision_at_20": 0.0036577067029601906,
+     "queries": 2939,
+     "recall_at_10": 0.017746629082654248,
+     "recall_at_20": 0.025980594896665075
+    },
+    "overall": {
+     "hit_rate_at_20": 0.5797500529548825,
+     "precision_at_10": 0.10735013768269434,
+     "precision_at_20": 0.06625714890912943,
+     "recall_at_10": 0.3155760971028302,
+     "recall_at_20": 0.3486721374521482
+    },
+    "queries": 4721
+   },
+   "fused[frp128_w0111_seed1]@0.8": {
+    "by_query_family": {
+     "digital": {
+      "queries": 1223,
+      "recall_at_10": 0.32018457168995984,
+      "recall_at_20": 0.3479648416414568,
+      "recommended_share": 0.2540775259478924
+     },
+     "grooved_other": {
+      "queries": 4,
+      "recall_at_10": 0.5,
+      "recall_at_20": 0.5,
+      "recommended_share": 0.003961025206524042
+     },
+     "optical": {
+      "queries": 1781,
+      "recall_at_10": 0.2632627643107727,
+      "recall_at_20": 0.2949888738560758,
+      "recommended_share": 0.3401715738191061
+     },
+     "shellac": {
+      "queries": 9,
+      "recall_at_10": 0.36464646464646466,
+      "recall_at_20": 0.3970538720538721,
+      "recommended_share": 0.006333403939843253
+     },
+     "tape": {
+      "queries": 158,
+      "recall_at_10": 0.31897308858660867,
+      "recall_at_20": 0.34655207960486706,
+      "recommended_share": 0.04906799406905317
+     },
+     "video": {
+      "queries": 1,
+      "recall_at_10": 0.0,
+      "recall_at_20": 0.0,
+      "recommended_share": 0.003198474899385723
+     },
+     "vinyl": {
+      "queries": 1545,
+      "recall_at_10": 0.32060547841278075,
+      "recall_at_20": 0.3566466449690855,
+      "recommended_share": 0.3429570006354586
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.5639705882352941,
+      "precision_at_10": 0.09529411764705882,
+      "precision_at_20": 0.05628676470588235,
+      "queries": 1360,
+      "recall_at_10": 0.30126013168649457,
+      "recall_at_20": 0.3347933467868707
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.4363207547169811,
+      "precision_at_10": 0.058254716981132076,
+      "precision_at_20": 0.031426886792452834,
+      "queries": 848,
+      "recall_at_10": 0.29435027363672855,
+      "recall_at_20": 0.31337395610380725
+     },
+     "51+": {
+      "hit_rate_at_20": 0.6910907577019151,
+      "precision_at_10": 0.16994171523730225,
+      "precision_at_20": 0.11407160699417153,
+      "queries": 1201,
+      "recall_at_10": 0.26436572770741773,
+      "recall_at_20": 0.30729224874394323
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.524390243902439,
+      "precision_at_10": 0.07621951219512195,
+      "precision_at_20": 0.0428734756097561,
+      "queries": 1312,
+      "recall_at_10": 0.33128482822131755,
+      "recall_at_20": 0.3598825521500115
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.24723718730035024
+    },
+    "novel": {
+     "hit_rate_at_20": 0.06736985369173189,
+     "precision_at_10": 0.005103776794828173,
+     "precision_at_20": 0.004066008846546444,
+     "queries": 2939,
+     "recall_at_10": 0.018774098459023246,
+     "recall_at_20": 0.028229666805331774
+    },
+    "overall": {
+     "hit_rate_at_20": 0.5623808515145097,
+     "precision_at_10": 0.10233001482736709,
+     "precision_at_20": 0.06279389959754289,
+     "recall_at_10": 0.2989772812413802,
+     "recall_at_20": 0.330922254939306
+    },
+    "queries": 4721
+   },
+   "fused[n2v128_nohub_p1q1_seed1]@0.4": {
+    "by_query_family": {
+     "digital": {
+      "queries": 1223,
+      "recall_at_10": 0.26619578776217695,
+      "recall_at_20": 0.31347413709304894,
+      "recommended_share": 0.22588434653675069
+     },
+     "grooved_other": {
+      "queries": 4,
+      "recall_at_10": 0.25,
+      "recall_at_20": 0.25,
+      "recommended_share": 0.003081974158017369
+     },
+     "optical": {
+      "queries": 1781,
+      "recall_at_10": 0.17872656838835627,
+      "recall_at_20": 0.21217373109204668,
+      "recommended_share": 0.3405634399491633
+     },
+     "shellac": {
+      "queries": 9,
+      "recall_at_10": 0.2202861952861953,
+      "recall_at_20": 0.34991582491582496,
+      "recommended_share": 0.003876297394619784
+     },
+     "tape": {
+      "queries": 158,
+      "recall_at_10": 0.23570231575887376,
+      "recall_at_20": 0.2605516225702059,
+      "recommended_share": 0.0381910612158441
+     },
+     "video": {
+      "queries": 1,
+      "recall_at_10": 0.0,
+      "recall_at_20": 0.0,
+      "recommended_share": 0.002965473416649015
+     },
+     "vinyl": {
+      "queries": 1545,
+      "recall_at_10": 0.22407612793260182,
+      "recall_at_20": 0.2622627532414237,
+      "recommended_share": 0.385204405846219
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.49117647058823527,
+      "precision_at_10": 0.06948529411764706,
+      "precision_at_20": 0.04386029411764706,
+      "queries": 1360,
+      "recall_at_10": 0.2273127439756628,
+      "recall_at_20": 0.27275128683518823
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.3643867924528302,
+      "precision_at_10": 0.041509433962264156,
+      "precision_at_20": 0.024587264150943398,
+      "queries": 848,
+      "recall_at_10": 0.22056419718260967,
+      "recall_at_20": 0.2549927992409287
+     },
+     "51+": {
+      "hit_rate_at_20": 0.5953372189841799,
+      "precision_at_10": 0.1141548709408826,
+      "precision_at_20": 0.0789758534554538,
+      "queries": 1201,
+      "recall_at_10": 0.17455798260458355,
+      "recall_at_20": 0.212929656150255
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.4298780487804878,
+      "precision_at_10": 0.054573170731707324,
+      "precision_at_20": 0.03288871951219512,
+      "queries": 1312,
+      "recall_at_10": 0.24730390084626008,
+      "recall_at_20": 0.28114975335323833
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.21823841521710566
+    },
+    "novel": {
+     "hit_rate_at_20": 0.11296359305886355,
+     "precision_at_10": 0.00918679823069071,
+     "precision_at_20": 0.007060224566178972,
+     "queries": 2939,
+     "recall_at_10": 0.03502312339096867,
+     "recall_at_20": 0.05298364802401529
+    },
+    "overall": {
+     "hit_rate_at_20": 0.4778648591400127,
+     "precision_at_10": 0.07167972887100191,
+     "precision_at_20": 0.0462825672527007,
+     "recall_at_10": 0.21823567592377724,
+     "recall_at_20": 0.25667711020717404
+    },
+    "queries": 4721
+   },
+   "heuristic": {
+    "by_query_family": {
+     "digital": {
+      "queries": 1223,
+      "recall_at_10": 0.0031039543530398633,
+      "recall_at_20": 0.0031623587450501423,
+      "recommended_share": 0.05789027748358399
+     },
+     "grooved_other": {
+      "queries": 4,
+      "recall_at_10": 0.0,
+      "recall_at_20": 0.0,
+      "recommended_share": 0.0
+     },
+     "optical": {
+      "queries": 1781,
+      "recall_at_10": 0.014078993632503665,
+      "recall_at_20": 0.019299719301681676,
+      "recommended_share": 0.32784367718703666
+     },
+     "shellac": {
+      "queries": 9,
+      "recall_at_10": 0.0,
+      "recall_at_20": 0.013888888888888888,
+      "recommended_share": 0.003929252277059945
+     },
+     "tape": {
+      "queries": 158,
+      "recall_at_10": 0.007366011311607865,
+      "recall_at_20": 0.008133584702396984,
+      "recommended_share": 0.001228553272611735
+     },
+     "video": {
+      "queries": 1,
+      "recall_at_10": 0.0,
+      "recall_at_20": 0.0,
+      "recommended_share": 0.0
+     },
+     "vinyl": {
+      "queries": 1545,
+      "recall_at_10": 0.0085626363515522,
+      "recall_at_20": 0.010190401459784988,
+      "recommended_share": 0.6091082397797077
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.04926470588235294,
+      "precision_at_10": 0.006470588235294119,
+      "precision_at_20": 0.004154411764705883,
+      "queries": 1360,
+      "recall_at_10": 0.00648763188294994,
+      "recall_at_20": 0.008515727072418721
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.03891509433962264,
+      "precision_at_10": 0.004127358490566038,
+      "precision_at_20": 0.0030070754716981134,
+      "queries": 848,
+      "recall_at_10": 0.009947967847894654,
+      "recall_at_20": 0.012626730844037285
+     },
+     "51+": {
+      "hit_rate_at_20": 0.11990008326394672,
+      "precision_at_10": 0.022398001665278937,
+      "precision_at_20": 0.0171940049958368,
+      "queries": 1201,
+      "recall_at_10": 0.010938850053803715,
+      "recall_at_20": 0.01468765130416887
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.04420731707317073,
+      "precision_at_10": 0.0039634146341463415,
+      "precision_at_20": 0.0027439024390243905,
+      "queries": 1312,
+      "recall_at_10": 0.00980740226615406,
+      "recall_at_20": 0.011788045479647883
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.0022519358945894633
+    },
+    "novel": {
+     "hit_rate_at_20": 0.033684926845865944,
+     "precision_at_10": 0.003164341612793467,
+     "precision_at_20": 0.0019904729499829877,
+     "queries": 2939,
+     "recall_at_10": 0.007921779502620149,
+     "recall_at_20": 0.009342771167081454
+    },
+    "overall": {
+     "hit_rate_at_20": 0.06396949798771447,
+     "precision_at_10": 0.00940478712137259,
+     "precision_at_20": 0.006873543740732896,
+     "recall_at_10": 0.009164144626909336,
+     "recall_at_20": 0.011733666905282337
+    },
+    "queries": 4721
+   },
+   "heuristic_all_artists": {
+    "by_query_family": {
+     "digital": {
+      "queries": 1223,
+      "recall_at_10": 0.23720550656499276,
+      "recall_at_20": 0.2728492208745806,
+      "recommended_share": 0.2370048718491845
+     },
+     "grooved_other": {
+      "queries": 4,
+      "recall_at_10": 0.25,
+      "recall_at_20": 0.25,
+      "recommended_share": 0.004998940902351197
+     },
+     "optical": {
+      "queries": 1781,
+      "recall_at_10": 0.141955196080132,
+      "recall_at_20": 0.16587277768810146,
+      "recommended_share": 0.33837110781614066
+     },
+     "shellac": {
+      "queries": 9,
+      "recall_at_10": 0.34351851851851856,
+      "recall_at_20": 0.37584175084175087,
+      "recommended_share": 0.0053590341029442915
+     },
+     "tape": {
+      "queries": 158,
+      "recall_at_10": 0.22904108900944345,
+      "recall_at_20": 0.23889893510146676,
+      "recommended_share": 0.04291463672950646
+     },
+     "video": {
+      "queries": 1,
+      "recall_at_10": 0.0,
+      "recall_at_20": 0.0,
+      "recommended_share": 0.003961025206524042
+     },
+     "vinyl": {
+      "queries": 1545,
+      "recall_at_10": 0.1721842694216668,
+      "recall_at_20": 0.19676402389448447,
+      "recommended_share": 0.36711501800466
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.3977941176470588,
+      "precision_at_10": 0.054411764705882354,
+      "precision_at_20": 0.03375,
+      "queries": 1360,
+      "recall_at_10": 0.1796646358251974,
+      "recall_at_20": 0.21115622130199094
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.3290094339622642,
+      "precision_at_10": 0.038561320754716986,
+      "precision_at_20": 0.02199292452830189,
+      "queries": 848,
+      "recall_at_10": 0.2086171763480441,
+      "recall_at_20": 0.2279483273998767
+     },
+     "51+": {
+      "hit_rate_at_20": 0.46711074104912575,
+      "precision_at_10": 0.08168193172356371,
+      "precision_at_20": 0.05699417152373023,
+      "queries": 1201,
+      "recall_at_10": 0.12160799440615239,
+      "recall_at_20": 0.15091605744683273
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.37347560975609756,
+      "precision_at_10": 0.047560975609756105,
+      "precision_at_20": 0.027629573170731708,
+      "queries": 1312,
+      "recall_at_10": 0.21488332483775632,
+      "recall_at_20": 0.23896357546742195
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.2627198129579201
+    },
+    "novel": {
+     "hit_rate_at_20": 0.08097992514460702,
+     "precision_at_10": 0.006736985369173189,
+     "precision_at_20": 0.004848587955086765,
+     "queries": 2939,
+     "recall_at_10": 0.031149909272482682,
+     "recall_at_20": 0.04109521073761924
+    },
+    "overall": {
+     "hit_rate_at_20": 0.39631434018216477,
+     "precision_at_10": 0.05659817835204405,
+     "precision_at_20": 0.03585045541198899,
+     "recall_at_10": 0.1798833708397236,
+     "recall_at_20": 0.20657552184128508
+    },
+    "queries": 4721
+   },
+   "n2v128_nohub_p1q1_seed1": {
+    "by_query_family": {
+     "digital": {
+      "queries": 1223,
+      "recall_at_10": 0.07266857815450471,
+      "recall_at_20": 0.09704983724913054,
+      "recommended_share": 0.19998940902351198
+     },
+     "grooved_other": {
+      "queries": 4,
+      "recall_at_10": 0.0,
+      "recall_at_20": 0.0,
+      "recommended_share": 0.0035691590764668503
+     },
+     "optical": {
+      "queries": 1781,
+      "recall_at_10": 0.10475184522385697,
+      "recall_at_20": 0.13331592717014906,
+      "recommended_share": 0.32824613429358185
+     },
+     "shellac": {
+      "queries": 9,
+      "recall_at_10": 0.06936026936026936,
+      "recall_at_20": 0.06936026936026936,
+      "recommended_share": 0.007879686507095954
+     },
+     "tape": {
+      "queries": 158,
+      "recall_at_10": 0.08480008036970063,
+      "recall_at_20": 0.09772164723686404,
+      "recommended_share": 0.03677187036644779
+     },
+     "video": {
+      "queries": 1,
+      "recall_at_10": 0.0,
+      "recall_at_20": 0.0,
+      "recommended_share": 0.004501165007413684
+     },
+     "vinyl": {
+      "queries": 1545,
+      "recall_at_10": 0.13649780360032535,
+      "recall_at_20": 0.1669643333922585,
+      "recommended_share": 0.4187883922897691
+     }
+    },
+    "by_query_release_count": {
+     "16-50": {
+      "hit_rate_at_20": 0.32132352941176473,
+      "precision_at_10": 0.03830882352941176,
+      "precision_at_20": 0.026323529411764707,
+      "queries": 1360,
+      "recall_at_10": 0.12608859595718788,
+      "recall_at_20": 0.16156267000714322
+     },
+     "3-5": {
+      "hit_rate_at_20": 0.07900943396226415,
+      "precision_at_10": 0.006839622641509435,
+      "precision_at_20": 0.004540094339622641,
+      "queries": 848,
+      "recall_at_10": 0.0352856394129979,
+      "recall_at_20": 0.04607573375262054
+     },
+     "51+": {
+      "hit_rate_at_20": 0.5578684429641965,
+      "precision_at_10": 0.10491257285595337,
+      "precision_at_20": 0.07227310574521233,
+      "queries": 1201,
+      "recall_at_10": 0.17235064191638882,
+      "recall_at_20": 0.20774945321706367
+     },
+     "6-15": {
+      "hit_rate_at_20": 0.1676829268292683,
+      "precision_at_10": 0.016615853658536586,
+      "precision_at_20": 0.011318597560975611,
+      "queries": 1312,
+      "recall_at_10": 0.07008585018767194,
+      "recall_at_20": 0.09287136301737649
+     }
+    },
+    "coverage": {
+     "catalog_artists": 220699,
+     "catalogue_coverage": 0.22259729314586835
+    },
+    "novel": {
+     "hit_rate_at_20": 0.053079278666212995,
+     "precision_at_10": 0.0038448451854372237,
+     "precision_at_20": 0.0033855052739026883,
+     "queries": 2939,
+     "recall_at_10": 0.010934841799451266,
+     "recall_at_20": 0.019291858292791442
+    },
+    "overall": {
+     "hit_rate_at_20": 0.2952764244863376,
+     "precision_at_10": 0.043571277271764464,
+     "precision_at_20": 0.02993009955517899,
+     "recall_at_10": 0.10598357744372089,
+     "recall_at_20": 0.1334784526635095
+    },
+    "queries": 4721
+   }
+  }
+ },
+ "stability": {
+  "heuristic": {
+   "identical": true,
+   "queries": 500
+  }
+ }
+}

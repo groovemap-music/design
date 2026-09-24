@@ -1,0 +1,8 @@
+{
+  "golden_artists": 36,
+  "artists_with_results": 31,
+  "ranked_pairs": 245,
+  "mismatched_artists": 0,
+  "dense_vs_production_max_abs_gap": 5e-05,
+  "dense_pairs_checked": 245
+}

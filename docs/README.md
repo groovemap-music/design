@@ -31,6 +31,9 @@ maintained current state.
 
 - [Shared delivery and batch-processing contract](spikes/gm-design-erl.1-delivery-contract.md)
   records the bounded GO decision for a shared settlement policy and a Discogs-only batch engine.
+- [Graph embeddings vs the heuristics-2026-09 baseline](spikes/gm-design-chw.2-graph-embeddings-vs-heuristics.md)
+  records the GO on the similar-artist gate for FastRP (not Node2Vec), with the candidate-generator
+  and novel-collaborator caveats the vector-search decision must weigh.
 
 ## Verification reports
 
