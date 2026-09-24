@@ -19,6 +19,7 @@ maintained current state.
 - [ADR 0010: First-party events, consent, and deletion closure](adr/0010-first-party-events-consent-and-deletion.md)
 - [ADR 0011: Catalog identifiers, manufacturing credits, and release country](adr/0011-catalog-identifiers-and-manufacturing-credits.md)
 - [ADR 0012: PostgreSQL SQL/PGQ as the catalog graph engine](adr/0012-postgresql-property-graph-migration.md)
+- [ADR 0013: pgvector in PostgreSQL for catalog embeddings](adr/0013-pgvector-catalog-embeddings.md)
 
 ## Program rollout plans
 
@@ -31,6 +32,14 @@ maintained current state.
 
 - [Shared delivery and batch-processing contract](spikes/gm-design-erl.1-delivery-contract.md)
   records the bounded GO decision for a shared settlement policy and a Discogs-only batch engine.
+- [pgvector footprint on a shared PostgreSQL 19 instance](spikes/gm-design-chw.1-pgvector-shared-footprint.md)
+  records the index-size, recall, latency, and neighbour-tenant measurements behind ADR 0013's
+  scope, and the open items it carries forward.
+- [Graph embeddings vs the heuristics-2026-09 baseline](spikes/gm-design-chw.2-graph-embeddings-vs-heuristics.md)
+  records the GO on the similar-artist gate for FastRP (not Node2Vec), with the candidate-generator
+  and novel-collaborator caveats the vector-search decision must weigh.
+- [Name-embedding candidate recall for MusicBrainz-Discogs identity](spikes/gm-design-chw.3-identity-name-embeddings.md)
+  records the NO-GO on the literal identity gate and the non-Latin signal ADR 0013 leaves open.
 
 ## Verification reports
 
