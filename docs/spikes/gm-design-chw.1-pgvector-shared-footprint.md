@@ -18,14 +18,16 @@ A throwaway PG19 + pgvector 0.8.6 image was built and run locally with productio
 memory settings, then loaded with synthetic vectors (content is irrelevant to a
 footprint measurement) at three dimensionalities, at two row-count tiers chosen to
 fit this machine's budget. Index size, build time, peak container memory, recall@10,
-query latency, and insert/update cost were measured directly; the real Discogs entity
-counts (labels, masters, artists — releases were already given) were pulled from
-Discogs's own live statistics rather than downloading and decompressing the multi-GB
-monthly dumps, since a published/live count was sufficient and no content was needed.
-Full-scope numbers for the two largest entities were then extrapolated from the
-measured per-row rate (validated as linear — see Evidence). A second PostgreSQL
-database on the same instance ran a synthetic OLTP workload (`pgbench`, TPC-B-like)
-to measure the effect of concurrent vector activity on a co-located tenant.
+query latency, and insert/update cost were measured directly. The real Discogs
+entity counts were first sanity-checked against Discogs's own live statistics API
+(no download needed), then confirmed against the actual 2026-09-01 monthly dumps
+(cached in the shared `~/.cache/groovemap-spikes/dumps/` location, under the lock
+convention) by stream-parsing each compressed file with `gzcat | grep -c` — the
+files were never fully decompressed to disk. Full-scope numbers for the two largest
+entities were then extrapolated from the measured per-row rate (validated as linear
+— see Evidence). A second PostgreSQL database on the same instance ran a synthetic
+OLTP workload (`pgbench`, TPC-B-like) to measure the effect of concurrent vector
+activity on a co-located tenant.
 
 No product code was touched in any repository. All commands ran against a local,
 disposable Docker container; nothing was pushed anywhere.
@@ -77,20 +79,28 @@ disposable Docker container; nothing was pushed anywhere.
   against the new tag first (the .so and its control file are what the running
   server loads).
 
-### Discogs entity counts (published, no dump download needed)
+### Discogs entity counts
 
-Pulled live from `api.discogs.com` on 2026-09-24 rather than downloading and
-stream-parsing the monthly XML dumps, per the "prefer published/quick counts" note:
+Two independent measurements agree closely:
 
-| Entity | Count | Source |
-| --- | --- | --- |
-| Releases | 19,474,054 | `GET https://api.discogs.com/` → `statistics.releases` |
-| Artists | 10,267,158 | `GET https://api.discogs.com/` → `statistics.artists` |
-| Labels | 2,435,961 | `GET https://api.discogs.com/` → `statistics.labels` |
-| Masters | ~2,597,482 | `GET https://api.discogs.com/database/search?type=master&per_page=1` → `pagination.items` (the root stats endpoint doesn't publish a masters count; this is the search index's total, a reasonable proxy) |
+| Entity | Live API (2026-09-24) | 2026-09-01 monthly dump (stream-counted) | Delta |
+| --- | --- | --- | --- |
+| Releases | 19,474,054 (`GET api.discogs.com` → `statistics.releases`) | 19,417,067 (`<release id=` count in `discogs_20260901_releases.xml.gz`) | +0.29% |
+| Artists | 10,267,158 (`statistics.artists`) | 10,203,002 (`<artist><id>` count) | +0.63% |
+| Labels | 2,435,961 (`statistics.labels`) | 2,415,476 (`<label><id>` count) | +0.85% |
+| Masters | ~2,597,482 (`database/search?type=master` → `pagination.items`; the stats endpoint doesn't publish a masters count) | 2,589,349 (`<master id=` count) | +0.31% |
 
-The bead's given baseline of "releases ≈ 17M" is now stale — live count is
-19,474,054 (+~15%). I extrapolate against the live count and call out the baseline
+The small, uniform deltas (all <1%, all in the direction of growth) are exactly what
+three weeks of database growth between the 2026-09-01 dump and the 2026-09-24 live
+query would produce — the two sources cross-validate each other. The dump counts are
+used below as the primary, reproducible figures (matching the design's specified
+stream-parse method); the live API figures served as the initial quick check before
+the dumps were available in the shared cache. Both files were stream-parsed with
+`gzcat <file> | grep -c '<tag>'` and never decompressed to disk; only the aggregate
+counts above are recorded here, no dump content is committed.
+
+The bead's given baseline of "releases ≈ 17M" is stale — the current count is
+~19.4M (+~14%). I extrapolate against the measured count and call out the baseline
 number where it changes the picture.
 
 ### Index size / build time / peak memory (measured)
@@ -115,12 +125,14 @@ Per-row index-size rate (used for extrapolation below, validated linear as above
 Linear extrapolation from the validated per-row rate. Budget line is 50% of
 `effective_cache_size` = **3 GiB**.
 
+Using the dump-measured counts (see above):
+
 | Entity | Rows | 64 dims | 128 dims | 256 dims | Fits 3 GiB budget? |
 | --- | --- | --- | --- | --- | --- |
-| Labels | 2,435,961 | 0.99 GiB | 1.29 GiB | 1.89 GiB | Yes, all three dims |
-| Masters | 2,597,482 | 1.05 GiB | 1.38 GiB | 2.01 GiB | Yes, all three dims |
-| Artists | 10,267,158 | 4.16 GiB | 5.45 GiB | 7.96 GiB | **No, at any dim tested** |
-| Releases (live, 19.47M) | 19,474,054 | 7.88 GiB | 10.34 GiB | 15.10 GiB | No |
+| Labels | 2,415,476 | 0.98 GiB | 1.28 GiB | 1.87 GiB | Yes, all three dims |
+| Masters | 2,589,349 | 1.05 GiB | 1.38 GiB | 2.01 GiB | Yes, all three dims |
+| Artists | 10,203,002 | 4.13 GiB | 5.42 GiB | 7.91 GiB | **No, at any dim tested** |
+| Releases (measured, 19.42M) | 19,417,067 | 7.86 GiB | 10.31 GiB | 15.06 GiB | No |
 | Releases (bead baseline, ~17M) | 17,000,000 | 6.88 GiB | 9.03 GiB | 13.18 GiB | No |
 
 Only labels and masters fit the size budget at any tested dimensionality; artists
@@ -248,4 +260,7 @@ neighbour-tenant p99 regression ≤ 10%) as measured:
 `docs/spikes/gm-design-chw.1/Dockerfile` builds the exact image used here. The SQL
 harness (`bench_template.sql`, `query_load.sql`) that generated every number above is
 alongside it; both use only synthetic, generated-in-SQL vectors — no provider data
-was downloaded, decompressed, or committed.
+was downloaded, decompressed, or committed. The entity-count check against the
+2026-09-01 monthly dumps used only `gzcat <file>.xml.gz | grep -c '<tag>'` against
+the files already cached at `~/.cache/groovemap-spikes/dumps/` — no separate script,
+and only the four aggregate counts made it into this document.
