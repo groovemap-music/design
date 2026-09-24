@@ -294,3 +294,25 @@ These are the implementation work for the replan of this molecule. Each becomes 
   sized in the low thousands, against a realistic candidate pool.
 - **Shared ground truth.** Share the identity spike's ground-truth construction, held-out
   MusicBrainz-to-Discogs URL relations stratified by script, with `gm-design-zwy`.
+
+## Amendment: embedding pipeline data access (2026-09-24)
+
+The FastRP pipeline needs every edge of the catalog graph (about 32.8 million nodes at full
+scale) and writes one embedding row per served artist. Today `analytics-engine` reads catalog
+data only through `catalog-api` over HTTP and writes only its own `insights` and `activity`
+schemas. Paging the whole graph through HTTP is impractical at that size, so the pipeline
+reads and writes PostgreSQL directly, under a dedicated least-privilege role:
+
+- `database-schema` defines a `NOLOGIN` group role for the pipeline with `SELECT` on the graph
+  edge and vertex relations the pipeline reads, and `SELECT`, `INSERT`, `UPDATE`, `DELETE` on
+  the embedding tables only. It holds no other privilege. As with `pg_trgm`, the role and its
+  grants are guarded, so an initializer without `CREATEROLE` still produces a working schema.
+- The login that is a member of that role is provisioned where credentials live: `deployment`
+  for development and CI, and the homelab for the shared production instance. No catalog-table
+  write privilege is granted to `analytics-engine`.
+- `catalog-api` remains the only service that serves catalog data to users. It reads the
+  embedding tables to answer similar-item queries.
+
+A paged export and ingest API on `catalog-api` was rejected for this workload because of its
+volume. Running the pipeline inside `database-schema` was rejected because the roadmap assigns
+offline features and embeddings to `analytics-engine`.
