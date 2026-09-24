@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: MIT
+# Throwaway harness for spike gm-design-chw.2. Not a product package.
+[project]
+name = "spike-gm-design-chw-2"
+version = "0.0.0"
+requires-python = ">=3.14,<3.15"
+dependencies = [
+    "numpy",
+    "scipy",
+    "lxml",
+    "torch",
+    "torch-geometric",
+    "torch-cluster",
+    "setuptools",
+    "groovemap-runtime @ git+https://github.com/groovemap-music/python-libraries.git@6e84fe9acfd9551bd3bba2f2e78fef0ec1ef38ef",
+    "pyg-lib",
+]
+
+[tool.uv]
+package = false
+# torch-cluster ships no macOS wheel; it builds against the installed torch.
+no-build-isolation-package = ["torch-cluster"]
+
+[tool.uv.sources]
+pyg-lib = { url = "https://data.pyg.org/whl/torch-2.14.0%2Bcpu/pyg_lib-0.9.0%2Bpt214-cp310-abi3-macosx_11_0_arm64.whl" }
