@@ -457,7 +457,10 @@ These are planning inputs. None is filed by this record.
 - **Graph resolution through native ids.** `graph.mb_release` and its neighbours reach Discogs
   only through `discogs_release_id`, so a promoted edition is invisible to the property graph.
   Whether those views should join through `gm_item_id` is a `database-schema` decision under
-  ADR 0012.
+  ADR 0012. Decided in
+  [ADR 0012's 2026-09-25 amendment](0012-postgresql-property-graph-migration.md#2026-09-25-musicbrainz-graph-crossings-resolve-through-native-ids):
+  the cross-catalog relations resolve through the native id's Discogs alias first and the
+  Discogs id second, and the change ships with the first promotion, once section 6 returns GO.
 - **Catalog re-attachment of split-linked items.** The section 8 job in `catalog-api`, for
   releases, release groups, artists, and labels. It does not wait on the section 6
   measurement, and a first run should report how many items load order has split.
