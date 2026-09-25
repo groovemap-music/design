@@ -315,6 +315,10 @@ no tie by id. If the review queue cannot be held near the spike's bar of three c
 query at a precision a reviewer can sustain, the program stops at this record. This record does
 not file that measurement.
 
+The first measurement returned DEFER, and the bar is now numeric; see the
+[second 2026-09-25 amendment](#2026-09-25-section-6-measured-on-newly-linked-releases-defer)
+below. This section stands until a re-run clears that bar.
+
 Rejected alternative:
 
 - **Build the matcher now at `score ≥ 10`.** That threshold was chosen on the dev split of the
@@ -489,3 +493,99 @@ lands" rule.
 
 This does not reopen anything decided here. Sections 3, 4, 7, and 8 are unchanged, and the
 guard's refuse/skip behavior remains correct until the merge lands.
+
+### 2026-09-25: Section 6 measured on newly linked releases: DEFER
+
+The section 6 measurement ran as
+[spike `gm-design-1wd.1`](../spikes/gm-design-1wd.1-unlinked-edition-candidates.md)
+([harness](../spikes/gm-design-1wd.1/README.md)). It took the MusicBrainz releases that had no
+Discogs link in the `20260919` JSON dump and gained exactly one by `20260923`, used each
+release's `20260919` record as the query and the new link as the label, and re-ran the
+`gm-design-zwy` deterministic baseline unchanged against a pool drawn from the full
+`discogs_20260901` dump. That gave 408 eligible queries (dev 90, test 318). No tie is broken by
+id: every metric is a function of score groups and section 4 comparison vectors.
+
+**Headline numbers.** These are for the test split, on the 305 queries whose target is in the
+Discogs dump, with 95% intervals, against `gm-design-zwy`'s linked population:
+
+| Metric | This measurement | `gm-design-zwy` |
+| --- | ---: | ---: |
+| Coverage | 89.5% (85.6–92.5) | 97.3% |
+| R@1, expected under random tie order | 76.4% (71.3–80.8) | 77.1% (id-order tie-break) |
+| R@1, unique top | 70.8% (65.5–75.6) | 69.4% |
+| Review queue at `score ≥ 8` (chosen on dev), candidates per query | 2.74 (2.13–3.43) | 2.54 at `score ≥ 10` |
+| Queue precision, candidates | 26.9% (22.4–35.7) | 35.2% at `score ≥ 10` |
+| Correct edition in the queue (all 318) | 73.6% (68.5–78.1) | 89.3% at `score ≥ 10` |
+| Review queue in section 4 ambiguity groups, per query | 1.38 | not reported |
+| Queue precision, groups | 53.2% | not reported |
+| Leading group ambiguous under section 4 | 17.9% (13.9–22.8) | not reported |
+| Target is the lowest id in its tie group (diagnostic) | 45.5% (31.7–59.9) | 87–91% |
+
+**Findings.**
+
+- **Coverage degrades, and ranking does not.** R@1 is indistinguishable from the linked
+  population's, but the coverage interval excludes zwy's figure. The cause is thin queries,
+  not the matcher or the pool: only 47% of test queries carry a barcode and 52% a catalogue
+  number, against zwy's 61% and 95%. Editors add identifiers when they link. Between the two
+  dumps, 27.9% of the query releases gained a catalogue number and 12.3% a barcode, most likely
+  copied from the Discogs release being linked. Missing identifiers are also why dev chose
+  `score ≥ 8` rather than zwy's 10: at 10, fewer than half of the correct editions would reach
+  the queue.
+- **The lowest-id bias is a linked-data artifact.** On linked data the target was the lowest
+  Discogs id in 87–91% of tie groups; on newly linked releases it is 45.5% (20 of 44), no
+  better than a coin toss in a two-way tie. An id tie-break would have looked like signal on the population the
+  threshold was first chosen on and been noise on the one it serves. That confirms section 4's
+  refusal to break ties by id or order.
+
+**Why DEFER rather than GO or NO-GO.** The direction is informative, but the sample cannot carry
+the decision section 6 asks for:
+
+1. The threshold is the thing section 6 recalibrates, and it rests on 87 reachable dev queries.
+   One point lower than the chosen 8 moves the dev queue from 2.34 to 5.82 candidates.
+2. The window is four days of edits, about 100 releases a day. The JSON dumps carry no editor
+   information, so one editor's batch dominating the sample can be neither ruled out nor
+   measured.
+3. The pool predates both snapshots. 16 of 408 targets, mostly 2020s releases, are absent from
+   the `discogs_20260901` dump.
+
+**Re-run trigger.** Re-run the `gm-design-1wd.1` harness, with its blocking, scoring, and
+normalization unchanged, on the MusicBrainz `20260919` to `20261014` time-split with a pool
+built from `discogs_20261001`. The target is about 2,500 eligible releases, roughly 500 dev and
+2,000 test. The `20261010` dump, about 2,100 eligible, is the earliest usable later snapshot. The
+only harness addition allowed is reporting: the seeded query bootstrap the harness already uses
+for the candidate queue is extended to the group queue and group precision, so that the bar
+below can be read from an interval.
+
+**The bar.** This replaces section 6's "near the spike's bar of three candidates per query at a
+precision a reviewer can sustain" with a numeric bar, decided by the owner:
+
+- **Unit.** The review queue is counted in section 4 ambiguity groups, not individual
+  candidates. A reviewer decides a group once, and section 4 already forbids promoting a member
+  of an ambiguous group, so groups are the load a reviewer carries.
+- **Queue.** GO requires the **upper bound** of the 95% interval on the mean test queue to be at
+  most **3 groups per query**.
+- **Precision.** GO requires the **lower bound** of the 95% interval on test queue precision,
+  the share of queued groups that contain the correct edition, to be at least **50%**. The bar
+  applies to the interval bound, not the point estimate, because that is what makes a GO
+  robust: a point estimate at 50% is a coin toss between a sustainable queue and an
+  unsustainable one. This measurement's 53.2% passes on the point estimate only; on 305
+  queries its interval cannot be expected to clear 50%, and a 2,000-query test split is sized
+  to settle it.
+- **Threshold.** The threshold is the lowest integer score at which the **dev** split meets both
+  bars on its point estimates. It is chosen once on dev and applied to test unchanged. If no
+  score meets both on dev, the result is NO-GO.
+- **Ties.** No tie is broken by id or insertion order, in the threshold choice or in any metric.
+- **Reported alongside, with no bar.** Coverage and the share of correct editions that reach the
+  queue, both on the reachable basis with 95% intervals, plus the section 4 leading-group
+  ambiguity rate. Coverage gets no bar because this measurement shows it is set by what the
+  MusicBrainz record carries, not by the matcher, and because a missed candidate leaves a
+  release unlinked, which is today's state, while a low-precision queue costs reviewer time on
+  every query. Coverage bounds the matcher's value, not its safety.
+
+**NO-GO.** If the re-run misses either bar, the program stops at this record: nothing in
+sections 1 to 5 or 7 is built. Section 8's catalog re-attachment continues regardless; it never
+waited on section 6.
+
+**Until then, nothing is built.** Section 6 stands as written apart from the bar above: no
+`matching` schema, role, job, or review action until a re-run clears it. Section 8 is
+unaffected. Sections 1 to 5 and 7 are unchanged.
