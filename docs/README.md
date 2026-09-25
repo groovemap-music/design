@@ -20,6 +20,7 @@ maintained current state.
 - [ADR 0011: Catalog identifiers, manufacturing credits, and release country](adr/0011-catalog-identifiers-and-manufacturing-credits.md)
 - [ADR 0012: PostgreSQL SQL/PGQ as the catalog graph engine](adr/0012-postgresql-property-graph-migration.md)
 - [ADR 0013: pgvector in PostgreSQL for catalog embeddings](adr/0013-pgvector-catalog-embeddings.md)
+- [ADR 0014: Ownership of cross-catalog release-edition candidates](adr/0014-cross-catalog-edition-candidates.md)
 
 ## Program rollout plans
 
@@ -40,6 +41,9 @@ maintained current state.
   and novel-collaborator caveats the vector-search decision must weigh.
 - [Name-embedding candidate recall for MusicBrainz-Discogs identity](spikes/gm-design-chw.3-identity-name-embeddings.md)
   records the NO-GO on the literal identity gate and the non-Latin signal ADR 0013 leaves open.
+- [Semantica for cross-catalog release-edition matching](spikes/gm-design-zwy-semantica-identity-matching.md)
+  records the NO-GO on Semantica, the deterministic baseline, and the tie and review-burden
+  evidence behind ADR 0014.
 
 ## Verification reports
 
