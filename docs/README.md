@@ -44,6 +44,9 @@ maintained current state.
 - [Semantica for cross-catalog release-edition matching](spikes/gm-design-zwy-semantica-identity-matching.md)
   records the NO-GO on Semantica, the deterministic baseline, and the tie and review-burden
   evidence behind ADR 0014.
+- [Deterministic edition candidates on newly linked releases](spikes/gm-design-1wd.1-unlinked-edition-candidates.md)
+  records the DEFER on ADR 0014 section 6, the thin-query coverage loss, and the re-run on a
+  wider time-split against the numeric bar ADR 0014's second 2026-09-25 amendment sets.
 
 ## Verification reports
 
