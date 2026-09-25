@@ -44,7 +44,14 @@ def load_jsonl(path: str) -> list[dict]:
     return list(iter_jsonl(path))
 
 
-def classify(c: View, t: View) -> set[str]:
+def _artist_map(t: View) -> dict[str, set]:
+    out: dict[str, set] = defaultdict(set)
+    for name, aid in t.extra.get("artist_pairs", ()):
+        out[name].add(aid)
+    return out
+
+
+def classify(c: View, t: View, t_artists: dict[str, set] | None = None) -> set[str]:
     """Hard-negative classes a non-target candidate falls in, relative to the target."""
     out: set[str] = set()
     if c.entity_kind == "master":
@@ -62,9 +69,7 @@ def classify(c: View, t: View) -> set[str]:
             out.add("sibling_diff_format")
     elif c.title and c.title == t.title:
         out.add("near_identical_title")
-    t_ids = defaultdict(set)
-    for name, aid in t.extra.get("artist_pairs", ()):
-        t_ids[name].add(aid)
+    t_ids = t_artists if t_artists is not None else _artist_map(t)
     for name, aid in c.extra.get("artist_pairs", ()):
         if name in t_ids and name != "various" and aid not in t_ids[name]:
             out.add("namesake_artist")
@@ -185,8 +190,7 @@ def evaluate_run(rows: list[dict], views: dict[str, View], present: dict[str, di
 
 def load_pool(pool_paths: list[str]) -> dict:
     views: dict[str, View] = {}
-    idx = {"barcode": defaultdict(list), "master": defaultdict(list), "title": defaultdict(list),
-           "artist": defaultdict(list)}
+    idx = {"barcode": defaultdict(list), "master": defaultdict(list), "title": defaultdict(list)}
     for path in pool_paths:
         for rec in iter_jsonl(path):
             v = view_of(rec, keep_raw=False)
@@ -197,8 +201,6 @@ def load_pool(pool_paths: list[str]) -> dict:
                 idx["master"][v.master_id].append(v.key)
             if v.title:
                 idx["title"][v.title].append(v.key)
-            for name, _aid in v.extra.get("artist_pairs", ()):
-                idx["artist"][name].append(v.key)
     return {"views": views, "idx": idx}
 
 
@@ -222,20 +224,20 @@ def query_context(queries_path: str, pool: dict) -> dict:
         if t is None:
             missing.add(r["native_id"])
             continue
+        # The census neighbourhood: records sharing the target's barcode, master, or
+        # title key, plus masters. A namesake-artist release counts only when it is in
+        # that neighbourhood, i.e. when it could plausibly be confused with the target.
         near = set()
         for b in t.barcodes:
             near.update(idx["barcode"][b])
         if t.master_id:
             near.update(idx["master"][t.master_id])
-            near.add(f"discogs:master:{t.master_id}")
         near.update(idx["title"][t.title])
-        for name, _aid in t.extra.get("artist_pairs", ()):
-            if name != "various" and len(idx["artist"][name]) <= 5000:
-                near.update(idx["artist"][name])
+        t_artists = _artist_map(t)
         counts = Counter()
         for key in near:
             if key in views:
-                for cls in classify(views[key], t):
+                for cls in classify(views[key], t, t_artists):
                     counts[cls] += 1
         present[r["native_id"]] = dict(counts)
     return {"qmeta": qmeta, "present": present, "missing": missing, "n": len(qrecs)}

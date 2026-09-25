@@ -103,7 +103,9 @@ def view_of(rec: dict, keep_raw: bool = True) -> View:
         formats = frozenset(f for f in (format_family(x.get("name")) for x in rec.get("formats") or []) if f)
         year = year_of(rec.get("released"))
         artist_ids = tuple(a.get("id") for a in rec.get("artists") or [])
-        master_id, rg = rec.get("master_id"), None
+        # The dump writes master_id 0 for a release with no master; that is absence,
+        # not a shared master.
+        master_id, rg = (rec.get("master_id") if rec.get("master_id") not in (None, "", "0") else None), None
         extra = {"artist_pairs": tuple(
             (sys.intern(name_key(a.get("name"))), a.get("id")) for a in rec.get("artists") or [] if a.get("name")
         )}

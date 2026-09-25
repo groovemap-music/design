@@ -75,3 +75,8 @@ def test_semantica_entity_encoding_and_ablation():
     raw = semantica_entity(q, normalized=False)
     assert raw["name"] == "Northern Lights (Remastered)"
     assert raw["properties"]["barcode"] == "012345678905"
+
+
+def test_master_id_zero_means_no_master():
+    rec = dict(FIXTURE["pool"][4], master_id="0")
+    assert view_of(rec).master_id is None
