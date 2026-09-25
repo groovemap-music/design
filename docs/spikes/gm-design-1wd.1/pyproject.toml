@@ -1,0 +1,22 @@
+# SPDX-License-Identifier: MIT
+# Throwaway harness for spike gm-design-1wd.1. Not a product package, and no GrooveMap
+# service depends on it. It re-runs the gm-design-zwy deterministic baseline on a
+# time-split of newly linked MusicBrainz releases; Semantica is not installed.
+[project]
+name = "spike-gm-design-1wd-1"
+version = "0.0.0"
+requires-python = ">=3.13,<3.15"
+dependencies = [
+    "lxml==6.1.3",
+    "orjson==3.12.0",
+]
+
+[dependency-groups]
+dev = ["pytest==9.1.1"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider"
