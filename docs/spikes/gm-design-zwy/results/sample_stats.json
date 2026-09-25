@@ -1,0 +1,23 @@
+{
+ "dev_queries": 2000,
+ "dev_script_latin": 1970,
+ "dev_script_non_latin": 22,
+ "dev_script_unknown": 8,
+ "eligible_single_link": 316559,
+ "excluded_multi_release_link": 2743,
+ "keys_barcodes": 7822,
+ "keys_catnos": 12757,
+ "keys_targets": 12998,
+ "keys_titles": 12592,
+ "linked_records": 319302,
+ "population_latin": 311035,
+ "population_non_latin": 4133,
+ "population_unknown": 1391,
+ "targets_linked_from_multiple_mb_releases": 1158,
+ "test_nonlatin_queries": 1000,
+ "test_nonlatin_script_non_latin": 1000,
+ "test_queries": 10000,
+ "test_script_latin": 9820,
+ "test_script_non_latin": 135,
+ "test_script_unknown": 45
+}
