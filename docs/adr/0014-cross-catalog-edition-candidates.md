@@ -455,7 +455,10 @@ These are planning inputs. None is filed by this record.
   measurement, and a first run should report how many items load order has split.
 - **Native-id merge.** What happens to a native item superseded by an identity decision,
   including one with dependents, whether from a promotion or a section 8 re-attachment. It is
-  an ADR 0009 question, not an edition question.
+  an ADR 0009 question, not an edition question. Decided in
+  [ADR 0009's 2026-09-25 amendment](0009-native-identity-and-provider-aliases.md#2026-09-25-superseded-catalog-items-and-native-id-merge),
+  which replaces the dependents guard in sections 3 and 8 with a reversible merge once
+  `catalog-api` implements it.
 - **UPC-A to EAN-13 in the identifier vocabulary.** A lookup improvement independent of
   matching, left to its own vocabulary change.
 - **Artist and label candidates.** An amendment under section 7, once `gm-design-e0b` has
