@@ -1,6 +1,6 @@
 # ADR 0014: Ownership of cross-catalog release-edition candidates
 
-- Status: Accepted
+- Status: Accepted; amended 2026-09-25
 
 ## Context
 
@@ -208,7 +208,8 @@ ADR 0009 defines no native-id merge or tombstone. To keep that orphan harmless, 
 refused when the former native id has any dependent in `artifacts`, `owned_copies`,
 `observations`, `user_collections`, or `user_wantlists`
 (`database-schema/src/groovemap_schema/postgres.py`, lines 220-428); such a case is left to a
-native-id merge decision this record does not make.
+native-id merge decision this record does not make. This guard applies until the ADR 0009
+merge lands; see the 2026-09-25 amendment below.
 
 A promotion is reversed by the same step in reverse: close the promoted rows, re-insert the
 aliases against the former native id held on the decision row, restore `gm_item_id`, and
@@ -365,7 +366,8 @@ loader would have to close valid alias rows inside a message transaction.
 This path is not gated by section 6. It uses no matcher and no threshold, and it needs no
 `matching` schema; the job records its actions in `admin_audit_log`. It applies section 3's
 dependents guard: a split item with any dependent is skipped and reported, and waits for the
-native-id merge decision deferred below. Once promotions exist, it is also what performs
+native-id merge decision deferred below. This guard applies until the ADR 0009 merge lands;
+see the 2026-09-25 amendment below. Once promotions exist, it is also what performs
 section 3's contradiction revert, since a contradicted promotion is one more item whose alias
 disagrees with its catalog link; in that case it also writes the revert decision row. Because
 it acts only on explicit catalog links, section 7's namesake caution does not apply to it.
@@ -415,7 +417,8 @@ This record accepts four frictions with ADR 0009 rather than hiding them:
 
 - **An orphaned native id.** Promotion leaves the MusicBrainz release's former native item
   unreferenced, because ADR 0009 defines no merge. The dependents guard keeps that harmless for
-  now and a native-id merge decision is deferred.
+  now and a native-id merge decision is deferred. That holds until the ADR 0009 merge lands;
+  see the 2026-09-25 amendment below.
 - **`user` covers operator review.** The `user` source was written with collectors in mind.
   Here it also covers an administrator accepting a candidate; the decision row, not the alias
   row, says which.
@@ -436,8 +439,9 @@ Repositories affected. Everything except the section 8 re-attachment waits for s
 - **`analytics-engine`** owns the matcher job, its versioned rules, normalization keys and
   country map.
 - **`catalog-api`** owns the review, resolve, promote, and revert actions, their audit, and the
-  dependents guard. Its catalog re-attachment job in section 8 is not gated by section 6. Any operator interface consumes them through the admin contract it already
-  publishes.
+  dependents guard (until the ADR 0009 merge lands; see the 2026-09-25 amendment below). Its
+  catalog re-attachment job in section 8 is not gated by section 6. Any operator interface
+  consumes them through the admin contract it already publishes.
 - **`deployment`** and the homelab provision the matcher role's login.
 
 ### Follow-ups
@@ -463,3 +467,25 @@ These are planning inputs. None is filed by this record.
   matching, left to its own vocabulary change.
 - **Artist and label candidates.** An amendment under section 7, once `gm-design-e0b` has
   landed and a generator for those kinds is adopted.
+
+## Amendments
+
+### 2026-09-25: Dependents guard replaced by the native-id merge
+
+[ADR 0009's amendment of the same date](0009-native-identity-and-provider-aliases.md#2026-09-25-superseded-catalog-items-and-native-id-merge)
+decides the native-id merge this record deferred. The dependents guard in sections 3 and 8
+stays in force exactly as written above until `catalog-api` implements the merge steps, and is
+removed in that same `catalog-api` change, not before. Once removed, the merge steps run as
+further steps appended inside the same transactions this record already assigns to
+`catalog-api`: the section 3 promotion and revert, and the section 8 re-attachment and
+contradiction revert. A superseded item's dependents move to the survivor, and the item itself
+is kept, never deleted, so an orphaned native id becomes a resolvable supersession instead. The
+first re-attachment run after the guard is removed picks up every item earlier runs skipped;
+no separate release list is needed.
+
+`catalog-api`'s re-attachment job (`gm-catalog-api-sv35`, `catalog-api` main `9ad0e09`)
+currently implements the guard, consistent with the ADR 0009 amendment's "until the merge
+lands" rule.
+
+This does not reopen anything decided here. Sections 3, 4, 7, and 8 are unchanged, and the
+guard's refuse/skip behavior remains correct until the merge lands.
