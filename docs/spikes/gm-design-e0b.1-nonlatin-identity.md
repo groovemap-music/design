@@ -514,12 +514,17 @@ A small side-check was attempted to quantify it directly: a 50,000-candidate art
 had already built -- not rebuilt or modified here) with the ADR's exact index shape, comparing
 HNSW top-10 (at `ef_search` 40 and 100) against this spike's exact-cosine top-10 on the same
 subsample. It did not complete: it failed with `psycopg.errors.DiskFull: could not resize shared
-memory segment ... No space left on device` while building the HNSW index, consistent with the
-shared host being at its disk floor (multiple concurrent spikes) at the time it ran. **No HNSW-vs-exact
-number is reported here; this is an acknowledged, unquantified limitation**, not a measured
-small gap -- re-running this check (`docs/spikes/gm-design-e0b.1/scripts/hnsw_vs_exact.py`,
-already written) when host resources allow is a direct, cheap follow-up before any GO verdict
-here is treated as a production recall estimate.
+memory segment ... No space left on device` while building the HNSW index. **This is the
+container's `/dev/shm` limit (Docker's 64MB default), not host disk pressure** -- an HNSW build
+needs shared memory scaled with `maintenance_work_mem`, which the container was never given via
+`--shm-size` (the same requirement the lhp2 procedure documents for the production build). **No
+HNSW-vs-exact number is reported here; this is an acknowledged, unquantified limitation**, not a
+measured small gap. Re-running this check (`docs/spikes/gm-design-e0b.1/scripts/hnsw_vs_exact.py`,
+already written) with `--shm-size` set on the container would fix the immediate failure, but per
+the maintainer this isn't being re-run right now: gm-analytics-engine-ieu.3 is separately
+measuring real HNSW-vs-exact recall on production FastRP vectors with the production index
+parameters, which supersedes what this side-check would have shown for the identity-candidate
+use case anyway.
 
 ## The GO/NO-GO arithmetic, stated precisely (per acceptance: fused recall@10 - trgm recall@10 >= 5pt on artists or labels)
 
@@ -600,7 +605,8 @@ wording and the instruction to flag near-misses rather than round them away:
   on cyrillic, hebrew, japanese_kana, arabic, korean_hangul, and (thinly) other_non_latin.
 - This verdict describes exact-cosine dense retrieval, an **unquantified upper bound** relative
   to the HNSW index ADR 0013 actually adopts for production (see above) -- the side-check meant
-  to size that gap failed on host disk exhaustion and was not re-attempted. Whatever generator
+  to size that gap failed on a container `/dev/shm` limit and was not re-attempted (see below --
+  gm-analytics-engine-ieu.3 covers this ground on production vectors instead). Whatever generator
   design follows from this verdict should be validated against real ANN retrieval before being
   treated as production-ready, not just against this spike's exact-cosine numbers.
 
@@ -633,10 +639,12 @@ wording and the instruction to flag near-misses rather than round them away:
    single fixed RRF rule across the board. Worth a follow-up measurement before implementation,
    not assumed.
 5. **Re-validate with real ANN retrieval before shipping anything.** This spike's dense numbers
-   are exact-cosine, not HNSW; the attempted quantification of that gap failed on host resources,
-   not because the gap was shown to be small. Re-run
-   `docs/spikes/gm-design-e0b.1/scripts/hnsw_vs_exact.py` (written, untested end-to-end) when host
-   disk/memory allow, before treating any recall number here as a production estimate.
+   are exact-cosine, not HNSW; the attempted quantification of that gap failed on a container
+   `/dev/shm` limit (fixable with `--shm-size`), not because the gap was shown to be small. Per
+   the maintainer this spike's own check isn't being re-run: gm-analytics-engine-ieu.3 is
+   separately measuring real HNSW-vs-exact recall against the production index parameters on
+   production FastRP vectors, and that result should be the one used before treating any recall
+   number here as a production estimate.
 6. **If a scoped generator is built**, it writes to `provider_aliases` exactly as ADR 0009
    specifies for any heuristic (`provider='discogs'`, `entity_kind='artist'|'label'`,
    `source='inference'`, `confidence` derived from the RRF/cosine score, `asserted_at=now()`), and
@@ -675,8 +683,10 @@ code):
   recall@1/10/50 per method via batched numpy matmul (not per-query SQL against pgvector).
 - `analyze_results.py` -- unchanged from chw.3: slices results and prints the GO/NO-GO
   arithmetic.
-- `hnsw_vs_exact.py` -- the HNSW-vs-exact side-check (see above): failed on host disk exhaustion
-  before completing; kept as-is for a future re-run rather than deleted.
+- `hnsw_vs_exact.py` -- the HNSW-vs-exact side-check (see above): failed on the pgvector
+  container's default `/dev/shm` limit before completing (needs `--shm-size` set); kept as-is,
+  not re-run per the maintainer since gm-analytics-engine-ieu.3 covers this measurement on
+  production vectors instead.
 
 No provider-derived data, embeddings, or model weights are committed. Raw dump downloads were
 streamed straight from `curl`/`gunzip`/`tar` into the extraction scripts, never written to disk
