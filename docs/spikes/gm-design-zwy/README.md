@@ -21,9 +21,13 @@ barcodes, or catalogue numbers. Dump extracts, sampled pairs, and rankings stay 
 | `scripts/run_method.py` | Runs one method over one query batch and writes rankings and a timing and RSS record |
 | `scripts/run_all.sh` | Every measured configuration |
 | `scripts/evaluate.py` | Coverage, ranking, review burden, hard-negative classes, and slices |
+| `scripts/collect_results.py` | Evaluates every finished run once and writes `results/` |
 | `scripts/license_check.py` | Runs the installed inventory through catalog-api's own license policy (adapted from gm-design-chw.2) |
 | `tests/` | Tests over invented fixtures only |
-| `results/*.json` | Aggregate metrics, timing records, and the license inventory |
+| `results/eval_*.json` | Aggregate metrics per run group: full keyed pool (10k), bounded pool (1k), ablations, dev, and the extra non-Latin slice |
+| `results/timing.json` | Per-run wall time and peak RSS (`ru_maxrss` and `/usr/bin/time -l`) |
+| `results/licenses.json` | Installed inventory, license families, and installed size, checked by catalog-api's policy |
+| `results/sample_stats.json` | Query-population and sampling counts |
 
 ## Reproducing
 
@@ -57,13 +61,11 @@ gzip -dc ~/.cache/groovemap-spikes/dumps/discogs_20260901_masters.xml.gz \
   | uv run python scripts/extract_discogs_masters.py $W/data/blocking_keys.json \
       $W/data/pool_releases.jsonl.gz $W/data/pool_masters.jsonl.gz
 
-# 5. Every configuration, then the metrics.
+# 5. Every configuration (about 2.5 core-hours, most of it the Semantica scans), then
+#    the metrics. Sections can run in parallel: full, bounded, ablation, slices,
+#    ablation_exhaustive. Each run is resumable (a finished run is skipped).
 PY="uv run python" scripts/run_all.sh all
-uv run python scripts/evaluate.py --queries $W/data/queries_test.jsonl \
-  --pool $W/data/pool_releases.jsonl.gz $W/data/pool_masters.jsonl.gz \
-  --run baseline=$W/runs/baseline_10k.jsonl.gz --run semantica_rerank=$W/runs/semrerank_10k.jsonl.gz \
-  --out results/eval_full_10k.json
-uv run python scripts/collect_results.py $W/runs results/
+uv run python scripts/collect_results.py $W results/
 
 # 6. License inventory against catalog-api's policy (read-only use of that checkout).
 uv run python scripts/license_check.py /path/to/catalog-api results/licenses.json

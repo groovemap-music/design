@@ -1,0 +1,399 @@
+{
+ "runs": {
+  "baseline_nonlatin": {
+   "n": 1000,
+   "coverage_pct": 96.9,
+   "recall@1_pct": 81.8,
+   "recall@5_pct": 95.9,
+   "recall@10_pct": 96.7,
+   "mrr": 0.8803,
+   "candidates_per_query": {
+    "mean": 11.03,
+    "median": 2,
+    "p95": 38,
+    "max": 1053
+   },
+   "zero_candidate_queries": 15,
+   "tied_top_queries": 202,
+   "target_tied_with_wrong_top": 106,
+   "review": {
+    "4": {
+     "queue_per_query": {
+      "mean": 6.71,
+      "median": 2,
+      "p95": 20,
+      "max": 500
+     },
+     "false_positives_per_query": 5.74,
+     "precision_of_queue_pct": 14.44,
+     "top1_precision_nonempty_pct": 83.05,
+     "confusion": {
+      "top_is_correct": 818,
+      "correct_in_queue_not_top": 151,
+      "only_wrong_candidates": 16,
+      "empty_queue": 15
+     }
+    },
+    "6": {
+     "queue_per_query": {
+      "mean": 6.62,
+      "median": 2,
+      "p95": 20,
+      "max": 500
+     },
+     "false_positives_per_query": 5.653,
+     "precision_of_queue_pct": 14.59,
+     "top1_precision_nonempty_pct": 82.99,
+     "confusion": {
+      "top_is_correct": 815,
+      "correct_in_queue_not_top": 151,
+      "only_wrong_candidates": 16,
+      "empty_queue": 18
+     }
+    },
+    "8": {
+     "queue_per_query": {
+      "mean": 4.72,
+      "median": 2,
+      "p95": 11,
+      "max": 500
+     },
+     "false_positives_per_query": 3.776,
+     "precision_of_queue_pct": 20.0,
+     "top1_precision_nonempty_pct": 83.23,
+     "confusion": {
+      "top_is_correct": 799,
+      "correct_in_queue_not_top": 145,
+      "only_wrong_candidates": 16,
+      "empty_queue": 40
+     }
+    },
+    "10": {
+     "queue_per_query": {
+      "mean": 2.79,
+      "median": 1,
+      "p95": 6,
+      "max": 444
+     },
+     "false_positives_per_query": 1.962,
+     "precision_of_queue_pct": 29.75,
+     "top1_precision_nonempty_pct": 83.73,
+     "confusion": {
+      "top_is_correct": 710,
+      "correct_in_queue_not_top": 121,
+      "only_wrong_candidates": 17,
+      "empty_queue": 152
+     }
+    },
+    "12": {
+     "queue_per_query": {
+      "mean": 1.46,
+      "median": 1,
+      "p95": 5,
+      "max": 46
+     },
+     "false_positives_per_query": 0.776,
+     "precision_of_queue_pct": 46.96,
+     "top1_precision_nonempty_pct": 83.26,
+     "confusion": {
+      "top_is_correct": 592,
+      "correct_in_queue_not_top": 95,
+      "only_wrong_candidates": 24,
+      "empty_queue": 289
+     }
+    },
+    "14": {
+     "queue_per_query": {
+      "mean": 0.74,
+      "median": 0,
+      "p95": 3,
+      "max": 17
+     },
+     "false_positives_per_query": 0.315,
+     "precision_of_queue_pct": 57.26,
+     "top1_precision_nonempty_pct": 83.71,
+     "confusion": {
+      "top_is_correct": 370,
+      "correct_in_queue_not_top": 52,
+      "only_wrong_candidates": 20,
+      "empty_queue": 558
+     }
+    }
+   },
+   "hard_negatives": {
+    "shared_barcode": {
+     "queries_with_class_in_pool": 143,
+     "queries_with_class_in_candidates": 141,
+     "outranks_target": 57,
+     "is_rank1": 55
+    },
+    "near_identical_title": {
+     "queries_with_class_in_pool": 248,
+     "queries_with_class_in_candidates": 76,
+     "outranks_target": 0,
+     "is_rank1": 0
+    },
+    "sibling_same_format": {
+     "queries_with_class_in_pool": 519,
+     "queries_with_class_in_candidates": 490,
+     "outranks_target": 153,
+     "is_rank1": 151
+    },
+    "sibling_diff_format": {
+     "queries_with_class_in_pool": 426,
+     "queries_with_class_in_candidates": 394,
+     "outranks_target": 11,
+     "is_rank1": 6
+    },
+    "release_vs_master": {
+     "queries_with_class_in_pool": 735,
+     "queries_with_class_in_candidates": 0,
+     "outranks_target": 0,
+     "is_rank1": 0
+    },
+    "namesake_artist": {
+     "queries_with_class_in_pool": 2,
+     "queries_with_class_in_candidates": 2,
+     "outranks_target": 0,
+     "is_rank1": 0
+    }
+   },
+   "slices": {
+    "barcode_on_query=no": {
+     "n": 428,
+     "coverage_pct": 94.63,
+     "recall@1_pct": 77.34,
+     "recall@10_pct": 94.16,
+     "mrr": 0.8417
+    },
+    "barcode_on_query=yes": {
+     "n": 572,
+     "coverage_pct": 98.6,
+     "recall@1_pct": 85.14,
+     "recall@10_pct": 98.6,
+     "mrr": 0.9092
+    },
+    "catno_on_query=no": {
+     "n": 69,
+     "coverage_pct": 79.71,
+     "recall@1_pct": 72.46,
+     "recall@10_pct": 79.71,
+     "mrr": 0.7557
+    },
+    "catno_on_query=yes": {
+     "n": 931,
+     "coverage_pct": 98.17,
+     "recall@1_pct": 82.49,
+     "recall@10_pct": 97.96,
+     "mrr": 0.8896
+    },
+    "script=non_latin": {
+     "n": 1000,
+     "coverage_pct": 96.9,
+     "recall@1_pct": 81.8,
+     "recall@10_pct": 96.7,
+     "mrr": 0.8803
+    }
+   },
+   "target_missing_from_dump": 2
+  },
+  "semrerank_nonlatin": {
+   "n": 1000,
+   "coverage_pct": 96.9,
+   "recall@1_pct": 78.3,
+   "recall@5_pct": 95.3,
+   "recall@10_pct": 96.2,
+   "mrr": 0.8587,
+   "candidates_per_query": {
+    "mean": 11.03,
+    "median": 2,
+    "p95": 38,
+    "max": 1053
+   },
+   "zero_candidate_queries": 15,
+   "tied_top_queries": 564,
+   "target_tied_with_wrong_top": 167,
+   "review": {
+    "0.6": {
+     "queue_per_query": {
+      "mean": 6.24,
+      "median": 2,
+      "p95": 20,
+      "max": 420
+     },
+     "false_positives_per_query": 5.296,
+     "precision_of_queue_pct": 15.07,
+     "top1_precision_nonempty_pct": 79.35,
+     "confusion": {
+      "top_is_correct": 761,
+      "correct_in_queue_not_top": 179,
+      "only_wrong_candidates": 19,
+      "empty_queue": 41
+     }
+    },
+    "0.7": {
+     "queue_per_query": {
+      "mean": 5.83,
+      "median": 2,
+      "p95": 19,
+      "max": 227
+     },
+     "false_positives_per_query": 4.894,
+     "precision_of_queue_pct": 16.05,
+     "top1_precision_nonempty_pct": 79.27,
+     "confusion": {
+      "top_is_correct": 757,
+      "correct_in_queue_not_top": 179,
+      "only_wrong_candidates": 19,
+      "empty_queue": 45
+     }
+    },
+    "0.8": {
+     "queue_per_query": {
+      "mean": 5.24,
+      "median": 2,
+      "p95": 18,
+      "max": 106
+     },
+     "false_positives_per_query": 4.313,
+     "precision_of_queue_pct": 17.71,
+     "top1_precision_nonempty_pct": 79.28,
+     "confusion": {
+      "top_is_correct": 750,
+      "correct_in_queue_not_top": 178,
+      "only_wrong_candidates": 18,
+      "empty_queue": 54
+     }
+    },
+    "0.9": {
+     "queue_per_query": {
+      "mean": 4.95,
+      "median": 2,
+      "p95": 18,
+      "max": 106
+     },
+     "false_positives_per_query": 4.037,
+     "precision_of_queue_pct": 18.46,
+     "top1_precision_nonempty_pct": 79.29,
+     "confusion": {
+      "top_is_correct": 739,
+      "correct_in_queue_not_top": 175,
+      "only_wrong_candidates": 18,
+      "empty_queue": 68
+     }
+    },
+    "0.95": {
+     "queue_per_query": {
+      "mean": 4.75,
+      "median": 2,
+      "p95": 17,
+      "max": 105
+     },
+     "false_positives_per_query": 3.836,
+     "precision_of_queue_pct": 19.17,
+     "top1_precision_nonempty_pct": 79.42,
+     "confusion": {
+      "top_is_correct": 737,
+      "correct_in_queue_not_top": 173,
+      "only_wrong_candidates": 18,
+      "empty_queue": 72
+     }
+    },
+    "1.0": {
+     "queue_per_query": {
+      "mean": 4.28,
+      "median": 2,
+      "p95": 15,
+      "max": 105
+     },
+     "false_positives_per_query": 3.383,
+     "precision_of_queue_pct": 21.01,
+     "top1_precision_nonempty_pct": 79.76,
+     "confusion": {
+      "top_is_correct": 733,
+      "correct_in_queue_not_top": 167,
+      "only_wrong_candidates": 19,
+      "empty_queue": 81
+     }
+    }
+   },
+   "hard_negatives": {
+    "shared_barcode": {
+     "queries_with_class_in_pool": 143,
+     "queries_with_class_in_candidates": 141,
+     "outranks_target": 60,
+     "is_rank1": 54
+    },
+    "near_identical_title": {
+     "queries_with_class_in_pool": 248,
+     "queries_with_class_in_candidates": 77,
+     "outranks_target": 3,
+     "is_rank1": 2
+    },
+    "sibling_same_format": {
+     "queries_with_class_in_pool": 519,
+     "queries_with_class_in_candidates": 490,
+     "outranks_target": 172,
+     "is_rank1": 160
+    },
+    "sibling_diff_format": {
+     "queries_with_class_in_pool": 426,
+     "queries_with_class_in_candidates": 395,
+     "outranks_target": 37,
+     "is_rank1": 22
+    },
+    "release_vs_master": {
+     "queries_with_class_in_pool": 735,
+     "queries_with_class_in_candidates": 0,
+     "outranks_target": 0,
+     "is_rank1": 0
+    },
+    "namesake_artist": {
+     "queries_with_class_in_pool": 2,
+     "queries_with_class_in_candidates": 2,
+     "outranks_target": 0,
+     "is_rank1": 0
+    }
+   },
+   "slices": {
+    "barcode_on_query=no": {
+     "n": 428,
+     "coverage_pct": 94.63,
+     "recall@1_pct": 74.53,
+     "recall@10_pct": 92.99,
+     "mrr": 0.823
+    },
+    "barcode_on_query=yes": {
+     "n": 572,
+     "coverage_pct": 98.6,
+     "recall@1_pct": 81.12,
+     "recall@10_pct": 98.6,
+     "mrr": 0.8854
+    },
+    "catno_on_query=no": {
+     "n": 69,
+     "coverage_pct": 79.71,
+     "recall@1_pct": 68.12,
+     "recall@10_pct": 79.71,
+     "mrr": 0.7291
+    },
+    "catno_on_query=yes": {
+     "n": 931,
+     "coverage_pct": 98.17,
+     "recall@1_pct": 79.05,
+     "recall@10_pct": 97.42,
+     "mrr": 0.8683
+    },
+    "script=non_latin": {
+     "n": 1000,
+     "coverage_pct": 96.9,
+     "recall@1_pct": 78.3,
+     "recall@10_pct": 96.2,
+     "mrr": 0.8587
+    }
+   },
+   "target_missing_from_dump": 2
+  }
+ },
+ "query_file": "queries_test_nonlatin.jsonl"
+}
