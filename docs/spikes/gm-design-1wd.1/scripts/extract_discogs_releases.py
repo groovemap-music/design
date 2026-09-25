@@ -30,6 +30,21 @@ from lxml import etree
 from normalize import barcode_key, catno_key, title_key
 
 
+class TailReader:
+    """File-like wrapper that counts bytes and keeps the last few, so the caller can
+    check that the stream really ended at the closing root tag."""
+
+    def __init__(self, raw):
+        self.raw, self.total, self.tail = raw, 0, b""
+
+    def read(self, n: int = -1) -> bytes:
+        chunk = self.raw.read(n)
+        self.total += len(chunk)
+        if chunk:
+            self.tail = (self.tail + chunk)[-64:]
+        return chunk
+
+
 def text_of(el, tag: str) -> str | None:
     child = el.find(tag)
     return child.text if child is not None else None
@@ -87,7 +102,10 @@ def main() -> None:
 
     stats = {"scanned": 0, "kept": 0, "target": 0, "barcode": 0, "catno": 0, "title": 0, "background": 0}
     started = time.time()
-    context = etree.iterparse(sys.stdin.buffer, events=("end",), tag="release", recover=True, huge_tree=True)
+    # recover=True closes an unterminated document on its own, so a dropped download
+    # would otherwise parse as a silently short pool. The raw bytes must end in </releases>.
+    source = TailReader(sys.stdin.buffer)
+    context = etree.iterparse(source, events=("end",), tag="release", recover=True, huge_tree=True)
     with gzip.open(args.out, "wt", compresslevel=5) as out:
         for _, el in context:
             if el.getparent() is None or el.getparent().tag != "releases":
@@ -122,7 +140,13 @@ def main() -> None:
                 break
     stats["targets_wanted"] = len(targets)
     stats["seconds"] = round(time.time() - started)
+    if not args.max_scan:
+        source.read(-1)
+    stats["bytes"] = source.total
+    stats["complete"] = bool(args.max_scan) or source.tail.rstrip().endswith(b"</releases>")
     print(f"DONE {json.dumps(stats)}", file=sys.stderr)
+    if not stats["complete"]:
+        sys.exit("stream ended before </releases>: the pool is truncated")
 
 
 if __name__ == "__main__":
