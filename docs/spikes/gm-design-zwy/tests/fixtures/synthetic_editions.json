@@ -1,0 +1,75 @@
+{
+  "_comment": "Invented records only. No MusicBrainz or Discogs data; ids, names, barcodes and catalogue numbers are fictional.",
+  "query": {
+    "source": "musicbrainz",
+    "entity_kind": "release",
+    "native_id": "00000000-0000-4000-8000-000000000001",
+    "title": "Northern Lights (Remastered)",
+    "artists": ["The Example Quartet"],
+    "artist_ids": ["00000000-0000-4000-8000-0000000000a1"],
+    "artist_display": "The Example Quartet",
+    "barcode": "012345678905",
+    "labels": [{"name": "Imaginary Records", "catno": "IMG 101", "mbid": null}],
+    "date": "2001-05-01",
+    "country": "GB",
+    "formats": ["CD"],
+    "status": "Official",
+    "release_group": {"id": "00000000-0000-4000-8000-0000000000b1", "primary_type": "Album"},
+    "target_discogs_id": "900001"
+  },
+  "pool": [
+    {
+      "source": "discogs", "entity_kind": "release", "native_id": "900001",
+      "title": "Northern Lights (Remastered)",
+      "artists": [{"id": "70001", "name": "The Example Quartet", "anv": null, "join": null}],
+      "labels": [{"id": "60001", "name": "Imaginary Records", "catno": "IMG-101"}],
+      "formats": [{"name": "CD", "qty": "1", "descriptions": ["Album"]}],
+      "country": "UK", "released": "2001-05-00", "master_id": "800001", "is_main_release": false,
+      "barcodes": ["0 12345 67890 5"], "kept_reasons": ["target", "barcode", "catno", "title"]
+    },
+    {
+      "source": "discogs", "entity_kind": "release", "native_id": "900002",
+      "title": "Northern Lights",
+      "artists": [{"id": "70001", "name": "The Example Quartet", "anv": null, "join": null}],
+      "labels": [{"id": "60001", "name": "Imaginary Records", "catno": "IMG 101 LP"}],
+      "formats": [{"name": "Vinyl", "qty": "1", "descriptions": ["LP"]}],
+      "country": "UK", "released": "1999", "master_id": "800001", "is_main_release": true,
+      "barcodes": [], "kept_reasons": ["title"]
+    },
+    {
+      "source": "discogs", "entity_kind": "release", "native_id": "900003",
+      "title": "Northern Lights (Remastered)",
+      "artists": [{"id": "70001", "name": "The Example Quartet", "anv": null, "join": null}],
+      "labels": [{"id": "60001", "name": "Imaginary Records", "catno": "IMG 101"}],
+      "formats": [{"name": "CD", "qty": "1", "descriptions": ["Album", "Reissue"]}],
+      "country": "Europe", "released": "2004", "master_id": "800001", "is_main_release": false,
+      "barcodes": ["012345678905"], "kept_reasons": ["barcode", "catno", "title"]
+    },
+    {
+      "source": "discogs", "entity_kind": "release", "native_id": "900004",
+      "title": "Northern Lights (Remastered)",
+      "artists": [{"id": "70002", "name": "The Example Quartet (2)", "anv": null, "join": null}],
+      "labels": [{"id": "60002", "name": "Other Imaginary Label", "catno": "OIL 7"}],
+      "formats": [{"name": "Cassette", "qty": "1", "descriptions": []}],
+      "country": "US", "released": "1987", "master_id": "800002", "is_main_release": true,
+      "barcodes": [], "kept_reasons": ["title"]
+    },
+    {
+      "source": "discogs", "entity_kind": "release", "native_id": "900005",
+      "title": "Completely Different Title",
+      "artists": [{"id": "70003", "name": "Unrelated Ensemble", "anv": null, "join": null}],
+      "labels": [{"id": "60003", "name": "Nowhere Music", "catno": "NW 1"}],
+      "formats": [{"name": "File", "qty": "1", "descriptions": ["MP3"]}],
+      "country": "Germany", "released": "2020", "master_id": null, "is_main_release": false,
+      "barcodes": ["4000000000006"], "kept_reasons": ["background"]
+    },
+    {
+      "source": "discogs", "entity_kind": "master", "native_id": "800001",
+      "title": "Northern Lights (Remastered)",
+      "artists": [{"id": "70001", "name": "The Example Quartet", "anv": null, "join": null}],
+      "labels": [], "formats": [], "country": null, "released": "1999",
+      "master_id": "800001", "main_release": "900002", "barcodes": [],
+      "kept_reasons": ["master_of_pooled_release", "title"]
+    }
+  ]
+}
