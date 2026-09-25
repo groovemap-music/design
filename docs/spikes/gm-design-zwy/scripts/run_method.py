@@ -13,7 +13,8 @@ Methods:
                           blocking_v2+phonetic) over queries+pool: coverage and pair volume
                           only, no scoring
 
-``--bounded-pool N`` replaces the full pool with a deterministic per-batch pool of at
+``--bounded-pool N --save-pool FILE`` materializes that pool once, so the scan methods
+and their memory are measured on the bounded pool alone. ``--bounded-pool N`` replaces the full pool with a deterministic per-batch pool of at
 most N records: every record any baseline rule (kind-blind) blocks for the batch, every
 target and pooled master, then background records by id order. Methods that scan the
 pool (native, exhaustive) are only affordable on such a pool; running the baseline with
@@ -113,8 +114,9 @@ def main() -> None:
     ap.add_argument("--drop", default="", help="comma list of fields to ablate")
     ap.add_argument("--kind-blind", action="store_true")
     ap.add_argument("--raw", action="store_true", help="Semantica gets raw strings, not GrooveMap-normalized")
-    ap.add_argument("--out", required=True)
-    ap.add_argument("--timing-out", required=True)
+    ap.add_argument("--save-pool", help="write the (bounded) pool's source records here and exit")
+    ap.add_argument("--out")
+    ap.add_argument("--timing-out")
     args = ap.parse_args()
     drop = frozenset(x for x in args.drop.split(",") if x)
 
@@ -136,6 +138,15 @@ def main() -> None:
     if args.bounded_pool:
         pool = bounded_pool(queries, pool, args.bounded_pool)
     t_pool = time.perf_counter() - t0 - t_load
+    if args.save_pool:
+        keep = {v.key for v in pool}
+        with gzip.open(args.save_pool, "wt") as f:
+            for path in args.pool:
+                for r in iter_jsonl(path):
+                    if f"{r['source']}:{r['entity_kind']}:{r['native_id']}" in keep:
+                        f.write(json.dumps(r, ensure_ascii=False) + "\n")
+        print(f"saved {len(keep)} pool records to {args.save_pool}", file=sys.stderr)
+        return
     rss_after_load = peak_rss_mb()
 
     t1 = time.perf_counter()
