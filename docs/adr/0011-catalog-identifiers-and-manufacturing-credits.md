@@ -274,4 +274,128 @@ types mint aliases" above are unchanged: a `barcode` alias keeps its digits only
 `catalog_number` alias is upper-cased with internal whitespace collapsed. No minted alias changes
 its external id, the identifier vocabulary does not change, and the lookup endpoint's
 normalization stays as decided here. A future widening of the barcode rule to treat UPC-A and EAN-13 as one
-GTIN would be its own vocabulary change and a further amendment to this record.
+GTIN would be its own vocabulary change and a further amendment to this record. Settled by the
+[second 2026-09-25 amendment](#2026-09-25-upc-a-and-ean-13-are-one-gtin-at-lookup-no-alias-is-re-keyed)
+below, at lookup time rather than as a vocabulary change.
+
+### 2026-09-25: UPC-A and EAN-13 are one GTIN at lookup; no alias is re-keyed
+
+The owner has decided that a 12-digit UPC-A barcode and the same digits with a leading zero,
+its 13-digit EAN-13 form, are one GTIN and are treated as one barcode. This settles the
+widening the amendment above left to a further amendment, and settles it at lookup time rather
+than as a vocabulary change: stored `barcode` aliases keep the external id this record's
+digits-only rule gave them.
+
+**The rule.** GS1 defines GTIN-12, GTIN-13, and GTIN-14 as one number space. A shorter GTIN is
+the same GTIN when it is right-aligned in a 14-digit field and filled with leading zeros
+([GS1 General Specifications](https://www.gs1.org/standards/barcodes-epcrfid-id-keys/gs1-general-specifications),
+section 3.3.2, the GTIN data structures, and the
+[GS1 clarification of GTIN-14 creation](https://www.gs1.org/docs/barcodes/GSCN_21-258_GTIN14.pdf)).
+The check digit is unchanged by that padding. The GS1 modulo-10 check digit (section 7.9.1)
+weights digits from the right, starting with 3 for the digit beside the check digit, so a
+leading zero contributes 0 at whatever weight it gets. `036000291452` and `0036000291452`
+therefore carry the same check digit, 2. For barcode lookup this becomes:
+
+1. Normalize the input with this record's `digits_only` rule, unchanged. It keeps the ASCII
+   digits `0`-`9` only, as the Discogs producer, the shared Python runtime, and the reference
+   mapper all do. Call the result `V`.
+2. If `V` is 12 digits, or 13 digits, or 14 digits beginning with `0`, its GTIN key is `V`
+   left-padded with zeros to 14 digits. Its equivalent values are the values of 12, 13, and 14
+   digits that share that key:
+   - a 12-digit `D` is equivalent to `0D` and `00D`;
+   - a 13-digit `E` beginning with a non-zero digit is equivalent to `0E`;
+   - a 13-digit `0D` is equivalent to `D` and `00D`, and a 14-digit value beginning with `0`
+     is equivalent to the same value with its one or two leading zeros removed, as long as the
+     result is 12 or 13 digits long.
+3. Every other `V` is equivalent only to itself. That covers 8 digits (EAN-8 or UPC-E, which
+   cannot be told apart, and UPC-E expands by an insertion rule, not by padding), 14 digits
+   beginning with an indicator digit from `1` to `9` (GS1 uses the indicator for a different
+   trade item, such as a case of the retail unit), and every other length.
+4. The check digit is not validated. Stored aliases were never validated, padding cannot turn a
+   valid GTIN into an invalid one or back, and rejecting an invalid value would make a
+   stored-but-invalid alias unreachable.
+
+**GTIN-14 is in scope, but only with indicator digit 0.** The owner's decision names 12 and 13
+digits. The 14-digit form is included because the catalogs store it, measured below. The
+`20260923` MusicBrainz dump holds 58,717 distinct 14-digit barcodes. 54,966 of them begin with
+`00`, so they are GTIN-12s written in a 14-digit field, and 98.6% of all MusicBrainz 14-digit
+values carry a valid check digit. 3,321 of the `00`-padded values also appear in MusicBrainz
+as the bare 12-digit value. A person holding the sleeve types the 12 printed digits, and
+without the 14-digit form those releases would never answer. Discogs is different. It holds
+25,409 distinct 14-digit values, and only 20.4% of them are check-valid, so most are typing or
+concatenation errors, which the rule leaves harmless: a value joins a GTIN's set only when its
+digits are the same GTIN padded. A 14-digit value with a non-zero indicator is not the same
+GTIN as anything shorter, so it stays exact.
+
+**Lookup.** `GET /api/lookup/barcode/{value}` resolves the full set of equivalent values in one
+read: current `provider_aliases` rows with provider `barcode`, kind `release`, and an
+`external_id` in that set. `normalized` in the response stays the step-1 value. Then:
+
+- **No row resolves:** `404`, as today.
+- **All rows resolve to one native id:** the response is exactly today's response for that
+  native id. Which stored form resolved it does not show.
+- **Rows resolve to two or more native ids:** the lookup returns every one of them. It does not
+  pick a winner, merge them, or hide any. Each entry carries its native id, the stored
+  `external_id` that resolved it, and its releases as `releases_for_native_id` returns them
+  today. Entries are ordered first by whether the stored value equals `V` (an exact match first),
+  then by stored value length (shortest first), then by native id. The existing `gm_id` and
+  `releases` fields name the first entry, so a single-item client keeps working. The full list is
+  an additive field in `catalog-api`'s current API contract. Choosing the field's name is the
+  implementing bead's job; its semantics are fixed here.
+
+Current alias rows already point at the survivor of any native-id merge
+([ADR 0009's amendment](0009-native-identity-and-provider-aliases.md#2026-09-25-superseded-catalog-items-and-native-id-merge),
+section 4), so two entries are never one item seen twice through a supersession. The same
+rule holds wherever a barcode is compared for identity: the `mcp-server` and `graph-explorer`
+lookup surfaces call this endpoint, and any new reader that answers "which release carries
+this barcode" applies these steps rather than an exact `external_id` match.
+
+**What does not change.** No alias is re-keyed. The `digits_only` namespace rule, the
+`taxonomy/identifiers/v1` vocabulary and its digest, and the three mappers (the Discogs
+producer's, the shared Python runtime's, and the reference mapper) are unchanged, and no
+conformance fixture moves. The loaders keep minting a `barcode` alias per exact digits-only
+value through `common.identity.attach_aliases`, so a UPC-A form and an EAN-13 form of one GTIN
+can still both be minted, to one native id or to two. The load-time conflict check stays an
+exact `external_id` comparison. Equivalence is applied only when reading.
+
+**The consequence, and why it is not a split signal.** The unique index gives each stored form
+its own current row, so two forms of one GTIN can resolve to two different native items. The
+lookup above answers that by returning both. The ADR 0014 section 8 re-attachment job does not
+treat it as a split, and neither does anything else. Section 8 acts only on a catalog's
+explicit link to another catalog's record. A barcode shared by two items is ordinary in this
+catalog, not a sign of one item split in two: 294,299 distinct 12-digit barcodes each sit on more
+than one Discogs release, because reissues and variants keep the barcode. A GTIN held in two
+forms is the same evidence, spelled two ways. Inside the matcher it is already one key, under
+ADR 0014 section 5, whose blocking key agrees with this rule on lengths 12 to 14, so it counts
+as candidate evidence subject to section 4 and section 6, and nothing more.
+
+**Measurement.** The counts are read-only aggregates, with no identifier committed
+([script](../spikes/gm-design-ey3.1/README.md)). The Discogs side streamed the full
+`discogs_20260901` releases dump: 19,417,067 releases, its SHA-256 matching the published
+checksum, parsed with recovery off, and failing unless the stream ends in `</releases>`. The
+MusicBrainz side read the `gm-design-1wd.1` compact snapshot of the `20260923` JSON dump, whose
+5,797,718 releases the run checks against the stream's own count. Values are distinct
+digits-only barcodes.
+
+| | Discogs | MusicBrainz |
+| --- | ---: | ---: |
+| Releases with a barcode | 5,283,802 | 2,715,704 |
+| 12-digit values | 1,769,071 | 1,250,405 |
+| 13-digit values | 2,391,381 | 1,260,580 |
+| of which begin with `0` | 194,660 | 97,635 |
+| 14-digit values | 25,409 | 58,717 |
+| of which begin with `00` | 3,121 | 54,966 |
+| 8-digit values | 5,724 | 408 |
+| GTINs held as both `D` and `0D` | 45,398 | 5,806 |
+| of those, some release carries both forms | 34,499 | 0 |
+| of those, the two forms sit only on different releases | 10,899 | 5,806 |
+
+A MusicBrainz release carries one barcode, so its 5,806 GTINs held in both forms are always on
+different releases. Across catalogs, 23,915 GTINs are held as `D` in MusicBrainz and as `0D` in
+Discogs, and 20,937 the other way round. In 9,653 and 9,879 of those GTINs respectively, a
+MusicBrainz release carrying one form already links to a Discogs release carrying the other.
+For scale, 533,635 12-digit values and 580,253 13-digit values appear in the same form in both
+catalogs. Over both catalogs together, since the alias table is shared, 71,380 of 5,553,143 in-scope GTINs (1.29%) are held in more than one form: 65,038 as 12 and 13 digits only, and 6,342 with a 14-digit form among them (4,495 as 12 and 14 digits, 1,229 as 13 and 14, and 618 in all three). These
+are the GTINs whose stored aliases can resolve to more than one native item. How many actually
+do depends on load order and on the links the loaders follow, so this is the upper bound
+the lookup's multi-item answer serves.
