@@ -1,0 +1,359 @@
+{
+ "verdict_with_empty_notices": "fail: reciprocal-license dependencies missing from THIRD_PARTY_NOTICES.md: certifi 2026.7.22 (Mozilla Public License 2.0 (MPL 2.0)); tqdm 4.70.1 (MPL-2.0 AND MIT)",
+ "forbidden_gpl_agpl": [],
+ "reciprocal_needing_notice": [
+  "certifi",
+  "tqdm"
+ ],
+ "packages": [
+  {
+   "Name": "annotated-types",
+   "Version": "0.8.0",
+   "License": "MIT",
+   "families": [],
+   "installed_mb": 0.0
+  },
+  {
+   "Name": "anyio",
+   "Version": "4.15.1",
+   "License": "MIT",
+   "families": [],
+   "installed_mb": 0.5
+  },
+  {
+   "Name": "certifi",
+   "Version": "2026.7.22",
+   "License": "Mozilla Public License 2.0 (MPL 2.0)",
+   "families": [
+    "MPL"
+   ],
+   "installed_mb": 0.2
+  },
+  {
+   "Name": "chardet",
+   "Version": "7.6.0",
+   "License": "0BSD",
+   "families": [],
+   "installed_mb": 2.9
+  },
+  {
+   "Name": "charset-normalizer",
+   "Version": "3.5.1",
+   "License": "MIT",
+   "families": [],
+   "installed_mb": 1.1
+  },
+  {
+   "Name": "click",
+   "Version": "8.5.0",
+   "License": "BSD-3-Clause",
+   "families": [],
+   "installed_mb": 0.4
+  },
+  {
+   "Name": "cloudpickle",
+   "Version": "3.1.2",
+   "License": "BSD License",
+   "families": [],
+   "installed_mb": 0.1
+  },
+  {
+   "Name": "grpcio",
+   "Version": "1.84.0",
+   "License": "Apache-2.0",
+   "families": [],
+   "installed_mb": 40.5
+  },
+  {
+   "Name": "h11",
+   "Version": "0.16.0",
+   "License": "MIT License",
+   "families": [],
+   "installed_mb": 0.1
+  },
+  {
+   "Name": "httpcore",
+   "Version": "1.0.9",
+   "License": "BSD-3-Clause",
+   "families": [],
+   "installed_mb": 0.3
+  },
+  {
+   "Name": "httpx",
+   "Version": "0.28.1",
+   "License": "BSD License",
+   "families": [],
+   "installed_mb": 0.3
+  },
+  {
+   "Name": "idna",
+   "Version": "3.20",
+   "License": "BSD-3-Clause",
+   "families": [],
+   "installed_mb": 0.3
+  },
+  {
+   "Name": "iniconfig",
+   "Version": "2.3.0",
+   "License": "MIT",
+   "families": [],
+   "installed_mb": 0.0
+  },
+  {
+   "Name": "joblib",
+   "Version": "1.6.0",
+   "License": "BSD-3-Clause",
+   "families": [],
+   "installed_mb": 0.9
+  },
+  {
+   "Name": "loguru",
+   "Version": "0.7.3",
+   "License": "MIT License",
+   "families": [],
+   "installed_mb": 0.2
+  },
+  {
+   "Name": "lxml",
+   "Version": "6.1.3",
+   "License": "BSD-3-Clause",
+   "families": [],
+   "installed_mb": 19.9
+  },
+  {
+   "Name": "markdown-it-py",
+   "Version": "4.2.0",
+   "License": "MIT License",
+   "families": [],
+   "installed_mb": 0.2
+  },
+  {
+   "Name": "mdurl",
+   "Version": "0.1.2",
+   "License": "MIT License",
+   "families": [],
+   "installed_mb": 0.0
+  },
+  {
+   "Name": "narwhals",
+   "Version": "2.26.0",
+   "License": "MIT",
+   "families": [],
+   "installed_mb": 2.0
+  },
+  {
+   "Name": "networkx",
+   "Version": "3.7",
+   "License": "BSD-3-Clause",
+   "families": [],
+   "installed_mb": 7.3
+  },
+  {
+   "Name": "numpy",
+   "Version": "2.5.3",
+   "License": "BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0",
+   "families": [],
+   "installed_mb": 20.6
+  },
+  {
+   "Name": "packaging",
+   "Version": "26.3",
+   "License": "Apache-2.0 OR BSD-2-Clause",
+   "families": [],
+   "installed_mb": 0.5
+  },
+  {
+   "Name": "pandas",
+   "Version": "3.0.6",
+   "License": "BSD License",
+   "families": [],
+   "installed_mb": 39.3
+  },
+  {
+   "Name": "pillow",
+   "Version": "12.3.0",
+   "License": "MIT-CMU",
+   "families": [],
+   "installed_mb": 13.3
+  },
+  {
+   "Name": "pluggy",
+   "Version": "1.6.0",
+   "License": "MIT License",
+   "families": [],
+   "installed_mb": 0.1
+  },
+  {
+   "Name": "protobuf",
+   "Version": "7.36.2",
+   "License": "3-Clause BSD License",
+   "families": [],
+   "installed_mb": 1.7
+  },
+  {
+   "Name": "pyarrow",
+   "Version": "25.0.1",
+   "License": "Apache-2.0",
+   "families": [],
+   "installed_mb": 126.5
+  },
+  {
+   "Name": "pydantic",
+   "Version": "2.13.5",
+   "License": "MIT",
+   "families": [],
+   "installed_mb": 1.9
+  },
+  {
+   "Name": "pydantic_core",
+   "Version": "2.46.5",
+   "License": "MIT",
+   "families": [],
+   "installed_mb": 4.5
+  },
+  {
+   "Name": "Pygments",
+   "Version": "2.21.0",
+   "License": "BSD-2-Clause",
+   "families": [],
+   "installed_mb": 4.6
+  },
+  {
+   "Name": "pyparsing",
+   "Version": "3.3.3",
+   "License": "MIT",
+   "families": [],
+   "installed_mb": 0.5
+  },
+  {
+   "Name": "pytest",
+   "Version": "9.1.1",
+   "License": "MIT",
+   "families": [],
+   "installed_mb": 1.4
+  },
+  {
+   "Name": "python-dateutil",
+   "Version": "2.9.0.post0",
+   "License": "BSD License AND Apache Software License",
+   "families": [],
+   "installed_mb": 0.4
+  },
+  {
+   "Name": "python-dotenv",
+   "Version": "1.2.3",
+   "License": "BSD-3-Clause",
+   "families": [],
+   "installed_mb": 0.1
+  },
+  {
+   "Name": "PyYAML",
+   "Version": "6.0.3",
+   "License": "MIT License",
+   "families": [],
+   "installed_mb": 0.6
+  },
+  {
+   "Name": "rdflib",
+   "Version": "7.6.0",
+   "License": "BSD License",
+   "families": [],
+   "installed_mb": 2.4
+  },
+  {
+   "Name": "requests",
+   "Version": "2.34.2",
+   "License": "Apache Software License",
+   "families": [],
+   "installed_mb": 0.2
+  },
+  {
+   "Name": "rich",
+   "Version": "15.0.0",
+   "License": "MIT License",
+   "families": [],
+   "installed_mb": 1.2
+  },
+  {
+   "Name": "scikit-learn",
+   "Version": "1.9.1",
+   "License": "BSD-3-Clause",
+   "families": [],
+   "installed_mb": 30.4
+  },
+  {
+   "Name": "scipy",
+   "Version": "1.18.1",
+   "License": "BSD License",
+   "families": [],
+   "installed_mb": 70.4
+  },
+  {
+   "Name": "semantica",
+   "Version": "0.7.0",
+   "License": "MIT License",
+   "families": [],
+   "installed_mb": 10.7
+  },
+  {
+   "Name": "six",
+   "Version": "1.17.0",
+   "License": "MIT License",
+   "families": [],
+   "installed_mb": 0.0
+  },
+  {
+   "Name": "structlog",
+   "Version": "26.1.0",
+   "License": "MIT OR Apache-2.0",
+   "families": [],
+   "installed_mb": 0.2
+  },
+  {
+   "Name": "threadpoolctl",
+   "Version": "3.7.0",
+   "License": "BSD-3-Clause",
+   "families": [],
+   "installed_mb": 0.1
+  },
+  {
+   "Name": "toml",
+   "Version": "0.10.2",
+   "License": "MIT License",
+   "families": [],
+   "installed_mb": 0.1
+  },
+  {
+   "Name": "tqdm",
+   "Version": "4.70.1",
+   "License": "MPL-2.0 AND MIT",
+   "families": [
+    "MPL"
+   ],
+   "installed_mb": 0.2
+  },
+  {
+   "Name": "typing-inspection",
+   "Version": "0.4.4",
+   "License": "MIT",
+   "families": [],
+   "installed_mb": 0.1
+  },
+  {
+   "Name": "typing_extensions",
+   "Version": "4.16.0",
+   "License": "PSF-2.0",
+   "families": [],
+   "installed_mb": 0.2
+  },
+  {
+   "Name": "urllib3",
+   "Version": "2.8.0",
+   "License": "MIT",
+   "families": [],
+   "installed_mb": 0.5
+  }
+ ],
+ "python": "3.13.13",
+ "installed_total_mb": 410.1
+}

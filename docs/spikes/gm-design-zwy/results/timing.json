@@ -1,0 +1,849 @@
+{
+ "baseline_10k": {
+  "method": "baseline",
+  "queries": 10000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 52.682,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 5.795,
+  "match_ms_per_query": 0.58,
+  "rss_after_load_mb": 2931.1,
+  "peak_rss_mb": 3446.7,
+  "index_seconds": 5.063,
+  "time_l_max_rss_mb": 3452.6
+ },
+ "baseline_1k": {
+  "method": "baseline",
+  "queries": 1000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 56.878,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 4.661,
+  "match_ms_per_query": 4.661,
+  "rss_after_load_mb": 3037.9,
+  "peak_rss_mb": 3392.6,
+  "index_seconds": 4.596,
+  "time_l_max_rss_mb": 3442.3
+ },
+ "baseline_b1k": {
+  "method": "baseline",
+  "queries": 1000,
+  "pool": 22154,
+  "pool_kinds": {
+   "release": 19815,
+   "master": 2339
+  },
+  "bounded_pool": 0,
+  "drop": [],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 0.88,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 0.074,
+  "match_ms_per_query": 0.074,
+  "rss_after_load_mb": 85.3,
+  "peak_rss_mb": 94.3,
+  "index_seconds": 0.015,
+  "time_l_max_rss_mb": 94.3
+ },
+ "baseline_dev": {
+  "method": "baseline",
+  "queries": 2000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 56.128,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 4.802,
+  "match_ms_per_query": 2.401,
+  "rss_after_load_mb": 2984.3,
+  "peak_rss_mb": 3430.8,
+  "index_seconds": 4.651,
+  "time_l_max_rss_mb": 3454.9
+ },
+ "baseline_drop_artist_10k": {
+  "method": "baseline",
+  "queries": 10000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [
+   "artist"
+  ],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 53.933,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 6.648,
+  "match_ms_per_query": 0.665,
+  "rss_after_load_mb": 3223.7,
+  "peak_rss_mb": 3610.5,
+  "index_seconds": 4.364,
+  "time_l_max_rss_mb": 3610.5
+ },
+ "baseline_drop_barcode+catno_10k": {
+  "method": "baseline",
+  "queries": 10000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [
+   "barcode",
+   "catno"
+  ],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 79.158,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 10.072,
+  "match_ms_per_query": 1.007,
+  "rss_after_load_mb": 2785.5,
+  "peak_rss_mb": 3110.1,
+  "index_seconds": 8.98,
+  "time_l_max_rss_mb": 3384.3
+ },
+ "baseline_drop_barcode_10k": {
+  "method": "baseline",
+  "queries": 10000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [
+   "barcode"
+  ],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 81.384,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 5.789,
+  "match_ms_per_query": 0.579,
+  "rss_after_load_mb": 3222.2,
+  "peak_rss_mb": 3499.7,
+  "index_seconds": 5.028,
+  "time_l_max_rss_mb": 3500.5
+ },
+ "baseline_drop_catno_10k": {
+  "method": "baseline",
+  "queries": 10000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [
+   "catno"
+  ],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 65.761,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 6.5,
+  "match_ms_per_query": 0.65,
+  "rss_after_load_mb": 2953.3,
+  "peak_rss_mb": 3404.8,
+  "index_seconds": 5.934,
+  "time_l_max_rss_mb": 3446.8
+ },
+ "baseline_drop_descriptors_10k": {
+  "method": "baseline",
+  "queries": 10000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [
+   "descriptors"
+  ],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 60.231,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 5.443,
+  "match_ms_per_query": 0.544,
+  "rss_after_load_mb": 3098.2,
+  "peak_rss_mb": 3508.7,
+  "index_seconds": 4.599,
+  "time_l_max_rss_mb": 3509.5
+ },
+ "baseline_drop_title+artist_10k": {
+  "method": "baseline",
+  "queries": 10000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [
+   "artist",
+   "title"
+  ],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 79.23,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 10.16,
+  "match_ms_per_query": 1.016,
+  "rss_after_load_mb": 2849.3,
+  "peak_rss_mb": 3064.7,
+  "index_seconds": 9.384,
+  "time_l_max_rss_mb": 3221.1
+ },
+ "baseline_drop_title_10k": {
+  "method": "baseline",
+  "queries": 10000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [
+   "title"
+  ],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 62.636,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 4.932,
+  "match_ms_per_query": 0.493,
+  "rss_after_load_mb": 3134.9,
+  "peak_rss_mb": 3446.0,
+  "index_seconds": 4.642,
+  "time_l_max_rss_mb": 3467.5
+ },
+ "baseline_kindblind_10k": {
+  "method": "baseline",
+  "queries": 10000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [],
+  "kind_blind": true,
+  "raw": false,
+  "load_seconds": 56.104,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 4.841,
+  "match_ms_per_query": 0.484,
+  "rss_after_load_mb": 3222.5,
+  "peak_rss_mb": 3590.1,
+  "index_seconds": 4.2,
+  "time_l_max_rss_mb": 3590.2
+ },
+ "baseline_nonlatin": {
+  "method": "baseline",
+  "queries": 1000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 82.248,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 7.198,
+  "match_ms_per_query": 7.198,
+  "rss_after_load_mb": 2770.3,
+  "peak_rss_mb": 3351.9,
+  "index_seconds": 7.098,
+  "time_l_max_rss_mb": 3370.8
+ },
+ "blocking_b1k": {
+  "method": "semantica_blocking",
+  "queries": 1000,
+  "pool": 22154,
+  "pool_kinds": {
+   "release": 19815,
+   "master": 2339
+  },
+  "bounded_pool": 0,
+  "drop": [],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 0.856,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 0.398,
+  "match_ms_per_query": 0.398,
+  "rss_after_load_mb": 85.1,
+  "peak_rss_mb": 139.2,
+  "blocking": {
+   "legacy": {
+    "blocks": 119,
+    "total_pairs": 15795260,
+    "cross_source_pairs": 1258203,
+    "coverage": 0.964,
+    "seconds": 0.01
+   },
+   "blocking_v2": {
+    "blocks": 5009,
+    "total_pairs": 16339815,
+    "cross_source_pairs": 1010091,
+    "coverage": 0.987,
+    "seconds": 0.041
+   },
+   "blocking_v2_phonetic": {
+    "blocks": 7152,
+    "total_pairs": 35764192,
+    "cross_source_pairs": 2266434,
+    "coverage": 0.987,
+    "seconds": 0.168
+   }
+  },
+  "time_l_max_rss_mb": 139.2
+ },
+ "exhaustive_b1k": {
+  "method": "semantica_exhaustive",
+  "queries": 1000,
+  "pool": 22154,
+  "pool_kinds": {
+   "release": 19815,
+   "master": 2339
+  },
+  "bounded_pool": 0,
+  "drop": [],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 0.943,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 933.024,
+  "match_ms_per_query": 933.024,
+  "rss_after_load_mb": 85.1,
+  "peak_rss_mb": 133.3,
+  "encode_seconds": 0.114,
+  "time_l_max_rss_mb": 137.7
+ },
+ "exhaustive_drop_artist_b1k": {
+  "method": "semantica_exhaustive",
+  "queries": 1000,
+  "pool": 22154,
+  "pool_kinds": {
+   "release": 19815,
+   "master": 2339
+  },
+  "bounded_pool": 0,
+  "drop": [
+   "artist"
+  ],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 1.221,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 807.5,
+  "match_ms_per_query": 807.5,
+  "rss_after_load_mb": 85.6,
+  "peak_rss_mb": 141.8,
+  "encode_seconds": 0.111,
+  "time_l_max_rss_mb": 141.8
+ },
+ "exhaustive_drop_barcode+catno_b1k": {
+  "method": "semantica_exhaustive",
+  "queries": 1000,
+  "pool": 22154,
+  "pool_kinds": {
+   "release": 19815,
+   "master": 2339
+  },
+  "bounded_pool": 0,
+  "drop": [
+   "barcode",
+   "catno"
+  ],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 1.172,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 629.039,
+  "match_ms_per_query": 629.039,
+  "rss_after_load_mb": 85.5,
+  "peak_rss_mb": 142.6,
+  "encode_seconds": 0.097,
+  "time_l_max_rss_mb": 142.6
+ },
+ "exhaustive_drop_barcode_b1k": {
+  "method": "semantica_exhaustive",
+  "queries": 1000,
+  "pool": 22154,
+  "pool_kinds": {
+   "release": 19815,
+   "master": 2339
+  },
+  "bounded_pool": 0,
+  "drop": [
+   "barcode"
+  ],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 0.985,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 957.289,
+  "match_ms_per_query": 957.289,
+  "rss_after_load_mb": 84.7,
+  "peak_rss_mb": 147.0,
+  "encode_seconds": 0.101,
+  "time_l_max_rss_mb": 147.0
+ },
+ "exhaustive_drop_catno_b1k": {
+  "method": "semantica_exhaustive",
+  "queries": 1000,
+  "pool": 22154,
+  "pool_kinds": {
+   "release": 19815,
+   "master": 2339
+  },
+  "bounded_pool": 0,
+  "drop": [
+   "catno"
+  ],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 0.987,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 726.512,
+  "match_ms_per_query": 726.512,
+  "rss_after_load_mb": 85.2,
+  "peak_rss_mb": 142.6,
+  "encode_seconds": 0.079,
+  "time_l_max_rss_mb": 142.6
+ },
+ "exhaustive_drop_descriptors_b1k": {
+  "method": "semantica_exhaustive",
+  "queries": 1000,
+  "pool": 22154,
+  "pool_kinds": {
+   "release": 19815,
+   "master": 2339
+  },
+  "bounded_pool": 0,
+  "drop": [
+   "descriptors"
+  ],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 1.169,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 805.549,
+  "match_ms_per_query": 805.549,
+  "rss_after_load_mb": 85.3,
+  "peak_rss_mb": 147.4,
+  "encode_seconds": 0.128,
+  "time_l_max_rss_mb": 147.4
+ },
+ "exhaustive_drop_title+artist_b1k": {
+  "method": "semantica_exhaustive",
+  "queries": 1000,
+  "pool": 22154,
+  "pool_kinds": {
+   "release": 19815,
+   "master": 2339
+  },
+  "bounded_pool": 0,
+  "drop": [
+   "artist",
+   "title"
+  ],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 1.12,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 31.779,
+  "match_ms_per_query": 31.779,
+  "rss_after_load_mb": 85.4,
+  "peak_rss_mb": 142.1,
+  "encode_seconds": 0.117,
+  "time_l_max_rss_mb": 142.1
+ },
+ "exhaustive_drop_title_b1k": {
+  "method": "semantica_exhaustive",
+  "queries": 1000,
+  "pool": 22154,
+  "pool_kinds": {
+   "release": 19815,
+   "master": 2339
+  },
+  "bounded_pool": 0,
+  "drop": [
+   "title"
+  ],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 0.988,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 37.072,
+  "match_ms_per_query": 37.072,
+  "rss_after_load_mb": 85.2,
+  "peak_rss_mb": 147.3,
+  "encode_seconds": 0.108,
+  "time_l_max_rss_mb": 147.3
+ },
+ "native_b1k": {
+  "method": "semantica_native",
+  "queries": 1000,
+  "pool": 22154,
+  "pool_kinds": {
+   "release": 19815,
+   "master": 2339
+  },
+  "bounded_pool": 0,
+  "drop": [],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 0.878,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 967.347,
+  "match_ms_per_query": 967.347,
+  "rss_after_load_mb": 85.3,
+  "peak_rss_mb": 115.6,
+  "encode_seconds": 0.096,
+  "time_l_max_rss_mb": 115.6
+ },
+ "semrerank_10k": {
+  "method": "semantica_rerank",
+  "queries": 10000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 74.074,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 19.693,
+  "match_ms_per_query": 1.969,
+  "rss_after_load_mb": 3223.4,
+  "peak_rss_mb": 3828.9,
+  "index_seconds": 5.169,
+  "time_l_max_rss_mb": 3828.9
+ },
+ "semrerank_1k": {
+  "method": "semantica_rerank",
+  "queries": 1000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 55.237,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 5.211,
+  "match_ms_per_query": 5.211,
+  "rss_after_load_mb": 3168.4,
+  "peak_rss_mb": 3521.7,
+  "index_seconds": 4.489,
+  "time_l_max_rss_mb": 3521.7
+ },
+ "semrerank_b1k": {
+  "method": "semantica_rerank",
+  "queries": 1000,
+  "pool": 22154,
+  "pool_kinds": {
+   "release": 19815,
+   "master": 2339
+  },
+  "bounded_pool": 0,
+  "drop": [],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 0.866,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 0.771,
+  "match_ms_per_query": 0.771,
+  "rss_after_load_mb": 85.3,
+  "peak_rss_mb": 120.9,
+  "index_seconds": 0.015,
+  "time_l_max_rss_mb": 120.9
+ },
+ "semrerank_dev": {
+  "method": "semantica_rerank",
+  "queries": 2000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 57.206,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 6.367,
+  "match_ms_per_query": 3.184,
+  "rss_after_load_mb": 3089.9,
+  "peak_rss_mb": 3508.5,
+  "index_seconds": 4.442,
+  "time_l_max_rss_mb": 3547.6
+ },
+ "semrerank_drop_artist_10k": {
+  "method": "semantica_rerank",
+  "queries": 10000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [
+   "artist"
+  ],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 55.09,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 35.513,
+  "match_ms_per_query": 3.551,
+  "rss_after_load_mb": 2713.8,
+  "peak_rss_mb": 3484.5,
+  "index_seconds": 5.47,
+  "time_l_max_rss_mb": 3822.0
+ },
+ "semrerank_drop_barcode+catno_10k": {
+  "method": "semantica_rerank",
+  "queries": 10000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [
+   "barcode",
+   "catno"
+  ],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 73.717,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 12.817,
+  "match_ms_per_query": 1.282,
+  "rss_after_load_mb": 3167.3,
+  "peak_rss_mb": 3548.6,
+  "index_seconds": 5.951,
+  "time_l_max_rss_mb": 3590.5
+ },
+ "semrerank_drop_barcode_10k": {
+  "method": "semantica_rerank",
+  "queries": 10000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [
+   "barcode"
+  ],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 76.774,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 17.253,
+  "match_ms_per_query": 1.725,
+  "rss_after_load_mb": 2873.3,
+  "peak_rss_mb": 3645.6,
+  "index_seconds": 5.354,
+  "time_l_max_rss_mb": 3667.1
+ },
+ "semrerank_drop_catno_10k": {
+  "method": "semantica_rerank",
+  "queries": 10000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [
+   "catno"
+  ],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 66.394,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 12.129,
+  "match_ms_per_query": 1.213,
+  "rss_after_load_mb": 2817.8,
+  "peak_rss_mb": 3513.9,
+  "index_seconds": 5.471,
+  "time_l_max_rss_mb": 3585.7
+ },
+ "semrerank_drop_descriptors_10k": {
+  "method": "semantica_rerank",
+  "queries": 10000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [
+   "descriptors"
+  ],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 60.887,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 15.764,
+  "match_ms_per_query": 1.576,
+  "rss_after_load_mb": 2868.2,
+  "peak_rss_mb": 3713.1,
+  "index_seconds": 5.273,
+  "time_l_max_rss_mb": 3713.1
+ },
+ "semrerank_drop_title+artist_10k": {
+  "method": "semantica_rerank",
+  "queries": 10000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [
+   "artist",
+   "title"
+  ],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 80.823,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 9.936,
+  "match_ms_per_query": 0.994,
+  "rss_after_load_mb": 2706.4,
+  "peak_rss_mb": 3255.2,
+  "index_seconds": 8.19,
+  "time_l_max_rss_mb": 3528.1
+ },
+ "semrerank_drop_title_10k": {
+  "method": "semantica_rerank",
+  "queries": 10000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [
+   "title"
+  ],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 60.003,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 5.988,
+  "match_ms_per_query": 0.599,
+  "rss_after_load_mb": 3128.4,
+  "peak_rss_mb": 3600.4,
+  "index_seconds": 4.994,
+  "time_l_max_rss_mb": 3601.2
+ },
+ "semrerank_kindblind_10k": {
+  "method": "semantica_rerank",
+  "queries": 10000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [],
+  "kind_blind": true,
+  "raw": false,
+  "load_seconds": 55.285,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 14.766,
+  "match_ms_per_query": 1.477,
+  "rss_after_load_mb": 3226.2,
+  "peak_rss_mb": 3839.8,
+  "index_seconds": 4.197,
+  "time_l_max_rss_mb": 3839.8
+ },
+ "semrerank_nonlatin": {
+  "method": "semantica_rerank",
+  "queries": 1000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [],
+  "kind_blind": false,
+  "raw": false,
+  "load_seconds": 96.663,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 7.902,
+  "match_ms_per_query": 7.902,
+  "rss_after_load_mb": 2802.0,
+  "peak_rss_mb": 3320.5,
+  "index_seconds": 7.142,
+  "time_l_max_rss_mb": 3434.2
+ },
+ "semrerank_raw_10k": {
+  "method": "semantica_rerank",
+  "queries": 10000,
+  "pool": 1266009,
+  "pool_kinds": {
+   "release": 1129406,
+   "master": 136603
+  },
+  "bounded_pool": 0,
+  "drop": [],
+  "kind_blind": false,
+  "raw": true,
+  "load_seconds": 56.945,
+  "pool_build_seconds": 0.0,
+  "match_seconds": 14.325,
+  "match_ms_per_query": 1.433,
+  "rss_after_load_mb": 3755.6,
+  "peak_rss_mb": 4377.8,
+  "index_seconds": 4.546,
+  "time_l_max_rss_mb": 4377.8
+ }
+}

@@ -1,6 +1,6 @@
 # ADR 0011: Catalog identifiers, manufacturing credits, and release country
 
-- Status: Accepted
+- Status: Accepted; amended 2026-09-25
 
 ## Context
 
@@ -254,4 +254,24 @@ Deferred to their own records:
   it on, which ADR 0009 explicitly left undecided.
 - **Identifier-driven edition matching.** A shared matrix inscription or barcode across two
   releases is strong evidence they are the same pressing. This record makes that evidence
-  available and queryable; what a matcher does with it is not settled here.
+  available and queryable; what a matcher does with it is not settled here. Settled by
+  [ADR 0014](0014-cross-catalog-edition-candidates.md); see the 2026-09-25 amendment below.
+
+## Amendments
+
+### 2026-09-25: Edition matching decided; alias normalization unchanged
+
+[ADR 0014](0014-cross-catalog-edition-candidates.md) settles the edition-matching deferral
+above, on the evidence of the
+[Semantica identity-matching spike](../spikes/gm-design-zwy-semantica-identity-matching.md).
+That spike compared barcodes and catalogue numbers under two keys wider than this record's:
+a 12-digit UPC-A barcode also as its 13-digit EAN-13 form with a leading zero, and a
+catalogue number also as a compact key with punctuation and spaces removed.
+
+ADR 0014 adopts both only as blocking and comparison keys inside its matcher and declines
+them as alias normalization. The namespace rules in "Vocabulary homes, vendoring, and which
+types mint aliases" above are unchanged: a `barcode` alias keeps its digits only, and a
+`catalog_number` alias is upper-cased with internal whitespace collapsed. No minted alias changes
+its external id, the identifier vocabulary does not change, and the lookup endpoint's
+normalization stays as decided here. A future widening of the barcode rule to treat UPC-A and EAN-13 as one
+GTIN would be its own vocabulary change and a further amendment to this record.
