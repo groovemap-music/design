@@ -286,11 +286,16 @@ widening the amendment above left to a further amendment, and settles it at look
 than as a vocabulary change: stored `barcode` aliases keep the external id this record's
 digits-only rule gave them.
 
-**The rule.** GS1 defines GTIN-12, GTIN-13, and GTIN-14 as one number space. A shorter GTIN is
-the same GTIN when it is right-aligned in a 14-digit field and filled with leading zeros
-([GS1 General Specifications](https://www.gs1.org/standards/barcodes-epcrfid-id-keys/gs1-general-specifications),
-section 3.3.2, the GTIN data structures, and the
-[GS1 clarification of GTIN-14 creation](https://www.gs1.org/docs/barcodes/GSCN_21-258_GTIN14.pdf)).
+**The rule.** GS1 defines GTIN-12, GTIN-13, and GTIN-14 as one number space, per the
+[GS1 General Specifications](https://www.gs1.org/standards/barcodes-epcrfid-id-keys/gs1-general-specifications),
+Release 26.0 (Ratified, January 2026); section numbers below refer to that release. A shorter
+GTIN is the same GTIN when it is right-aligned in a 14-digit field and filled with leading
+zeros: section 3.3.2, "Identification of a trade item (GTIN): AI (01)," carries every GTIN in
+that 14-digit field with leading zeros (GTIN-12 as `00` plus 12 digits, GTIN-13 as `0` plus 13
+digits; section 2.1 holds the GTIN format rules), and section 5.2.2.3, "UPC-A barcodes," states
+that a UPC-A barcode may be decoded as a 13-digit number by adding an implied leading zero to
+the GTIN-12 — the direct basis for `D` <-> `0D` below — see also the
+[GS1 clarification of GTIN-14 creation](https://www.gs1.org/docs/barcodes/GSCN_21-258_GTIN14.pdf).
 The check digit is unchanged by that padding. The GS1 modulo-10 check digit (section 7.9.1)
 weights digits from the right, starting with 3 for the digit beside the check digit, so a
 leading zero contributes 0 at whatever weight it gets. `036000291452` and `0036000291452`
