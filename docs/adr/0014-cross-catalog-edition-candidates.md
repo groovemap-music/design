@@ -342,6 +342,11 @@ own ambiguity rule, which discography, date, or country evidence resolves a name
 threshold measured on its own population, and its own rule version. Scores are not shared
 across kinds.
 
+Artist and label candidates are admitted for three scripts, with their own ambiguity rule and
+numeric bar; see the
+[third 2026-09-25 amendment](#2026-09-25-artist-and-label-candidates-for-three-scripts) below.
+Nothing for those kinds is built until a measurement clears that bar.
+
 Rejected alternative:
 
 - **Decide artist and label candidates here, on edition evidence.** The spike did not measure
@@ -473,7 +478,10 @@ These are planning inputs. None is filed by this record.
 - **UPC-A to EAN-13 in the identifier vocabulary.** A lookup improvement independent of
   matching, left to its own vocabulary change.
 - **Artist and label candidates.** An amendment under section 7, once `gm-design-e0b` has
-  landed and a generator for those kinds is adopted.
+  landed and a generator for those kinds is adopted. Decided in the
+  [third 2026-09-25 amendment](#2026-09-25-artist-and-label-candidates-for-three-scripts):
+  candidates for Cyrillic, Hebrew, and Japanese kana names, Han excluded, gated by their own
+  measurement.
 
 ## Amendments
 
@@ -592,3 +600,313 @@ waited on section 6.
 **Until then, nothing is built.** Section 6 stands as written apart from the bar above: no
 `matching` schema, role, job, or review action until a re-run clears it. Section 8 is
 unaffected. Sections 1 to 5 and 7 are unchanged.
+
+### 2026-09-25: Artist and label candidates for three scripts
+
+Section 7 left artist and label candidates to an amendment that states its own population,
+ambiguity rule, threshold, and rule version. The evidence is the non-Latin identity spike,
+`gm-design-e0b.1` (`docs/spikes/gm-design-e0b.1-nonlatin-identity.md`),
+read with [`gm-design-chw.3`](../spikes/gm-design-chw.3-identity-name-embeddings.md) and
+[ADR 0013](0013-pgvector-catalog-embeddings.md)'s "Identity candidates" section. `gm-design-e0b.1`
+held out MusicBrainz-to-Discogs links on 5,000 non-Latin artists against a 1,098,846-name pool
+and on all 1,592 usable non-Latin labels against every Discogs label, and compared `pg_trgm`,
+two multilingual embedding models (`multilingual-e5-small` and `bge-m3`), and rank fusion of
+each with `pg_trgm`. The owner approved its report and gave `gm-design-e0b.2` a GO scoped as
+the report recommends: a script-scoped generator for Cyrillic, Hebrew, and Japanese kana, Han
+excluded, validated against real HNSW retrieval before it ships.
+
+The findings this amendment relies on:
+
+- **The aggregate result is split.** Best fusion raises recall@10 over `pg_trgm` by 6.85
+  points for labels (73.18% to 80.03%) and by 3.96 points for artists (54.44% to 58.40%), 1.04
+  points short of the 5-point bar ADR 0013 set. Both gains are far smaller than
+  `gm-design-chw.3`'s thin-sample 9.6 and 16.7 points.
+- **The split is population mix.** Han is 38% of the artist sample and 23% of the label sample,
+  and no name method recovers Han names that Discogs stores romanized. Outside Han, both kinds
+  show the same shape: large gains in a few scripts.
+- **Dense retrieval alone sometimes beats fusion.** On artist Hebrew, `e5-small` alone gains
+  14.92 points against fusion's 6.69, and on artist Cyrillic `bge-m3` alone gains 7.07 against
+  fusion's 4.20.
+- **Namesakes defeat every name method.** When the target's name collides in the pool,
+  recall@1 falls to 19.7% for artists and 48.9% for labels at `pg_trgm`, against 54.7% and
+  73.1% when it does not, and no method does materially better.
+- **Every dense number is exact cosine.** The side-check that would have compared pgvector
+  HNSW to exact search failed on a container shared-memory limit. The gap is unmeasured, not
+  small.
+- **Every number is on linked pairs.** As with `gm-design-zwy`, the population measured is the
+  one editors already linked, which is not the one a generator would serve.
+
+#### 1. Population: unlinked MusicBrainz artists and labels in the scoped scripts
+
+The query population is the MusicBrainz artists whose `discogs_artist_id` is null and the
+MusicBrainz labels whose `discogs_label_id` is null, whose name falls in a scoped script. As
+for releases, an entity with a catalog link is never re-matched, and a split-linked entity is
+section 8's, not the matcher's. In the `20260923` MusicBrainz dump, 131,112 artists and 5,339
+labels are non-Latin and unlinked, about 2.6 and 3.3 times the number already linked.
+`gm-design-e0b.1` did not break the unlinked counts down by script, and the linked sample's
+script mix need not match them, so the scoped population is not yet sized. The measurement in
+subsection 5 reports it per script.
+
+The candidate pool is the loaded Discogs artists or labels whose native item carries no current
+`musicbrainz` alias of the same kind. A Discogs entity that MusicBrainz already links to
+another MusicBrainz entity is excluded: MusicBrainz asserts that the two MusicBrainz entities
+are distinct, so a second link onto the same Discogs item would merge them.
+
+Latin-script names are not admitted. `gm-design-chw.3` found `pg_trgm` near 97% recall@10 on
+the linked, mostly Latin population, but that population is easy by construction, and
+namesakes are densest in Latin script. They join by a further amendment with their own
+measurement, if ever.
+
+Rejected alternative:
+
+- **All non-Latin names, script-agnostic.** The artist aggregate misses the bar because Han
+  drags it down, and a single threshold would hide scripts where the method works behind one
+  where it cannot.
+
+#### 2. Script scope: Cyrillic, Hebrew, and Japanese kana; Han excluded
+
+A name's script is its dominant Unicode block among alphabetic characters, as
+`gm-design-e0b.1`'s classifier computes it. The classifier is part of the rule version.
+Recall@10 gains over `pg_trgm` on `gm-design-e0b.1`'s linked pairs decide the scope:
+
+| Cell | n | `pg_trgm` recall@10 | Best fusion gain | Best dense-alone gain |
+| --- | ---: | ---: | ---: | ---: |
+| Artist, Cyrillic | 1,358 | 87.63% | +4.20 | +7.07 (`bge-m3`) |
+| Artist, Hebrew | 583 | 57.29% | +6.69 | +14.92 (`e5-small`) |
+| Artist, Japanese kana | 588 | 48.13% | +11.90 | +14.29 (`e5-small`) |
+| Label, Hebrew | 175 | 54.86% | +16.00 | +17.71 (`bge-m3`) |
+| Label, Japanese kana | 239 | 51.46% | +17.99 | +20.50 (`e5-small`) |
+| Label, Cyrillic | 672 | 94.79% | +1.79 | +1.19 (`bge-m3`) |
+
+The first five cells are admitted with dense retrieval. Label Cyrillic is admitted as a
+trigram-only cell: embeddings add nothing there, but `pg_trgm` already recalls 94.79%, and the
+cell faces the same namesake hazard and bars as the others.
+
+**Promising but unconfirmed.** Arabic, Korean Hangul, Thai, and the remaining non-Latin
+scripts show gains, but on samples below 180 on at least one kind, down to 10. They are not
+admitted on this evidence. Each joins by amendment once a sample powered to the bar in
+subsection 5 clears it. Greek showed no gain above 4.41 points on either kind and is not
+listed.
+
+**Han is excluded.** It is the largest non-Latin slice, and the diagnosis is a script mismatch,
+not a weak matcher. When the Discogs name is also in Han, every method, `pg_trgm` included,
+recalls 95.9% to 99.2% at 10. When Discogs stores it romanized, which it does for 73.7% of Han
+artist queries and 45.8% of Han label queries, following its convention of romaji or pinyin in
+given-name-first order, every method recalls 0% to 7.9%, both embedding models included. Neither
+Simplified and Traditional variants nor trigram tokenization explain it. No name similarity
+crosses scripts that far.
+
+A separate Han path would need a transliteration bridge: a romanized key for each Han-script
+MusicBrainz name, matched against Discogs names and name variations. Its source is the open
+question. MusicBrainz sort names and Latin-script aliases are editor-entered and cover part of
+the population. Generated romanization needs a dependency under the license policy and cannot
+recover Japanese given-name readings, which kanji do not determine. That path needs its own
+spike measuring recall on the romanized subset, its own bar under subsection 5, and its own
+amendment. It is not decided here.
+
+Rejected alternative:
+
+- **Include Han and rely on the Han-to-Han subset.** It would admit a population where most
+  targets are unreachable, and a queue of Han-script namesakes where the true entity is a
+  romanized record no method retrieves.
+
+#### 3. Retrieval: per-cell policy, trigram candidates always kept
+
+Every candidate list includes `pg_trgm`'s top candidates, as ADR 0013 requires of any adopted
+embedding. In the five dense cells it also includes the dense model's top candidates, and a
+per-cell policy ranks the union: dense alone, or rank fusion with `pg_trgm`. The policy and the
+model are chosen per cell on the dev split of subsection 5 and versioned with the rules.
+
+This is a planning input rather than a fixed rule, because the evidence is one measurement, on
+linked pairs, with exact cosine. It suggests dense-alone ranking in artist Cyrillic, artist
+Hebrew, and label Japanese kana, where fusion gives back most of dense's gain, and it does not
+settle the model. `bge-m3` embeds about seven times slower than `e5-small` (195.8 against
+1,483.6 names per second for artists) and leads in only some cells.
+
+ADR 0013's "embeddings only supplement trigrams" rests on `gm-design-chw.3`'s mostly Latin
+sample, where dense retrieval lost at recall@1 in every slice. In the five dense cells
+`gm-design-e0b.1` shows the reverse: the better model beats `pg_trgm` at recall@1 in each. The union keeps ADR 0013's intent: no trigram candidate is
+lost, and dense ranking decides only order.
+
+Rejected alternative:
+
+- **One RRF rule for every cell.** It halves the gain in artist Hebrew and turns artist
+  Cyrillic from a pass into a near-miss.
+
+#### 4. The namesake rule: an ambiguous artist or label is a hazard, never a set
+
+A namesake is a different person or company. A wrong promotion merges two of them: their
+aliases, their catalog rows, and through ADR 0009's merge, whatever a user owns of them. That
+is the opposite of section 4's case. Two indistinguishable pressings are the same work, so an
+ambiguous edition group is a partial truth worth storing as a set. Two same-named artists share
+nothing but a string, so no set-valued artist or label candidate is stored, no fallback to a
+broader entity exists, and an ambiguous candidate is kept only so a reviewer can reject it or
+resolve it.
+
+Name evidence never suffices, for two reasons. When two or more pool entities share the
+leading candidate's normalized name, recall@1 collapses, as both spikes found. And in the
+unlinked population the true counterpart is often absent from Discogs altogether, so a unique
+name match can still be a namesake. The candidate row therefore carries non-name evidence, and
+acceptance is bounded by it:
+
+- **Positive evidence, which can support an accept.** Release overlap: a release credited to
+  the MusicBrainz entity, or issued on the label, that resolves by catalog link or promotion to
+  a Discogs release crediting the candidate. A shared external URL, such as an official site or
+  a label's Bandcamp page, carried by both records.
+- **Corroborating evidence, which never supports an accept alone.** Active years and country.
+  Discogs records neither for artists or labels, so both are derived from the releases credited
+  to the candidate. They are weaker discography evidence, not independent facts.
+- **Contradicting evidence, which blocks an accept.** Person against group, non-overlapping
+  active years, or release overlap that points at a different candidate. A reviewer may
+  override it only by recording evidence outside both records.
+
+A candidate is **contested** when another pool entity, or another queued candidate, shares its
+normalized name after Discogs's `(2)`-style suffix is stripped. An uncontested candidate is
+accepted only with at least one positive signal and no contradiction. A contested candidate is
+accepted only when positive evidence singles it out from every namesake. Anything else stays
+unaccepted, and the MusicBrainz entity keeps its own native id, which is today's state. Neither
+the matcher, a harness, nor the review action breaks a tie by id or insertion order.
+
+Rejected alternatives:
+
+- **Accept an uncontested name match.** A unique name in the pool says nothing when the true
+  counterpart is missing from Discogs.
+- **Keep an ambiguous namesake group as a set, as section 4 does for editions.** A set of
+  namesakes asserts nothing true about any member.
+- **Treat country and years as sufficient.** For Discogs they are derived from releases, so
+  they can only repeat what release overlap already says, less precisely.
+
+#### 5. The bar: measured per cell on newly linked entities, through HNSW
+
+Nothing in this amendment is built until a measurement clears this bar in at least one cell,
+and only cells that clear it are built. The measurement follows section 6's time-split: the
+query set is the MusicBrainz artists and labels in a scoped script that had no Discogs link in
+one JSON dump and gained exactly one by a later dump. Each entity's earlier record is the query
+and the new link is the label. The pool is every Discogs artist or label in a dump no older
+than the earlier MusicBrainz dump, minus subsection 1's exclusion. It is not sampled, because
+namesake density grows with pool size. Queries are split into dev and test once, seeded.
+
+**Precondition: HNSW, not exact cosine.** Dense retrieval is measured through pgvector HNSW at
+the index shape ADR 0013 adopts (`halfvec`, `m = 16`, `ef_construction = 64`, cosine) and one
+fixed `ef_search`, never through exact cosine. The harness also reports HNSW recall@10 against
+exact search on the same cell, so that gap is known. `gm-analytics-engine-ieu.3`'s HNSW
+measurement on production FastRP vectors sets the procedure and informs `ef_search`, but it is
+not a substitute: text-embedding recall does not transfer from 128-dimension graph vectors.
+
+**Minimum size.** A cell is decided only with at least 100 dev and 400 test queries. A cell
+below that is neither GO nor NO-GO. It waits for a longer window, and nothing is built for it.
+Label cells may take many months to reach it.
+
+**The bars, per cell, on the test split, each on a 95% interval from a seeded query
+bootstrap:**
+
+- **Gain.** In a dense cell, the lower bound of the paired interval on the chosen policy's
+  recall@10 minus `pg_trgm`'s must be at least **5 points**, ADR 0013's bar applied to the
+  bound. A dense cell that misses it may still pass as trigram-only, on the bars below.
+- **Queue.** The upper bound on mean candidates queued per query must be at most **3**.
+  Candidates are counted individually, because namesakes are distinct entities and each needs
+  its own decision.
+- **Precision.** The lower bound on the share of queued candidates that are the correct entity
+  must be at least **50%**.
+- **Namesake safety.** Of test queries where subsection 4's rule, applied mechanically to the
+  harness's evidence, singles out exactly one candidate for acceptance, the upper bound on the
+  share where that candidate is the wrong entity must be at most **2%**. This bars the rule, not
+  the reviewer. The reviewer is a second check, not the first.
+
+**Threshold.** The threshold is on the cell's policy score. It is the most permissive value at
+which the dev split meets the queue and precision bars on point estimates, chosen once on dev
+and applied to test unchanged. If no value meets both on dev, the cell is NO-GO.
+
+**Reported alongside, with no bar.** Recall@10 of each method through HNSW, the share of test
+queries whose correct entity reaches the queue, the contested-queue rate, the share of contested
+queries the evidence rule can resolve, and the unlinked population per script. Also reported: a
+hand-labelled random sample of currently unlinked entities in each cell, giving the share that
+reaches a non-empty queue and that queue's precision. The time-split has a counterpart by
+construction and the served population often does not, so this sample sizes the reject load a
+reviewer will actually carry. Subsection 4's positive-evidence rule, not a bar, is what keeps an
+absent counterpart from being promoted.
+
+**Outcome.** A cell that clears every bar is GO and is built. A cell that misses one is NO-GO
+and stays out until a further amendment. If no cell clears, artist and label candidates stop
+at this record.
+
+**Independence from editions.** Scores are not shared across kinds, so this gate is separate
+from section 6. The second 2026-09-25 amendment's rule that an edition NO-GO leaves "sections 1
+to 5 or 7" unbuilt is narrowed here: an artist or label GO builds the `matching` schema, the
+matcher role, and the review action for its cells alone, whatever the edition re-run returns.
+
+**Footprint, an open precondition.** A linear extrapolation of ADR 0013's size table puts a
+full Discogs artist name index near 10 GiB at `e5-small`'s 384 dimensions and over 20 GiB at
+`bge-m3`'s 1,024, beyond the artists index that ADR 0013 made the largest admitted scope. A
+label index at 384 dimensions is near 2.5 GiB. The implementation plan must settle this before
+the first build: narrower vectors that still clear the bar, a pool restricted without breaking
+subsection 1, or an ADR 0013 amendment admitting the index. Scoring exactly inside the batch
+job, as `gm-design-e0b.1` did, would avoid the index but not the owner's HNSW validation, so it
+would need its own amendment.
+
+Rejected alternatives:
+
+- **The aggregate recall@10 gain alone, as `gm-design-e0b.1` measured it.** It measures
+  retrieval on linked pairs through exact cosine, and says nothing about queue load or namesake
+  harm.
+- **Section 6's group unit.** Groups are sets of indistinguishable editions. Namesakes are not
+  indistinguishable, and grouping them would let one decision merge several.
+- **Pooled scripts for thin label cells.** Pooling would recreate the script-agnostic
+  threshold subsection 1 rejects. A thin cell waits.
+
+#### 6. Rule version
+
+Each kind has its own rule version, recorded on every run and decision row. It fixes the script
+classifier, name normalization and suffix stripping, the per-cell retrieval policy, the
+embedding model and its version, the index parameters and `ef_search`, the candidate depth, the
+per-cell thresholds, and subsection 4's evidence rules. Any change is a new version. A change to
+retrieval, normalization, classifier, model, or evidence rules re-runs the subsection 5 harness
+and must clear its bars before its candidates replace the running version's. Artist, label, and
+edition versions never share a threshold or a score.
+
+#### 7. Producer, storage, and promotion under ADR 0005 and ADR 0009
+
+The producer is section 1's: a scheduled batch job in `analytics-engine`, under the same
+reasoning from [ADR 0005](0005-source-owned-catalog-ingestion.md). A matcher reads two sources,
+so it sits downstream of both producers and both loaders, and neither loader changes. The
+matcher role's grants widen to `SELECT` on both catalogs' artist and label tables and on the
+release and credit tables the evidence rule reads. The name embeddings are matcher-internal,
+stored in the `matching` schema with the model version, written only by that role, and not in
+ADR 0013's similar-item embedding tables. They are provider-derived and fall under ADR 0013's
+quarantine.
+
+Candidates live only in the `matching` schema, keyed by entity kind, as section 2 decides.
+**`gm-design-e0b.1`'s recommendation 6 is superseded.** It proposed writing candidates to
+`provider_aliases` as `source = 'inference'`, and ADR 0013's "Identity candidates" section says
+the same. Both predate sections 2 and 3. For artist and label candidates, no unreviewed
+candidate is ever written to `provider_aliases`, under any source. Only a person's reviewed
+acceptance in `catalog-api` writes identity.
+
+Promotion is section 3's transaction, applied to the kind. `catalog-api` closes the aliases on
+the MusicBrainz artist's or label's native id, re-inserts them against the Discogs entity's
+native id as `source = 'user'` with confidence 1.0, and sets `gm_item_id` on that one
+`musicbrainz.artists` or `musicbrainz.labels` row. The decision row records the evidence the
+acceptance cited under subsection 4. Revert, rejection suppression, and section 8's
+contradiction revert apply unchanged: a MusicBrainz link later published to a different Discogs
+entity closes the promotion.
+
+A promotion of an artist or label is a merge of two catalog items of the same kind, so it runs
+[ADR 0009's merge](0009-native-identity-and-provider-aliases.md#2026-09-25-superseded-catalog-items-and-native-id-merge)
+steps inside the same transaction, and its exact reversal is what makes a wrong namesake merge
+recoverable. That amendment's `cause` vocabulary is closed at `edition_promotion` and
+`catalog_reattachment`, and it requires artist and label promotions to join it by amendment. A
+one-value ADR 0009 amendment, proposed as `artist_label_promotion`, must land before the first
+artist or label promotion. It is not made here. Until `catalog-api` implements the merge
+steps, the dependents guard applies to artist and label promotions exactly as to editions.
+
+#### 8. Not decided here
+
+- Implementation beads, in any repository.
+- The Han path of subsection 2.
+- The scripts listed as promising but unconfirmed.
+- Latin-script names.
+- The footprint precondition of subsection 5.
+- The ADR 0009 `cause` value of subsection 7.
+
+Sections 1 to 6 and 8 are unchanged for editions. Section 7 is fulfilled for the three scripts
+above.
