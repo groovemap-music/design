@@ -652,13 +652,20 @@ wording and the instruction to flag near-misses rather than round them away:
    The text-embedding gap remains unmeasured and should be closed (re-run
    `hnsw_vs_exact.py` with `--shm-size` set) before treating any recall number here as a
    production estimate.
-6. **If a scoped generator is built**, it writes to `provider_aliases` exactly as ADR 0009
+6. ~~**If a scoped generator is built**, it writes to `provider_aliases` exactly as ADR 0009
    specifies for any heuristic (`provider='discogs'`, `entity_kind='artist'|'label'`,
    `source='inference'`, `confidence` derived from the RRF/cosine score, `asserted_at=now()`), and
-   never auto-promotes to `source='catalog'`. Given the common-name-collision failure mode
+   never auto-promotes to `source='catalog'`.~~ **SUPERSEDED** (owner review, 2026-09-25): per ADR
+   0014 sections 2-3 (`docs/adr/0014-cross-catalog-edition-candidates.md`, design `main`), a
+   generator must **not** write candidates to `provider_aliases` as `source='inference'` --
+   unreviewed candidates live in the `matching` schema instead (the `provider_aliases` partial
+   unique index cannot hold a candidate set, and `catalog-api` reads do not filter on `source`),
+   and only a human-reviewed promotion in `catalog-api` writes identity. The struck text above is
+   left in place, not deleted, since it reflects this spike's own reasoning at submission time; the
+   corrected design lives in ADR 0014, not here. Given the common-name-collision failure mode
    (recall@1 collapses to 19.7-48.9% for every method when a name collides in the pool), any such
-   generator's output belongs behind a confidence floor and/or human review, not a direct write
-   path.
+   generator's output still belongs behind a confidence floor and/or human review before
+   promotion, whichever schema it's staged in.
 7. **Sizing the real prize, independent of the recall verdict**: 131,112 non-Latin MusicBrainz
    artists and 5,339 non-Latin MusicBrainz labels have no Discogs link today at all (2.6x and
    3.3x the number that are already linked). Whatever generator design follows from this spike,
