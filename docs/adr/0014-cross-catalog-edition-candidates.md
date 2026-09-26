@@ -290,7 +290,11 @@ the `taxonomy/identifiers/v1` vocabulary and three mappers together, and changes
 distinct printed values, and in a table whose unique index gives one release per value, a new
 collision is an alias another release silently loses. ADR 0011 carries a dated amendment
 recording this. The UPC-A widening is a plausible lookup improvement in its own right, since
-the two forms are the same GTIN, and is left to its own identifier-vocabulary change.
+the two forms are the same GTIN, and is left to its own identifier-vocabulary change. Decided in
+[ADR 0011's second 2026-09-25 amendment](0011-catalog-identifiers-and-manufacturing-credits.md#2026-09-25-upc-a-and-ean-13-are-one-gtin-at-lookup-no-alias-is-re-keyed):
+UPC-A, EAN-13, and GTIN-14 with indicator digit 0 are one GTIN at lookup, and no alias is
+re-keyed. This matcher key agrees with that rule on 12, 13, and 14 digits and stays the
+matcher's own versioned key.
 
 Rejected alternative:
 
@@ -476,7 +480,10 @@ These are planning inputs. None is filed by this record.
   which replaces the dependents guard in sections 3 and 8 with a reversible merge once
   `catalog-api` implements it.
 - **UPC-A to EAN-13 in the identifier vocabulary.** A lookup improvement independent of
-  matching, left to its own vocabulary change.
+  matching, left to its own vocabulary change. Decided in
+  [ADR 0011's second 2026-09-25 amendment](0011-catalog-identifiers-and-manufacturing-credits.md#2026-09-25-upc-a-and-ean-13-are-one-gtin-at-lookup-no-alias-is-re-keyed)
+  as lookup-time equivalence rather than a vocabulary change: the vocabulary, the mappers, and
+  every minted alias are unchanged, and a GTIN held in two forms is not a section 8 split signal.
 - **Artist and label candidates.** An amendment under section 7, once `gm-design-e0b` has
   landed and a generator for those kinds is adopted. Decided in the
   [third 2026-09-25 amendment](#2026-09-25-artist-and-label-candidates-for-three-scripts):
