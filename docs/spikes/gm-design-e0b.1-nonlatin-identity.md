@@ -521,10 +521,12 @@ needs shared memory scaled with `maintenance_work_mem`, which the container was 
 HNSW-vs-exact number is reported here; this is an acknowledged, unquantified limitation**, not a
 measured small gap. Re-running this check (`docs/spikes/gm-design-e0b.1/scripts/hnsw_vs_exact.py`,
 already written) with `--shm-size` set on the container would fix the immediate failure, but per
-the maintainer this isn't being re-run right now: gm-analytics-engine-ieu.3 is separately
-measuring real HNSW-vs-exact recall on production FastRP vectors with the production index
-parameters, which supersedes what this side-check would have shown for the identity-candidate
-use case anyway.
+the dispatcher it isn't being re-run right now. gm-analytics-engine-ieu.3 is separately measuring
+HNSW-vs-exact recall on production 128-dim FastRP graph vectors with the production index
+parameters -- a related data point, not a substitute: those are graph embeddings at a different
+dimensionality and distribution than this spike's `e5-small`/`bge-m3` text embeddings, and HNSW
+recall does not transfer across that difference. **The text-embedding HNSW-vs-exact gap this
+spike would need remains unmeasured.**
 
 ## The GO/NO-GO arithmetic, stated precisely (per acceptance: fused recall@10 - trgm recall@10 >= 5pt on artists or labels)
 
@@ -605,9 +607,11 @@ wording and the instruction to flag near-misses rather than round them away:
   on cyrillic, hebrew, japanese_kana, arabic, korean_hangul, and (thinly) other_non_latin.
 - This verdict describes exact-cosine dense retrieval, an **unquantified upper bound** relative
   to the HNSW index ADR 0013 actually adopts for production (see above) -- the side-check meant
-  to size that gap failed on a container `/dev/shm` limit and was not re-attempted (see below --
-  gm-analytics-engine-ieu.3 covers this ground on production vectors instead). Whatever generator
-  design follows from this verdict should be validated against real ANN retrieval before being
+  to size that gap failed on a container `/dev/shm` limit and was not re-attempted. This gap
+  remains genuinely unmeasured: gm-analytics-engine-ieu.3's HNSW-vs-exact measurement is a related
+  data point, not a substitute, since it covers 128-dim FastRP graph vectors, not this spike's
+  `e5-small`/`bge-m3` text embeddings. Whatever generator design follows from this verdict should
+  be validated against real ANN retrieval on these text embeddings specifically before being
   treated as production-ready, not just against this spike's exact-cosine numbers.
 
 ## Recommendation
@@ -641,10 +645,13 @@ wording and the instruction to flag near-misses rather than round them away:
 5. **Re-validate with real ANN retrieval before shipping anything.** This spike's dense numbers
    are exact-cosine, not HNSW; the attempted quantification of that gap failed on a container
    `/dev/shm` limit (fixable with `--shm-size`), not because the gap was shown to be small. Per
-   the maintainer this spike's own check isn't being re-run: gm-analytics-engine-ieu.3 is
-   separately measuring real HNSW-vs-exact recall against the production index parameters on
-   production FastRP vectors, and that result should be the one used before treating any recall
-   number here as a production estimate.
+   the dispatcher this spike's own check isn't being re-run right now. gm-analytics-engine-ieu.3's
+   HNSW-vs-exact measurement (production index parameters, production FastRP vectors) is a related
+   data point, not a substitute -- it's a different vector space (128-dim graph embeddings, not
+   `e5-small`/`bge-m3` text embeddings) and HNSW recall does not transfer across that difference.
+   The text-embedding gap remains unmeasured and should be closed (re-run
+   `hnsw_vs_exact.py` with `--shm-size` set) before treating any recall number here as a
+   production estimate.
 6. **If a scoped generator is built**, it writes to `provider_aliases` exactly as ADR 0009
    specifies for any heuristic (`provider='discogs'`, `entity_kind='artist'|'label'`,
    `source='inference'`, `confidence` derived from the RRF/cosine score, `asserted_at=now()`), and
@@ -685,8 +692,9 @@ code):
   arithmetic.
 - `hnsw_vs_exact.py` -- the HNSW-vs-exact side-check (see above): failed on the pgvector
   container's default `/dev/shm` limit before completing (needs `--shm-size` set); kept as-is,
-  not re-run per the maintainer since gm-analytics-engine-ieu.3 covers this measurement on
-  production vectors instead.
+  not re-run right now per the dispatcher. gm-analytics-engine-ieu.3's HNSW-vs-exact measurement
+  (128-dim FastRP graph vectors) is a related data point but not a substitute for this spike's
+  text-embedding vector space; that gap remains open.
 
 No provider-derived data, embeddings, or model weights are committed. Raw dump downloads were
 streamed straight from `curl`/`gunzip`/`tar` into the extraction scripts, never written to disk
