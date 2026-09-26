@@ -316,3 +316,93 @@ reads and writes PostgreSQL directly, under a dedicated least-privilege role:
 A paged export and ingest API on `catalog-api` was rejected for this workload because of its
 volume. Running the pipeline inside `database-schema` was rejected because the roadmap assigns
 offline features and embeddings to `analytics-engine`.
+
+## Amendment: non-Latin identity candidates (2026-09-25)
+
+The "Identity candidates" section left a generator neither adopted nor disproven, and named a
+properly powered non-Latin evaluation against a realistic pool as the condition for revisiting
+it. That evaluation is the spike `gm-design-e0b.1`
+([`docs/spikes/gm-design-e0b.1-nonlatin-identity.md`](../spikes/gm-design-e0b.1-nonlatin-identity.md)).
+It held out MusicBrainz-to-Discogs links from the `20260923` MusicBrainz and 2026-09-01
+Discogs dumps: 5,000 sampled non-Latin artists against a pool of 1,098,846 Discogs artists,
+and all 1,592 usable non-Latin labels against every Discogs label, 2,415,477 after
+de-duplication. It compared `pg_trgm`, `multilingual-e5-small`, `bge-m3`, and rank fusion of
+each model with `pg_trgm`.
+
+**The verdict is GO, scoped.** A non-Latin identity candidate generator is adopted for
+Cyrillic, Hebrew, and Japanese kana names. Han is excluded. The owner made the decision on
+2026-09-25 under `gm-design-e0b.2`.
+
+**The bar applied was the one this ADR set, unchanged:** best fused recall@10 at least 5 points
+above `pg_trgm` recall@10, on the aggregate of artists or of labels. Best fused is the better of
+the two fusions.
+
+| Kind | Queries | Pool | `pg_trgm` recall@10 | Best fused recall@10 | Gain | Against the bar |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Artists | 5,000 | 1,098,846 | 54.44% | 58.40% (RRF with bge-m3) | +3.96 points | Misses by 1.04 points |
+| Labels | 1,592 | 2,415,477 | 73.18% | 80.03% (RRF with bge-m3) | +6.85 points | Clears |
+
+Labels clear the bar, so the "artists or labels" condition is met. Artists are a near-miss,
+not a NO-GO. Both gains are far smaller than the 9.6 and 16.7 points this ADR recorded on the
+thin samples of `gm-design-chw.3`, which confirms that the 20,000-name pool flattered every
+method.
+
+The aggregates are not what scopes the generator. The per-script cells are:
+
+| Cell | Queries | `pg_trgm` recall@10 | Best fused gain | Best dense-alone gain |
+| --- | ---: | ---: | ---: | ---: |
+| Artist, Cyrillic | 1,358 | 87.63% | +4.20 | +7.07 (`bge-m3`) |
+| Artist, Hebrew | 583 | 57.29% | +6.69 | +14.92 (`e5-small`) |
+| Artist, Japanese kana | 588 | 48.13% | +11.90 | +14.29 (`e5-small`) |
+| Label, Cyrillic | 672 | 94.79% | +1.79 | +1.19 (`bge-m3`) |
+| Label, Hebrew | 175 | 54.86% | +16.00 | +17.71 (`bge-m3`) |
+| Label, Japanese kana | 239 | 51.46% | +17.99 | +20.50 (`e5-small`) |
+| Artist, Han | 1,917 | 26.03% | +0.42 | +0.47 (`bge-m3`) |
+| Label, Han | 360 | 51.94% | +5.00 | +5.56 (`bge-m3`) |
+
+In the three scoped scripts, every cell but label Cyrillic gains well past 5 points by at least
+one method. Label Cyrillic gains little because `pg_trgm` already recalls 94.79%. Dense retrieval
+alone sometimes beats fusion, so the retrieval policy is a per-cell choice, not a fixed fusion.
+
+**Han is excluded because the target is out of reach, not because the matcher is weak.** Han is
+38% of the artist sample and 23% of the label sample. Discogs stores 73.7% of the Han artist
+targets and 45.8% of the Han label targets romanized, and on those every method recalls 0% to
+7.9% at 10, both embedding models included. Where Discogs also stores the name in Han, every
+method recalls 95.9% to 99.2%. Label Han's +5.00 points sits exactly on the bar only because its
+romanized share is smaller. No name-similarity method crosses that script gap, and a
+transliteration bridge would need its own spike and decision.
+
+**The prize is the unlinked population.** In the `20260923` MusicBrainz dump, 131,112 artists
+and 5,339 labels are non-Latin and have no Discogs link, about 2.6 and 3.3 times the number
+already linked. The spike did not break them down by script, so the scoped share is not yet
+sized.
+
+**Precondition: validated through HNSW on the text vectors before it ships.** Every dense number
+in the spike is exact cosine over the full pool. Its side-check comparing pgvector HNSW to exact
+search failed on a container shared-memory limit, so the gap is unmeasured, not small. Before the
+generator ships, its recall is measured through pgvector HNSW on the `e5-small` or `bge-m3` text
+vectors, at the index shape this ADR adopts. `gm-analytics-engine-ieu.3` measures HNSW against
+exact search on the 128-dimension FastRP graph vectors only. It is related, and may inform the
+procedure, but it is not a substitute, because recall does not transfer across that difference
+in dimension and distribution.
+
+The spike also confirms two findings this ADR already recorded. Embeddings add candidates to
+`pg_trgm` and never replace it. Namesakes defeat every name method: with a colliding name,
+`pg_trgm` recall@1 falls to 19.7% for artists and 48.9% for labels, against 54.7% and 73.1%
+without one.
+
+**Ownership and storage are ADR 0014's, not this ADR's.** The "Identity candidates" section
+placed any generator's output in `provider_aliases` as `source = 'inference'`, and the spike's
+recommendation 6 proposed the same. Both are superseded by
+[ADR 0014](0014-cross-catalog-edition-candidates.md). Its sections 1 to 3 make the producer an
+`analytics-engine` batch job, keep candidates in the `matching` schema, and write identity only
+on a person's reviewed acceptance in `catalog-api`. Its section 7 admits artist and label
+candidates only by amendment. That amendment is ADR 0014's 2026-09-25 "Artist and label
+candidates for three scripts" (`gm-design-gcj`), which sets the population,
+namesake rule, per-cell bars, and rule version for these three scripts, including the HNSW
+precondition above. This amendment decides that a generator is worth building and for which
+scripts. It does not decide how, and it files no implementation beads.
+
+The "Identity candidates" revisit condition under "Rejected alternatives and conditions for
+revisiting" is met for the three scoped scripts and still stands for Han, Latin-script names,
+and the thinly sampled scripts. The "Non-Latin identity evaluation" follow-up is done.
