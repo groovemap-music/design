@@ -430,10 +430,9 @@ nine relations from the `graph` schema: the eight main-artist relations (`by_art
 `master_in_style`) plus one release-level credited-artist relation, `graph.credited_on` joined
 to `graph.same_as` on person name, filtered to a whole-string role match rather than the
 spike's own per-token split on comma. It carries no per-track credit and no track-performer
-relation; neither exists in the `graph` schema today. Track-level relations are follow-up
-work, not yet built: the schema and loader derivation are `gm-database-schema-ug3v` and
-`gm-discogs-sql-loader-b2a`, and reading them into the graph the embedding pipeline builds is
-`gm-analytics-engine-x3d`.
+relation; neither reaches the embedding graph today. The schema and loader derivation for both
+have already landed — `gm-database-schema-ug3v` and `gm-discogs-sql-loader-b2a` — but reading
+them into the graph the embedding pipeline builds is still pending, as `gm-analytics-engine-x3d`.
 
 On the real dumps:
 
