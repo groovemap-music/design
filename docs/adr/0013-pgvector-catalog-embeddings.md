@@ -406,3 +406,161 @@ scripts. It does not decide how, and it files no implementation beads.
 The "Identity candidates" revisit condition under "Rejected alternatives and conditions for
 revisiting" is met for the three scoped scripts and still stands for Han, Latin-script names,
 and the thinly sampled scripts. The "Non-Latin identity evaluation" follow-up is done.
+
+## Amendment: as-built embedding graph and measured preconditions (2026-09-26)
+
+The "Similar-item retrieval" decision and two of the "Preconditions before production use" —
+ANN recall on real embeddings and churn — were set against the chw.2 spike's own graph (about
+32.8 million nodes, 10.2 million artist rows, about 9.4 million servable) and against synthetic
+vectors, because no real embedding existed yet. `gm-analytics-engine-ieu.3` and
+`gm-analytics-engine-ste` measured the graph, the two preconditions, and the proxy-benchmark
+recall gain against the embeddings that ship, over the real 2026-08 and 2026-09 Discogs dumps
+([`recall_and_churn.md`](https://github.com/groovemap-music/analytics-engine/blob/main/docs/recall_and_churn.md),
+[`embedding_quality.md`](https://github.com/groovemap-music/analytics-engine/blob/main/docs/embedding_quality.md),
+[`embeddings.md`](https://github.com/groovemap-music/analytics-engine/blob/main/docs/embeddings.md)).
+This amendment records what was measured. It reopens no part of the adoption decision, and it
+does not decide how `catalog-api` should proceed against the recall precondition below; that
+decision belongs to the maintainer.
+
+### The as-built graph is narrower than the spike's, and smaller than its own earlier extrapolation
+
+The shipped pipeline (`gm-analytics-engine-ieu`, widened by `gm-analytics-engine-ieu.6`) reads
+nine relations from the `graph` schema: the eight main-artist relations (`by_artist`,
+`on_label`, `derived_from`, `in_genre`, `in_style`, `master_by_artist`, `master_in_genre`,
+`master_in_style`) plus one release-level credited-artist relation, `graph.credited_on` joined
+to `graph.same_as` on person name, filtered to a whole-string role match rather than the
+spike's own per-token split on comma. It carries no per-track credit and no track-performer
+relation; neither exists in the `graph` schema today. Track-level relations are follow-up
+work, not yet built: the schema and loader derivation are `gm-database-schema-ug3v` and
+`gm-discogs-sql-loader-b2a`, and reading them into the graph the embedding pipeline builds is
+`gm-analytics-engine-x3d`.
+
+On the real dumps:
+
+| | 2026-08 dump | 2026-09 dump |
+| --- | ---: | ---: |
+| Total vertices | 30,121,572 | 30,240,002 |
+| Total edges | 173,511,755 | not separately totalled |
+| Distinct artists embedded (main + credited) | 6,869,453 | 6,896,892 |
+
+This is smaller than the 32.8 million nodes and 10.2 million artist rows this ADR quotes from
+the chw.2 spike's own graph — not because the shipped graph is missing something the spike's
+was right to include, but because that figure was itself the spike's coarse, pre-dump
+extrapolation and was never checked against a real dump before this measurement. The spike's
+own real-dump-derived counts elsewhere in this ADR — 19,417,067 releases, 10,203,002 artists,
+2,415,476 labels, 2,589,349 masters — are the whole-catalog artist count, not the
+graph-embedded count; the two were never the same figure.
+
+### ANN recall@10 ≥ 0.95: measured on real vectors, not met
+
+The "ANN recall on real embeddings" precondition is closed by measurement, not by passing.
+Swept over `ef_search` on both months' real FastRP vectors, at this ADR's fixed HNSW
+parameters (`m = 16, ef_construction = 64`):
+
+| `ef_search` | August recall@10 | September recall@10 |
+| --- | ---: | ---: |
+| 40 | 0.60695 | 0.59755 |
+| 100 | 0.6796 | 0.67555 |
+| 200 | 0.7357 | 0.73395 |
+| 400 | 0.7846 | 0.78235 |
+| 800 | 0.83385 | 0.83 |
+| 1000 (pgvector's hard cap) | **0.8429** | **0.8405** |
+
+No swept `ef_search` reaches 0.95 in either month, and 1000 is pgvector's own maximum, so there
+is no larger value left to try. The production `ef_search` this precondition asked the pipeline
+to fix is therefore: none, at this bar.
+
+The shortfall has a diagnosed structural cause. FastRP's shipped iteration weights, `0,1,1,1,1`
+— adopted unchanged from the chw.2 spike — put zero weight on a node's own projection row
+(`k = 0`): an artist's vector depends only on its neighbours' structure, never its own
+identity, so two artists with identical neighbourhoods within the propagation radius get
+byte-identical vectors by construction. Measured on the August vectors: 2,659,206 of 6,869,453
+(38.7%) are exact byte-duplicates of at least one other vector, in 753,588 groups, the largest
+with 818 members. Over the 2,000-query recall sample, the 10th-vs-11th exact-cosine gap has
+median 0.0017, and 17.5% of queries have an exact (within 1e-6) tie at or adjacent to the
+10th-place score — so a real share of the recall "misses" are the ANN index and the exact
+brute-force computation validly disagreeing on which member of a tied group lands at position
+10 versus 11, not the ANN index failing to find a genuinely closer neighbour. A tie-tolerant
+recomputation (counting a hit within 1e-4 of the true 10th-place score) was started but not
+completed; the raw 0.84 figures above are expected to understate it, by an unmeasured amount.
+This is a property of the shipped FastRP configuration itself, not an artifact of the ieu.6
+credit-edge widening or of this measurement: it would apply equally to the narrower pre-ieu.6
+graph.
+
+### Churn: the seed-stability fix holds on real embeddings
+
+The "Churn" precondition — deterministic, per-node-key-hashed projections in place of a global
+random stream, measured month over month on real dumps — is closed and met. On a 10,000-artist
+common sample (the August ∩ September intersection), mean top-10 Jaccard is 0.9083 on exact
+cosine and 0.8026 on the served ANN index at `ef_search = 1000`. This is the outcome the
+hashed-projection requirement in "Similar-item retrieval" was written to fix: the spike's own
+unpinned, per-run random projection replaced about 72% of a list across seeds (Jaccard 0.28) at
+comparable recall. The gap between the exact figure and the ANN figure here is the same tie
+structure described above: the ANN index's arbitrary tie-breaking among near-tied candidates
+can flip between months even when the underlying embeddings barely move.
+
+### Recommendation quality on the chw.2 proxy benchmark: the gate is still met, at a smaller margin
+
+`gm-analytics-engine-ste` re-ran the chw.2 spike's own proxy benchmark against the shipped
+September embedding, rather than the spike's from-scratch training run, on the same held-out
+test split and the same all-artist-heuristic baseline this ADR's "Similar-item retrieval" gate
+uses:
+
+| Model | Recall@10 | vs. all-artist heuristic |
+| --- | ---: | ---: |
+| All-artist heuristic | 0.1799 | -- |
+| Shipped FastRP alone | 0.2430 | +35.1% [+28.8%, +41.1%] |
+| Shipped FastRP fused, α = 0.8 (dev-selected) | 0.2533 | +40.8% [+35.0%, +46.7%] |
+| *Spike's own fused FastRP, α = 0.9 (for reference)* | *0.3173* | *+76.4% [+69.4%, +83.6%]* |
+
+The "relative recall@10 gain of at least 10%" bar this ADR applied is still met, at +40.8%
+against the same baseline. It sits 6.4 points below the spike's own fused figure. The
+evaluation cannot isolate a single cause, since the shipped embedding was built once, not
+ablated, but it lists the shipped graph's known differences from the spike's as the plausible
+contributors: no track-level edges at all (the spike's own ablation found removing credit edges
+alone cost about 10 points of recall@10 on a comparable configuration; track-edge removal was
+never isolated), the whole-string role filter, name-join rather than direct-id credit
+resolution, and the wider nine-relation graph itself. 11.5% of the benchmark's subset artists
+have no shipped vector and fall back to an all-zero row, which dilutes the comparison further
+but concentrates in artists the benchmark's own query set does not draw from.
+
+### Operational: HNSW build memory and pipeline peak memory
+
+Building a full month's HNSW index at this ADR's fixed parameters needs materially more
+`maintenance_work_mem` than `database-schema`'s documented 2 GB operator value: at 2 GB the
+build slowed to a disk-spilling-consistent 15,000–18,000 tuples/minute from about 3.4 million
+of 6,869,453 tuples on, and was killed at 52.3% after about 1h25m; at 4.5 GB it also slowed,
+from about 5.3 million tuples (77%) on. At 8 GB with parallel HNSW build workers enabled
+(`max_parallel_maintenance_workers = 4`), on a 6-CPU host, both months completed at full speed
+with no slowdown: 552.8 s (August, 6,869,453 rows) and 596.1 s (September, 6,896,892 rows).
+This is a finding about the shape of the sizing problem at this row count, not a specific
+replacement value for the production host, whose CPU count and available memory were not
+available to test against. It also assumes the per-`model_version` partial index shape
+`gm-database-schema-19g5` adds; the "Build memory" precondition text above was written against
+a plain, whole-table index, which is a different and larger build.
+
+The embedding pipeline's own peak memory for a full month's compute is estimated, not yet
+measured end to end against a real streaming PostgreSQL read: `estimate_peak_bytes()` against
+the real August graph shape (30,121,572 nodes, 173,511,755 directed edges, 6,869,453 artist
+rows) predicts about 7.55 GB (build 3.62 GB, compute 7.55 GB), within the 12 GB budget this
+ADR's FastRP configuration already carries. `gm-deployment-cy6` will measure the real pipeline
+end to end.
+
+### Status: the serving precondition remains open
+
+The "ANN recall on real embeddings" precondition asked for a production `ef_search` fixed by
+measurement before the artist index serves traffic. That measurement is now done, and its
+answer is that no swept `ef_search`, up to pgvector's own cap, reaches the 0.95 bar this ADR
+set. Whether and how `catalog-api` (`gm-catalog-api-2zsq`) proceeds against that gap is not
+decided by this amendment; it is the maintainer's decision, informed by the tie-structure
+finding above. Options the measurement surfaces, stated neutrally:
+
+- Give a node's own projection non-zero weight (a change to the shipped FastRP configuration)
+  and re-measure recall against the new vectors.
+- Over-fetch through the ANN index and re-rank the candidates by exact cosine before returning
+  the top 10.
+- Accept the measured ~0.84 recall@10 at pgvector's `ef_search` cap, at the query latency that
+  implies.
+- Raise `m` and/or `ef_construction` beyond this ADR's fixed HNSW parameters and re-measure.
+
+None of these is applied by this amendment.
