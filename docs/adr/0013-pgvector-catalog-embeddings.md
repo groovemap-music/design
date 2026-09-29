@@ -287,7 +287,10 @@ These are the implementation work for the replan of this molecule. Each becomes 
   hashed projections, the monthly recompute, the real-embedding ANN recall sweep, the
   month-over-month churn measurement, and MPL notices.
 - **kNN retrieval.** `catalog-api` serves similar artists from the index, behind the churn and
-  recall preconditions.
+  recall preconditions. *Superseded in part by the 2026-09-29 amendment below: the maintainer's
+  serving-mode verdict is to serve precomputed monthly exact top-K lists (K=50 stored, top-10
+  served), not the live HNSW index. This follow-up is rescoped accordingly and tracked as
+  `gm-catalog-api-2zsq`.*
 - **Candidate-generator fix.** `catalog-api` replaces the top-500-per-genre candidate generator
   with scoring over every artist. This is independent of vectors and can ship first.
 - **Non-Latin identity evaluation.** Re-run the identity harness on a non-Latin-only sample
@@ -563,3 +566,193 @@ finding above. Options the measurement surfaces, stated neutrally:
 - Raise `m` and/or `ef_construction` beyond this ADR's fixed HNSW parameters and re-measure.
 
 None of these is applied by this amendment.
+
+## Amendment: as-built edges-v3 embedding, FastRP self term, and precomputed similar-artist serving (2026-09-29)
+
+The previous amendment left the graph narrower than `gm-analytics-engine-x3d`'s track-level
+widening (then pending), left the "ANN recall on real embeddings" precondition open, and left
+`catalog-api`'s (`gm-catalog-api-2zsq`) path against that gap to the maintainer. Two further
+`analytics-engine` beads closed both: `gm-analytics-engine-i37`
+([`docs/embedding_weight_sweep.md`](https://github.com/groovemap-music/analytics-engine/blob/main/docs/embedding_weight_sweep.md))
+landed x3d's wider graph and swept FastRP's step-0 weight; `gm-analytics-engine-8ts`
+([`docs/embedding_tie_break.md`](https://github.com/groovemap-music/analytics-engine/blob/main/docs/embedding_tie_break.md))
+added a genuine FastRP self term and rendered the maintainer's serving-mode verdict. This
+amendment records what was built and measured, and the serving decision that follows from it.
+It reopens no part of the adoption decision.
+
+### As-built: edges-v3 graph and FastRP algorithm v2 with a self term
+
+`gm-analytics-engine-x3d` has now landed and is read into the embedding graph, which the
+previous amendment described as still pending. The shipped graph is **edges-v3**: on top of
+edges-v2's release-level `graph.credited_on` (joined to `graph.same_as`), it adds
+`graph.track_credited_on` — track and sub-track credits, resolved through `same_as` the same
+way — and `graph.track_by_artist`, track performers. Both are new relations at the graph edge,
+not new preconditions on the pgvector extension itself.
+
+`gm-analytics-engine-8ts` gives FastRP a genuine self term, distinct from the `w0` weight this
+ADR previously described: FastRP's sum has no `k = 0`/self term in the first place — the term
+that `w0` scales is `P¹R`, the one-hop neighbour mean, not a node's own untransformed projection
+(see the duplicate-vector finding below). `FastRPConfig.self_weight` adds `self_weight *
+normalize(R[v])`, `R[v]` the node's own hashed projection row, on top of the existing sum; the
+default (`0.0`) is bit-identical to the prior formula. This is `FASTRP_ALGORITHM_VERSION = 2`,
+named **FastRP algorithm v2** below and in the stored `model_version`.
+
+The as-built configuration, chosen by `i37`'s winner-selection rule (`w0 = 0`, ranked by chw.2
+fused recall@10) and then carried into `8ts`'s self-term measurement, is:
+
+- `w0 = 0` (`i37`'s winner across `w0 ∈ {0, 0.1, 0.25}`, by 0.32 points of fused recall@10 over
+  the runner-up `w0 = 0.25`, outside the sweep's 0.001 tie band).
+- `self_weight = 0.05` (`8ts`; `0.02`/`0.1` were not swept, for time-budget reasons).
+- Edges-v3, as above.
+- Stored `model_version`:
+  `fastrp-v2:dim=128:weights=0,1,1,1,1:beta=0:self=0.05:proj=achlioptas-s3:rows=splitmix64(blake2b64(kind,key)):seed=20260924:edges-v3@discogs_2026{08,09}01`.
+- Artist rows embedded: 9,330,617 (August dump) and **9,366,416** (September dump) — the figure
+  this amendment cites elsewhere as ~9.37M is the September count.
+
+### The duplicate-vector finding: FastRP's `k = 0` term carries no node identity
+
+`i37` diagnosed why the shipped edges-v2/edges-v3 embeddings, at every `w0` this ADR or its
+prior amendments considered, produce exact duplicate vectors for artists with identical one-hop
+neighbourhoods (the "as-built" amendment above already found this at 38.7% for edges-v2):
+FastRP's sum is `sum_k w_k * normalize((P^(k+1) R)[v])`, and the `k = 0` term `w0` weights is
+`P¹R`, the one-hop neighbour mean — never the node's own raw projection `R`. Reweighting `w0`
+across `{0, 0.1, 0.25}` therefore cannot touch the mechanism: **the duplicate-vector share on
+edges-v3 is 42.22% at every swept `w0`, identical to eleven decimal places**
+(`shipped_file_dup_group_pct = 0.42218656527747644` in all three of `i37`'s per-weight quality
+files), against edges-v2's 38.7%. Widening the credit-edge scope did not shrink the tie
+structure and plausibly worsened it.
+
+`8ts`'s self term fixes this directly: `self_weight * normalize(R[v])` is distinct per node with
+overwhelming probability, regardless of neighbourhood identity. **Measured duplicate-vector
+share with `self_weight = 0.05`: 0.0%**, down from 42.22%.
+
+**This supersedes, without erasing, the previous amendment's duplicate-vector numbers.** The
+"as-built" amendment's 38.7% (edges-v2, `self_weight = 0`, the pre-`i37`/`8ts` graph) and its
+recall and churn figures measured against that graph are superseded by edges-v3 and then by the
+self term, as detailed below; they remain accurate descriptions of what was measured at the
+time.
+
+### Measured quality: the chw.2 gate is still met, at a margin closer to the spike's own
+
+| Configuration | Embedding alone | Fused @ dev-selected α | Gain over all-artist heuristic (0.1799), 95% CI |
+| --- | ---: | ---: | --- |
+| Edges-v2, `self_weight = 0` (previous amendment) | 0.2430 | 0.2533 (α=0.8) | +40.8% [+35.0%, +46.7%] |
+| Edges-v3, `w0 = 0`, `self_weight = 0` (`i37`) | 0.2626 | 0.2719 (α=0.8) | +51.17% [+44.65%, +57.75%] |
+| **Edges-v3, `w0 = 0`, `self_weight = 0.05` (`8ts`, as built)** | 0.2613 | **0.2723** (α=0.8) | **+51.4% [+45.0%, +57.9%]** |
+| *Spike's own fused FastRP, `w0,1,1,1,1`, α=0.9 (for reference)* | -- | *0.3173* | *+76.4% [+69.4%, +83.6%]* |
+
+The "relative recall@10 gain of at least 10%" bar this ADR's "Similar-item retrieval" section
+applies is still met, at +51.4% against the all-artist heuristic (reproduced as 0.1799,
+17.988%, by both `i37` and `8ts`). This **supersedes the previous amendment's 0.2533/+40.8%
+figure**, which was measured against the narrower edges-v2 graph before `i37` or `8ts` ran; it
+is not wrong, only superseded by the wider graph and then the self term. The self term's own
+effect on this benchmark is small (0.2719 → 0.2723): chw.2's queries are active seed artists who
+almost always have a distinguishing neighbourhood already, so only 0.1% of test queries had a
+shipped vector in a duplicate group even at 42.2% overall duplication — the benchmark mostly
+confirms the self term does not hurt the signal chw.2 measures, while directly fixing an
+artifact chw.2 could not see in the first place.
+
+### Serving decision: precomputed monthly exact top-K lists, not the live HNSW index
+
+The self term also improves recall and churn measurably, though not enough to clear the
+maintainer's ANN-serving bar. Against edges-v3 with `self_weight = 0` (`i37`) vs.
+`self_weight = 0.05` (`8ts`), both months, `m = 16, ef_construction = 64`:
+
+| Metric | `self_weight = 0` (`i37`) | `self_weight = 0.05` (`8ts`) |
+| --- | ---: | ---: |
+| Strict recall@10, `ef_search = 1000` (Aug / Sept) | 0.7953 / 0.7952 | **0.8335 / 0.8290** |
+| Exact churn (Aug→Sept, raw vectors) | 0.8886 | **0.9519** |
+| ANN churn, `ef_search = 1000` | 0.6888 | **0.7243** |
+| Index/exact churn gap | 0.1998 | 0.2276 (wider) |
+
+`8ts` rendered the maintainer's three-threshold "D serving-mode verdict" against these
+`self_weight = 0.05` numbers (serve from the index only if all three hold):
+
+| Threshold | Required | Measured | Result |
+| --- | --- | ---: | --- |
+| ANN churn at a named `ef_search` | ≥ 0.85 | 0.7243 (`ef_search=1000`) | **FAIL** |
+| ANN churn within 0.05 of exact churn | gap ≤ 0.05 | 0.2276 | **FAIL** |
+| Strict recall@10 at a named `ef_search` | ≥ 0.85 | 0.8335 (Aug), 0.8290 (Sept), both at `ef_search=1000`, pgvector's maximum | **FAIL** |
+
+**Decision: do not serve similar-artist results from the live ANN index.** GrooveMap serves
+precomputed monthly exact top-K lists instead, computed once per monthly dump directly from
+the raw embeddings — `8ts` measured this at 361.4 s (August) and 283.8 s (September), well
+within a monthly batch job's budget — and stored as a static lookup
+(`public.artist_similar_artists`, `public.artist_embedding_releases`). Fusion with the
+`heuristics-2026-09` weights happens at serve time from those precomputed lists, using the
+stored embedding vectors for the point cosines the fusion needs. The HNSW index this ADR
+adopts is still built (the self term makes its own build meaningfully more expensive — see
+"Memory findings" below — precisely because it now has real work to do per candidate) but is
+optional and non-serving: nothing in the production path queries it.
+
+**The self term is adopted regardless of this verdict.** It is what makes the precomputed exact
+list trustworthy month to month: zero duplicate-vector ties (down from 42.22%), 3.4–3.8 points
+more strict recall at every swept `ef_search`, and exact churn up to 0.9519 (up from 0.8886).
+Reverting to `self_weight = 0` to avoid the heavier index build would reintroduce the
+duplicate-vector problem into the same list this decision serves.
+
+**This resolves the previous amendment's "Status: the serving precondition remains open"
+section**, without adopting any of its four options as stated. `8ts` tried the first
+("give a node's own projection non-zero weight") and it was necessary but not sufficient — the
+ANN index still fails all three thresholds even with it — so the path taken is closest to
+"accept the measured recall," except that GrooveMap accepts it by not serving through the ANN
+index at all rather than by serving at pgvector's `ef_search` cap. The four listed options
+remain accurate as a statement of what was on the table at the time; they are superseded as a
+description of what happens next by the decision above.
+
+### Memory findings
+
+FastRP's own peak process memory, `self_weight = 0.05`, edges-v3, both months (the same
+`AdjacencyBuilder.build()` phase `i37` reports below): **10.70 GB (September) to 12.01 GB
+(August)**, within this ADR's 12 GB FastRP budget. For context, `i37`'s own measurement of the
+same phase, at `self_weight = 0` and across the `w0` sweep, was markedly higher — 17.27 GB
+(September) to 19.26 GB (August) — and `i37`'s FastRP-alone figures (post-parse, parser freed)
+ranged 9.87–10.65 GB (August, by `w0`) to 11.66–14.33 GB (September, by `w0`), with September's
+`w0 = 0.1`/`w0 = 0.25` landing 4.2 GB above `i37`'s own pre-measurement estimate and eating past
+the 12 GB budget. `8ts` attributes the gap between its own lower numbers and `i37`'s to host
+conditions at run time, consistent with `i37`'s own note that this phase's peak varies with host
+state, not with FastRP configuration — the improvement is not claimed as a consequence of the
+self term or of a memory-guard fix `8ts` made to the pipeline's own footprint-tracking code
+(`process_footprint_bytes()`, commit `66608ed`), unrelated to the FastRP algorithm itself.
+
+**HNSW build memory, once ties are broken, is heavier than this ADR's preconditions assumed.**
+With duplicate vectors eliminated, the `m = 16` build itself got measurably more expensive:
+August's build exhausted `maintenance_work_mem = 8 GB` near the end (about 9.15M of its
+9,330,617 rows already inserted) and fell into IO-bound behaviour for its last stretch, taking
+82.4 minutes against September's 42.3 minutes for an almost identical row count at the same
+settings — HNSW's graph-construction bookkeeping can no longer short-circuit comparisons among
+now-distinct candidate vectors. `8ts`'s recommendation: **budget approximately 10 GB of
+`maintenance_work_mem` for production HNSW builds on this catalog once ties are broken**, up
+from the 8 GB used throughout both `i37` and `8ts`. Separately, `i37` found the larger-index
+variant (`m = 32, ef_construction = 128`) does not fit an 8 GB `maintenance_work_mem` at this
+scale at all: September's `w0 = 0` build overflowed at about 6.1M of 9,366,416 tuples, fell to
+an on-disk build path (about 80 tuples/s), and was abandoned after about 4h50m at roughly 75%
+complete; it was not measured to completion by either bead.
+
+### Latency: a real quiet-host measurement, finally
+
+`8ts` ran the first latency pass not measured under host load. Mean and p95 per-query ANN
+latency, September index, `self_weight = 0.05`:
+
+| `ef_search` | Mean (ms) | p95 (ms) |
+| --- | ---: | ---: |
+| 200 | 24.8 | 32.8 |
+| 400 | 38.7 | 46.3 |
+| 800 | 69.8 | 84.1 |
+| 1000 | **84.7** | **101.2** |
+
+These supersede `i37`'s own "upper bounds only" figures (91–296 ms mean at `ef_search = 1000`,
+measured under sustained host load) as the first real off-load characterization of this index.
+Given the serving decision above, this latency does not gate anything in production: nothing
+queries the ANN index at serve time, and the precomputed-list job's own exact-computation cost
+(361.4 s / 283.8 s per month) is the number that matters for serving.
+
+### Follow-ups updated
+
+The "Follow-ups" list's kNN retrieval item is rescoped, marked in place above: `catalog-api`
+(`gm-catalog-api-2zsq`) now serves similar artists from the precomputed monthly exact top-K
+lists this amendment decides, not from the live index. The "ANN recall on real embeddings"
+precondition under "Preconditions before production use" is closed by this amendment's serving
+decision, not by a passing measurement: no `ef_search` cleared the bar on either the `i37` or
+`8ts` configuration, and the decision above is to not depend on the index for serving rather
+than to keep sweeping toward it.
