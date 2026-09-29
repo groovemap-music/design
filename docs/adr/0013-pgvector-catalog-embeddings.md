@@ -288,8 +288,9 @@ These are the implementation work for the replan of this molecule. Each becomes 
   month-over-month churn measurement, and MPL notices.
 - **kNN retrieval.** `catalog-api` serves similar artists from the index, behind the churn and
   recall preconditions. *Superseded in part by the 2026-09-29 amendment below: the maintainer's
-  serving-mode verdict is to serve precomputed monthly exact top-10 lists, not the live HNSW
-  index. This follow-up is rescoped accordingly and tracked as `gm-catalog-api-2zsq`.*
+  serving-mode verdict is to serve precomputed monthly exact top-K lists (K=50 stored, top-10
+  served), not the live HNSW index. This follow-up is rescoped accordingly and tracked as
+  `gm-catalog-api-2zsq`.*
 - **Candidate-generator fix.** `catalog-api` replaces the top-500-per-genre candidate generator
   with scoring over every artist. This is independent of vectors and can ship first.
 - **Non-Latin identity evaluation.** Re-run the identity harness on a non-Latin-only sample
@@ -651,7 +652,7 @@ shipped vector in a duplicate group even at 42.2% overall duplication — the be
 confirms the self term does not hurt the signal chw.2 measures, while directly fixing an
 artifact chw.2 could not see in the first place.
 
-### Serving decision: precomputed monthly exact top-10 lists, not the live HNSW index
+### Serving decision: precomputed monthly exact top-K lists, not the live HNSW index
 
 The self term also improves recall and churn measurably, though not enough to clear the
 maintainer's ANN-serving bar. Against edges-v3 with `self_weight = 0` (`i37`) vs.
@@ -674,7 +675,7 @@ maintainer's ANN-serving bar. Against edges-v3 with `self_weight = 0` (`i37`) vs
 | Strict recall@10 at a named `ef_search` | ≥ 0.85 | 0.8335 (Aug), 0.8290 (Sept), both at `ef_search=1000`, pgvector's maximum | **FAIL** |
 
 **Decision: do not serve similar-artist results from the live ANN index.** GrooveMap serves
-precomputed monthly exact top-10 lists instead, computed once per monthly dump directly from
+precomputed monthly exact top-K lists instead, computed once per monthly dump directly from
 the raw embeddings — `8ts` measured this at 361.4 s (August) and 283.8 s (September), well
 within a monthly batch job's budget — and stored as a static lookup
 (`public.artist_similar_artists`, `public.artist_embedding_releases`). Fusion with the
@@ -749,7 +750,7 @@ queries the ANN index at serve time, and the precomputed-list job's own exact-co
 ### Follow-ups updated
 
 The "Follow-ups" list's kNN retrieval item is rescoped, marked in place above: `catalog-api`
-(`gm-catalog-api-2zsq`) now serves similar artists from the precomputed monthly exact top-10
+(`gm-catalog-api-2zsq`) now serves similar artists from the precomputed monthly exact top-K
 lists this amendment decides, not from the live index. The "ANN recall on real embeddings"
 precondition under "Preconditions before production use" is closed by this amendment's serving
 decision, not by a passing measurement: no `ef_search` cleared the bar on either the `i37` or
