@@ -105,6 +105,33 @@ The rollout stops if Neo4j parity fails, an embedding relation loses its writer,
 contract changes without a pinned consumer promotion, or rollback cannot restore the last known
 Neo4j-authoritative configuration.
 
+## Filed owner-hive pause molecules
+
+The following replacement molecules were validated, previewed, filed, round-trip inspected, and
+verified on 2026-10-02. Each is deliberately `kickoff=pending`; filing records the plan and does
+not authorize dispatch.
+
+- **database-schema — Preserve SQL/PGQ work and keep relational graph contracts
+  (`gm-database-schema-5wsk`).** Preservation precedes relation classification and disabling the
+  unsupported PostgreSQL 19 activation path.
+- **catalog-api — Keep Neo4j authoritative and retire the PostgreSQL graph flip
+  (`gm-catalog-api-zvyh`).** Both the merged comparison tree and held default-flip ref are verified
+  before the production default and compatibility tests are reconciled.
+- **discogs-sql-loader — Preserve Discogs relational graph writes for Neo4j continuity
+  (`gm-discogs-sql-loader-dsu`).** The loader retains the embedding relations, refreshes, retries,
+  and Neo4j parity independently of SQL/PGQ.
+- **musicbrainz-sql-loader — Preserve MusicBrainz relational graph writes and Neo4j parity
+  (`gm-musicbrainz-sql-loader-a6s`).** Source-owned media and relationship writes retain their
+  schema contract and parity coverage.
+- **deployment — Keep Neo4j production-safe after the PostgreSQL 19 graph pause
+  (`gm-deployment-okp`).** Explicit Neo4j configuration, persistent data, health, and rollback are
+  proved after owner revisions are available.
+
+The stale PostgreSQL 19 cutover work is superseded with recorded reasons:
+`gm-database-schema-0n7` and its children, `gm-deployment-2sb` and its children, and
+`gm-catalog-api-wpku.6` are closed. The catalog API's PostgreSQL 19 deployment gate
+`gm-catalog-api-ln38` is also closed. None remains dispatchable.
+
 ## Phase 0: foundation
 
 **Repositories.** `database-schema`, `catalog-api`, `design`, `deployment`.
