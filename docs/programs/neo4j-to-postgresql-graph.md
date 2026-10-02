@@ -1,13 +1,19 @@
-# Neo4j to PostgreSQL graph-migration program
+# PostgreSQL SQL/PGQ pause and Neo4j continuity program
 
-**Status: phases 0 and 1 filed 2026-09-15. Phases 2 to 5 are scoped here and are not filed.
-Phase 2 onward is filed only after the phase 1 decision closes GO.**
+**Status: cutover stopped 2026-10-02. PostgreSQL 19 SQL/PGQ activation, the backend-default
+flip, and Neo4j decommission are prohibited. Selective cleanup starts only after preservation
+refs are created and verified in each owning repository.**
 
 This document records the rollout plan for
 [ADR 0012](../adr/0012-postgresql-property-graph-migration.md), which decides that the GrooveMap
-catalog graph moves out of Neo4j and into PostgreSQL as a SQL/PGQ property graph. The decision
-itself, its label mapping, and its list of affected repositories live in that record. This
-document carries only the order of delivery.
+catalog graph was evaluated for a move out of Neo4j and into PostgreSQL as a SQL/PGQ property
+graph. The 2026-10-02 amendment keeps Neo4j authoritative after PostgreSQL reverted SQL/PGQ from
+version 19. The decision and its evidence gate live in that record. This document now carries the
+preservation, selective-cleanup, and continuity order.
+
+The original phase plan below is retained as historical context. It is not dispatch authority.
+No phase may activate `GRAPH_TABLE`, flip the default backend, or decommission Neo4j for
+PostgreSQL 19.
 
 The phase order is a dependency order, not a schedule. Every later phase consumes something an
 earlier phase publishes, so a phase begins when its entry criteria hold at a reviewed commit and

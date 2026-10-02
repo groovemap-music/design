@@ -1,6 +1,6 @@
-# ADR 0012: PostgreSQL SQL/PGQ as the catalog graph engine
+# ADR 0012: Catalog graph engine and the PostgreSQL SQL/PGQ evaluation
 
-- Status: Accepted; amended 2026-09-25
+- Status: Accepted; active decision amended 2026-10-02
 
 ## Context
 
@@ -268,6 +268,48 @@ Deferred to their own records:
   administrative surface should show is a `catalog-api` decision rather than an engine one.
 
 ## Amendments
+
+### 2026-10-02: PostgreSQL 19 SQL/PGQ was reverted; Neo4j remains authoritative
+
+PostgreSQL reverted SQL/PGQ from both `REL_19_STABLE` and `master` on 2026-09-07 in
+[upstream commit `b1f106c80cb`](https://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=b1f106c80cb).
+That change removed `CREATE PROPERTY GRAPH`, `GRAPH_TABLE`, and their supporting catalog and
+executor work from PostgreSQL 19. The premise of this record's original active decision therefore
+does not hold: PostgreSQL 19 cannot be GrooveMap's property-graph engine.
+
+The active decision is now to keep Neo4j authoritative for graph reads and writes. PostgreSQL
+continues to own the ordinary relational catalog, including the `graph` schema relations already
+written by the SQL loaders. Those relations are useful independently of SQL/PGQ and remain on
+`main` where a current consumer or compatibility contract depends on them. In particular,
+`analytics-engine` reads the loader-populated edge relations to build artist embeddings. This
+amendment does not authorize their deletion.
+
+For PostgreSQL 19, the following actions are forbidden:
+
+- activating `CREATE PROPERTY GRAPH` or `GRAPH_TABLE` in any environment;
+- changing the graph-backend default from Neo4j to PostgreSQL;
+- removing Neo4j, its persistent data, its production configuration, either graph enricher, or
+  the rollback path that returns reads and writes to Neo4j.
+
+The SQL/PGQ implementation work is preserved on named remote branches before selective cleanup.
+Each owning repository must create its preservation branch from the recorded holding commit and
+verify that the remote ref resolves to the same object before removing or disabling any SQL/PGQ
+specific path. Plain SQL relations, loader writes, recursive SQL functions, parity fixtures, and
+other code with a non-SQL/PGQ consumer are evaluated separately and retained until that consumer
+has a reviewed replacement.
+
+The PostgreSQL version used for pgvector is a separate decision. [ADR 0013](0013-pgvector-catalog-embeddings.md)
+chooses pgvector for catalog embeddings; it neither depends on SQL/PGQ nor supplies a reason to
+activate a PostgreSQL graph backend. PostgreSQL 19 adoption for pgvector, maintenance, or another
+relational feature must pass its own compatibility and upgrade gates while Neo4j remains the graph
+authority.
+
+This decision may be reconsidered for a future PostgreSQL major release only after all of the
+following evidence exists in an official release branch: the SQL/PGQ feature is present rather
+than carried as a development patch; the GrooveMap query-family and variable-length traversal
+suite passes on the release candidate and final image; Neo4j parity and performance budgets pass
+on representative data; and production has a tested, reversible rollout with Neo4j retained
+through its soak period. General availability of PostgreSQL 19 alone cannot reopen this decision.
 
 ### 2026-09-25: MusicBrainz graph crossings resolve through native ids
 
