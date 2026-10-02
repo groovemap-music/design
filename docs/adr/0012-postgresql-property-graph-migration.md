@@ -291,12 +291,12 @@ For PostgreSQL 19, the following actions are forbidden:
 - removing Neo4j, its persistent data, its production configuration, either graph enricher, or
   the rollback path that returns reads and writes to Neo4j.
 
-The SQL/PGQ implementation work is preserved on named remote branches before selective cleanup.
-Each owning repository must create its preservation branch from the recorded holding commit and
-verify that the remote ref resolves to the same object before removing or disabling any SQL/PGQ
-specific path. Plain SQL relations, loader writes, recursive SQL functions, parity fixtures, and
-other code with a non-SQL/PGQ consumer are evaluated separately and retained until that consumer
-has a reviewed replacement.
+The SQL/PGQ implementation is recoverable from the merged Git history. No archive or holding
+branch is required before removing SQL/PGQ-specific code. Each owning repository records the
+current commit and the relevant merged commits so a future evaluation can recover the old work
+without keeping obsolete runtime paths on `main`. Plain SQL relations, loader writes, recursive
+SQL functions, parity fixtures, and other code with a non-SQL/PGQ consumer are evaluated
+separately and retained until that consumer has a reviewed replacement.
 
 The PostgreSQL version used for pgvector is a separate decision. [ADR 0013](0013-pgvector-catalog-embeddings.md)
 chooses pgvector for catalog embeddings; it neither depends on SQL/PGQ nor supplies a reason to

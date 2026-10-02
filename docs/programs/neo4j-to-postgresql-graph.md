@@ -1,15 +1,16 @@
 # PostgreSQL SQL/PGQ pause and Neo4j continuity program
 
-**Status: cutover stopped 2026-10-02. PostgreSQL 19 SQL/PGQ activation, the backend-default
-flip, and Neo4j decommission are prohibited. Selective cleanup starts only after preservation
-refs are created and verified in each owning repository.**
+**Status: cutover stopped and SQL/PGQ-specific code removed from the owning repositories on
+2026-10-02. PostgreSQL 19 SQL/PGQ activation, the backend-default flip, and Neo4j decommission
+are prohibited. Independently consumed ordinary SQL contracts remain. The disposable-stack
+continuity exercise is a release gate when approved digest-pinned images are available.**
 
 This document records the rollout plan for
 [ADR 0012](../adr/0012-postgresql-property-graph-migration.md), which decides that the GrooveMap
 catalog graph was evaluated for a move out of Neo4j and into PostgreSQL as a SQL/PGQ property
 graph. The 2026-10-02 amendment keeps Neo4j authoritative after PostgreSQL reverted SQL/PGQ from
 version 19. The decision and its evidence gate live in that record. This document now carries the
-preservation, selective-cleanup, and continuity order.
+Git-history recovery, selective-cleanup, and continuity order.
 
 The original phase plan below is retained as historical context. It is not dispatch authority.
 No phase may activate `GRAPH_TABLE`, flip the default backend, or decommission Neo4j for
@@ -36,26 +37,32 @@ work ships dark into an unchanged production engine.
 | 4 Write cutover | catalog-api, discogs-graph-enricher, musicbrainz-graph-enricher | Collection and wantlist edges become views, both graph enrichers retire, and the `gm_id` projection job retires. | After phase 3 |
 | 5 Decommission | deployment, database-schema, operations-console, python-libraries, operations-toolkit, design | Neo4j removed everywhere, persistence contract major bump, and an amendment to ADR 0012. | After phase 4 |
 
-## 2026-10-02 reconciliation and holding refs
+## 2026-10-02 reconciliation and Git recovery points
 
-The original PostgreSQL 19 cutover is superseded. `GRAPH_TABLE` work may be kept for research,
-but it is not a runtime target for PostgreSQL 19. The following refs are the exact review inputs
-for selective cleanup. The first task in every owner-hive molecule is to create
-`archive/pg19-sql-pgq-2026-10-02` from the listed commit, push it, and prove with `git ls-remote`
-that the remote ref resolves to the same full object id. Cleanup does not start when the branch
-exists only locally or when the remote object differs.
+The original PostgreSQL 19 cutover is superseded. SQL/PGQ-specific runtime code, tests, and
+obsolete contract claims are removed from `main`; the merged Git history is the recovery source
+for future research. The first task in every owner-hive molecule records the relevant merged
+commits and classifies independently consumed ordinary SQL code before deletion. No archive or
+holding branch is created.
 
-| Repository owner | Current holding ref and commit | Preservation scope |
+| Repository owner | Pre-cleanup commit | History and retained-code scope |
 | --- | --- | --- |
 | `database-schema` | `origin/main` at `fecb0a43814a1e5047a5db423e7bb924986dedf6` | SQL/PGQ declarations and PG19 tests together with the relational graph DDL and compatibility history. |
-| `catalog-api` | `origin/backup/gm-catalog-api-wpku.6` at `61124ce65b69c38b6170b0793b160a173b5a23d8` for the unmerged default flip; `origin/main` at `c5de6e5b16defe7c0e296cefdaad2f8116721efd` for the merged backend and parity work | Preserve both the held flip and the merged Neo4j/PostgreSQL comparison implementation. The archive branch is created from `origin/main`; the existing backup remains immutable and separately verified. |
+| `catalog-api` | `origin/main` at `c5de6e5b16defe7c0e296cefdaad2f8116721efd` for the merged backend and parity work; the unmerged default flip was held at `61124ce65b69c38b6170b0793b160a173b5a23d8` | Remove the SQL/PGQ alternate backend from `main`, retain Neo4j and independently useful ordinary SQL reads, and record the merged commits needed for recovery. |
 | `discogs-sql-loader` | `origin/main` at `f1b1b40a5bbe96ffba6e5fc122376d3fb6464a48` | Loader-written graph relations, Neo4j parity, and derived-relation refresh behavior. |
 | `musicbrainz-sql-loader` | `origin/main` at `1f0150d61519df4089cda1f990f5b9dbf3fdc6a9` | Loader-written MusicBrainz graph relations and Neo4j parity behavior. |
 | `deployment` | `origin/main` at `77449dd807ac97fa0d2dfbb1f4374f72b40b30df` | The production PostgreSQL 18 and Neo4j topology before any PG19 graph activation or backend flip. |
 
-These are observed remote-tracking refs, not claims that the remote cannot move. Each molecule's
-preservation task fetches the named ref, refuses a changed object until this document is amended,
-creates the archive ref from the recorded object, and verifies the pushed object before continuing.
+These commits identify the state reviewed when the pause was planned; the remote may have advanced.
+Each owner records the actual starting commit and the relevant merged PGQ commits in its cleanup
+documentation. Git history provides recovery without a dedicated branch.
+
+The completed cleanup landed at `database-schema` `9a50949b1810f3e61adae2f89b86acec2e20c4a3`,
+`catalog-api` `24c95868af6f0f5f28bc8bd61418b32ac0039185`, `discogs-sql-loader`
+`baa289b6264d567384648d8c6ab7a013a9287325`, `musicbrainz-sql-loader`
+`cd4e59931d586eab5d6ba0c2462ac4ce7853fc38`, and `deployment`
+`d40e93c5e2b25a4b2f537a6411c635ba2d7b9c01`. These are source revisions; deployment
+requires approved, digest-pinned images before the disposable continuity exercise.
 
 ## Relational graph consumers that survive the SQL/PGQ pause
 
@@ -79,26 +86,27 @@ removed without bundling these independently consumed relations into the deletio
 
 ## Ordered pause rollout
 
-1. **`database-schema`: preserve, classify, and publish the compatibility boundary.** Create and
-   verify the archive ref first. Disable PostgreSQL 19 property-graph declaration and
+1. **`database-schema`: classify, remove PGQ, and publish the compatibility boundary.** Record
+   the Git recovery commits first. Remove PostgreSQL 19 property-graph declaration and
    `GRAPH_TABLE` tests, while keeping the ordinary relations above, their grants, recursive SQL
    functions, and PostgreSQL 18 behavior. Prove schema initialization twice, loader compatibility,
-   the embedding read contract, and a clean rollback to the preserved ref.
+   the embedding read contract, and a clean rollback to the pre-cleanup commit.
 2. **`catalog-api`: retain Neo4j as the default and rollback target.** This waits for the
-   database-schema classification. Verify both recorded refs before touching the held flip.
-   Supersede the PostgreSQL-default work, keep the Neo4j implementation production-safe, and
+   database-schema classification. Record the merged PGQ commits and supersede the held flip.
+   Remove the SQL/PGQ alternate backend, keep the Neo4j implementation production-safe, and
    retain parity fixtures only where they still test ordinary SQL compatibility. Prove every
    registered family serves through Neo4j and that no PostgreSQL 19 SQL/PGQ availability check is
    required at startup.
 3. **SQL loaders: preserve writes consumed outside SQL/PGQ.** After the schema contract is pinned,
-   `discogs-sql-loader` and `musicbrainz-sql-loader` create and verify their archive refs, keep the
+   `discogs-sql-loader` and `musicbrainz-sql-loader` record Git recovery commits and keep the
    relations in the table above populated, and retain cross-store Neo4j parity checks. They remove
    a write only after its schema owner and every consumer name the replacement. Each loader proves
    retry/idempotency behavior and Neo4j parity before release.
 4. **`deployment`: make Neo4j continuity explicit.** This follows the schema, API, and loader
-   releases. Create and verify the archive ref first; keep PostgreSQL 18 as the graph-related
-   production pin, configure the API explicitly for Neo4j, retain Neo4j storage and health checks,
-   and exercise rollback with production-shaped configuration. PostgreSQL 19 work for pgvector or
+   releases. Record the pre-cleanup commit first; keep PostgreSQL 18 as the graph-related
+   production pin, use the API's direct Neo4j wiring, retain Neo4j storage and health checks,
+   and document a production-shaped rollback exercise. Run that disposable-stack exercise at
+   release promotion after approved image digests exist. PostgreSQL 19 work for pgvector or
    unrelated relational needs is a separate rollout and cannot set the graph backend.
 
 The rollout stops if Neo4j parity fails, an embedding relation loses its writer, a compatibility
@@ -107,25 +115,24 @@ Neo4j-authoritative configuration.
 
 ## Filed owner-hive pause molecules
 
-The following replacement molecules were validated, previewed, filed, round-trip inspected, and
-verified on 2026-10-02. Each is deliberately `kickoff=pending`; filing records the plan and does
-not authorize dispatch.
+The following replacement molecules were filed, amended to use Git history instead of archive
+branches, dispatched, validated, and landed on 2026-10-02.
 
-- **database-schema — Preserve SQL/PGQ work and keep relational graph contracts
-  (`gm-database-schema-5wsk`).** Preservation precedes relation classification and disabling the
-  unsupported PostgreSQL 19 activation path.
-- **catalog-api — Keep Neo4j authoritative and retire the PostgreSQL graph flip
-  (`gm-catalog-api-zvyh`).** Both the merged comparison tree and held default-flip ref are verified
-  before the production default and compatibility tests are reconciled.
-- **discogs-sql-loader — Preserve Discogs relational graph writes for Neo4j continuity
+- **database-schema — Remove SQL/PGQ while keeping relational graph contracts
+  (`gm-database-schema-5wsk`).** Git inventory precedes removal of the unsupported activation path.
+- **catalog-api — Remove PGQ graph backend and keep Neo4j authoritative
+  (`gm-catalog-api-zvyh`).** The SQL/PGQ alternate backend is removed while Neo4j and ordinary SQL
+  compatibility paths are retained.
+- **discogs-sql-loader — Remove PGQ-only code and retain Discogs relational graph writes
   (`gm-discogs-sql-loader-dsu`).** The loader retains the embedding relations, refreshes, retries,
   and Neo4j parity independently of SQL/PGQ.
-- **musicbrainz-sql-loader — Preserve MusicBrainz relational graph writes and Neo4j parity
+- **musicbrainz-sql-loader — Remove PGQ-only code and retain MusicBrainz relational writes
   (`gm-musicbrainz-sql-loader-a6s`).** Source-owned media and relationship writes retain their
   schema contract and parity coverage.
-- **deployment — Keep Neo4j production-safe after the PostgreSQL 19 graph pause
-  (`gm-deployment-okp`).** Explicit Neo4j configuration, persistent data, health, and rollback are
-  proved after owner revisions are available.
+- **deployment — Remove PGQ activation and keep Neo4j production-safe
+  (`gm-deployment-okp`).** The API wires Neo4j directly. Deployment contract tests cover its
+  credentials, persistence, health, and resources; the disposable-stack restart and rollback
+  exercise remains required when approved digest-pinned cleanup images are published.
 
 The stale PostgreSQL 19 cutover work is superseded with recorded reasons:
 `gm-database-schema-0n7` and its children, `gm-deployment-2sb` and its children, and
