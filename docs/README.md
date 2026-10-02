@@ -18,7 +18,7 @@ maintained current state.
 - [ADR 0009: Native identity and provider aliases](adr/0009-native-identity-and-provider-aliases.md)
 - [ADR 0010: First-party events, consent, and deletion closure](adr/0010-first-party-events-consent-and-deletion.md)
 - [ADR 0011: Catalog identifiers, manufacturing credits, and release country](adr/0011-catalog-identifiers-and-manufacturing-credits.md)
-- [ADR 0012: PostgreSQL SQL/PGQ as the catalog graph engine](adr/0012-postgresql-property-graph-migration.md)
+- [ADR 0012: Catalog graph engine and the PostgreSQL SQL/PGQ evaluation](adr/0012-postgresql-property-graph-migration.md) records the 2026-10-02 amendment that keeps Neo4j authoritative after SQL/PGQ was reverted from PostgreSQL 19.
 - [ADR 0013: pgvector in PostgreSQL for catalog embeddings](adr/0013-pgvector-catalog-embeddings.md)
 - [ADR 0014: Ownership of cross-catalog release-edition candidates](adr/0014-cross-catalog-edition-candidates.md)
 
@@ -27,7 +27,7 @@ maintained current state.
 - [Media-taxonomy program rollout](programs/media-taxonomy.md) records the completed delivery of ADR 0007 across the organization in five waves.
 - [Native identity and first-party events program rollout](programs/native-identity-and-events.md) records the four-wave delivery plan for ADR 0009 and ADR 0010, the artifacts each wave pins, and the gaps it deliberately leaves to their own records.
 - [Catalog-identifiers program rollout](programs/catalog-identifiers.md) records the delivery of ADR 0011 across the organization in five waves, complete except mcp-server's company-credit surface in wave 4.
-- [Neo4j to PostgreSQL graph-migration program](programs/neo4j-to-postgresql-graph.md) records the six-phase plan for ADR 0012, the entry and exit criteria of each phase, and the feasibility questions that gate everything after phase 1.
+- [PostgreSQL SQL/PGQ pause and Neo4j continuity program](programs/neo4j-to-postgresql-graph.md) records the stopped cutover, preservation refs, retained relational consumers, and owner-hive pause work required by ADR 0012's 2026-10-02 amendment.
 
 ## Design spikes
 
