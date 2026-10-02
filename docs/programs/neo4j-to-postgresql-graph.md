@@ -36,6 +36,75 @@ work ships dark into an unchanged production engine.
 | 4 Write cutover | catalog-api, discogs-graph-enricher, musicbrainz-graph-enricher | Collection and wantlist edges become views, both graph enrichers retire, and the `gm_id` projection job retires. | After phase 3 |
 | 5 Decommission | deployment, database-schema, operations-console, python-libraries, operations-toolkit, design | Neo4j removed everywhere, persistence contract major bump, and an amendment to ADR 0012. | After phase 4 |
 
+## 2026-10-02 reconciliation and holding refs
+
+The original PostgreSQL 19 cutover is superseded. `GRAPH_TABLE` work may be kept for research,
+but it is not a runtime target for PostgreSQL 19. The following refs are the exact review inputs
+for selective cleanup. The first task in every owner-hive molecule is to create
+`archive/pg19-sql-pgq-2026-10-02` from the listed commit, push it, and prove with `git ls-remote`
+that the remote ref resolves to the same full object id. Cleanup does not start when the branch
+exists only locally or when the remote object differs.
+
+| Repository owner | Current holding ref and commit | Preservation scope |
+| --- | --- | --- |
+| `database-schema` | `origin/main` at `fecb0a43814a1e5047a5db423e7bb924986dedf6` | SQL/PGQ declarations and PG19 tests together with the relational graph DDL and compatibility history. |
+| `catalog-api` | `origin/backup/gm-catalog-api-wpku.6` at `61124ce65b69c38b6170b0793b160a173b5a23d8` for the unmerged default flip; `origin/main` at `c5de6e5b16defe7c0e296cefdaad2f8116721efd` for the merged backend and parity work | Preserve both the held flip and the merged Neo4j/PostgreSQL comparison implementation. The archive branch is created from `origin/main`; the existing backup remains immutable and separately verified. |
+| `discogs-sql-loader` | `origin/main` at `f1b1b40a5bbe96ffba6e5fc122376d3fb6464a48` | Loader-written graph relations, Neo4j parity, and derived-relation refresh behavior. |
+| `musicbrainz-sql-loader` | `origin/main` at `1f0150d61519df4089cda1f990f5b9dbf3fdc6a9` | Loader-written MusicBrainz graph relations and Neo4j parity behavior. |
+| `deployment` | `origin/main` at `77449dd807ac97fa0d2dfbb1f4374f72b40b30df` | The production PostgreSQL 18 and Neo4j topology before any PG19 graph activation or backend flip. |
+
+These are observed remote-tracking refs, not claims that the remote cannot move. Each molecule's
+preservation task fetches the named ref, refuses a changed object until this document is amended,
+creates the archive ref from the recorded object, and verifies the pushed object before continuing.
+
+## Relational graph consumers that survive the SQL/PGQ pause
+
+The `graph` schema is not synonymous with SQL/PGQ. `analytics-engine` builds its monthly FastRP
+artist embeddings by reading ordinary SQL relations from PostgreSQL. Removing these relations
+would break embeddings even though the authoritative online graph remains Neo4j.
+
+| Relations retained on `main` | Writer / owner | Independent consumer and reason |
+| --- | --- | --- |
+| `graph.by_artist`, `graph.on_label`, `graph.derived_from`, `graph.in_genre`, `graph.in_style`, `graph.master_by_artist`, `graph.master_in_genre`, `graph.master_in_style` | DDL in `database-schema`; release and master rows written by `discogs-sql-loader` | `analytics-engine/insights/embedding_pipeline.py` scans all eight as the core FastRP edge set. |
+| `graph.credited_on`, `graph.same_as` | DDL in `database-schema`; release credits and identity mappings written by `discogs-sql-loader` | The embedding pipeline joins credited names to artists and retains production, engineering, session, and other musical credits. |
+| `graph.track_credited_on`, `graph.track_by_artist` | DDL in `database-schema`; track and sub-track rows written by `discogs-sql-loader` | The embedding pipeline includes track credits and performers in its `edges-v3` model input. |
+| `graph.vertex_degree` | DDL and refresh function in `database-schema`; refreshed by `discogs-sql-loader` after extraction | The embedding pipeline discovers the six supported vertex kinds before streaming edges. |
+| `graph.artist_member_of` | DDL and refresh function in `database-schema`; refreshed by `discogs-sql-loader` from both catalog sources | Retained as an input to `graph.vertex_degree` and the recursive path compatibility surface. |
+| `graph.issued_on`, `graph.medium`, `graph.media_family` | DDL in `database-schema`; both SQL loaders write their source-owned rows | Retained for existing catalog queries, media parity, and the cross-source persistence contract; they are ordinary SQL tables, not a reason to enable SQL/PGQ. |
+
+Any selective cleanup must begin with a repository-wide consumer search and contract test. A
+relation stays on `main` until every listed reader has moved to a reviewed replacement and the
+replacement revision is pinned by its consumer. SQL/PGQ-only objects may then be disabled or
+removed without bundling these independently consumed relations into the deletion.
+
+## Ordered pause rollout
+
+1. **`database-schema`: preserve, classify, and publish the compatibility boundary.** Create and
+   verify the archive ref first. Disable PostgreSQL 19 property-graph declaration and
+   `GRAPH_TABLE` tests, while keeping the ordinary relations above, their grants, recursive SQL
+   functions, and PostgreSQL 18 behavior. Prove schema initialization twice, loader compatibility,
+   the embedding read contract, and a clean rollback to the preserved ref.
+2. **`catalog-api`: retain Neo4j as the default and rollback target.** This waits for the
+   database-schema classification. Verify both recorded refs before touching the held flip.
+   Supersede the PostgreSQL-default work, keep the Neo4j implementation production-safe, and
+   retain parity fixtures only where they still test ordinary SQL compatibility. Prove every
+   registered family serves through Neo4j and that no PostgreSQL 19 SQL/PGQ availability check is
+   required at startup.
+3. **SQL loaders: preserve writes consumed outside SQL/PGQ.** After the schema contract is pinned,
+   `discogs-sql-loader` and `musicbrainz-sql-loader` create and verify their archive refs, keep the
+   relations in the table above populated, and retain cross-store Neo4j parity checks. They remove
+   a write only after its schema owner and every consumer name the replacement. Each loader proves
+   retry/idempotency behavior and Neo4j parity before release.
+4. **`deployment`: make Neo4j continuity explicit.** This follows the schema, API, and loader
+   releases. Create and verify the archive ref first; keep PostgreSQL 18 as the graph-related
+   production pin, configure the API explicitly for Neo4j, retain Neo4j storage and health checks,
+   and exercise rollback with production-shaped configuration. PostgreSQL 19 work for pgvector or
+   unrelated relational needs is a separate rollout and cannot set the graph backend.
+
+The rollout stops if Neo4j parity fails, an embedding relation loses its writer, a compatibility
+contract changes without a pinned consumer promotion, or rollback cannot restore the last known
+Neo4j-authoritative configuration.
+
 ## Phase 0: foundation
 
 **Repositories.** `database-schema`, `catalog-api`, `design`, `deployment`.
