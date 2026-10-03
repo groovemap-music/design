@@ -21,6 +21,7 @@ maintained current state.
 - [ADR 0012: Catalog graph engine and the PostgreSQL SQL/PGQ evaluation](adr/0012-postgresql-property-graph-migration.md) records the 2026-10-02 amendment that keeps Neo4j authoritative after SQL/PGQ was reverted from PostgreSQL 19.
 - [ADR 0013: pgvector in PostgreSQL for catalog embeddings](adr/0013-pgvector-catalog-embeddings.md)
 - [ADR 0014: Ownership of cross-catalog release-edition candidates](adr/0014-cross-catalog-edition-candidates.md)
+- [ADR 0015: Valkey replaces Redis](adr/0015-valkey-replaces-redis.md)
 
 ## Program rollout plans
 
