@@ -32,8 +32,8 @@ function ownGet(map, key) {
   return Object.hasOwn(map, key) ? map[key] : undefined;
 }
 
-// A format/medium entry must be a plain object: not null, not an array, and
-// not a bare string or number standing in for one.
+// A format/medium entry must be a non-null, non-array object, not a primitive.
+// This shape guard does not restrict the object's prototype.
 function isPlainEntry(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
