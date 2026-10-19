@@ -19,7 +19,7 @@
     {
       "name": "analytics-engine",
       "url": "https://github.com/groovemap-music/analytics-engine",
-      "description": "Scheduled and precomputed music analytics with PostgreSQL and Redis caching.",
+      "description": "Scheduled and precomputed music analytics with PostgreSQL and Valkey caching.",
       "responsibilities": ["Compute catalog analytics", "Cache reusable analytical results"],
       "relationships": [
         { "repository": "catalog-api", "kind": "provides-analytics-to" },
@@ -28,7 +28,7 @@
       ],
       "homepage": null,
       "languages": ["Dockerfile", "Python", "Shell"],
-      "topics": ["analytics", "music", "postgresql", "python", "redis"],
+      "topics": ["analytics", "music", "postgresql", "python", "valkey"],
       "license": "AGPL-3.0-only",
       "commercial_license_available": true,
       "release_units": ["container image", "service distribution"],
