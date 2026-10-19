@@ -115,7 +115,7 @@ groovemap_pipeline_messages_total, http.server.request.duration -> http_server_r
 - Use OTEL semantic conventions wherever one exists:
   http.server.request.duration {http.request.method, http.route, http.response.status_code}
   http.client.request.duration {http.request.method, server.address, http.response.status_code}
-  db.client.operation.duration {db.system.name=postgresql|neo4j|redis, db.operation.name, error.type?}
+  db.client.operation.duration {db.system.name=postgresql|neo4j|valkey, db.operation.name, error.type?}
   messaging.client.consumed.messages / messaging.client.sent.messages / messaging.client.operation.duration
     {messaging.system=rabbitmq, messaging.destination.name, messaging.operation.name, error.type?}
 - Domain metrics live under groovemap.* and are shared across services with the same shape (attribute sets are closed):
@@ -124,7 +124,7 @@ groovemap_pipeline_messages_total, http.server.request.duration -> http_server_r
   groovemap.pipeline.batch.size (histogram, {items}) {store=neo4j|postgresql, entity}
   groovemap.pipeline.batch.flush.duration (histogram, s) {store, entity, outcome}
   groovemap.pipeline.consumers.active (up-down counter) {source}
-  groovemap.pipeline.reconnects (counter) {system=rabbitmq|neo4j|postgresql|redis}
+  groovemap.pipeline.reconnects (counter) {system=rabbitmq|neo4j|postgresql|valkey}
   groovemap.pipeline.circuit_breaker.state (gauge; 0 closed, 1 half-open, 2 open) {system}
   groovemap.extraction.records (counter) {source, entity}
   groovemap.extraction.files (counter) {source, outcome=completed|skipped|failed}
