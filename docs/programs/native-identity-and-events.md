@@ -86,7 +86,7 @@ publication handoff prints both vocabulary digests. Pins: none.
   `INSERT` that never raises to the caller. Log impressions on the search and recommendation
   paths with the policy, candidate set, position, score, and propensity. Emit the collection
   and wantlist events. Add the consent endpoints, the JSON Lines export endpoint, and the
-  erasure procedure with its Neo4j and Redis closure. Own the `gm_id` projection job, whose
+  erasure procedure with its Neo4j and Valkey closure. Own the `gm_id` projection job, whose
   scope is that one property. Publish the updated consumer contracts. Pins: schema commit,
   runtime revision, both vocabulary digests. Verified by `just source-check` and the
   repository's contract check.
@@ -111,7 +111,7 @@ Register the single low-cardinality event-writer counter in the closed telemetry
 [ADR 0006](../adr/0006-opentelemetry-metrics.md) defines, with `event_type` as its only
 attribute. Schedule partition maintenance and retention for the `activity` tables. Extend the
 smoke stack so an erasure request is asserted to leave no row in either activity table, no
-subject link, no user subgraph in Neo4j, and no user-keyed Redis key, and so an export request
+subject link, no user subgraph in Neo4j, and no user-keyed Valkey key, and so an export request
 returns JSON Lines. Update the runbook and the architecture documentation. Pins: the released
 images from waves 1 to 3.
 
