@@ -114,3 +114,29 @@ re-attached release created after the first load.
 - **Work parents are as of `20261021`.**
 - **The verdict applies gm-design-loj9's bar unchanged.** If G2 misses it, the history
   shows no more than a log table, and D's first build is a table.
+
+## Proxy 2, registered after proxy 1 failed and before it is computed
+
+Proxy 1 failed in one way only: edits to older links. This section is committed before
+proxy 2 is computed.
+
+**Definition.** `l_release_url.id` is a sequence, so a row's id orders it by creation. An
+edit changes `last_updated` but keeps the id, if MusicBrainz edits relationships in place.
+Take every release-URL row k, of any link type. Its creation is bounded by c(k), the
+minimum `last_updated` over rows j ≥ k. A row that was never edited has c(k) equal to its
+true creation, because every later row was created after it. An edited row gets the
+creation of the next unedited row, so the edit cannot push it later. Proxy 2's L is the
+earliest c(k) over the release's current Discogs links. Everything else in the method is
+unchanged: C, D(C), the runs, the monthly model, and G1-G3. Proxy 2 has no free
+parameter. If MusicBrainz instead edits a relationship by deleting it and inserting a new
+row, those edits look like new links, as they do under proxy 1, and the validation will
+show it.
+
+**Validation.** The bar is unchanged: precision ≥ 0.90 and recall ≥ 0.90.
+
+- **Binding: the out-of-sample window.** Proxy 2 was designed after proxy 1's errors in
+  the 20261017 → 20261021 window were seen. So its binding validation is the next window
+  neither proxy has seen: JSON dumps 20261021 → 20261024, against the 20261024 full
+  export.
+- **Diagnostic only: the in-sample window.** Proxy 2 is also scored on the 20261017 →
+  20261021 window, but that score cannot pass or fail it.
