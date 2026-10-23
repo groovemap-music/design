@@ -1,18 +1,19 @@
 # Spike: concept D's ledger bar on real months, from the MusicBrainz full export
 
-Status: **DEFER**, pending one binding check.
+Status: **GO** for concept D's history-only ledger, **by the maintainer's decision** of
+2026-10-23: "Please do not DEFER D. Let's change that to a GO". The pre-registered rule
+alone would still read DEFER, pending one out-of-sample check. The evidence below is
+unchanged:
 
 - **Proxy 1 fails its bar.** It was pre-registered at `9e9440a`, before any data was
   read. Its precision is 0.8223 against 0.90, because edits to older links date them into
   the window. So it is not used.
-- **Proxy 2 clears every bar, but is not yet validated.** It was registered at `8f7a5ed`,
-  after proxy 1 failed, and it has no free parameter. On 12 real months it clears G1, G2,
-  and G3 by wide margins: 12 months, 35,434 works, and 35,467 re-attachments. Its
-  validation on the same window passes (precision 0.9868, recall 0.9239), but that window
-  is in-sample, so the result is only a diagnostic.
-- **What decides it.** Proxy 2's binding validation is the unseen 20261021 → 20261024
-  window, which can run once the 20261024 dumps are published. If it passes, the verdict
-  is GO. If it fails, the verdict stays DEFER.
+- **Proxy 2 clears every bar, but only in-sample.** It was registered at `8f7a5ed`, after
+  proxy 1 failed, and it has no free parameter. On 12 real months it clears G1, G2, and G3
+  by wide margins: 12 months, 35,434 works, and 35,467 re-attachments. Its validation on
+  the same window passes (precision 0.9868, recall 0.9239), but that window is in-sample.
+- **The out-of-sample check no longer gates the verdict.** The unseen 20261021 → 20261024
+  window now decides how the ledger is backfilled (see Recommendation).
 
 Spike: `gm-design-6b8u` (epic `gm-design-cgh9`)  
 Prior spike: gm-design-loj9 (`docs/spikes/gm-design-loj9-strata-ledger.md` on the Strata
@@ -236,37 +237,63 @@ missing, so older months are lower bounds.
 
 ## Verdict
 
-**DEFER.** Proxy 1, the one registered before any data was read, failed its bar, so it is
-not used.
+**GO** for concept D's history-only ledger. This is the maintainer's decision of
+2026-10-23: "Please do not DEFER D. Let's change that to a GO".
 
-Proxy 2 clears G1, G2, and G3 by wide margins on 12 real months. G2 is 35 times its bar
-at the lower bound, and 6 times its bar when the first load is left out. But proxy 2 was
-designed after proxy 1's errors were seen, so its only validation so far is in-sample.
-The pre-registered rule makes the unseen 20261021 → 20261024 window binding:
+Applied alone, the bar fixed in advance would not yet give GO:
 
-- if proxy 2 passes it (precision ≥ 0.90 and recall ≥ 0.90), the verdict is **GO** for the
-  history-only ledger;
-- if it fails, the verdict stays **DEFER**.
+- **Proxy 1 failed.** Registered before any data was read, it failed its validation bar
+  (precision 0.8223), so it is not used.
+- **Proxy 2 clears the bar only in-sample.** It clears G1, G2, and G3 on 12 real months:
+  G1 is 12 months, G2 is 35,434 works at the lower bound (5,980 counting only changes
+  after the first load), and G3 is 35,467 re-attachments. But it was designed after proxy
+  1's errors were seen, and its only validation (precision 0.9868, recall 0.9239) is on the
+  same window.
+- **The rule would wait.** It would have held DEFER until the unseen 20261021 → 20261024
+  window.
 
-For gm-design-loj9: its four-day replay found G2 = 743. That figure measured one
-hypothetical cycle, not a shortage of history. On real months the history shows change
-across months for tens of thousands of works.
+The maintainer has accepted that residual risk. The out-of-sample result is still run and
+recorded, and it now decides how the ledger's past is filled in, not whether D is built.
+
+gm-design-loj9's DEFER stands as the record for its four-day window, and its merged
+document is unchanged. Its four-day replay found G2 = 743. That figure measured one
+hypothetical cycle, not a shortage of history. Its G1 and G2 are restated as DEFER under
+"Corrections to gm-design-loj9" below.
 
 ## Recommendation
 
-1. **Run proxy 2's binding validation once the 20261024 dumps are out.** The full export
-   is expected around 05:00 UTC on 2026-10-24, and the JSON `release` member around 15:00
-   UTC. It needs about 30 GB streamed and about an hour, with no code change. The
-   README gives the commands. Then commit `results/oos_validation.json` and set the
-   verdict by the rule above. The JSON dumps that window needs are deleted within a week,
-   so it has to run soon after they appear.
-2. **If it passes, the decision bead `gm-design-7xo5` takes concept D as GO** for a
-   history-only ledger. Use the shape gm-design-loj9 drafted: the PostgreSQL route, the
-   state vocabulary, `work_disagreement` with a primary parent, and no lateral identifier
-   edges.
-3. **If it fails, D's first build waits.** It is not a table yet, because neither proxy
-   would then have shown that the history is too sparse. Re-measure once a GrooveMap
-   catalog exists.
+1. **Run the out-of-sample check, and let it decide the backfill.** Run `scripts/oos.py`
+   on the unseen 20261021 → 20261024 window as soon as the 20261024 full export and JSON
+   `release` member are published. The bar is unchanged: precision ≥ 0.90 and
+   recall ≥ 0.90.
+   - **If proxy 2 passes:** backfill D's history from the full-export series. Each Discogs
+     link is dated by proxy 2's row-id creation bound, which gives the ledger the past 12
+     or more months on its first day.
+   - **If proxy 2 fails:** the ledger records forward only, from live dump diffs. Each
+     MusicBrainz load's diff against the previous one gives exact link additions, as in
+     this spike's validation set E. The backfill waits for a proxy that passes a fresh
+     unseen window. Until then, D shows history from its first load onward.
+2. **GO conditions, carried from gm-design-loj9 for the decision bead `gm-design-7xo5`
+   and implementation molecule M6:**
+   - **PostgreSQL route.** The admin route reads PostgreSQL, the identity authority under
+     ADR 0009, not Neo4j, which holds only the current `gm_id` projection. Record the
+     departure from the epic's "Strata routes are Neo4j queries" rule in ADR 0016.
+   - **Two work parents.** 30.15% of cross-linked editions have two work parents:
+     566,661 in the predecessor-schema link structure, and 564,667 in loj9's dump replay.
+     The ledger gives each such edition a primary parent, the Discogs master, because the
+     survivor is always on the Discogs side. It shows the second parent, the MusicBrainz
+     release group's own work, as an explicit `work_disagreement` edge. It does not
+     duplicate the edition or hide the second parent.
+   - **ADR 0014 section 6 stays DEFER.** The history ledger needs no matching schema, no
+     candidate store, and no review action. It reads only `provider_aliases`,
+     `catalog_item_supersessions`, `catalog_item_moves`, and `admin_audit_log`, plus the
+     catalogs' own rows. Nothing in D's first build depends on, or reopens, the section 6
+     measurement. Edition candidates join only after a section 6 re-run returns GO.
+   - **operations-console stack.** Classic scripts only, with no ES modules, matching the
+     console's existing `admin.js` (gm-design-loj9 section 7).
+   - **First build: a table or a timeline.** That means works with their editions' identity
+     events in transaction time, using gm-design-loj9's state vocabulary and draft
+     `admin_identity_ledger_*` routes. A layered Strata view comes later.
 
 ## Missing evidence and failure modes
 
