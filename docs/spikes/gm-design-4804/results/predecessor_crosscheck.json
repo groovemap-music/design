@@ -1,0 +1,13 @@
+{
+  "predecessor_snapshot_days": [
+    "2026-10-23"
+  ],
+  "cells_harness": 200,
+  "cells_predecessor": 206,
+  "cells_shared": 199,
+  "predecessor_cells_with_unknown_genre": 0,
+  "total_harness": 22579699,
+  "total_predecessor_known_genres": 22600925,
+  "relative_diff_median": 0.0008,
+  "relative_diff_abs_p90_cells_ge_10k": 0.0021
+}

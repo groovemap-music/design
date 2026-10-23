@@ -1,0 +1,5 @@
+<releases>
+<release id="11" status="Accepted"><artists><artist><id>101</id><name>Invented A</name></artist></artists><title>T1</title><labels><label name="L" catno="X1" id="201"/></labels><extraartists><artist><id>999</id><name>Credit</name></artist></extraartists><genres><genre>Alpha</genre><genre>Beta</genre></genres><styles><style>Alpha One</style><style>Alpha One</style><style>Shared</style></styles><released>1991-03-00</released><master_id is_main_release="true">31</master_id><tracklist><track><position>A</position><artists><artist><id>555</id></artist></artists></track></tracklist></release>
+<release id="12" status="Accepted"><artists><artist><id>102</id></artist><artist><id>0</id></artist></artists><genres><genre>Beta</genre></genres><styles><style>Shared</style></styles><released>Unknown</released></release>
+<release id="13" status="Accepted"><genres><genre>Alpha</genre></genres><released>2005</released></release>
+</releases>
