@@ -1,0 +1,286 @@
+{
+ "discogs_dumps": [
+  "discogs_20260901",
+  "discogs_20261001"
+ ],
+ "kinds": {
+  "artist": {
+   "alias_windows": {
+    "closed": {
+     "t3": 0,
+     "t6": 621
+    },
+    "opened": {
+     "t1": 10189040,
+     "t2": 3015686,
+     "t3": 0,
+     "t4": 46171,
+     "t5": 3882,
+     "t6": 621
+    }
+   },
+   "discogs_records": {
+    "dump_a": 10189040,
+    "dump_b": 10229123,
+    "missing_from_b": 6088,
+    "new_in_b": 46171
+   },
+   "linked_at_ingest": {
+    "t2": 1263156,
+    "t5": 723
+   },
+   "musicbrainz_items_minted": {
+    "t2": 1752530,
+    "t5": 3159
+   },
+   "musicbrainz_linked": {
+    "dump_a": 1276446,
+    "dump_b": 1277562
+   },
+   "musicbrainz_rows": {
+    "dump_a": 3015686,
+    "dump_b": 3019373,
+    "missing_from_b": 195,
+    "new_in_b": 3882,
+    "table_after_b": 3019568
+   },
+   "r1": {
+    "guarded": 0,
+    "reattached": 0
+   },
+   "r2": {
+    "guarded_shared_native_id": 19,
+    "linked": 1263860,
+    "musicbrainz_only": 1741968,
+    "reattached": 621,
+    "reattached_by_cause": {
+     "discogs_arrived": 203,
+     "link_added": 416,
+     "link_changed": 2
+    },
+    "unresolved": 13100
+   }
+  },
+  "label": {
+   "alias_windows": {
+    "closed": {
+     "t3": 0,
+     "t6": 44
+    },
+    "opened": {
+     "t1": 2410384,
+     "t2": 353364,
+     "t3": 0,
+     "t4": 11974,
+     "t5": 394,
+     "t6": 44
+    }
+   },
+   "discogs_records": {
+    "dump_a": 2410384,
+    "dump_b": 2420927,
+    "missing_from_b": 1431,
+    "new_in_b": 11974
+   },
+   "linked_at_ingest": {
+    "t2": 163539,
+    "t5": 75
+   },
+   "musicbrainz_items_minted": {
+    "t2": 189825,
+    "t5": 319
+   },
+   "musicbrainz_linked": {
+    "dump_a": 165119,
+    "dump_b": 165226
+   },
+   "musicbrainz_rows": {
+    "dump_a": 353364,
+    "dump_b": 353741,
+    "missing_from_b": 17,
+    "new_in_b": 394,
+    "table_after_b": 353758
+   },
+   "r1": {
+    "guarded": 0,
+    "reattached": 0
+   },
+   "r2": {
+    "guarded_shared_native_id": 4,
+    "linked": 163610,
+    "musicbrainz_only": 188530,
+    "reattached": 44,
+    "reattached_by_cause": {
+     "discogs_arrived": 11,
+     "link_added": 33
+    },
+    "unresolved": 1570
+   }
+  },
+  "release": {
+   "alias_windows": {
+    "closed": {
+     "t3": 0,
+     "t6": 1204
+    },
+    "opened": {
+     "t1": 19417067,
+     "t2": 5858098,
+     "t3": 0,
+     "t4": 78951,
+     "t5": 9993,
+     "t6": 1204
+    }
+   },
+   "discogs_records": {
+    "dump_a": 19417067,
+    "dump_b": 19492392,
+    "missing_from_b": 3626,
+    "new_in_b": 78951
+   },
+   "linked_at_ingest": {
+    "t2": 1881444,
+    "t5": 1315
+   },
+   "musicbrainz_items_minted": {
+    "t2": 3976654,
+    "t5": 8678
+   },
+   "musicbrainz_linked": {
+    "dump_a": 1888636,
+    "dump_b": 1890540
+   },
+   "musicbrainz_rows": {
+    "dump_a": 5858098,
+    "dump_b": 5867935,
+    "missing_from_b": 156,
+    "new_in_b": 9993,
+    "table_after_b": 5868091
+   },
+   "r1": {
+    "guarded": 0,
+    "reattached": 0
+   },
+   "r2": {
+    "guarded_shared_native_id": 5,
+    "linked": 1882754,
+    "musicbrainz_only": 3977521,
+    "reattached": 1204,
+    "reattached_by_cause": {
+     "discogs_arrived": 682,
+     "link_added": 522
+    },
+    "unresolved": 6607
+   }
+  },
+  "release-group": {
+   "alias_windows": {
+    "closed": {
+     "t3": 0,
+     "t6": 337
+    },
+    "opened": {
+     "t1": 2589349,
+     "t2": 4583909,
+     "t3": 0,
+     "t4": 9639,
+     "t5": 8095,
+     "t6": 337
+    }
+   },
+   "discogs_records": {
+    "dump_a": 2589349,
+    "dump_b": 2598586,
+    "missing_from_b": 402,
+    "new_in_b": 9639
+   },
+   "linked_at_ingest": {
+    "t2": 348399,
+    "t5": 38
+   },
+   "musicbrainz_items_minted": {
+    "t2": 4235510,
+    "t5": 8057
+   },
+   "musicbrainz_linked": {
+    "dump_a": 350612,
+    "dump_b": 350896
+   },
+   "musicbrainz_rows": {
+    "dump_a": 4583909,
+    "dump_b": 4591825,
+    "missing_from_b": 179,
+    "new_in_b": 8095,
+    "table_after_b": 4592004
+   },
+   "r1": {
+    "guarded": 0,
+    "reattached": 0
+   },
+   "r2": {
+    "guarded_shared_native_id": 1,
+    "linked": 348436,
+    "musicbrainz_only": 4241105,
+    "reattached": 337,
+    "reattached_by_cause": {
+     "discogs_arrived": 97,
+     "link_added": 240
+    },
+    "unresolved": 2125
+   }
+  }
+ },
+ "ledger": {
+  "edition_event_types": {
+   "month 1": {
+    "linked_at_ingest": 1881444,
+    "musicbrainz_item_minted": 3976654
+   },
+   "month 2": {
+    "linked_at_ingest": 1315,
+    "musicbrainz_item_minted": 8678,
+    "reattached": 1204
+   }
+  },
+  "editions": 23480146,
+  "editions_by_work_count": {
+   "0": 7453079,
+   "1": 15462400,
+   "2+": 564667
+  },
+  "editions_events_multi_month": 542,
+  "editions_repaired": 1202,
+  "editions_with_events": 1867008,
+  "evented_editions_per_work": {
+   "max": 200,
+   "p50": 1,
+   "p90": 2,
+   "p99": 5
+  },
+  "split_now": 5,
+  "unresolved_now": 6607,
+  "works": 6839569,
+  "works_with_2plus_evented_editions": 259935,
+  "works_with_2plus_evented_editions_multi_month": 743,
+  "works_with_2plus_repaired_editions": 66
+ },
+ "musicbrainz_dumps": [
+  "json-dumps/20261017-001001",
+  "json-dumps/20261021-001001"
+ ],
+ "prediction": "replayed from real dumps; not measured on a catalog",
+ "supersessions_per_run": {
+  "r1": {
+   "artist": 0,
+   "label": 0,
+   "release": 0,
+   "release-group": 0
+  },
+  "r2": {
+   "artist": 621,
+   "label": 44,
+   "release": 1204,
+   "release-group": 337
+  }
+ }
+}

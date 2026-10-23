@@ -49,8 +49,10 @@ maintained current state.
   records the DEFER on ADR 0014 section 6, the thin-query coverage loss, and the re-run on a
   wider time-split against the numeric bar ADR 0014's second 2026-09-25 amendment sets.
 - [Identity history for concept D's ledger, without edition candidates](spikes/gm-design-loj9-strata-ledger.md)
-  records the DEFER on a history-only Strata ledger, the transition table today's code allows,
-  the work-level split in the catalogs' own links, and the draft admin route.
+  records the DEFER on a history-only Strata ledger. A replay of the identity jobs over real
+  dumps predicts too little change after the first load. The entry also covers the transition
+  table today's code allows, the work-level split in the catalogs' own links, and the draft
+  admin route.
 
 ## Verification reports
 

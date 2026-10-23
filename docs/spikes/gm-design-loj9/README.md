@@ -2,16 +2,29 @@
 
 This is throwaway code for
 [Identity history for concept D's ledger, without edition candidates](../gm-design-loj9-strata-ledger.md).
-It is not a product package, and no GrooveMap service depends on it. The measurement is
-plain SQL run read-only through `psql`. Python defines the same figures over in-memory rows,
-builds the draft ledger payload, and tests both on an invented catalog. The committed
-outputs in `results/` are aggregates (counts, months, days) and payloads built from the
-invented catalog. They contain no catalog ids, user data, or audit rows.
+It is not a product package, and no GrooveMap service depends on it.
+
+GrooveMap has never been deployed, so no catalog holds identity history to measure. The
+headline numbers therefore come from `scripts/replay.py`, which replays the identity
+jobs' rules over two consecutive real dumps of each catalog. Each rule cites its source
+code. The SQL in `sql/` is the direct measurement, ready for the first real catalog. It
+runs read-only through `psql`. Python defines the same figures over in-memory rows, builds
+the draft ledger payload, and tests all of it on invented data.
+
+The committed outputs in `results/` are aggregates (counts, months, days) and payloads
+built from invented data. They contain no catalog ids, user data, or audit rows. The
+dumps and their compact extracts stay under `~/.cache/groovemap-spikes/gm-design-loj9/`,
+outside the repository.
 
 ## Files
 
 | File | Role |
 | --- | --- |
+| `scripts/extract_mb.py`, `scripts/stream_mb.sh` | Stream one MusicBrainz JSON dump member into `mbid, discogs id[, release group]`, using `musicbrainz-ingestion`'s Discogs-id rule. The dump is never written |
+| `scripts/extract_discogs.py`, `scripts/stream_discogs.sh` | Stream one Discogs dump into record ids (plus `master_id` for releases), applying `discogs-ingestion`'s skip rule. Requests hold `dumps/.fetch.lock` and back off from 60 s |
+| `scripts/replay.py` | The two-cycle replay. It writes per-kind counts for each step and run, alias windows per step, and the release ledger figures. The docstring cites every rule |
+| `tests/test_replay.py` | Each rule's outcome on hand-built dumps, and the replay's ledger equal to `reference.py` on the rows it implies |
+| `results/replay.json` | The replay of `discogs_20260901` then MusicBrainz `20261017`, followed by `discogs_20261001` then MusicBrainz `20261021` |
 | `sql/probe.sql` | Which identity tables exist, and how many audit rows and identity audit rows there are. Runs on any PostgreSQL database |
 | `sql/identity_history.sql` | The identity-history measurement: per-source volumes and monthly density, the transition counts, and the ledger shape (editions, works, events). Never reads `catalog_item_moves.user_id` or `row_id`, or `admin_audit_log.admin_id` or `target` |
 | `sql/link_structure.sql` | The catalogs' own links, read from the provider-keyed tables only. It gives the ceiling of the cross-catalog history and shows where the work level splits |
@@ -31,6 +44,41 @@ invented catalog. They contain no catalog ids, user data, or audit rows.
 | `results/example_payload_work*.json` | The draft payload for one invented work, now and as of 2026-09-01 12:00 UTC |
 
 ## Reproducing
+
+### The replay
+
+About 52 GB of xz is streamed from MusicBrainz. From Discogs come two releases dumps of
+about 11 GB each, plus the smaller kinds. Nothing large is written: the compact extracts
+total about 1 GB. Wall time here was about 70 minutes for the two
+MusicBrainz release members, run in parallel. Each Discogs releases dump took about
+16 minutes, and `replay.py` took 4.5 minutes with an 11.7 GB peak footprint.
+
+```bash
+cd docs/spikes/gm-design-loj9
+export UV_PROJECT_ENVIRONMENT=~/.cache/groovemap-spikes/gm-design-loj9/.venv
+uv sync
+export PY=$UV_PROJECT_ENVIRONMENT/bin/python
+for dump in 20261017-001001 20261021-001001; do
+  for kind in release release-group artist label; do scripts/stream_mb.sh "$dump" "$kind"; done
+done
+for dump in 20260901 20261001; do
+  for kind in labels artists masters releases; do scripts/stream_discogs.sh "$dump" "$kind"; done
+done
+(cd scripts && $PY replay.py ~/.cache/groovemap-spikes/gm-design-loj9/data ../results/replay.json \
+   --mb 20261017-001001 20261021-001001 --discogs 20260901 20261001)
+```
+
+The committed run did not stream `discogs_20261001_releases`. To spare the rate-limited
+Discogs server a second request, it read gm-design-4804's compact of the same dump with
+`--releases-b ~/.cache/groovemap-spikes/gm-design-4804/data/releases_20261001.npz`. That
+file holds 19,492,392 releases, the same count the predecessor catalog holds. The masters
+dumps came from the shared cache (`~/.cache/groovemap-spikes/dumps/`), which
+`stream_discogs.sh` reads when a complete copy is there.
+
+The monthly re-run the spike recommends reuses the cycle-A extracts already in the work
+directory: `--mb 20261021-001001 <first dump after 20261101> --discogs 20261001 20261101`.
+
+### The direct measurement and the tests
 
 ```bash
 cd docs/spikes/gm-design-loj9
