@@ -1,0 +1,32 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: MIT -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Strata renderer harness (gm-design-on0x)</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="strata.css">
+<script src="/vendor/d3.min.js"></script>
+<script type="importmap">{"imports":{"three":"/vendor/three.module.js"}}</script>
+<script type="module" src="main.mjs"></script>
+</head>
+<body>
+<div class="tools">
+  <div class="seg" role="group" aria-label="Planes shown"></div>
+  <div class="readouts" aria-live="polite"></div>
+</div>
+<div class="body">
+  <div class="stage" tabindex="0" role="application" aria-roledescription="strata view">
+    <div class="labels"></div>
+    <div class="stage-ctl"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">-</button><button type="button" data-z="reset" aria-label="Reset view">R</button></div>
+  </div>
+  <aside class="panel" aria-live="polite"></aside>
+</div>
+<div class="time">
+  <label>Released through <input type="range" id="valid" min="1950" max="2026" step="1" value="2026"><output id="valid-o">2026</output></label>
+  <label>Recorded as of <input type="range" id="tx" min="2010" max="2026.8" step="0.1" value="2026.8"><output id="tx-o">2026.8</output></label>
+</div>
+<details class="outline"><summary>Table of every credit, master, and release with its state and why it is blocked</summary><div class="outline-body"></div></details>
+</body>
+</html>

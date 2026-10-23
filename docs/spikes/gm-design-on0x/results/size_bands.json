@@ -1,0 +1,255 @@
+{
+ "source": "MusicBrainz JSON dumps 20261021-001001: release (via gm-design-1h2l's compact TSV) and release-group; release group stands in for master, artist credit for credit",
+ "releases": 5867935,
+ "masterless_releases": 0,
+ "masters_with_releases": 4589277,
+ "master_artist_rows": 5139284,
+ "credits_with_masters": 1127651,
+ "releases_per_master": {
+  "p50": 1,
+  "p90": 2,
+  "p99": 5,
+  "p999": 15,
+  "max": 294
+ },
+ "credit_nodes": {
+  "p50": 5,
+  "p90": 20,
+  "p99": 115,
+  "p999": 431,
+  "p9999": 1452
+ },
+ "largest_credits": [
+  {
+   "nodes": 15136,
+   "masters": 6320,
+   "releases": 8815
+  },
+  {
+   "nodes": 14661,
+   "masters": 6196,
+   "releases": 8464
+  },
+  {
+   "nodes": 14614,
+   "masters": 6110,
+   "releases": 8503
+  },
+  {
+   "nodes": 10290,
+   "masters": 2145,
+   "releases": 8144
+  },
+  {
+   "nodes": 6944,
+   "masters": 3050,
+   "releases": 3893
+  },
+  {
+   "nodes": 6619,
+   "masters": 2933,
+   "releases": 3685
+  },
+  {
+   "nodes": 6565,
+   "masters": 3281,
+   "releases": 3283
+  },
+  {
+   "nodes": 6511,
+   "masters": 2773,
+   "releases": 3737
+  },
+  {
+   "nodes": 5486,
+   "masters": 1908,
+   "releases": 3577
+  },
+  {
+   "nodes": 5406,
+   "masters": 2185,
+   "releases": 3220
+  }
+ ],
+ "bands": [
+  {
+   "name": "b50",
+   "nodes": [
+    1,
+    158
+   ],
+   "credits": 1120915,
+   "share": 0.994027,
+   "releases_per_master": [
+    [
+     1,
+     1,
+     3658933
+    ],
+    [
+     2,
+     2,
+     423216
+    ],
+    [
+     3,
+     4,
+     125924
+    ],
+    [
+     5,
+     9,
+     26729
+    ],
+    [
+     10,
+     30,
+     2907
+    ],
+    [
+     31,
+     100,
+     50
+    ]
+   ]
+  },
+  {
+   "name": "b500",
+   "nodes": [
+    159,
+    1581
+   ],
+   "credits": 6637,
+   "share": 0.005886,
+   "releases_per_master": [
+    [
+     1,
+     1,
+     570835
+    ],
+    [
+     2,
+     2,
+     109407
+    ],
+    [
+     3,
+     4,
+     55718
+    ],
+    [
+     5,
+     9,
+     25723
+    ],
+    [
+     10,
+     30,
+     8514
+    ],
+    [
+     31,
+     100,
+     536
+    ],
+    [
+     101,
+     400,
+     10
+    ]
+   ]
+  },
+  {
+   "name": "b5000",
+   "nodes": [
+    1582,
+    10000
+   ],
+   "credits": 95,
+   "share": 0.000084,
+   "releases_per_master": [
+    [
+     1,
+     1,
+     87356
+    ],
+    [
+     2,
+     2,
+     13613
+    ],
+    [
+     3,
+     4,
+     5535
+    ],
+    [
+     5,
+     9,
+     2210
+    ],
+    [
+     10,
+     30,
+     1060
+    ],
+    [
+     31,
+     100,
+     230
+    ],
+    [
+     101,
+     400,
+     7
+    ]
+   ]
+  },
+  {
+   "name": "b20000",
+   "nodes": [
+    10001,
+    1000000
+   ],
+   "credits": 4,
+   "share": 0.000004,
+   "releases_per_master": [
+    [
+     1,
+     1,
+     15319
+    ],
+    [
+     2,
+     2,
+     3688
+    ],
+    [
+     3,
+     4,
+     1217
+    ],
+    [
+     5,
+     9,
+     378
+    ],
+    [
+     10,
+     30,
+     124
+    ],
+    [
+     31,
+     100,
+     39
+    ],
+    [
+     101,
+     400,
+     6
+    ]
+   ]
+  }
+ ]
+}
