@@ -308,6 +308,14 @@ catalog database, with read-only queries. The maintainer has since
 approved those queries. That schema is an earlier version of GrooveMap's, so every figure
 in loj9's section 5 is a **predecessor-schema measurement**.
 
+gm-design-loj9 reports two counts of editions with two work parents, and only one of them
+comes from the predecessor:
+
+| loj9 figure | Editions with two work parents | Source | Label |
+| --- | ---: | --- | --- |
+| Link structure (`results/link_structure.json`) | 566,661 | Predecessor catalog, read-only SQL | **Predecessor-schema measurement** |
+| Dump replay (`results/replay.json`) | 564,667 | MusicBrainz JSON dumps `20261017` and `20261021` with Discogs extracts, replayed by gm-design-loj9's own harness | Not a predecessor measurement. It never touched that database, so no schema difference below can move it |
+
 A read-only check (`gm-design-6b8u/sql/predecessor_schema.sql`, run 2026-10-23 UTC)
 compared the four tables the query reads with `database-schema` at `817081d`:
 
