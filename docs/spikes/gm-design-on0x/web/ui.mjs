@@ -98,7 +98,7 @@ export class Chrome {
     } else if (n.level === 1) {
       const ps = n.ref.children;
       const missing = ps.filter((k) => m.recorded(k) !== 'owned');
-      body = `<p class="p-explain">Derived from its ${ps.length} pressing${ps.length > 1 ? 's' : ''}: owned when any pressing is owned. ${missing.length} not owned.</p><span class="p-sec">Pressings</span><ul class="edges-l">${ps.map((k) => `<li>${esc(k.label)} · ${esc(STATES[m.recorded(k)].label)}${k.prov === 'mb' ? ' · MusicBrainz only' : ''}</li>`).join('')}</ul>`;
+      body = `<p class="p-explain">${n.ref.lane ? `This credit's ${ps.length} release${ps.length > 1 ? 's' : ''} with no master on Discogs.` : `Derived from its ${ps.length} pressing${ps.length > 1 ? 's' : ''}: owned when any pressing is owned.`} ${missing.length} not owned.</p><span class="p-sec">Pressings</span><ul class="edges-l">${ps.map((k) => `<li>${esc(k.label)} · ${esc(STATES[m.recorded(k)].label)}${k.prov === 'mb' ? ' · MusicBrainz only' : ''}</li>`).join('')}</ul>`;
     } else {
       const ms = n.ref.children; const own = ms.filter((x) => m.state(x) === 'owned').length;
       body = `<p class="p-explain">${own} of ${ms.length} masters owned.</p>`;

@@ -21,13 +21,26 @@ export function sampler(buckets, r) {
   };
 }
 
-// The histogram band whose node range contains n, so a 20,000-node fixture borrows the shape of
-// the largest real discographies rather than the catalog-wide median.
+// The band whose node range contains n. A fixture takes the band's `near` shape: artists within a
+// factor of 1.6 of the fixture's scale, so a 20,000-node fixture looks like the largest real
+// discographies rather than the catalog-wide median.
 export function bandFor(bands, n) {
   const b = bands.bands.find((x) => n >= x.nodes[0] && n <= x.nodes[1]) || bands.bands[bands.bands.length - 1];
-  const w = b.releases_per_master.reduce((s, x) => s + x[2], 0);
-  return { ...b, mean_releases_per_master: b.releases_per_master.reduce((s, [lo, hi, c]) => s + c * (lo + hi) / 2, 0) / w };
+  const shape = b.near || b;
+  const w = shape.releases_per_master.reduce((s, x) => s + x[2], 0);
+  return {
+    name: b.name,
+    releases_per_master: shape.releases_per_master,
+    masterless: shape.masterless_share_per_artist ?? 0,
+    undated: shape.undated_share_per_artist ?? 0,
+    mean_releases_per_master: shape.releases_per_master.reduce((s, [lo, hi, c]) => s + c * (lo + hi) / 2, 0) / w,
+  };
 }
+
+// Discogs gives masterless releases no year fallback, and 13.8% of them have no year against
+// 7.8% of all releases after the fallback (gm-design-1h2l). The same ratio splits a band's undated
+// share between masterless releases and whole masters with no year.
+const MASTERLESS_UNDATED_RATIO = 13.76 / 7.82;
 
 export function generate({ nodes: N, seed = 1, bands }) {
   const r = rng(seed * 7919 + N);
@@ -45,47 +58,74 @@ export function generate({ nodes: N, seed = 1, bands }) {
   const weights = Array.from({ length: C }, (_, i) => 1 / Math.pow(i + 1, 1.1));
   const wsum = weights.reduce((s, w) => s + w, 0);
   const pickCredit = () => { let x = r() * wsum; for (let i = 0; i < C; i++) if ((x -= weights[i]) < 0) return i; return 0; };
-  let left = N - C;
-  let m = 0, rel = 0;
-  // A collector holds or wants a pressing of about 30% of a small discography's masters, capped near
-  // 40 masters for a large one: nobody collects a quarter of a 7,000-master catalogue.
-  const expectMasters = Math.max(1, (N - C) / (1 + band.mean_releases_per_master));
+  // Split the nodes left after the credits: masterless releases are the band's share of all
+  // releases, and each credit holding any gets one "Releases without a master" lane node.
+  const f = band.masterless, mean = band.mean_releases_per_master;
+  const releasesEst = (N - C) / (1 + (1 - f) / mean);
+  let masterlessLeft = Math.round(f * releasesEst);
+  const lanes = Math.min(C, masterlessLeft);
+  masterlessLeft = Math.max(0, Math.min(masterlessLeft, N - C - lanes - (f < 1 ? 2 : 0)));
+  const pMlUndated = Math.min(0.9, band.undated * MASTERLESS_UNDATED_RATIO);
+  const pMasterUndated = f < 1 ? Math.max(0, (band.undated - f * pMlUndated) / (1 - f)) : 0;
+  // A collector holds or wants a pressing of about 30% of a small discography's masters, capped
+  // near 40 masters for a large one: nobody collects a quarter of a 7,000-master catalogue.
+  const expectMasters = Math.max(1, (N - C - lanes - masterlessLeft) / (1 + mean));
   const pInterest = Math.min(0.3, 40 / expectMasters);
+  let left = N - C - lanes - masterlessLeft;
+  let m = 0, rel = 0;
   const masters = [];
+  const addRelease = (parent, year, j, undated, x) => {
+    const prov = j > 0 && r.chance(0.06) ? 'mb' : 'discogs';
+    const node = { id: `r${rel++}`, level: 2, parent, year: undated ? null : year, label: undated ? `${j === 0 ? 'Original LP' : r.pick(FORMATS)}, no year` : `${j === 0 ? 'Original LP' : r.pick(FORMATS)} ${year}`, kind: 'disc', prov, hist: [], ...(undated ? { undated: true } : {}), ...x };
+    if (prov === 'mb' && r.chance(0.3)) node.known = Math.max(year, TX.min) + r() * Math.max(0.1, TX.max - Math.max(year, TX.min));
+    out.push(node);
+    if (r.chance(0.05) && rel > 1) edges.push({ a: node.id, b: `r${r.int(0, rel - 2)}`, kind: 'company' });
+    return node;
+  };
+  const collect = (node, mode) => {
+    if (node.prov !== 'discogs') return;
+    const t = TX.min + r() * (TX.max - TX.min - 0.2);
+    if (mode === 'owned') { if (r.chance(0.3)) node.hist.push([t - Math.min(1.5, t - TX.min) * r(), 'wanted']); node.hist.push([t, 'owned']); }
+    else node.hist.push([t, mode]);
+    node.hist.sort((a, b) => a[0] - b[0]);
+  };
   while (left >= 2) {
     const ci = m < C ? m : pickCredit();
     const year = Math.min(2026, start + Math.floor(Math.pow(r(), 1.4) * Math.min(55, 2026 - start)));
+    const undated = r.chance(pMasterUndated);
     const id = `m${m++}`;
-    const master = { id, level: 1, parent: `c${ci}`, label: title(r), year, kind: 'sphere', sub: `Master · ${year}` };
+    const master = { id, level: 1, parent: `c${ci}`, label: title(r), year: undated ? null : year, kind: 'sphere', sub: undated ? 'Master · no year' : `Master · ${year}`, ...(undated ? { undated: true } : {}) };
     out.push(master); masters.push(master);
     left--;
     const k = Math.max(1, Math.min(left, relPerMaster()));
     const interest = r.chance(pInterest);
-    let ownedIdx = -1;
-    if (interest) ownedIdx = r.chance(0.7) ? r.int(0, k - 1) : -1;
+    const ownedIdx = interest && r.chance(0.7) ? r.int(0, k - 1) : -1;
     for (let j = 0; j < k; j++) {
       const ry = j === 0 ? year : Math.min(2026, year + Math.floor(Math.pow(r(), 0.7) * (2027 - year)));
-      const prov = j > 0 && r.chance(0.06) ? 'mb' : 'discogs';
-      const node = { id: `r${rel++}`, level: 2, parent: id, year: ry, label: `${j === 0 ? 'Original LP' : r.pick(FORMATS)} ${ry}`, kind: 'disc', prov, hist: [] };
-      if (prov === 'mb' && r.chance(0.3)) node.known = Math.max(ry, TX.min) + r() * Math.max(0.1, TX.max - Math.max(ry, TX.min));
-      if (prov === 'discogs') {
-        if (j === ownedIdx) {
-          const t = TX.min + r() * (TX.max - TX.min - 0.2);
-          if (r.chance(0.3)) node.hist.push([t - Math.min(1.5, t - TX.min) * r(), 'wanted']);
-          node.hist.push([t, 'owned']);
-        } else if (interest && ownedIdx === -1 && j === 0) node.hist.push([TX.min + r() * (TX.max - TX.min), 'wanted']);
-        else if (interest && ownedIdx >= 0 && r.chance(0.04)) node.hist.push([TX.min + r() * (TX.max - TX.min), 'redundant']);
-      }
-      node.hist.sort((a, b) => a[0] - b[0]);
-      out.push(node);
-      if (r.chance(0.05) && rel > 1) edges.push({ a: node.id, b: `r${r.int(0, rel - 2)}`, kind: 'company' });
+      const node = addRelease(id, ry, j, undated);
+      if (j === ownedIdx) collect(node, 'owned');
+      else if (interest && ownedIdx === -1 && j === 0) collect(node, 'wanted');
+      else if (interest && ownedIdx >= 0 && r.chance(0.04)) collect(node, 'redundant');
     }
     left -= k;
   }
+  // The no-master lane: one node per credit on the master plane, parenting that credit's
+  // masterless releases. Its x is the mean of its releases' years, like any master without one.
+  const laneOf = new Map();
+  for (let i = 0; i < lanes; i++) {
+    const node = { id: `nm${i}`, level: 1, parent: `c${i}`, label: 'Releases without a master', year: null, kind: 'sphere', sub: 'No-master lane', lane: 'nomaster' };
+    out.push(node); laneOf.set(i, node);
+  }
+  for (let j = 0; j < masterlessLeft; j++) {
+    const ci = j < lanes ? j : Math.min(lanes - 1, pickCredit());
+    const year = Math.min(2026, start + Math.floor(Math.pow(r(), 1.2) * Math.min(55, 2026 - start)));
+    const node = addRelease(laneOf.get(ci).id, year, 1, r.chance(pMlUndated));
+    if (r.chance(pInterest * 0.5)) collect(node, r.chance(0.7) ? 'owned' : 'wanted');
+  }
   // Shared personnel: chronological neighbours within a credit often share players, and a few links
-  // reach anywhere in the discography, as real line-ups do.
+  // reach anywhere in the discography, as real line-ups do. Undated masters have no neighbours.
   const byCredit = new Map();
-  for (const ms of masters) { if (!byCredit.has(ms.parent)) byCredit.set(ms.parent, []); byCredit.get(ms.parent).push(ms); }
+  for (const ms of masters) { if (ms.undated) continue; if (!byCredit.has(ms.parent)) byCredit.set(ms.parent, []); byCredit.get(ms.parent).push(ms); }
   for (const list of byCredit.values()) {
     list.sort((a, b) => a.year - b.year);
     for (let i = 1; i < list.length; i++) if (r.chance(0.5)) edges.push({ a: list[i - 1].id, b: list[i].id, kind: 'personnel' });

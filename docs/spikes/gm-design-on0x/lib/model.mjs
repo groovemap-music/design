@@ -28,7 +28,8 @@ const TRANSITIONS = [
   { from: ['owned'], to: 'none', label: 'Remove from collection' },
 ];
 const discogsGate = (n) => (n.prov === 'mb' ? { block: DISCOGS_BLOCK } : null);
-const siblingOwned = (n, m) => m.byId.get(n.parent).children.some((k) => k !== n && m.recorded(k) === 'owned');
+// Pressings in the no-master lane share no master, so owning one says nothing about another.
+const siblingOwned = (n, m) => { const p = m.byId.get(n.parent); return !p.lane && p.children.some((k) => k !== n && m.recorded(k) === 'owned'); };
 
 export class Model {
   constructor(fixture, { V = 2026, T = 2026.8, txMax = 2026.8 } = {}) {

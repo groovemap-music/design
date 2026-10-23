@@ -13,7 +13,8 @@ const { chromium } = createRequire(join(PREFIX, 'package.json'))('playwright');
 
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 ? process.argv[i + 1] : d; };
 const BUDGET = arg('budget', '6,20,30');
-const RENDERERS = arg('renderers', 'webgl,webgl-inst,iso,d3').split(',');
+// `webgl-inst:depth` is the instanced renderer with the mockup's nearest-hit picking.
+const RENDERERS = arg('renderers', 'webgl,webgl-inst:depth,webgl-inst,iso,d3').split(',');
 const SCALES = arg('scales', '50,500,5000,20000').split(',').map(Number);
 const LAYOUT = arg('layout', 'mockup');
 const server = await serve(0);
@@ -25,7 +26,8 @@ async function open(r, n, extra = {}, query = '') {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2, ...extra });
   const page = await ctx.newPage();
   page.setDefaultTimeout(180000);
-  await page.goto(`${base}?r=${r}&n=${n}&budget=${BUDGET}${LAYOUT === 'spaced' ? '&spaced=1' : ''}${query}`);
+  const [rr, pick] = r.split(':');
+  await page.goto(`${base}?r=${rr}&n=${n}&budget=${BUDGET}${pick ? `&pick=${pick}` : ''}${LAYOUT === 'spaced' ? '&spaced=1' : ''}${query}`);
   await page.evaluate(() => window.__h.ready);
   if (r === 'd3') await page.evaluate(() => window.__h.app.renderer.settle(20000));
   await page.waitForTimeout(300);
@@ -81,10 +83,11 @@ for (const r of RENDERERS) for (const n of SCALES) {
         const rep = view.rep.get(x);
         if (!rep) return { drawn: false, actions };
         if (!rep.agg) {
-          if (!actions) return { drawn: true, clickable: clickableIn(rep), actions };
+          if (!actions) return { drawn: true, clickable: clickableIn(rep), ring: ringIn(rep), actions };
           app.pinned = state.pinned; app.focus = state.focus; app.selected = null; app.build();
           if (app.renderer.settle) app.renderer.settle(5000);
-          return { drawn: true, clickable: clickableIn(app.view.byId.get(rep.id)), actions };
+          const node = app.view.byId.get(rep.id);
+          return { drawn: true, clickable: clickableIn(node), ring: ringIn(node), actions };
         }
         state = app.drill(state, rep);
         view = app.viewFor(state);
@@ -92,11 +95,20 @@ for (const r of RENDERERS) for (const n of SCALES) {
       return { drawn: false, actions: 200 };
     };
     const clickableIn = (n) => { const R2 = app.renderer; const p = R2.screenPos(n); if (!p.ok || p.x < canvasRect.left || p.x > canvasRect.right || p.y < canvasRect.top || p.y > canvasRect.bottom) return false; return R2.pick(p.x, p.y) === n; };
+    // A pointer is rarely on the exact centre: the share of 8 points at 60% of the node's drawn
+    // radius that still pick it. Occlusion shows here first.
+    const ringIn = (n) => {
+      const R2 = app.renderer, p = R2.screenPos(n), rad = 0.6 * R2.screenRadius(n);
+      let hit = 0;
+      for (let k = 0; k < 8; k++) { const a = k / 8 * Math.PI * 2; if (R2.pick(p.x + Math.cos(a) * rad, p.y + Math.sin(a) * rad) === n) hit++; }
+      return hit / 8;
+    };
     const reset = () => { app.seen = new Set(); if (!app.pinned.size && !app.focus) return; app.pinned = new Set(); app.focus = null; app.selected = null; app.build(); if (app.renderer.settle) app.renderer.settle(5000); };
     const reachAll = (xs) => {
       const rs = xs.map((x) => { const r = reach(x); reset(); return r; });
       const acts = rs.filter((r) => r.drawn).map((r) => r.actions).sort((a, b) => a - b);
-      return { targets: xs.length, reached: rs.filter((r) => r.drawn).length, clickableAfter: rs.filter((r) => r.clickable).length, medianActions: acts.length ? acts[acts.length >> 1] : null, maxActions: acts.length ? acts[acts.length - 1] : null };
+      const rings = rs.filter((r) => r.drawn).map((r) => r.ring);
+      return { targets: xs.length, reached: rs.filter((r) => r.drawn).length, clickableAfter: rs.filter((r) => r.clickable).length, ringShare: rings.length ? +(rings.reduce((a, b) => a + b, 0) / rings.length).toFixed(3) : null, medianActions: acts.length ? acts[acts.length >> 1] : null, maxActions: acts.length ? acts[acts.length - 1] : null };
     };
     // T1: a missing pressing of an owned master.
     const owned = m.nodes.filter((x) => x.level === 1 && m.vis.has(x) && m.state(x) === 'owned' && x.children.some((k) => m.recorded(k) !== 'owned'));

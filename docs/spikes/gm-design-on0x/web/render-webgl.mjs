@@ -5,7 +5,7 @@
 // change, and labels created only for label candidates.
 
 import * as THREE from 'three';
-import { W, D, roundedHull } from '../lib/layout.mjs';
+import { W, D, UNDATED_X, roundedHull } from '../lib/layout.mjs';
 import { STATES, EDGE_KINDS, PLANES } from '../lib/model.mjs';
 import { placeLabels } from '../lib/labels.mjs';
 import { tok } from './ui.mjs';
@@ -46,8 +46,9 @@ function ribbon(pos, ax, az, bx, bz, w, dash, shrinkA, shrinkB, arrow) {
 const geomOf = (pos) => { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); return g; };
 
 export default class WebGLStrata {
-  constructor(stage, view, app, { mode, edges }) {
+  constructor(stage, view, app, { mode, edges, pick }) {
     Object.assign(this, { stage, view, app, mode, drawn: edges });
+    this.pickMode = pick || (mode === 'inst' ? 'resolve' : 'depth');
     this.reduce = app.reduce;
     this.canvas = document.createElement('canvas');
     stage.prepend(this.canvas);
@@ -87,6 +88,9 @@ export default class WebGLStrata {
       g.add(new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-bw, 0, -bd), new THREE.Vector3(bw, 0, -bd), new THREE.Vector3(bw, 0, bd), new THREE.Vector3(-bw, 0, bd)]), new THREE.LineBasicMaterial({ color: this.c.planeLine, transparent: true, opacity: 0.9 })));
       const pts = [];
       for (const t of ticks) { const x = this.view.axis.X(t); pts.push(new THREE.Vector3(x, 0.01, -bd), new THREE.Vector3(x, 0.01, bd)); }
+      // The edge of the undated lane, between UNDATED_X and the first year.
+      const ux = (UNDATED_X + this.view.axis.X(this.view.axis.y0)) / 2;
+      pts.push(new THREE.Vector3(ux, 0.01, -bd), new THREE.Vector3(ux, 0.01, bd));
       g.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: this.c.planeLine, transparent: true, opacity: 0.35 })));
       const hulls = new THREE.Group(); g.add(hulls);
       this.scene.add(g);
@@ -196,12 +200,27 @@ export default class WebGLStrata {
     });
     cv.addEventListener('pointerup', (e) => { if (down && !down.moved) this.app.select(this.pick(e.clientX, e.clientY)); down = null; });
   }
+  // 'depth' is the mockup: the nearest hit wins, so a node in front hides the one the collector
+  // aimed at. 'resolve' collects every hit along the ray and takes the node whose projected centre
+  // is closest to the pointer, preferring the soloed plane, then the selected node's plane.
   pick(cx, cy) {
     const rect = this.canvas.getBoundingClientRect();
     const ray = new THREE.Raycaster(); ray.setFromCamera(new THREE.Vector2(((cx - rect.left) / rect.width) * 2 - 1, -((cy - rect.top) / rect.height) * 2 + 1), this.camera);
-    if (this.mode === 'inst') { const h = ray.intersectObjects(this.pickables, false)[0]; return h ? h.object.userData.nodes[h.instanceId] : null; }
-    const h = ray.intersectObjects(this.view.nodes.map((n) => n.gl.mesh), false)[0];
-    return h ? h.object.userData.node : null;
+    const hits = this.mode === 'inst'
+      ? ray.intersectObjects(this.pickables, false).map((h) => h.object.userData.nodes[h.instanceId])
+      : ray.intersectObjects(this.view.nodes.map((n) => n.gl.mesh), false).map((h) => h.object.userData.node);
+    if (this.pickMode !== 'resolve' || hits.length < 2) return hits[0] || null;
+    const seen = new Set(), cands = [];
+    for (const n of hits) {
+      if (seen.has(n) || (this.solo != null && n.level !== this.solo)) continue;
+      seen.add(n);
+      const p = this.screenPos(n);
+      const plane = this.selected && n.level === this.selected.level ? 0 : 1;
+      cands.push({ n, d: Math.hypot(p.x - cx, p.y - cy), plane });
+    }
+    cands.sort((a, b) => a.d - b.d || a.plane - b.plane);
+    this.lastHits = cands.map((c) => c.n);
+    return cands.length ? cands[0].n : null;
   }
 
   resize() {
@@ -376,6 +395,10 @@ export default class WebGLStrata {
 
   labelBoxes() {
     return (this.lastItems || []).filter((it) => it.shown && it.node && it.el.style.visibility === 'visible').map((it) => { const r = it.el.getBoundingClientRect(); return { x: r.x, y: r.y, w: r.width, h: r.height }; });
+  }
+  screenRadius(n) {
+    const a = this.screenPos(n), r = this.canvas.getBoundingClientRect(), v3 = new THREE.Vector3(n.x + n.size, this.yOf(n.level) + n.h, n.z).project(this.camera);
+    return Math.hypot(r.left + (v3.x + 1) / 2 * r.width - a.x, r.top + (1 - v3.y) / 2 * r.height - a.y);
   }
   screenPos(n) {
     const r = this.canvas.getBoundingClientRect(), v3 = new THREE.Vector3(n.x, this.yOf(n.level) + n.h, n.z).project(this.camera);

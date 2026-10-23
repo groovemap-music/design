@@ -97,6 +97,7 @@ export default class D3Graph {
     }
     return c;
   }
+  screenRadius(n) { const d = this.nodes.find((x) => x.n === n); return this.radius(d) * this.t.k; }
   screenPos(n) { const d = this.nodes.find((x) => x.n === n); const r = this.svgEl.getBoundingClientRect(); const [x, y] = this.t.apply([d.x, d.y]); return { x: r.left + x, y: r.top + y, ok: true }; }
   pick(cx, cy) { const el = document.elementFromPoint(cx, cy); const g = el && el.closest('g'); const d = g && this.d3.select(g).datum(); return d && d.n ? d.n : null; }
   nodesOnScreen() { let c = 0; for (const d of this.nodes) { const [x, y] = this.t.apply([d.x, d.y]); if (x >= 0 && x <= this.w && y >= 0 && y <= this.h) c++; } return c; }

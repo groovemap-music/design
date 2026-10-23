@@ -9,7 +9,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { generate, SCALES } from '../lib/fixture.mjs';
 import { Model } from '../lib/model.mjs';
-import { View } from '../lib/view.mjs';
+import { fitView } from '../lib/view.mjs';
 import { layoutModel, invariants } from '../lib/layout.mjs';
 
 const HERE = dirname(dirname(fileURLToPath(import.meta.url)));
@@ -21,8 +21,7 @@ const models = new Map();
 for (const n of SCALES) for (const s of SEEDS) models.set(`${n}:${s}`, new Model(generate({ nodes: n, seed: s, bands })));
 
 const check = (m, budget, gutter, pinned, focus, sizeScale = 1, spaced = SPACED) => {
-  const v = new View(m, { budget, pinned, focus, sizeScale });
-  layoutModel(v, { gutter, spaced });
+  const v = fitView(m, { budget, pinned, focus, spaced, gutter, sizeScale });
   const all = invariants(v, { policy: 'all' });
   const planar = invariants(v, { policy: 'planar' });
   return { v, perPlane: v.perPlane(), intrusions: planar.planes.map((p) => p.intrusions), overlaps: planar.planes.map((p) => p.overlaps), crossingsAll: all.crossings, crossings: planar.crossings, drawnEdges: planar.drawnEdges, edgesAll: all.drawnEdges };
@@ -44,7 +43,7 @@ const raw = (spaced) => SCALES.map((n) => {
 });
 
 // 2. Budget sweep. A configuration passes only if every scale and seed holds all three at zero.
-const B0 = [3, 4, 5, 6, 8, 10], B1 = [12, 16, 20, 25, 30, 40, 50], B2 = [16, 20, 25, 30, 40, 50, 60, 80, 100], GUTTERS = [0, 4];
+const B0 = [3, 4, 6, 8], B1 = [12, 16, 20, 25, 30, 40], B2 = [16, 20, 25, 30, 40, 50, 60], GUTTERS = [0, 4];
 const sweep = [];
 // sizeScale 0.5 halves every node's radius (the mockup's sizes are 4.2, 2.4, 1.35 world units).
 for (const sizeScale of [1, 0.5]) for (const gutter of GUTTERS) for (const b0 of B0) for (const b1 of B1) for (const b2 of B2) {

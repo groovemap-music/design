@@ -17,14 +17,14 @@ holds aggregate counts only. Dumps, intermediate files, npm packages, and browse
 | File | Role |
 | --- | --- |
 | `lib/rng.mjs` | Seeded PRNG and invented-word labels |
-| `lib/fixture.mjs` | Synthetic credit → master → release discographies at 50, 500, 5,000, and 20,000 nodes, with releases per master drawn from the measured size band |
+| `lib/fixture.mjs` | Synthetic credit → master → release discographies at 50, 500, 5,000, and 20,000 nodes. Releases per master, the masterless share, and the undated share come from the measured size band. Each credit with masterless releases gets a no-master lane node, and undated releases and masters carry `undated` |
 | `lib/model.mjs` | CFG_A's state machine: derived master and credit states, transitions, the Discogs-alias guard, the redundant-want redirect, and the read-only past |
-| `lib/layout.mjs` | The mockup's time icicle, hull, and point-in-polygon code, plus the invariants: hull intrusions, node overlaps, same-plane edge crossings, and the planar edge rule |
-| `lib/view.mjs` | What gets drawn: every node (the mockup) or the aggregation rule under a per-plane node budget, with paged drill-down |
+| `lib/layout.mjs` | The mockup's time icicle, hull, and point-in-polygon code, the undated lane at the left edge of the year axis, and the invariants: hull intrusions, node overlaps, same-plane edge crossings, and the planar edge rule |
+| `lib/view.mjs` | What gets drawn: every node (the mockup) or the aggregation rule under a per-plane node budget, with paged drill-down. `fitView` tightens the budget until each plane's footprints fit its depth |
 | `lib/labels.mjs` | The mockup's greedy label placement and an overlap census |
-| `web/` | The harness page. One renderer per load: `webgl` (the mockup engine as is), `webgl-inst` (the same scene with instancing), `iso` (2.5D Canvas 2D), and `d3` (graph-explorer's force graph) |
+| `web/` | The harness page. One renderer per load: `webgl` (the mockup engine as is), `webgl-inst` (the same scene with instancing and occlusion-resolving picking), `iso` (2.5D Canvas 2D), and `d3` (graph-explorer's force graph) |
 | `scripts/serve.mjs` | Static server with a strict Content-Security-Policy. It serves vendor files only when their SHA-256 matches the pins |
-| `scripts/mb_rg_artists.mjs`, `scripts/size_bands.mjs` | The size-band quick count |
+| `scripts/size_bands_discogs.py` | The size bands: a read-only query over gm-design-1h2l's Discogs database |
 | `scripts/layout_sweep.mjs` | Raw invariants per scale, then the budget sweep and drill-down checks |
 | `scripts/measure_perf.mjs` | Playwright frame-rate and label matrix |
 | `scripts/check_a11y_tasks.mjs` | Keyboard, reduced motion, the table against the model, and task reachability |
@@ -52,18 +52,12 @@ versions use. Afterwards, re-run their own `playwright install`.
 Run everything from this directory. Node 24 or later is assumed.
 
 ```sh
-# 1. Size bands (aggregate counts only). The MusicBrainz release-group dump is read from the shared
-#    cache. The per-release TSV is gm-design-1h2l's compact stream of the release dump
-#    (rg_mbid in column 0). The (rg, artist) pairs stay in the work directory.
-W=~/.cache/groovemap-spikes/gm-design-on0x/data
-xz -dc ~/.cache/groovemap-spikes/dumps/musicbrainz_20261021-001001_release-group.tar.xz \
-  | tar -xOf - mbdump/release-group \
-  | node scripts/mb_rg_artists.mjs $W/mb_rg_artists_20261021-001001.tsv.gz
-node scripts/size_bands.mjs --label "<source description>" \
-  --releases ~/.cache/groovemap-spikes/gm-design-1h2l/data/mb_release_20261021-001001.tsv.gz \
-  --master-col 0 --credits $W/mb_rg_artists_20261021-001001.tsv.gz > results/size_bands.json
+# 1. Size bands (aggregate counts only) from gm-design-1h2l's Discogs 20261001 database,
+#    opened read-only. See gm-design-1h2l's README for how it is built.
+uv run --no-project --with duckdb==2.0.0 python -I scripts/size_bands_discogs.py \
+  ~/.cache/groovemap-spikes/gm-design-1h2l/spike.duckdb > results/size_bands.json
 
-# 2. Layout invariants and the budget sweep (10 seeds per scale, about 7 minutes each on an M1 Pro).
+# 2. Layout invariants and the budget sweep (10 seeds per scale; about 4 and 9 minutes on an M1 Pro).
 LAYOUT=mockup SEEDS=10 node scripts/layout_sweep.mjs > results/layout-mockup.json
 LAYOUT=spaced SEEDS=10 node scripts/layout_sweep.mjs > results/layout.json
 node --test test/*.test.mjs
@@ -90,16 +84,19 @@ Step 2's chosen layout and budget feed steps 3 and 4. The values shown are the o
 | `n` | target node count (the fixture lands within one node of it) |
 | `seed` | fixture seed, default 1 |
 | `budget` | `b0,b1,b2` per-plane node budget. Omit it to draw everything, as the mockup does |
-| `spaced` | `1` for the spaced icicle |
+| `spaced` | `1` for the spaced icicle, with `fitView`'s footprint check |
+| `pick` | `depth` (the mockup: nearest hit) or `resolve` (all hits, nearest projected centre). The default is `resolve` for `webgl-inst` and `depth` for `webgl` |
 | `gutter` | world units between top-level groups |
 | `edges` | `planar` (default) or `all` (the mockup) |
 
 `window.__h.app` exposes `orbitFor(ms)`, `census()`, and the model, view, and renderer to the
 measurement scripts.
 
-## Shared dump cache
+## Shared data
 
-`~/.cache/groovemap-spikes/dumps/` holds dumps that several spikes read. A download takes the lock
-by creating `<file>.lock` with `mkdir`, which is atomic. It writes `<file>.part`, verifies it, and
-renames it, then removes the lock. Readers wait while the lock exists. gm-design-1h2l's
-`scripts/fetch_dump.sh` implements this. This harness only reads the cache and never downloads.
+The harness reads gm-design-1h2l's DuckDB file (`~/.cache/groovemap-spikes/gm-design-1h2l/spike.duckdb`)
+read-only and downloads nothing. The molecule's convention for the shared dump cache
+(`~/.cache/groovemap-spikes/dumps/`) is a `dumps/<file>.lock` directory made with `mkdir` around
+a download to `<file>.part`, verified and renamed before the lock is removed, and
+`dumps/.fetch.lock` around every request to data.discogs.com. Releases dumps are streamed, never
+cached.

@@ -34,8 +34,11 @@ export function inPoly(p, poly) {
 // `gutter` (world units) reserves space between top-level groups. `spaced` weights each node by the
 // larger of its children's weights and its own footprint (2 * size + 0.6), so siblings never sit
 // closer than their discs, whatever the leaf counts. gutter 0 and spaced false is the mockup.
+// Undated nodes (no year even after the master-year fallback) sit in a lane at the left edge of
+// the plane, outside the year axis, which starts UNDATED_GAP units further right.
+export const UNDATED_X = -W / 2 + 4, UNDATED_GAP = 8;
 export function layoutTimeIcicle(m, { y0, y1, gutter = 0, spaced = false }) {
-  const X = (y) => -W / 2 + 6 + (y - y0) / (y1 - y0) * (W - 12);
+  const X = (y) => -W / 2 + 4 + UNDATED_GAP + (y - y0) / (y1 - y0) * (W - 10 - UNDATED_GAP);
   const kids = (n) => n.children;
   const memo = new Map();
   const leaves = spaced
@@ -45,7 +48,7 @@ export function layoutTimeIcicle(m, { y0, y1, gutter = 0, spaced = false }) {
   const total = roots.reduce((s, r) => s + leaves(r), 0);
   const place = (n, a, b) => {
     n.z = (a + b) / 2;
-    const ks = kids(n).slice().sort((p, q) => (p.year || 0) - (q.year || 0));
+    const ks = kids(n).slice().sort((p, q) => (p.year ?? -Infinity) - (q.year ?? -Infinity));
     const L = leaves(n); let c = a;
     for (const k of ks) { const w = (b - a) * leaves(k) / L; place(k, c, c + w); c += w; }
   };
@@ -54,8 +57,12 @@ export function layoutTimeIcicle(m, { y0, y1, gutter = 0, spaced = false }) {
   for (const r of roots) { const w = usable * leaves(r) / total; place(r, z, z + w); z += w + gutter; }
   const setX = (n) => {
     for (const k of n.children) setX(k);
-    if (n.year != null) n.x = X(n.year);
-    else { const ks = kids(n); n.x = ks.length ? ks.reduce((s, k) => s + k.x, 0) / ks.length : 0; }
+    if (n.undated) n.x = UNDATED_X;
+    else if (n.year != null) n.x = X(n.year);
+    else {
+      const ks = kids(n).filter((k) => !k.undated), all = kids(n);
+      n.x = ks.length ? ks.reduce((s, k) => s + k.x, 0) / ks.length : all.length ? UNDATED_X : 0;
+    }
   };
   roots.forEach(setX);
   m.axis = { X, y0, y1 };

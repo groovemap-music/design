@@ -5,8 +5,8 @@
 
 import { generate } from '../lib/fixture.mjs';
 import { Model } from '../lib/model.mjs';
-import { View } from '../lib/view.mjs';
-import { layoutModel, hullIntrusions, drawnEdges, samePlaneCrossings } from '../lib/layout.mjs';
+import { fitView } from '../lib/view.mjs';
+import { hullIntrusions, drawnEdges, samePlaneCrossings } from '../lib/layout.mjs';
 import { overlapCensus } from '../lib/labels.mjs';
 import { Chrome } from './ui.mjs';
 
@@ -19,6 +19,7 @@ const opts = {
   gutter: +(P.get('gutter') || 0),
   edges: P.get('edges') || 'planar',
   spaced: P.get('spaced') === '1',
+  pick: P.get('pick') || null,
 };
 const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const RENDERERS = { webgl: './render-webgl.mjs', 'webgl-inst': './render-webgl.mjs', iso: './render-iso.mjs', d3: './render-d3.mjs' };
@@ -67,7 +68,7 @@ class App {
     this.inv = inv;
     if (!this.chrome) this.chrome = new Chrome(this);
     this.chrome.readout(inv);
-    this.renderer = new this.Renderer(document.querySelector('.stage'), this.view, this, { mode: opts.r === 'webgl-inst' ? 'inst' : 'mesh', edges });
+    this.renderer = new this.Renderer(document.querySelector('.stage'), this.view, this, { mode: opts.r === 'webgl-inst' ? 'inst' : 'mesh', edges, pick: opts.pick });
     this.renderer.render();
     this.buildMs = performance.now() - tb;
   }
@@ -115,9 +116,7 @@ class App {
     this.renderer.update(); this.chrome.renderPanel();
   }
   viewFor({ pinned, focus }) {
-    const view = new View(this.model, { budget: opts.budget, pinned, focus });
-    layoutModel(view, { gutter: opts.gutter, spaced: opts.spaced });
-    return view;
+    return fitView(this.model, { budget: opts.budget, pinned, focus, spaced: opts.spaced, gutter: opts.gutter });
   }
 
   // Drill-down. A pressings count node pages its master's pressings onto the release plane. A

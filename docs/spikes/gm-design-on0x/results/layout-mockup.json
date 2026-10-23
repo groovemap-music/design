@@ -1,6 +1,6 @@
 {
  "seeds": 10,
- "bands": "MusicBrainz JSON dumps 20261021-001001: release (via gm-design-1h2l's compact TSV) and release-group; release group stands in for master, artist credit for credit",
+ "bands": "Discogs 20261001 via gm-design-1h2l's spike.duckdb (load_db.py); query: scripts/size_bands_discogs.py",
  "layout": "mockup",
  "raw": {
   "mockup": [
@@ -8,8 +8,8 @@
     "scale": 50,
     "perPlane": [
      4,
-     21,
-     25
+     10,
+     36
     ],
     "intrusions": [
      0,
@@ -18,79 +18,79 @@
     ],
     "overlaps": [
      0,
-     4,
-     0
+     0,
+     6
     ],
     "crossingsAllEdges": 0,
     "crossingsPlanar": 0,
-    "edgesAll": 14,
-    "edgesPlanar": 11
+    "edgesAll": 7,
+    "edgesPlanar": 4
    },
    {
     "scale": 500,
     "perPlane": [
      11,
-     176,
-     314
+     55,
+     436
     ],
     "intrusions": [
-     6,
-     97,
-     132
+     4,
+     41,
+     193
     ],
     "overlaps": [
-     6,
-     375,
-     255
+     4,
+     27,
+     602
     ],
-    "crossingsAllEdges": 92,
+    "crossingsAllEdges": 56,
     "crossingsPlanar": 0,
-    "edgesAll": 135,
-    "edgesPlanar": 90
+    "edgesAll": 52,
+    "edgesPlanar": 22
    },
    {
     "scale": 5000,
     "perPlane": [
      35,
-     1857,
-     3143
+     320,
+     4649
     ],
     "intrusions": [
-     182,
-     5481,
-     7726
+     96,
+     909,
+     11346
     ],
     "overlaps": [
-     146,
-     34470,
-     27252
+     80,
+     840,
+     88520
     ],
-    "crossingsAllEdges": 9433,
+    "crossingsAllEdges": 5712,
     "crossingsPlanar": 0,
-    "edgesAll": 1371,
-    "edgesPlanar": 944
+    "edgesAll": 433,
+    "edgesPlanar": 142
    },
    {
     "scale": 20000,
     "perPlane": [
      71,
-     7324,
-     12638
+     1351,
+     18689
     ],
     "intrusions": [
-     1094,
-     49057,
-     70180
+     672,
+     9184,
+     102525
     ],
     "overlaps": [
-     815,
-     492879,
-     430712
+     526,
+     13871,
+     1069495
     ],
-    "crossingsAllEdges": 153971,
+    "crossingsAllEdges": 86002,
     "crossingsPlanar": 0,
-    "edgesAll": 5444,
-    "edgesPlanar": 3742
+    "edgesAll": 1742,
+    "edgesPlanar": 583
    }
   ],
   "spaced": [
@@ -98,8 +98,8 @@
     "scale": 50,
     "perPlane": [
      4,
-     21,
-     25
+     10,
+     36
     ],
     "intrusions": [
      0,
@@ -108,92 +108,92 @@
     ],
     "overlaps": [
      0,
-     5,
-     0
+     0,
+     6
     ],
     "crossingsAllEdges": 0,
     "crossingsPlanar": 0,
-    "edgesAll": 14,
-    "edgesPlanar": 11
+    "edgesAll": 7,
+    "edgesPlanar": 4
    },
    {
     "scale": 500,
     "perPlane": [
      11,
-     176,
-     314
+     55,
+     436
     ],
     "intrusions": [
-     6,
-     95,
-     127
+     4,
+     39,
+     194
     ],
     "overlaps": [
-     6,
-     371,
-     256
+     4,
+     27,
+     612
     ],
-    "crossingsAllEdges": 88,
+    "crossingsAllEdges": 56,
     "crossingsPlanar": 0,
-    "edgesAll": 135,
-    "edgesPlanar": 90
+    "edgesAll": 52,
+    "edgesPlanar": 22
    },
    {
     "scale": 5000,
     "perPlane": [
      35,
-     1857,
-     3143
+     320,
+     4649
     ],
     "intrusions": [
-     180,
-     5387,
-     7643
+     96,
+     908,
+     11345
     ],
     "overlaps": [
-     147,
-     34374,
-     27200
+     80,
+     838,
+     88703
     ],
-    "crossingsAllEdges": 9441,
+    "crossingsAllEdges": 5712,
     "crossingsPlanar": 0,
-    "edgesAll": 1371,
-    "edgesPlanar": 944
+    "edgesAll": 433,
+    "edgesPlanar": 142
    },
    {
     "scale": 20000,
     "perPlane": [
      71,
-     7324,
-     12638
+     1351,
+     18689
     ],
     "intrusions": [
-     1096,
-     49222,
-     70074
+     672,
+     9177,
+     102524
     ],
     "overlaps": [
-     821,
-     491685,
-     433996
+     527,
+     13864,
+     1069478
     ],
-    "crossingsAllEdges": 154049,
+    "crossingsAllEdges": 86010,
     "crossingsPlanar": 0,
-    "edgesAll": 5444,
-    "edgesPlanar": 3742
+    "edgesAll": 1742,
+    "edgesPlanar": 583
    }
   ]
  },
  "sweep": {
-  "configurations": 1512,
-  "passing": 54,
+  "configurations": 672,
+  "passing": 8,
   "best": {
    "sizeScale": 1,
    "gutter": 0,
    "budget": [
     3,
     12,
-    16
+    25
    ],
    "pass": true,
    "worst": {
@@ -205,7 +205,7 @@
    "maxPlane": [
     3,
     12,
-    13
+    25
    ]
   },
   "frontier": [
@@ -214,32 +214,45 @@
     "budget": [
      3,
      12,
-     16
+     25
     ],
     "maxPlane": [
      3,
      12,
-     13
+     25
     ]
    },
    {
     "gutter": 0,
     "budget": [
-     6,
-     12,
+     4,
+     16,
      16
     ],
     "maxPlane": [
-     6,
+     4,
+     16,
+     16
+    ]
+   },
+   {
+    "gutter": 4,
+    "budget": [
+     4,
      12,
-     10
+     20
+    ],
+    "maxPlane": [
+     4,
+     12,
+     20
     ]
    }
   ],
   "perPlaneMax": [
-   6,
-   12,
-   13
+   4,
+   16,
+   25
   ],
   "nearFailures": [
    {
@@ -247,20 +260,20 @@
     "gutter": 0,
     "budget": [
      3,
-     16,
-     16
+     12,
+     30
     ],
     "pass": false,
     "worst": {
      "intrusions": 0,
-     "overlaps": 4,
+     "overlaps": 5,
      "crossings": 0,
      "overBudget": 0
     },
     "maxPlane": [
      3,
-     16,
-     16
+     12,
+     27
     ]
    },
    {
@@ -268,20 +281,20 @@
     "gutter": 0,
     "budget": [
      3,
-     16,
-     20
+     12,
+     40
     ],
     "pass": false,
     "worst": {
      "intrusions": 0,
-     "overlaps": 4,
+     "overlaps": 12,
      "crossings": 0,
      "overBudget": 0
     },
     "maxPlane": [
      3,
-     16,
-     18
+     12,
+     36
     ]
    },
    {
@@ -295,14 +308,14 @@
     "pass": false,
     "worst": {
      "intrusions": 0,
-     "overlaps": 4,
+     "overlaps": 2,
      "crossings": 0,
      "overBudget": 0
     },
     "maxPlane": [
      3,
      16,
-     18
+     25
     ]
    },
    {
@@ -316,14 +329,14 @@
     "pass": false,
     "worst": {
      "intrusions": 0,
-     "overlaps": 4,
+     "overlaps": 5,
      "crossings": 0,
      "overBudget": 0
     },
     "maxPlane": [
      3,
      16,
-     18
+     30
     ]
    },
    {
@@ -331,41 +344,20 @@
     "gutter": 0,
     "budget": [
      3,
-     20,
-     16
+     16,
+     40
     ],
     "pass": false,
     "worst": {
      "intrusions": 0,
-     "overlaps": 7,
+     "overlaps": 15,
      "crossings": 0,
      "overBudget": 0
     },
     "maxPlane": [
      3,
-     20,
-     16
-    ]
-   },
-   {
-    "sizeScale": 1,
-    "gutter": 0,
-    "budget": [
-     3,
-     20,
-     20
-    ],
-    "pass": false,
-    "worst": {
-     "intrusions": 0,
-     "overlaps": 7,
-     "crossings": 0,
-     "overBudget": 0
-    },
-    "maxPlane": [
-     3,
-     20,
-     20
+     16,
+     40
     ]
    },
    {
@@ -379,14 +371,35 @@
     "pass": false,
     "worst": {
      "intrusions": 0,
-     "overlaps": 7,
+     "overlaps": 3,
      "crossings": 0,
      "overBudget": 0
     },
     "maxPlane": [
      3,
      20,
-     22
+     25
+    ]
+   },
+   {
+    "sizeScale": 1,
+    "gutter": 0,
+    "budget": [
+     3,
+     20,
+     30
+    ],
+    "pass": false,
+    "worst": {
+     "intrusions": 0,
+     "overlaps": 5,
+     "crossings": 0,
+     "overBudget": 0
+    },
+    "maxPlane": [
+     3,
+     20,
+     30
     ]
    },
    {
@@ -395,19 +408,19 @@
     "budget": [
      3,
      25,
-     16
+     25
     ],
     "pass": false,
     "worst": {
      "intrusions": 0,
-     "overlaps": 9,
+     "overlaps": 11,
      "crossings": 0,
      "overBudget": 0
     },
     "maxPlane": [
      3,
      25,
-     16
+     25
     ]
    }
   ],
@@ -415,9 +428,9 @@
    "sizeScale": 0.5,
    "gutter": 0,
    "budget": [
-    8,
-    25,
-    25
+    4,
+    30,
+    40
    ],
    "pass": true,
    "worst": {
@@ -427,106 +440,106 @@
     "overBudget": 0
    },
    "maxPlane": [
-    8,
-    25,
-    24
+    4,
+    30,
+    40
    ]
   }
  },
  "expansion": {
   "pinAll": {
-   "opened": 10,
+   "opened": 40,
    "worst": {
-    "intrusions": 1,
-    "overlaps": 13,
+    "intrusions": 9,
+    "overlaps": 21309,
     "crossings": 0
    },
    "maxPlane": [
     3,
-    12,
-    32
+    9,
+    919
    ]
   },
   "focusPaged": {
-   "opened": 10,
+   "opened": 40,
    "worst": {
-    "intrusions": 0,
-    "overlaps": 0,
+    "intrusions": 1,
+    "overlaps": 6,
     "crossings": 0
    },
    "maxPlane": [
     3,
     12,
-    15
+    25
    ]
   }
  },
- "drillDownPageMax": 15,
+ "drillDownPageMax": 0,
  "masterPages": [
   {
    "per": 2,
-   "opened": 39,
-   "violations": 0,
+   "opened": 29,
+   "violations": 3,
    "overBudget": 0,
    "maxPlane": [
     3,
     12,
-    15
+    25
    ]
   },
   {
    "per": 4,
-   "opened": 39,
-   "violations": 2,
+   "opened": 29,
+   "violations": 8,
    "overBudget": 0,
    "maxPlane": [
     3,
     12,
-    15
+    25
    ]
   },
   {
    "per": 6,
-   "opened": 39,
-   "violations": 0,
-   "overBudget": 0,
+   "opened": 29,
+   "violations": 2,
+   "overBudget": 21,
    "maxPlane": [
     3,
-    12,
-    15
+    14,
+    25
    ]
   },
   {
    "per": 8,
-   "opened": 39,
-   "violations": 15,
-   "overBudget": 0,
+   "opened": 29,
+   "violations": 114,
+   "overBudget": 24,
    "maxPlane": [
     3,
-    12,
-    15
+    16,
+    25
    ]
   },
   {
    "per": 10,
-   "opened": 39,
-   "violations": 81,
-   "overBudget": 30,
+   "opened": 29,
+   "violations": 172,
+   "overBudget": 24,
    "maxPlane": [
     3,
-    14,
-    15
+    18,
+    25
    ]
   },
   {
    "per": 12,
-   "opened": 39,
-   "violations": 241,
-   "overBudget": 35,
+   "opened": 29,
+   "violations": 221,
+   "overBudget": 24,
    "maxPlane": [
     3,
-    16,
-    18
+    20,
+    25
    ]
   }
  ]

@@ -159,6 +159,7 @@ export default class IsoStrata {
   setSolo(l) { this.solo = l; this.animateTo({ el: l == null ? CAM.el : 1.5 }); this.dirty = true; }
   select(n) { this.selected = n; this.selSet = n ? this.view.cylinder(n) : null; this.dirty = true; }
   labelBoxes() { return (this.lastItems || []).filter((it) => it.shown).map((it) => { const r = it.el.getBoundingClientRect(); return { x: r.x, y: r.y, w: r.width, h: r.height }; }); }
+  screenRadius(n) { this.frame(); return n.size * this.s * (n.kind === 'disc' ? this.se : 1); }
   screenPos(n) { this.frame(); const r = this.canvas.getBoundingClientRect(), p = this.P(n.x, this.yOf(n.level) + n.h, n.z); return { x: r.left + p[0], y: r.top + p[1], ok: true }; }
   nodesOnScreen() { this.frame(); let c = 0; for (const n of this.view.nodes) { const p = this.P(n.x, this.yOf(n.level), n.z); if (p[0] >= 0 && p[0] <= this.w && p[1] >= 0 && p[1] <= this.h) c++; } return c; }
   dispose() { this.ro.disconnect(); this.canvas.remove(); this.labelsEl.textContent = ''; }

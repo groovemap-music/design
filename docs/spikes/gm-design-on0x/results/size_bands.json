@@ -1,74 +1,94 @@
 {
- "source": "MusicBrainz JSON dumps 20261021-001001: release (via gm-design-1h2l's compact TSV) and release-group; release group stands in for master, artist credit for credit",
- "releases": 5867935,
- "masterless_releases": 0,
- "masters_with_releases": 4589277,
- "master_artist_rows": 5139284,
- "credits_with_masters": 1127651,
- "releases_per_master": {
-  "p50": 1,
-  "p90": 2,
-  "p99": 5,
-  "p999": 15,
-  "max": 294
- },
+ "source": "Discogs 20261001 via gm-design-1h2l's spike.duckdb (load_db.py); query: scripts/size_bands_discogs.py",
+ "releases": 19492392,
+ "masterless_releases": 8108112,
+ "undated_releases": 1524526,
+ "undated_raw": 2593700,
+ "credits_with_releases": 2882133,
  "credit_nodes": {
-  "p50": 5,
-  "p90": 20,
-  "p99": 115,
-  "p999": 431,
-  "p9999": 1452
+  "p50": 3,
+  "p90": 13,
+  "p99": 103,
+  "p999": 668,
+  "p9999": 3465
+ },
+ "releases_per_master": {
+  "p50": 2,
+  "p90": 7,
+  "p99": 32,
+  "p999": 112,
+  "max": 1542
  },
  "largest_credits": [
   {
-   "nodes": 15136,
-   "masters": 6320,
-   "releases": 8815
+   "nodes": 1530999,
+   "masters": 174943,
+   "releases": 1356055,
+   "masterless": 830287,
+   "undated": 140106
   },
   {
-   "nodes": 14661,
-   "masters": 6196,
-   "releases": 8464
+   "nodes": 97046,
+   "masters": 9362,
+   "releases": 87683,
+   "masterless": 67554,
+   "undated": 40604
   },
   {
-   "nodes": 14614,
-   "masters": 6110,
-   "releases": 8503
+   "nodes": 66145,
+   "masters": 7343,
+   "releases": 58801,
+   "masterless": 12837,
+   "undated": 7549
   },
   {
-   "nodes": 10290,
-   "masters": 2145,
-   "releases": 8144
+   "nodes": 62128,
+   "masters": 8062,
+   "releases": 54065,
+   "masterless": 13754,
+   "undated": 7857
   },
   {
-   "nodes": 6944,
-   "masters": 3050,
-   "releases": 3893
+   "nodes": 51667,
+   "masters": 7007,
+   "releases": 44659,
+   "masterless": 12737,
+   "undated": 6496
   },
   {
-   "nodes": 6619,
-   "masters": 2933,
-   "releases": 3685
+   "nodes": 38062,
+   "masters": 1627,
+   "releases": 36434,
+   "masterless": 4228,
+   "undated": 1955
   },
   {
-   "nodes": 6565,
-   "masters": 3281,
-   "releases": 3283
+   "nodes": 33603,
+   "masters": 3731,
+   "releases": 29871,
+   "masterless": 5989,
+   "undated": 3994
   },
   {
-   "nodes": 6511,
-   "masters": 2773,
-   "releases": 3737
+   "nodes": 32445,
+   "masters": 1996,
+   "releases": 30448,
+   "masterless": 4504,
+   "undated": 1534
   },
   {
-   "nodes": 5486,
-   "masters": 1908,
-   "releases": 3577
+   "nodes": 28605,
+   "masters": 3367,
+   "releases": 25237,
+   "masterless": 6656,
+   "undated": 2879
   },
   {
-   "nodes": 5406,
-   "masters": 2185,
-   "releases": 3220
+   "nodes": 27399,
+   "masters": 1324,
+   "releases": 26074,
+   "masterless": 4210,
+   "undated": 1174
   }
  ],
  "bands": [
@@ -78,38 +98,127 @@
     1,
     158
    ],
-   "credits": 1120915,
-   "share": 0.994027,
+   "credits": 2864988,
+   "releases_on_masters": 6291083,
+   "masterless_releases": 7334382,
+   "undated_releases": 1213707,
+   "undated_raw": 1574506,
+   "masters": 2073300,
+   "masterless_share_per_artist": 0.8007,
+   "undated_share_per_artist": 0.1348,
    "releases_per_master": [
     [
      1,
      1,
-     3658933
+     63622
     ],
     [
      2,
      2,
-     423216
+     621364
     ],
     [
      3,
      4,
-     125924
+     229507
     ],
     [
      5,
      9,
-     26729
+     71401
     ],
     [
      10,
      30,
-     2907
+     13646
     ],
     [
      31,
      100,
-     50
+     454
+    ],
+    [
+     101,
+     400,
+     6
+    ]
+   ],
+   "near": {
+    "nodes": [
+     31,
+     80
+    ],
+    "credits": 77635,
+    "masterless_share_per_artist": 0.3756,
+    "undated_share_per_artist": 0.0677,
+    "releases_per_master": [
+     [
+      1,
+      1,
+      38034
+     ],
+     [
+      2,
+      2,
+      496006
+     ],
+     [
+      3,
+      4,
+      271487
+     ],
+     [
+      5,
+      9,
+      142940
+     ],
+     [
+      10,
+      30,
+      48521
+     ],
+     [
+      31,
+      100,
+      3012
+     ]
+    ]
+   },
+   "releases_per_master_pooled": [
+    [
+     1,
+     1,
+     108169
+    ],
+    [
+     2,
+     2,
+     1159574
+    ],
+    [
+     3,
+     4,
+     543733
+    ],
+    [
+     5,
+     9,
+     210171
+    ],
+    [
+     10,
+     30,
+     50006
+    ],
+    [
+     31,
+     100,
+     1638
+    ],
+    [
+     101,
+     400,
+     9
     ]
    ]
   },
@@ -119,43 +228,142 @@
     159,
     1581
    ],
-   "credits": 6637,
-   "share": 0.005886,
+   "credits": 16239,
+   "releases_on_masters": 4247044,
+   "masterless_releases": 1040843,
+   "undated_releases": 351396,
+   "undated_raw": 853069,
+   "masters": 765095,
+   "masterless_share_per_artist": 0.222,
+   "undated_share_per_artist": 0.068,
    "releases_per_master": [
     [
      1,
      1,
-     570835
+     42721
     ],
     [
      2,
      2,
-     109407
+     360115
     ],
     [
      3,
      4,
-     55718
+     262133
     ],
     [
      5,
      9,
-     25723
+     186858
     ],
     [
      10,
      30,
-     8514
+     124674
     ],
     [
      31,
      100,
-     536
+     22534
     ],
     [
      101,
      400,
-     10
+     962
+    ],
+    [
+     401,
+     1000,
+     3
+    ]
+   ],
+   "near": {
+    "nodes": [
+     312,
+     800
+    ],
+    "credits": 5104,
+    "masterless_share_per_artist": 0.1929,
+    "undated_share_per_artist": 0.0671,
+    "releases_per_master": [
+     [
+      1,
+      1,
+      44819
+     ],
+     [
+      2,
+      2,
+      332528
+     ],
+     [
+      3,
+      4,
+      253153
+     ],
+     [
+      5,
+      9,
+      194142
+     ],
+     [
+      10,
+      30,
+      143233
+     ],
+     [
+      31,
+      100,
+      30990
+     ],
+     [
+      101,
+      400,
+      1135
+     ]
+    ]
+   },
+   "releases_per_master_pooled": [
+    [
+     1,
+     1,
+     38061
+    ],
+    [
+     2,
+     2,
+     279005
+    ],
+    [
+     3,
+     4,
+     208734
+    ],
+    [
+     5,
+     9,
+     141864
+    ],
+    [
+     10,
+     30,
+     82951
+    ],
+    [
+     31,
+     100,
+     13838
+    ],
+    [
+     101,
+     400,
+     640
+    ],
+    [
+     401,
+     1000,
+     2
     ]
    ]
   },
@@ -165,43 +373,147 @@
     1582,
     10000
    ],
-   "credits": 95,
-   "share": 0.000084,
+   "credits": 853,
+   "releases_on_masters": 2053202,
+   "masterless_releases": 321528,
+   "undated_releases": 150411,
+   "undated_raw": 537403,
+   "masters": 227094,
+   "masterless_share_per_artist": 0.1398,
+   "undated_share_per_artist": 0.0655,
    "releases_per_master": [
     [
      1,
      1,
-     87356
+     37943
     ],
     [
      2,
      2,
-     13613
+     294229
     ],
     [
      3,
      4,
-     5535
+     231968
     ],
     [
      5,
      9,
-     2210
+     192244
     ],
     [
      10,
      30,
-     1060
+     169666
     ],
     [
      31,
      100,
-     230
+     59452
     ],
     [
      101,
      400,
-     7
+     14161
+    ],
+    [
+     401,
+     1000,
+     337
+    ]
+   ],
+   "near": {
+    "nodes": [
+     3125,
+     8000
+    ],
+    "credits": 261,
+    "masterless_share_per_artist": 0.1257,
+    "undated_share_per_artist": 0.0598,
+    "releases_per_master": [
+     [
+      1,
+      1,
+      33965
+     ],
+     [
+      2,
+      2,
+      290812
+     ],
+     [
+      3,
+      4,
+      229921
+     ],
+     [
+      5,
+      9,
+      192244
+     ],
+     [
+      10,
+      30,
+      169966
+     ],
+     [
+      31,
+      100,
+      63932
+     ],
+     [
+      101,
+      400,
+      18453
+     ],
+     [
+      401,
+      1000,
+      707
+     ]
+    ]
+   },
+   "releases_per_master_pooled": [
+    [
+     1,
+     1,
+     10625
+    ],
+    [
+     2,
+     2,
+     69891
+    ],
+    [
+     3,
+     4,
+     55192
+    ],
+    [
+     5,
+     9,
+     44530
+    ],
+    [
+     10,
+     30,
+     34946
+    ],
+    [
+     31,
+     100,
+     9872
+    ],
+    [
+     101,
+     400,
+     1981
+    ],
+    [
+     401,
+     1000,
+     57
     ]
    ]
   },
@@ -211,43 +523,162 @@
     10001,
     1000000
    ],
-   "credits": 4,
-   "share": 0.000004,
+   "credits": 53,
+   "releases_on_masters": 1256761,
+   "masterless_releases": 1071500,
+   "undated_releases": 269596,
+   "undated_raw": 469052,
+   "masters": 279483,
+   "masterless_share_per_artist": 0.2061,
+   "undated_share_per_artist": 0.1,
    "releases_per_master": [
     [
      1,
      1,
-     15319
+     59497
     ],
     [
      2,
      2,
-     3688
+     340318
     ],
     [
      3,
      4,
-     1217
+     244083
     ],
     [
      5,
      9,
-     378
+     180227
     ],
     [
      10,
      30,
-     124
+     124844
     ],
     [
      31,
      100,
-     39
+     38925
     ],
     [
      101,
      400,
-     6
+     10005
+    ],
+    [
+     401,
+     1000,
+     1911
+    ],
+    [
+     1001,
+     5000,
+     189
+    ]
+   ],
+   "near": {
+    "nodes": [
+     12500,
+     32000
+    ],
+    "credits": 31,
+    "masterless_share_per_artist": 0.1944,
+    "undated_share_per_artist": 0.0993,
+    "releases_per_master": [
+     [
+      1,
+      1,
+      59695
+     ],
+     [
+      2,
+      2,
+      330870
+     ],
+     [
+      3,
+      4,
+      243538
+     ],
+     [
+      5,
+      9,
+      183258
+     ],
+     [
+      10,
+      30,
+      126155
+     ],
+     [
+      31,
+      100,
+      43448
+     ],
+     [
+      101,
+      400,
+      10649
+     ],
+     [
+      401,
+      1000,
+      2123
+     ],
+     [
+      1001,
+      5000,
+      264
+     ]
+    ]
+   },
+   "releases_per_master_pooled": [
+    [
+     1,
+     1,
+     16795
+    ],
+    [
+     2,
+     2,
+     142339
+    ],
+    [
+     3,
+     4,
+     69792
+    ],
+    [
+     5,
+     9,
+     31999
+    ],
+    [
+     10,
+     30,
+     15064
+    ],
+    [
+     31,
+     100,
+     2916
+    ],
+    [
+     101,
+     400,
+     493
+    ],
+    [
+     401,
+     1000,
+     77
+    ],
+    [
+     1001,
+     5000,
+     8
     ]
    ]
   }

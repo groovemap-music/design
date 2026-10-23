@@ -10,8 +10,8 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { generate, SCALES } from '../lib/fixture.mjs';
 import { Model, DISCOGS_BLOCK, PAST_BLOCK } from '../lib/model.mjs';
-import { View } from '../lib/view.mjs';
-import { hull, inPoly, layoutModel, invariants, drawnEdges, samePlaneCrossings, segmentsCross } from '../lib/layout.mjs';
+import { fitView } from '../lib/view.mjs';
+import { hull, inPoly, layoutModel, invariants, drawnEdges, samePlaneCrossings, segmentsCross, UNDATED_X } from '../lib/layout.mjs';
 import { placeLabels, overlapCensus } from '../lib/labels.mjs';
 
 const HERE = dirname(dirname(fileURLToPath(import.meta.url)));
@@ -20,8 +20,7 @@ const measured = JSON.parse(readFileSync(join(HERE, 'results/layout.json'), 'utf
 const BEST = measured.sweep.best;
 const build = (n, seed, opts = {}) => {
   const m = new Model(generate({ nodes: n, seed, bands }));
-  const v = new View(m, opts);
-  layoutModel(v, { gutter: opts.gutter || 0, spaced: measured.layout === 'spaced' });
+  const v = fitView(m, { ...opts, spaced: measured.layout === 'spaced' });
   return { m, v };
 };
 
@@ -80,6 +79,33 @@ test('aggregation keeps every plane under the measured budget with the invariant
     const held = new Map();
     for (const x of v.nodes) for (const mem of x.members) held.set(mem, (held.get(mem) || 0) + 1);
     for (const x of m.nodes) if (m.vis.has(x)) assert.equal(held.get(x), 1, `${x.id} held ${held.get(x)}`);
+  }
+});
+
+test('paging through a master keeps every pressing in the view', () => {
+  const m = new Model(generate({ nodes: 5000, seed: 1, bands }));
+  const big = m.nodes.filter((x) => x.level === 1).sort((a, b) => b.children.length - a.children.length)[0];
+  for (let page = 0; page < 4; page++) {
+    const v = fitView(m, { budget: BEST.budget, focus: { id: big.id, page }, spaced: measured.layout === 'spaced' });
+    const held = new Map();
+    for (const x of v.nodes) for (const mem of x.members) held.set(mem, (held.get(mem) || 0) + 1);
+    for (const x of m.nodes) if (m.vis.has(x)) assert.equal(held.get(x), 1, `page ${page}: ${x.id} held ${held.get(x)}`);
+  }
+});
+
+test('the no-master and undated lanes are always drawn or reachable', () => {
+  for (const n of SCALES) for (const seed of [1, 2]) {
+    const { m, v } = build(n, seed, { budget: BEST.budget, gutter: BEST.gutter });
+    const lanes = m.nodes.filter((x) => x.lane === 'nomaster' && m.vis.has(x));
+    assert.ok(lanes.length > 0, `${n}/${seed}: fixture has a no-master lane`);
+    for (const lane of lanes) {
+      const rep = v.rep.get(lane);
+      assert.ok(rep, `${lane.id} reachable`);
+      if (!rep.agg) assert.equal(rep.lane, 'nomaster', 'a drawn lane stays a lane, never a decade bucket');
+    }
+    const undated = m.nodes.filter((x) => x.undated && m.vis.has(x));
+    assert.ok(undated.length > 0, `${n}/${seed}: fixture has undated nodes`);
+    for (const x of v.nodes) if (x.undated) assert.equal(x.x, UNDATED_X, `${x.id} sits in the undated lane`);
   }
 });
 
