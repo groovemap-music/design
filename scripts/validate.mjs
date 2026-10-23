@@ -5,6 +5,7 @@ import { dirname, extname, relative, resolve, sep } from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
+import { validateStateTokens } from "./brand-tokens.mjs";
 import { validateTaxonomy } from "./media-mapper.mjs";
 import {
   extractLinks,
@@ -94,6 +95,8 @@ const REQUIRED_FILES = [
   "docs/programs/native-identity-and-events.md",
   "docs/programs/neo4j-to-postgresql-graph.md",
   "fixtures/catalog-valid.json",
+  "scripts/brand-tokens.mjs",
+  "scripts/brand-tokens.test.mjs",
   "scripts/build.mjs",
   "scripts/audit-catalog-fixtures.py",
   "scripts/audit-disposable-mutations.py",
@@ -465,6 +468,9 @@ function checkAssets() {
     requireCondition(actual === expected, `${path} differs from the reviewed infra-source output`);
   }
   console.log("Verified byte identity of 12 reviewed brand outputs.");
+  const stateErrors = validateStateTokens(JSON.parse(readFileSync(resolve(ROOT, "brand/tokens.json"), "utf8")));
+  requireCondition(stateErrors.length === 0, `Strata state tokens are invalid:\n${stateErrors.join("\n")}`);
+  console.log("Verified Strata state tokens: distinct from entity-type colors, AA contrast in both themes.");
 }
 
 function checkLicense() {
@@ -472,7 +478,7 @@ function checkLicense() {
   requireCondition(licenseHash === MIT_SHA256, "LICENSE must remain the unmodified approved MIT text");
   const notice = readFileSync(resolve(ROOT, "NOTICE"), "utf8");
   requireCondition(/MIT License/.test(notice) && /does not grant trademark rights/i.test(notice), "NOTICE must retain the copyright/trademark boundary");
-  for (const path of ["Justfile", "scripts/build.mjs", "scripts/check-governance.mjs", "scripts/check-recipes.mjs", "scripts/check-recipes.test.mjs", "scripts/check-secrets.sh", "scripts/media-mapper.mjs", "scripts/publication-readiness.mjs", "scripts/tooling.mjs", "scripts/validate.mjs", "scripts/validate.test.mjs", "scripts/validation-policy.mjs"]) {
+  for (const path of ["Justfile", "scripts/brand-tokens.mjs", "scripts/brand-tokens.test.mjs", "scripts/build.mjs", "scripts/check-governance.mjs", "scripts/check-recipes.mjs", "scripts/check-recipes.test.mjs", "scripts/check-secrets.sh", "scripts/media-mapper.mjs", "scripts/publication-readiness.mjs", "scripts/tooling.mjs", "scripts/validate.mjs", "scripts/validate.test.mjs", "scripts/validation-policy.mjs"]) {
     requireCondition(readFileSync(resolve(ROOT, path), "utf8").includes("SPDX-License-Identifier: MIT"), `${path} is missing MIT license metadata`);
   }
   console.log("Verified MIT license metadata and the separate trademark boundary.");
