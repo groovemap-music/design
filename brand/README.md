@@ -17,10 +17,31 @@ The renderer uses only pinned Node.js standard-library APIs. Given the same trac
 
 `assets.sha256` fixes the reviewed 12-file output set. `just brand` first renders in check mode and then verifies every output byte against that manifest.
 
+## Strata state tokens
+
+`tokens.json` also holds the color tokens of the Strata graph view ([ADR 0016](../docs/adr/0016-strata-graph-view.md), section 4). Color there is a state, so no state may be mistaken for the color of an entity type.
+
+- `entity` holds the entity-type colors of today's Explore palette (artist green, category blue, genre yellow, label slate, release pink). They are recorded here so that collisions can be checked, and they are the same in both themes.
+- `state` holds one object per vocabulary, and each token has a `light` and a `dark` value:
+  - `collector` (concept A): `none`, `wanted`, `owned`, `wantedOwned`.
+  - `lifecycle` (concept B): `absent`, `emerging`, `established`, `reviving`, `declining`, and `provisional`. `provisional` is the color of the treatment for the latest two years, whose counts are still growing. A renderer draws it as a dashed outline or hatch over the stage fill, so the cue is never color alone.
+  - `fit` (concept C′): `affinity`, `novelty`, `bridge`, `redundancy`. These are the Fit components that can be drawn on the atlas.
+  - `identity` (concept D): `notRecorded`, `discogsOnly`, `musicbrainzOnly`, `unresolved`, `split`, `linked`, `superseded`.
+
+`just brand` proves, through [`scripts/brand-tokens.mjs`](../scripts/brand-tokens.mjs), that in each theme:
+
+- every state has WCAG 2 contrast of at least 4.5:1 on each background it is drawn on: `void` and `deep` in the dark theme, and `lightBackground` in the light theme. A white card is lighter than `lightBackground`, so it passes too;
+- every state is at least 15 CIEDE2000 from every entity-type color and from the brand cyan and purple accents;
+- states drawn in one view are at least 15 CIEDE2000 apart. C′ is drawn on B's atlas, so the `fit` and `lifecycle` states form one view.
+
+The rendered `tokens.css` names them `--groovemap-entity-<type>` and `--groovemap-state-<vocabulary>-<state>-<light|dark>`. A consumer picks the value for its own theme mechanism. Neutral states (`none`, `absent`, `notRecorded`) are warm grays, so they stay apart from the slate label color.
+
 ## Promotion provenance
 
-The canonical sources and 12 generated outputs remain byte-identical to Design commit
-`59c9fd3c8bbdfa676e0b7bb3d463fc766c1f3c0d`. Public consumer source records pin that
+All of the sources and outputs were byte-identical to Design commit
+`59c9fd3c8bbdfa676e0b7bb3d463fc766c1f3c0d` until the Strata state tokens were added. That
+change alters `tokens.json`, `render.mjs`, and `assets/tokens.css`, and the other 11 outputs
+are unchanged from that commit. Public consumer source records pin that
 revision and its asset digests in the organization profile, the Pages site, Graph Explorer,
 and Operations Console. Those records prove which reviewed Design bytes were promoted; they
 do not authorize this repository to modify a consumer.
