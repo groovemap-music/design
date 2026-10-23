@@ -1,0 +1,26 @@
+{
+  "group_master_vs_sibling_masters": {
+    "agree": 310789,
+    "disagree": 4790
+  },
+  "linked_but_release_missing_from_discogs_dump": 6670,
+  "linked_share": 0.3222,
+  "linked_to_discogs_release": 1890540,
+  "linked_to_more_than_one_discogs_release": 12791,
+  "mb_only_attached_share": 0.1162,
+  "mb_only_attached_to_a_master": 462111,
+  "mb_only_by_path": {
+    "native_id": 319386,
+    "native_id_master_missing_from_dump": 1313,
+    "none": 3432173,
+    "release_group_ambiguous": 894,
+    "release_group_one_master": 142725,
+    "release_group_siblings_masterless": 80904
+  },
+  "mb_only_releases": 3977395,
+  "mb_only_with_a_release_level_master_link": 0,
+  "mb_releases": 5867935,
+  "release_group_master_missing_from_discogs_dump": 2130,
+  "release_groups": 4591825,
+  "release_groups_with_master_link": 350896
+}

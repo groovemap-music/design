@@ -1,0 +1,18 @@
+{
+ "admin_audit_log_identity_rows": 0,
+ "admin_audit_log_rows": 0,
+ "database": "predecessor catalog: both dumps loaded, no native identity",
+ "measured_on": "2026-10-23",
+ "server_version_num": 180006,
+ "tables": {
+  "admin_audit_log": true,
+  "catalog_item_moves": false,
+  "catalog_item_supersessions": false,
+  "catalog_items": false,
+  "masters": true,
+  "musicbrainz.release_groups": true,
+  "musicbrainz.releases": true,
+  "provider_aliases": false,
+  "releases": true
+ }
+}
