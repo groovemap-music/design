@@ -29,6 +29,7 @@ work directory. loj9's README gives their reproduce commands.
 | `scripts/extract_mb_history.py`, `scripts/stream_mb_history.sh` | Stream the full export's `mbdump.tar.bz2` (`core`) or `mbdump-derived.tar.bz2` (`derived`). `core` writes each Discogs release link's release id, row id, Discogs id, `last_updated`, release MBID, and release-group MBID, plus every release-URL row's id and `last_updated`. `derived` writes `release_meta.date_added` |
 | `scripts/months.py` | Proxy 1 and proxy 2 link times, validation against the exact JSON diff, the monthly model, and G1-G3. Writes `results/months.json` |
 | `scripts/oos.py` | Proxy 2's binding out-of-sample validation (20261021 → 20261024). Writes `results/oos_validation.json` |
+| `sql/predecessor_schema.sql` | Read-only schema and content check of the predecessor catalog's four link-structure tables (correction 2 in the spike document) |
 | `tests/` | Synthetic fixtures only: the calendar, both directions of validation error, the monthly model, G2, the creation bound, the extractor on a tiny invented `mbdump`, and the privacy guard |
 
 ## Reproducing
@@ -60,4 +61,14 @@ W=~/.cache/groovemap-spikes/gm-design-6b8u scripts/stream_mb.sh 20261024-001001 
 cp ~/.cache/groovemap-spikes/gm-design-loj9/data/mb_release_20261021-001001.tsv.gz ~/.cache/groovemap-spikes/gm-design-6b8u/data/
 (cd scripts && $PY oos.py ~/.cache/groovemap-spikes/gm-design-6b8u/data ~/.cache/groovemap-spikes/gm-design-6b8u/data \
    ../results/oos_validation.json)
+```
+
+### The predecessor schema check
+
+The check is read-only, and the maintainer approved it. Host, container, role, and database
+are withheld.
+
+```bash
+{ echo "BEGIN TRANSACTION READ ONLY; SET LOCAL statement_timeout = '300s';"; cat sql/predecessor_schema.sql; echo "COMMIT;"; } \
+  | ssh -o BatchMode=yes <host> docker exec -i <container> psql -X -q -A -t -U <role> -d <database>
 ```

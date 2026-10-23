@@ -286,6 +286,54 @@ across months for tens of thousands of works.
 No catalog id, user data, or audit row is committed. No product code changed, and no
 bead was filed.
 
+## Corrections to gm-design-loj9
+
+gm-design-loj9 is merged and its document cannot change, so two corrections are recorded
+here.
+
+### 1. G1 and G2 from its two-cycle replay are DEFER, not "holds"
+
+gm-design-loj9's verdict table reported G1 as "holds" (2 runs, R2 writing 2,206) and G2
+as 743. Both rest on two **hypothetical** cycles: Discogs dumps a month apart, paired
+with MusicBrainz dumps 4 days apart. G1 and G2 are statements about distinct real months,
+so on that evidence both are **DEFER**, and neither holds nor fails. G3 (1,204 release
+re-attachments in one cycle) does not depend on the calendar, and it cleared its bar per
+cycle. This spike's month figures above replace both, subject to proxy 2's binding
+validation.
+
+### 2. Its link-structure numbers are predecessor-schema measurements
+
+gm-design-loj9's `results/link_structure.json` was measured on the predecessor system's
+catalog database, with read-only queries. The maintainer has since
+approved those queries. That schema is an earlier version of GrooveMap's, so every figure
+in loj9's section 5 is a **predecessor-schema measurement**.
+
+A read-only check (`gm-design-6b8u/sql/predecessor_schema.sql`, run 2026-10-23 UTC)
+compared the four tables the query reads with `database-schema` at `817081d`:
+
+| Table | Columns the query reads | Same in both | Only in database-schema | Only in the predecessor | Affects the query? |
+| --- | --- | --- | --- | --- | --- |
+| `musicbrainz.releases` | `discogs_release_id`, `release_group_mbid` | `mbid` UUID, `discogs_release_id` BIGINT, `release_group_mbid` UUID, `data` JSONB | `gm_item_id`, `media`, and their indexes | nothing | No |
+| `musicbrainz.release_groups` | `mbid`, `discogs_master_id` | `discogs_master_id` BIGINT | `gm_item_id` and its index | nothing | No |
+| `public.releases` | `data_id`, `data ->> 'master_id'` | `data_id` VARCHAR, `data` JSONB | `gm_item_id`, `media`, and their indexes | title, year, country, genres, labels, and full-text indexes | No. In a 1% sample (195,850 rows), `master_id` is a JSON string in every row, as database-schema's `derived_from` reads it |
+| `public.masters` | `data_id` | `data_id` VARCHAR | `gm_item_id` and its index | title, year, and full-text indexes | No |
+
+What else differs, and whether it affects the numbers:
+
+- **The Discogs-id rule.** The predecessor's extractor, its repository at `3a49d2c`
+  (`extractor/src/jsonl_parser.rs`) lines 33-39 and 130-142, applies the same rule as
+  `musicbrainz-ingestion` `6c6c284` (lines 45-51 and 216-228): the first `discogs` URL
+  relation, then the id before the first `-`, parsed as `i64`. `release_group_mbid` comes
+  from `release-group.id` in both (line 235 there).
+- **Snapshot dates.** The predecessor's Discogs tables hold `discogs_20261001`, last
+  written on 2026-10-03, with release and master counts equal to that dump's. Its
+  MusicBrainz tables were last written on 2026-10-13, so they hold a MusicBrainz dump
+  from about 2026-10-10. gm-design-loj9's replay used MusicBrainz `20261017` and
+  `20261021`. The figures differ slightly for that reason, for example two work parents
+  for 566,661 editions there against 564,667 in loj9's replay.
+- **Identity tables.** The predecessor has no native-identity tables. That is why
+  link-structure figures are all it can give: links, not history.
+
 ## Sources
 
 - gm-design-loj9: definitions, the bar G1-G3, and the harness this copies (epic branch
