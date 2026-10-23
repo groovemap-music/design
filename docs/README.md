@@ -22,6 +22,7 @@ maintained current state.
 - [ADR 0013: pgvector in PostgreSQL for catalog embeddings](adr/0013-pgvector-catalog-embeddings.md)
 - [ADR 0014: Ownership of cross-catalog release-edition candidates](adr/0014-cross-catalog-edition-candidates.md)
 - [ADR 0015: Valkey replaces Redis](adr/0015-valkey-replaces-redis.md)
+- [ADR 0016: Strata, the level-of-detail bi-temporal graph view](adr/0016-strata-graph-view.md) records the GO verdicts for concepts A to D, the 3D renderer, routes and stores, state vocabularies, clocks, and data rules. Concept D's backfill branch is pending `gm-design-6b8u`.
 
 ## Program rollout plans
 
