@@ -16,6 +16,8 @@ check: lint test policy-check links catalog taxonomy identity events identifiers
 # Statically validate executable source and the repository recipe contract.
 lint:
     {{tool}} node --check brand/render.mjs
+    {{tool}} node --check scripts/brand-tokens.mjs
+    {{tool}} node --check scripts/brand-tokens.test.mjs
     {{tool}} node --check scripts/build.mjs
     {{tool}} node --check scripts/check-governance.mjs
     {{tool}} node --check scripts/check-recipes.mjs
