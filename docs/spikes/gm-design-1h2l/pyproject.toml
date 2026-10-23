@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: MIT
+# Throwaway harness for spike gm-design-1h2l. Not a product package, and no GrooveMap
+# service depends on it. It measures how the catalog fits concept A's credit -> master
+# -> release ladder from the public dumps, and carries the Neo4j latency harness.
+[project]
+name = "spike-gm-design-1h2l"
+version = "0.0.0"
+requires-python = ">=3.13,<3.15"
+dependencies = [
+    "duckdb==2.0.0",
+    "lxml==6.1.3",
+    "neo4j==6.4.1",
+    "orjson==3.12.0",
+]
+
+[dependency-groups]
+dev = ["pytest==9.1.1"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider"
