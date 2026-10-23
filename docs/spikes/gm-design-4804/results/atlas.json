@@ -1,0 +1,524 @@
+{
+  "dumps": [
+    "20260901",
+    "20261001"
+  ],
+  "population": {
+    "early": {
+      "releases": 19417067,
+      "masters": 2589349,
+      "releases_dated": 16832481,
+      "releases_styled": 16451567,
+      "releases_no_genre": 1,
+      "releases_multi_genre": 4958465,
+      "releases_with_master": 11340082,
+      "release_style_tags": 29505340
+    },
+    "late": {
+      "releases": 19492392,
+      "masters": 2598586,
+      "releases_dated": 16898693,
+      "releases_styled": 16518099,
+      "releases_no_genre": 1,
+      "releases_multi_genre": 4978923,
+      "releases_with_master": 11384280,
+      "release_style_tags": 29636712
+    },
+    "styles_early": 757,
+    "styles_late": 757,
+    "styles_common": 757,
+    "genres_common": 16
+  },
+  "headline_share": 0.2,
+  "headline_year": 2025,
+  "multi_parent": {
+    "early": {
+      "styles_with_releases": 757,
+      "partof_rule": {
+        "styles_with_2plus_parents_pct": 89.56,
+        "release_weighted_pct": 99.56,
+        "parent_count_hist": {
+          "0": 0,
+          "1": 79,
+          "2": 88,
+          "3": 69,
+          "4": 77,
+          "5": 444
+        },
+        "mean_parents": 6.47
+      },
+      "share_rule": {
+        "0.05": {
+          "styles_pct": 82.83,
+          "release_weighted_pct": 80.04,
+          "secondary_parent_pairs": 2020
+        },
+        "0.10": {
+          "styles_pct": 69.75,
+          "release_weighted_pct": 71.81,
+          "secondary_parent_pairs": 1116
+        },
+        "0.20": {
+          "styles_pct": 45.97,
+          "release_weighted_pct": 41.58,
+          "secondary_parent_pairs": 473
+        },
+        "0.30": {
+          "styles_pct": 29.06,
+          "release_weighted_pct": 28.33,
+          "secondary_parent_pairs": 258
+        }
+      },
+      "dominant_share": {
+        "median": 0.992,
+        "p10": 0.892
+      },
+      "multi_parent_split_at_headline": {
+        "mean_top1": 0.926,
+        "mean_top2": 0.397,
+        "with_3plus_parents": 92
+      }
+    },
+    "late": {
+      "styles_with_releases": 757,
+      "partof_rule": {
+        "styles_with_2plus_parents_pct": 89.56,
+        "release_weighted_pct": 99.55,
+        "parent_count_hist": {
+          "0": 0,
+          "1": 79,
+          "2": 86,
+          "3": 68,
+          "4": 79,
+          "5": 445
+        },
+        "mean_parents": 6.49
+      },
+      "share_rule": {
+        "0.05": {
+          "styles_pct": 82.83,
+          "release_weighted_pct": 80.01,
+          "secondary_parent_pairs": 2026
+        },
+        "0.10": {
+          "styles_pct": 69.75,
+          "release_weighted_pct": 71.79,
+          "secondary_parent_pairs": 1112
+        },
+        "0.20": {
+          "styles_pct": 45.97,
+          "release_weighted_pct": 41.66,
+          "secondary_parent_pairs": 470
+        },
+        "0.30": {
+          "styles_pct": 28.8,
+          "release_weighted_pct": 28.32,
+          "secondary_parent_pairs": 256
+        }
+      },
+      "dominant_share": {
+        "median": 0.992,
+        "p10": 0.892
+      },
+      "multi_parent_split_at_headline": {
+        "mean_top1": 0.926,
+        "mean_top2": 0.396,
+        "with_3plus_parents": 91
+      }
+    },
+    "dominant_parent_changed": 1,
+    "parent_set_changed_at_headline": 6
+  },
+  "lifecycle": {
+    "rule": {
+      "emerge_total": 25.0,
+      "active_share": 0.5,
+      "establish_years": 10.0,
+      "revive_ratio": 1.5,
+      "revive_floor": 0.25,
+      "window": 3
+    },
+    "release_year": {
+      "stage_hist_headline_late": {
+        "absent": 10,
+        "emerging": 5,
+        "established": 291,
+        "declining": 410,
+        "reviving": 41
+      },
+      "dump_flip_headline_pct": 0.54,
+      "dump_flip_headline_styles": 4,
+      "dump_flip_prev_year_pct": 0.67,
+      "dump_flip_timeline_pct": 0.7,
+      "headline_year_count_growth_pct": 1.39,
+      "count_growth_by_year_pct": {
+        "2019": 0.17,
+        "2020": 0.24,
+        "2021": 0.24,
+        "2022": 0.33,
+        "2023": 0.43,
+        "2024": 0.78,
+        "2025": 1.39
+      },
+      "tagged_count_by_year_late": {
+        "2019": 664126,
+        "2020": 708090,
+        "2021": 664139,
+        "2022": 612841,
+        "2023": 592111,
+        "2024": 526950,
+        "2025": 477357
+      },
+      "stage_hist_by_year_late": {
+        "1990": {
+          "absent": 157,
+          "emerging": 104,
+          "established": 344,
+          "declining": 127,
+          "reviving": 25
+        },
+        "2000": {
+          "absent": 62,
+          "emerging": 83,
+          "established": 396,
+          "declining": 194,
+          "reviving": 22
+        },
+        "2010": {
+          "absent": 27,
+          "emerging": 28,
+          "established": 350,
+          "declining": 318,
+          "reviving": 34
+        },
+        "2015": {
+          "absent": 16,
+          "emerging": 22,
+          "established": 313,
+          "declining": 376,
+          "reviving": 30
+        },
+        "2020": {
+          "absent": 12,
+          "emerging": 12,
+          "established": 315,
+          "declining": 376,
+          "reviving": 42
+        },
+        "2024": {
+          "absent": 10,
+          "emerging": 5,
+          "established": 308,
+          "declining": 390,
+          "reviving": 44
+        }
+      },
+      "perturbation_headline_pct": {
+        "emerge_totalx0.9": 0.0,
+        "active_sharex0.9": 4.69,
+        "establish_yearsx0.9": 0.13,
+        "revive_ratiox0.9": 0.94,
+        "revive_floorx0.9": 1.47,
+        "emerge_totalx1.1": 0.27,
+        "active_sharex1.1": 3.88,
+        "establish_yearsx1.1": 0.0,
+        "revive_ratiox1.1": 0.4,
+        "revive_floorx1.1": 1.07
+      },
+      "perturbation_timeline_pct": {
+        "emerge_totalx0.9": 0.83,
+        "active_sharex0.9": 3.31,
+        "establish_yearsx0.9": 1.18,
+        "revive_ratiox0.9": 0.77,
+        "revive_floorx0.9": 0.43,
+        "emerge_totalx1.1": 1.17,
+        "active_sharex1.1": 4.11,
+        "establish_yearsx1.1": 1.15,
+        "revive_ratiox1.1": 0.57,
+        "revive_floorx1.1": 0.48
+      },
+      "max_perturbation_headline_pct": 4.69,
+      "max_perturbation_timeline_pct": 4.11
+    },
+    "master_year": {
+      "stage_hist_headline_late": {
+        "absent": 47,
+        "emerging": 18,
+        "established": 170,
+        "declining": 503,
+        "reviving": 19
+      },
+      "dump_flip_headline_pct": 1.69,
+      "dump_flip_headline_styles": 12,
+      "dump_flip_prev_year_pct": 1.13,
+      "dump_flip_timeline_pct": 0.94,
+      "headline_year_count_growth_pct": 1.56,
+      "count_growth_by_year_pct": {
+        "2019": 0.19,
+        "2020": 0.23,
+        "2021": 0.22,
+        "2022": 0.49,
+        "2023": 0.57,
+        "2024": 0.86,
+        "2025": 1.56
+      },
+      "tagged_count_by_year_late": {
+        "2019": 91024,
+        "2020": 92202,
+        "2021": 82075,
+        "2022": 74468,
+        "2023": 69492,
+        "2024": 60430,
+        "2025": 52256
+      },
+      "stage_hist_by_year_late": {
+        "1990": {
+          "absent": 219,
+          "emerging": 105,
+          "established": 250,
+          "declining": 149,
+          "reviving": 34
+        },
+        "2000": {
+          "absent": 124,
+          "emerging": 82,
+          "established": 245,
+          "declining": 271,
+          "reviving": 35
+        },
+        "2010": {
+          "absent": 80,
+          "emerging": 35,
+          "established": 181,
+          "declining": 432,
+          "reviving": 29
+        },
+        "2015": {
+          "absent": 66,
+          "emerging": 22,
+          "established": 185,
+          "declining": 445,
+          "reviving": 39
+        },
+        "2020": {
+          "absent": 55,
+          "emerging": 20,
+          "established": 214,
+          "declining": 428,
+          "reviving": 40
+        },
+        "2024": {
+          "absent": 49,
+          "emerging": 20,
+          "established": 185,
+          "declining": 471,
+          "reviving": 32
+        }
+      },
+      "perturbation_headline_pct": {
+        "emerge_totalx0.9": 0.56,
+        "active_sharex0.9": 2.25,
+        "establish_yearsx0.9": 0.42,
+        "revive_ratiox0.9": 0.42,
+        "revive_floorx0.9": 1.13,
+        "emerge_totalx1.1": 0.56,
+        "active_sharex1.1": 4.65,
+        "establish_yearsx1.1": 0.28,
+        "revive_ratiox1.1": 0.28,
+        "revive_floorx1.1": 0.7
+      },
+      "perturbation_timeline_pct": {
+        "emerge_totalx0.9": 1.5,
+        "active_sharex0.9": 2.96,
+        "establish_yearsx0.9": 1.31,
+        "revive_ratiox0.9": 0.69,
+        "revive_floorx0.9": 0.46,
+        "emerge_totalx1.1": 2.08,
+        "active_sharex1.1": 4.13,
+        "establish_yearsx1.1": 1.26,
+        "revive_ratiox1.1": 0.8,
+        "revive_floorx1.1": 0.76
+      },
+      "max_perturbation_headline_pct": 4.65,
+      "max_perturbation_timeline_pct": 4.13
+    },
+    "emergence": {
+      "first_year_changed_between_dumps": 44,
+      "emergence_year_changed_between_dumps": 34,
+      "first_year_more_than_10y_before_emergence_pct": 46.59,
+      "first_year_minus_emergence_median_years": 9.0,
+      "partof_parent_after_child_rule_y0": 274,
+      "partof_parent_after_child_first_year": 262,
+      "dominant_parent_after_child_rule_y0": 5,
+      "styles_with_partof_parent": 757
+    }
+  },
+  "layout": {
+    "geography": {
+      "ring_order_changed": false,
+      "cotag_edges": 1428,
+      "dominant": {
+        "drawn_nodes": 757,
+        "ghost_nodes": 0,
+        "intruding_nodes": 0,
+        "intrusion_pairs": 0,
+        "omitted_parent_pairs": 470,
+        "parent_pairs": 1227,
+        "sector_width_max_deg": 44.6,
+        "edge_crossings": 21577,
+        "edges_through_foreign_hull": 52,
+        "intra_hull_edges": 1162,
+        "intra_hull_crossings": 7984,
+        "stability": {
+          "median_nn": 0.022,
+          "p95_nn": 0.584,
+          "max_nn": 7.535,
+          "share_over_1nn": 0.022,
+          "knn10_jaccard": 0.916,
+          "host_changed": 1
+        }
+      },
+      "ghost": {
+        "drawn_nodes": 1227,
+        "ghost_nodes": 470,
+        "intruding_nodes": 0,
+        "intrusion_pairs": 0,
+        "omitted_parent_pairs": 0,
+        "parent_pairs": 1227,
+        "sector_width_max_deg": 45.3,
+        "edge_crossings": 11976,
+        "edges_through_foreign_hull": 8,
+        "intra_hull_edges": 1363,
+        "intra_hull_crossings": 10099,
+        "stability": {
+          "median_nn": 0.187,
+          "p95_nn": 0.69,
+          "max_nn": 10.014,
+          "share_over_1nn": 0.017,
+          "knn10_jaccard": 0.921,
+          "host_changed": 1
+        }
+      },
+      "border": {
+        "drawn_nodes": 757,
+        "ghost_nodes": 0,
+        "intruding_nodes": 0,
+        "intrusion_pairs": 0,
+        "omitted_parent_pairs": 306,
+        "parent_pairs": 1227,
+        "sector_width_max_deg": 44.6,
+        "edge_crossings": 21218,
+        "edges_through_foreign_hull": 59,
+        "intra_hull_edges": 1162,
+        "intra_hull_crossings": 7901,
+        "stability": {
+          "median_nn": 0.024,
+          "p95_nn": 0.689,
+          "max_nn": 7.679,
+          "share_over_1nn": 0.028,
+          "knn10_jaccard": 0.909,
+          "host_changed": 1
+        }
+      },
+      "dominant_cotag_inner": {
+        "drawn_nodes": 757,
+        "ghost_nodes": 0,
+        "intruding_nodes": 0,
+        "intrusion_pairs": 0,
+        "omitted_parent_pairs": 470,
+        "parent_pairs": 1227,
+        "sector_width_max_deg": 44.6,
+        "edge_crossings": 17641,
+        "edges_through_foreign_hull": 72,
+        "intra_hull_edges": 1162,
+        "intra_hull_crossings": 3469,
+        "stability": {
+          "median_nn": 0.066,
+          "p95_nn": 0.954,
+          "max_nn": 16.458,
+          "share_over_1nn": 0.038,
+          "knn10_jaccard": 0.888,
+          "host_changed": 1
+        }
+      },
+      "ghost_cotag_inner": {
+        "drawn_nodes": 1227,
+        "ghost_nodes": 470,
+        "intruding_nodes": 0,
+        "intrusion_pairs": 0,
+        "omitted_parent_pairs": 0,
+        "parent_pairs": 1227,
+        "sector_width_max_deg": 45.3,
+        "edge_crossings": 5722,
+        "edges_through_foreign_hull": 13,
+        "intra_hull_edges": 1371,
+        "intra_hull_crossings": 4152,
+        "stability": {
+          "median_nn": 0.227,
+          "p95_nn": 1.131,
+          "max_nn": 15.232,
+          "share_over_1nn": 0.059,
+          "knn10_jaccard": 0.893,
+          "host_changed": 1
+        }
+      },
+      "ghost_unpinned_ring_stability": {
+        "median_nn": 0.187,
+        "p95_nn": 0.69,
+        "max_nn": 10.014,
+        "share_over_1nn": 0.017
+      }
+    },
+    "cooccurrence": {
+      "drawn_nodes": 757,
+      "ghost_nodes": 0,
+      "intruding_nodes": 467,
+      "intrusion_pairs": 1421,
+      "omitted_parent_pairs": 228,
+      "parent_pairs": 1227,
+      "edge_crossings": 23491,
+      "edges_through_foreign_hull": 996,
+      "intra_hull_edges": 1162,
+      "intra_hull_crossings": 11728,
+      "stability": {
+        "median_nn": 0.087,
+        "p95_nn": 0.546,
+        "max_nn": 8.224,
+        "share_over_1nn": 0.02,
+        "knn10_jaccard": 0.91
+      },
+      "source": "cooccurrence"
+    },
+    "embedding": {
+      "drawn_nodes": 757,
+      "ghost_nodes": 0,
+      "intruding_nodes": 363,
+      "intrusion_pairs": 862,
+      "omitted_parent_pairs": 280,
+      "parent_pairs": 1227,
+      "edge_crossings": 17090,
+      "edges_through_foreign_hull": 758,
+      "intra_hull_edges": 1162,
+      "intra_hull_crossings": 7539,
+      "stability": {
+        "median_nn": 0.129,
+        "p95_nn": 0.406,
+        "max_nn": 12.346,
+        "share_over_1nn": 0.015,
+        "knn10_jaccard": 0.935
+      },
+      "source": "embedding",
+      "vector_cosine_across_dumps": {
+        "median": 1.0,
+        "p05": 0.9997
+      }
+    }
+  },
+  "cost_inputs": {
+    "stage_computation_seconds": 0.0056,
+    "release_style_tags_late": 29636712,
+    "style_year_cells_nonzero_late": 49525,
+    "lifecycle_table_rows": 125662,
+    "measure_seconds": 3.1
+  }
+}

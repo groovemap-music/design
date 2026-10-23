@@ -296,7 +296,11 @@ def main() -> None:
         block["vector_cosine_across_dumps"] = {"median": round(float(np.median(cos[live])), 4), "p05": round(float(np.percentile(cos[live], 5)), 4)}
         res["layout"]["embedding"] = block
     hy = HEADLINE_YEAR - YEAR0
+    t_stage = time.perf_counter()
+    lifecycle.stages(b["style_year_rel"][:, : hy + 1])
+    stage_seconds = time.perf_counter() - t_stage
     res["cost_inputs"] = {
+        "stage_computation_seconds": round(stage_seconds, 4),
         "release_style_tags_late": int(b_raw["counts"][COUNT_NAMES.index("release_style_tags")]),
         "style_year_cells_nonzero_late": int((b["style_year_rel"][:, : hy + 1] > 0).sum()),
         "lifecycle_table_rows": int(len(styles) * (HEADLINE_YEAR - YEAR0 + 1)),

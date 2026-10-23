@@ -87,7 +87,7 @@ for d in 20260901 20261001; do
   uv run python scripts/aggregate.py $W/data/releases_$d.npz $W/data/masters_$d.npz $W/data/aggregates_$d.npz
 done
 
-# 4. FastRP rebuilds (about 30 minutes and 7.4 GB peak RSS each on a loaded host).
+# 4. FastRP rebuilds (20-30 minutes and 7.4-13.4 GB peak RSS each on a loaded host).
 for d in 20260901 20261001; do
   (cd scripts && OMP_NUM_THREADS=4 uv run python fastrp.py $W/data/releases_$d.npz $W/data/masters_$d.npz \
      $W/data/aggregates_$d.npz $W/data/vectors_$d.npz)
