@@ -1,0 +1,33 @@
+{
+ "database": "predecessor catalog: both dumps loaded, no native identity",
+ "discogs_masters": 2598586,
+ "discogs_releases": 19492392,
+ "discogs_releases_linked": 1861852,
+ "discogs_releases_linked_from_2plus": 17085,
+ "linked": 1885908,
+ "linked_editions_per_work": {
+  "max": 200,
+  "p50": 1,
+  "p90": 2,
+  "p99": 8
+ },
+ "linked_release_loaded": 1879464,
+ "linked_release_missing": 6444,
+ "measured_on": "2026-10-23",
+ "musicbrainz_releases": 5846849,
+ "release_groups": {
+  "linked": 350041,
+  "linked_master_missing": 2107,
+  "rows": 4577536
+ },
+ "two_work_parents": 566661,
+ "work_relation": {
+  "both_masterless": 656604,
+  "different_master": 8583,
+  "group_unlinked_release_has_master": 558092,
+  "release_masterless_group_linked": 2653,
+  "same_master": 653532
+ },
+ "works_with_2plus_linked_editions": 203279,
+ "works_with_linked_editions": 784601
+}

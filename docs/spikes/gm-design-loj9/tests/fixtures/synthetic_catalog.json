@@ -1,0 +1,624 @@
+{
+ "_comment": "Invented rows only; regenerate with `uv run python tests/synthetic.py`.",
+ "catalog_items": [
+  {
+   "id": "00000000-0000-4000-8000-000000000101",
+   "kind": "master",
+   "created_at": "2026-08-01T02:00:00+00:00"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000000102",
+   "kind": "master",
+   "created_at": "2026-08-01T02:00:00+00:00"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000000103",
+   "kind": "master",
+   "created_at": "2026-08-01T02:00:00+00:00"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000000001",
+   "kind": "release",
+   "created_at": "2026-08-01T02:00:00+00:00"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000000002",
+   "kind": "release",
+   "created_at": "2026-08-01T02:00:00+00:00"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000000004",
+   "kind": "release",
+   "created_at": "2026-08-01T02:00:00+00:00"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000000006",
+   "kind": "release",
+   "created_at": "2026-08-01T02:00:00+00:00"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000000007",
+   "kind": "release",
+   "created_at": "2026-08-01T02:00:00+00:00"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000000202",
+   "kind": "master",
+   "created_at": "2026-08-03T05:00:03+00:00"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000000204",
+   "kind": "master",
+   "created_at": "2026-08-03T05:00:04+00:00"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000000205",
+   "kind": "master",
+   "created_at": "2026-08-03T05:00:05+00:00"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000000013",
+   "kind": "release",
+   "created_at": "2026-08-03T05:00:11+00:00"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000000005",
+   "kind": "release",
+   "created_at": "2026-08-03T05:00:12+00:00"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000000018",
+   "kind": "release",
+   "created_at": "2026-08-03T05:00:15+00:00"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000000019",
+   "kind": "release",
+   "created_at": "2026-08-03T05:00:16+00:00"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000000003",
+   "kind": "release",
+   "created_at": "2026-09-01T02:00:00+00:00"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000000008",
+   "kind": "release",
+   "created_at": "2026-09-01T02:00:00+00:00"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000000105",
+   "kind": "master",
+   "created_at": "2026-10-01T02:00:00+00:00"
+  }
+ ],
+ "provider_aliases": [
+  {
+   "id": "00000000-0000-4000-8000-000000010000",
+   "provider": "discogs",
+   "entity_kind": "master",
+   "external_id": "900101",
+   "native_id": "00000000-0000-4000-8000-000000000101",
+   "valid_from": "2026-08-01T02:00:00+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000010001",
+   "provider": "discogs",
+   "entity_kind": "master",
+   "external_id": "900102",
+   "native_id": "00000000-0000-4000-8000-000000000102",
+   "valid_from": "2026-08-01T02:00:00+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000010002",
+   "provider": "discogs",
+   "entity_kind": "master",
+   "external_id": "900103",
+   "native_id": "00000000-0000-4000-8000-000000000103",
+   "valid_from": "2026-08-01T02:00:00+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000010003",
+   "provider": "discogs",
+   "entity_kind": "release",
+   "external_id": "900001",
+   "native_id": "00000000-0000-4000-8000-000000000001",
+   "valid_from": "2026-08-01T02:00:00+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000010004",
+   "provider": "barcode",
+   "entity_kind": "release",
+   "external_id": "synthetic-barcode-1",
+   "native_id": "00000000-0000-4000-8000-000000000001",
+   "valid_from": "2026-08-01T02:00:00+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000010005",
+   "provider": "discogs",
+   "entity_kind": "release",
+   "external_id": "900002",
+   "native_id": "00000000-0000-4000-8000-000000000002",
+   "valid_from": "2026-08-01T02:00:00+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000010006",
+   "provider": "discogs",
+   "entity_kind": "release",
+   "external_id": "900004",
+   "native_id": "00000000-0000-4000-8000-000000000004",
+   "valid_from": "2026-08-01T02:00:00+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000010007",
+   "provider": "discogs",
+   "entity_kind": "release",
+   "external_id": "900005",
+   "native_id": "00000000-0000-4000-8000-000000000006",
+   "valid_from": "2026-08-01T02:00:00+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000010008",
+   "provider": "discogs",
+   "entity_kind": "release",
+   "external_id": "900006",
+   "native_id": "00000000-0000-4000-8000-000000000007",
+   "valid_from": "2026-08-01T02:00:00+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000010009",
+   "provider": "musicbrainz",
+   "entity_kind": "master",
+   "external_id": "00000000-0000-4000-9000-0000000000b1",
+   "native_id": "00000000-0000-4000-8000-000000000101",
+   "valid_from": "2026-08-03T05:00:01+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-00000001000a",
+   "provider": "musicbrainz",
+   "entity_kind": "master",
+   "external_id": "00000000-0000-4000-9000-0000000000b3",
+   "native_id": "00000000-0000-4000-8000-000000000103",
+   "valid_from": "2026-08-03T05:00:02+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-00000001000b",
+   "provider": "musicbrainz",
+   "entity_kind": "master",
+   "external_id": "00000000-0000-4000-9000-0000000000b2",
+   "native_id": "00000000-0000-4000-8000-000000000202",
+   "valid_from": "2026-08-03T05:00:03+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-00000001000c",
+   "provider": "musicbrainz",
+   "entity_kind": "master",
+   "external_id": "00000000-0000-4000-9000-0000000000b4",
+   "native_id": "00000000-0000-4000-8000-000000000204",
+   "valid_from": "2026-08-03T05:00:04+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-00000001000d",
+   "provider": "musicbrainz",
+   "entity_kind": "master",
+   "external_id": "00000000-0000-4000-9000-0000000000b5",
+   "native_id": "00000000-0000-4000-8000-000000000205",
+   "valid_from": "2026-08-03T05:00:05+00:00",
+   "valid_to": "2026-10-02T10:00:01+00:00",
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-00000001000e",
+   "provider": "musicbrainz",
+   "entity_kind": "release",
+   "external_id": "00000000-0000-4000-9000-000000000001",
+   "native_id": "00000000-0000-4000-8000-000000000001",
+   "valid_from": "2026-08-03T05:00:10+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-00000001000f",
+   "provider": "catalog_number",
+   "entity_kind": "release",
+   "external_id": "synthetic-catno-1",
+   "native_id": "00000000-0000-4000-8000-000000000001",
+   "valid_from": "2026-08-03T05:00:10+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000010010",
+   "provider": "musicbrainz",
+   "entity_kind": "release",
+   "external_id": "00000000-0000-4000-9000-000000000003",
+   "native_id": "00000000-0000-4000-8000-000000000013",
+   "valid_from": "2026-08-03T05:00:11+00:00",
+   "valid_to": "2026-09-02T10:00:01+00:00",
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000010011",
+   "provider": "barcode",
+   "entity_kind": "release",
+   "external_id": "synthetic-barcode-3",
+   "native_id": "00000000-0000-4000-8000-000000000013",
+   "valid_from": "2026-08-03T05:00:11+00:00",
+   "valid_to": "2026-09-02T10:00:01+00:00",
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000010012",
+   "provider": "musicbrainz",
+   "entity_kind": "release",
+   "external_id": "00000000-0000-4000-9000-000000000005",
+   "native_id": "00000000-0000-4000-8000-000000000005",
+   "valid_from": "2026-08-03T05:00:12+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000010013",
+   "provider": "musicbrainz",
+   "entity_kind": "release",
+   "external_id": "00000000-0000-4000-9000-000000000006",
+   "native_id": "00000000-0000-4000-8000-000000000006",
+   "valid_from": "2026-08-03T05:00:13+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000010014",
+   "provider": "musicbrainz",
+   "entity_kind": "release",
+   "external_id": "00000000-0000-4000-9000-000000000007",
+   "native_id": "00000000-0000-4000-8000-000000000007",
+   "valid_from": "2026-08-03T05:00:14+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000010015",
+   "provider": "musicbrainz",
+   "entity_kind": "release",
+   "external_id": "00000000-0000-4000-9000-000000000008",
+   "native_id": "00000000-0000-4000-8000-000000000018",
+   "valid_from": "2026-08-03T05:00:15+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000010016",
+   "provider": "matrix",
+   "entity_kind": "release",
+   "external_id": "synthetic-matrix-8",
+   "native_id": "00000000-0000-4000-8000-000000000018",
+   "valid_from": "2026-08-03T06:00:15+00:00",
+   "valid_to": null,
+   "source": "user"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000010017",
+   "provider": "musicbrainz",
+   "entity_kind": "release",
+   "external_id": "00000000-0000-4000-9000-000000000009",
+   "native_id": "00000000-0000-4000-8000-000000000019",
+   "valid_from": "2026-08-03T05:00:16+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000010018",
+   "provider": "discogs",
+   "entity_kind": "release",
+   "external_id": "900003",
+   "native_id": "00000000-0000-4000-8000-000000000003",
+   "valid_from": "2026-09-01T02:00:00+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000010019",
+   "provider": "discogs",
+   "entity_kind": "release",
+   "external_id": "900008",
+   "native_id": "00000000-0000-4000-8000-000000000008",
+   "valid_from": "2026-09-01T02:00:00+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-00000001001a",
+   "provider": "musicbrainz",
+   "entity_kind": "release",
+   "external_id": "00000000-0000-4000-9000-000000000003",
+   "native_id": "00000000-0000-4000-8000-000000000003",
+   "valid_from": "2026-09-02T10:00:01+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-00000001001b",
+   "provider": "barcode",
+   "entity_kind": "release",
+   "external_id": "synthetic-barcode-3",
+   "native_id": "00000000-0000-4000-8000-000000000003",
+   "valid_from": "2026-09-02T10:00:01+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-00000001001c",
+   "provider": "musicbrainz",
+   "entity_kind": "release",
+   "external_id": "00000000-0000-4000-9000-000000000002",
+   "native_id": "00000000-0000-4000-8000-000000000002",
+   "valid_from": "2026-09-10T05:00:00+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-00000001001d",
+   "provider": "matrix",
+   "entity_kind": "release",
+   "external_id": "synthetic-matrix-1",
+   "native_id": "00000000-0000-4000-8000-000000000001",
+   "valid_from": "2026-10-05T05:00:00+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-00000001001e",
+   "provider": "discogs",
+   "entity_kind": "master",
+   "external_id": "900105",
+   "native_id": "00000000-0000-4000-8000-000000000105",
+   "valid_from": "2026-10-01T02:00:00+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  },
+  {
+   "id": "00000000-0000-4000-8000-00000001001f",
+   "provider": "musicbrainz",
+   "entity_kind": "master",
+   "external_id": "00000000-0000-4000-9000-0000000000b5",
+   "native_id": "00000000-0000-4000-8000-000000000105",
+   "valid_from": "2026-10-02T10:00:01+00:00",
+   "valid_to": null,
+   "source": "catalog"
+  }
+ ],
+ "catalog_item_supersessions": [
+  {
+   "id": "00000000-0000-4000-8000-000000005003",
+   "superseded_id": "00000000-0000-4000-8000-000000000013",
+   "survivor_id": "00000000-0000-4000-8000-000000000003",
+   "cause": "catalog_reattachment",
+   "decision_ref": "00000000-0000-4000-8000-00000000a001",
+   "valid_from": "2026-09-02T10:00:01+00:00",
+   "valid_to": null,
+   "via_id": null
+  },
+  {
+   "id": "00000000-0000-4000-8000-000000005005",
+   "superseded_id": "00000000-0000-4000-8000-000000000205",
+   "survivor_id": "00000000-0000-4000-8000-000000000105",
+   "cause": "catalog_reattachment",
+   "decision_ref": "00000000-0000-4000-8000-00000000a002",
+   "valid_from": "2026-10-02T10:00:01+00:00",
+   "valid_to": null,
+   "via_id": null
+  }
+ ],
+ "catalog_item_moves": [],
+ "admin_audit_log": [
+  {
+   "id": "00000000-0000-4000-8000-00000000a001",
+   "admin_id": "00000000-0000-4000-8000-00000000f001",
+   "action": "identity.reattach.auto",
+   "target": "discogs:20260901",
+   "created_at": "2026-09-02T10:00:00+00:00",
+   "details": {
+    "job_id": "00000000-0000-4000-8000-00000000a001",
+    "apply": true,
+    "outcomes": {
+     "release": {
+      "reattached": 1,
+      "guarded": 1,
+      "unchanged": 0,
+      "failed": 0,
+      "supersessions_opened": 1,
+      "merged_with_dependents": 0
+     },
+     "release_group": {
+      "reattached": 0,
+      "guarded": 0,
+      "unchanged": 0,
+      "failed": 0,
+      "supersessions_opened": 0,
+      "merged_with_dependents": 0
+     },
+     "artist": {
+      "reattached": 0,
+      "guarded": 0,
+      "unchanged": 0,
+      "failed": 0,
+      "supersessions_opened": 0,
+      "merged_with_dependents": 0
+     },
+     "label": {
+      "reattached": 0,
+      "guarded": 0,
+      "unchanged": 0,
+      "failed": 0,
+      "supersessions_opened": 0,
+      "merged_with_dependents": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "00000000-0000-4000-8000-00000000a011",
+   "admin_id": "00000000-0000-4000-8000-00000000f001",
+   "action": "identity.project.trigger",
+   "target": null,
+   "created_at": "2026-09-02T11:00:00+00:00",
+   "details": {
+    "job_id": "00000000-0000-4000-8000-00000000a012"
+   }
+  },
+  {
+   "id": "00000000-0000-4000-8000-00000000a002",
+   "admin_id": "00000000-0000-4000-8000-00000000f001",
+   "action": "identity.reattach.auto",
+   "target": "discogs:20261001",
+   "created_at": "2026-10-02T10:00:00+00:00",
+   "details": {
+    "job_id": "00000000-0000-4000-8000-00000000a002",
+    "apply": true,
+    "outcomes": {
+     "release": {
+      "reattached": 0,
+      "guarded": 1,
+      "unchanged": 1,
+      "failed": 0,
+      "supersessions_opened": 0,
+      "merged_with_dependents": 0
+     },
+     "release_group": {
+      "reattached": 1,
+      "guarded": 0,
+      "unchanged": 0,
+      "failed": 0,
+      "supersessions_opened": 1,
+      "merged_with_dependents": 0
+     },
+     "artist": {
+      "reattached": 0,
+      "guarded": 0,
+      "unchanged": 0,
+      "failed": 0,
+      "supersessions_opened": 0,
+      "merged_with_dependents": 0
+     },
+     "label": {
+      "reattached": 0,
+      "guarded": 0,
+      "unchanged": 0,
+      "failed": 0,
+      "supersessions_opened": 0,
+      "merged_with_dependents": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "00000000-0000-4000-8000-00000000a021",
+   "admin_id": "00000000-0000-4000-8000-00000000f001",
+   "action": "admin.login",
+   "target": "someone@example.invalid",
+   "created_at": "2026-10-02T10:00:00+00:00",
+   "details": {
+    "success": true
+   }
+  }
+ ],
+ "discogs_releases": [
+  {
+   "data_id": "900001",
+   "master_id": "900101"
+  },
+  {
+   "data_id": "900002",
+   "master_id": "900101"
+  },
+  {
+   "data_id": "900003",
+   "master_id": " 900101 "
+  },
+  {
+   "data_id": "900004",
+   "master_id": "900101"
+  },
+  {
+   "data_id": "900005",
+   "master_id": "900102"
+  },
+  {
+   "data_id": "900006",
+   "master_id": "900102"
+  },
+  {
+   "data_id": "900008",
+   "master_id": "900103"
+  }
+ ],
+ "musicbrainz_releases": [
+  {
+   "mbid": "00000000-0000-4000-9000-000000000001",
+   "release_group_mbid": "00000000-0000-4000-9000-0000000000b1",
+   "discogs_release_id": 900001
+  },
+  {
+   "mbid": "00000000-0000-4000-9000-000000000002",
+   "release_group_mbid": "00000000-0000-4000-9000-0000000000b1",
+   "discogs_release_id": 900002
+  },
+  {
+   "mbid": "00000000-0000-4000-9000-000000000003",
+   "release_group_mbid": "00000000-0000-4000-9000-0000000000b1",
+   "discogs_release_id": 900003
+  },
+  {
+   "mbid": "00000000-0000-4000-9000-000000000005",
+   "release_group_mbid": "00000000-0000-4000-9000-0000000000b1",
+   "discogs_release_id": null
+  },
+  {
+   "mbid": "00000000-0000-4000-9000-000000000006",
+   "release_group_mbid": "00000000-0000-4000-9000-0000000000b2",
+   "discogs_release_id": 900005
+  },
+  {
+   "mbid": "00000000-0000-4000-9000-000000000007",
+   "release_group_mbid": "00000000-0000-4000-9000-0000000000b2",
+   "discogs_release_id": 900006
+  },
+  {
+   "mbid": "00000000-0000-4000-9000-000000000008",
+   "release_group_mbid": "00000000-0000-4000-9000-0000000000b3",
+   "discogs_release_id": 900008
+  },
+  {
+   "mbid": "00000000-0000-4000-9000-000000000009",
+   "release_group_mbid": "00000000-0000-4000-9000-0000000000b4",
+   "discogs_release_id": 900009
+  }
+ ]
+}
