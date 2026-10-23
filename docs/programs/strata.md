@@ -89,7 +89,7 @@ check gate. No repository imports another's source or uses it as a Docker build 
 | --- | --- | --- | --- | --- |
 | H1 | database-schema revision carrying the `release_group_mbid` index (`gm-database-schema-kk3f`) | database-schema | catalog-api: bump the schema pin | The MusicBrainz sibling join in `gm-catalog-api-absv` |
 | H2 | Graph-explorer contract promoted with `/api/explore/strata`, the contract staying at `"version": 1` | catalog-api (M2) | graph-explorer: promote `contracts/catalog-api/graph-explorer/v1` | `gm-graph-explorer-1v9`, Explore integration |
-| H3 | database-schema revision carrying the three `insights` tables (`gm-database-schema-0bv9`) | database-schema | analytics-engine: bump the schema pin | `gm-analytics-engine-m86` |
+| H3 | database-schema revision carrying the Genre Atlas `insights` tables (`gm-database-schema-0bv9`) | database-schema | analytics-engine: bump the schema pin | `gm-analytics-engine-m86` |
 | H4 | `internal-insights` contract 1.2.0 with `/api/internal/insights/style-year-counts` (`gm-catalog-api-hfg2`) | catalog-api | analytics-engine: promote the contract, `source.json` and digests | `gm-analytics-engine-m86` |
 | H5 | analytics-engine serving `GET /api/insights/style-atlas` (`gm-analytics-engine-21z`) | analytics-engine | catalog-api: the proxy (`gm-catalog-api-kw87`) forwards to it | A working proxy in a deployed stack |
 | H6 | Graph-explorer contract promoted with `/api/insights/style-atlas` (`gm-catalog-api-kw87`) | catalog-api (M4) | graph-explorer: promote the contract | `gm-graph-explorer-cnn`, the Genre Atlas view |
