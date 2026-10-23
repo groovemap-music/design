@@ -1,0 +1,34 @@
+{
+    "runs": [
+        {
+            "query": "overhead",
+            "rc": 0,
+            "wall_s": 1.56,
+            "result": "1"
+        },
+        {
+            "query": "overhead",
+            "rc": 0,
+            "wall_s": 1.56,
+            "result": "1"
+        },
+        {
+            "query": "style_by_year",
+            "rc": 0,
+            "wall_s": 32.19,
+            "result": "50283, 26395259"
+        },
+        {
+            "query": "style_by_year",
+            "rc": 0,
+            "wall_s": 32.21,
+            "result": "50283, 26395259"
+        },
+        {
+            "query": "genre_by_decade",
+            "rc": 0,
+            "wall_s": 31.92,
+            "result": "206, 22600925"
+        }
+    ]
+}

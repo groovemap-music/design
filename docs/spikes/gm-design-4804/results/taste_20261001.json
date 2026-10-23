@@ -1,0 +1,93 @@
+{
+  "collectors": 120,
+  "sizes": [
+    50,
+    300,
+    2000
+  ],
+  "fit_evaluations": 3600,
+  "landmarks_per_style": 25,
+  "landmark_masters": 15125,
+  "items": {
+    "held_items": 94000,
+    "with_style_pct": 96.93,
+    "genre_only_pct": 3.07,
+    "no_genre_pct": 0.0,
+    "with_master_pct": 61.88,
+    "master_is_landmark_pct": 4.35,
+    "styles_span_2plus_hulls_pct": 24.9,
+    "mean_style_landings": 2.36
+  },
+  "fit": {
+    "affinity": {
+      "scored_pct": 99.36,
+      "entries": 13373,
+      "entries_target_pct": {
+        "none": 13.66,
+        "position": 86.34
+      },
+      "scored_with_drawable_capped_pct": 99.8,
+      "scored_with_drawable_uncapped_pct": 99.83,
+      "scored_nothing_drawable_pct": 0.17,
+      "scored_drawable_lost_to_cap_pct": 0.03,
+      "scored_ambiguous_pct": 0.0
+    },
+    "novelty": {
+      "scored_pct": 94.39,
+      "entries": 8215,
+      "entries_target_pct": {
+        "none": 82.47,
+        "position": 17.53
+      },
+      "scored_with_drawable_capped_pct": 22.22,
+      "scored_with_drawable_uncapped_pct": 28.1,
+      "scored_nothing_drawable_pct": 71.9,
+      "scored_drawable_lost_to_cap_pct": 5.89,
+      "scored_ambiguous_pct": 0.0
+    },
+    "bridge": {
+      "scored_pct": 27.56,
+      "entries": 1984,
+      "entries_target_pct": {
+        "edge": 50.0,
+        "label": 50.0
+      },
+      "scored_with_drawable_capped_pct": 100.0,
+      "scored_with_drawable_uncapped_pct": 100.0,
+      "scored_nothing_drawable_pct": 0.0,
+      "scored_drawable_lost_to_cap_pct": 0.0,
+      "scored_ambiguous_pct": 0.0
+    },
+    "depth": {
+      "scored_pct": 35.86,
+      "entries": 1827,
+      "entries_target_pct": {
+        "none": 100.0
+      },
+      "scored_with_drawable_capped_pct": 0.0,
+      "scored_with_drawable_uncapped_pct": 0.0,
+      "scored_nothing_drawable_pct": 100.0,
+      "scored_drawable_lost_to_cap_pct": 0.0,
+      "scored_ambiguous_pct": 0.0
+    },
+    "redundancy": {
+      "scored_pct": 1.03,
+      "entries": 37,
+      "entries_target_pct": {
+        "none": 5.41,
+        "position": 94.59
+      },
+      "scored_with_drawable_capped_pct": 94.59,
+      "scored_with_drawable_uncapped_pct": 94.59,
+      "scored_nothing_drawable_pct": 5.41,
+      "scored_drawable_lost_to_cap_pct": 0.0,
+      "scored_ambiguous_pct": 0.0
+    }
+  },
+  "affinity_mass_on_atlas_dims": {
+    "median": 1.0,
+    "mean": 0.835
+  },
+  "genre_names_with_comma_or_and": 1,
+  "seconds": 15.9
+}

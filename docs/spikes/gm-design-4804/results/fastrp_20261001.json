@@ -1,0 +1,1 @@
+{"nodes": 26315738, "edge_rows": 124119075, "nnz": 245199950, "artists": 2882136, "zero_artist_vectors": 0, "graph_seconds": 85.6, "fastrp_seconds": 1650.1, "style_seconds": 5.5, "peak_rss_gb": 7.39}
