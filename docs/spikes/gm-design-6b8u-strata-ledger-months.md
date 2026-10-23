@@ -1,8 +1,9 @@
 # Spike: concept D's ledger bar on real months, from the MusicBrainz full export
 
-Status: **pre-registered**. This commit fixes the method, the proxy's validation bar, and
-the monthly model before any of the data is read. The evidence and the verdict follow in
-later commits.  
+Status: **DEFER**. The pre-registered proxy failed its validation bar. Its precision is
+0.8223 against a bar of 0.90, because edits to older links date them into the window. So
+it is not used, and the bar is not evaluated on months. The method below was committed
+(`9e9440a`) before any data was read.  
 Spike: `gm-design-6b8u` (epic `gm-design-cgh9`)  
 Prior spike: gm-design-loj9 (`docs/spikes/gm-design-loj9-strata-ledger.md` on the Strata
 epic branch `wt/bead/epic/gm-design-uq8t`, merged at `3fdb051`). That spike holds the
@@ -52,7 +53,8 @@ The window W is (2026-10-17 00:10:01, 2026-10-21 00:10:01] UTC, the instants of 
 JSON dumps.
 
 - **Exact set E.** Releases present in JSON dump A with no Discogs id that carry one in
-  dump B. Per gm-design-loj9, E holds 522 releases.
+  dump B. gm-design-loj9's 522 "link added" re-attachments are the subset of E whose
+  Discogs target is loaded. E itself holds 565.
 - **Proxy set P.** Releases with C ≤ T_A whose L falls in W.
 - **Precision** is |P ∩ E| / |P|. Its misses are links the proxy dates into the window
   but the diff does not add, such as an older link edited during the window.
