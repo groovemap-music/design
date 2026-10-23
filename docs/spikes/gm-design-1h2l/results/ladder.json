@@ -1,0 +1,372 @@
+{
+  "bands": [
+    {
+      "artists": 2569433,
+      "band": "1-9",
+      "masters_per_artist": {
+        "max": 8,
+        "mean": 0.2626,
+        "n": 2569433,
+        "p50": 0,
+        "p90": 1,
+        "p95": 1,
+        "p99": 2
+      },
+      "no_master_share_per_artist": {
+        "max": 1.0,
+        "mean": 0.8406,
+        "n": 2569433,
+        "p50": 1.0,
+        "p90": 1.0,
+        "p95": 1.0,
+        "p99": 1.0
+      },
+      "pooled_no_master_share": 0.7231,
+      "releases": 5693758,
+      "releases_per_artist": {
+        "max": 9,
+        "mean": 2.216,
+        "n": 2569433,
+        "p50": 1,
+        "p90": 5,
+        "p95": 7,
+        "p99": 9
+      }
+    },
+    {
+      "artists": 288359,
+      "band": "10-99",
+      "masters_per_artist": {
+        "max": 50,
+        "mean": 4.385,
+        "n": 288359,
+        "p50": 3,
+        "p90": 10,
+        "p95": 13,
+        "p99": 20
+      },
+      "no_master_share_per_artist": {
+        "max": 1.0,
+        "mean": 0.4574,
+        "n": 288359,
+        "p50": 0.4068,
+        "p90": 1.0,
+        "p95": 1.0,
+        "p99": 1.0
+      },
+      "pooled_no_master_share": 0.4182,
+      "releases": 7099710,
+      "releases_per_artist": {
+        "max": 99,
+        "mean": 24.6211,
+        "n": 288359,
+        "p50": 18,
+        "p90": 50,
+        "p95": 66,
+        "p99": 91
+      }
+    },
+    {
+      "artists": 22843,
+      "band": "100-999",
+      "masters_per_artist": {
+        "max": 384,
+        "mean": 36.0675,
+        "n": 22843,
+        "p50": 29,
+        "p90": 68,
+        "p95": 90,
+        "p99": 140
+      },
+      "no_master_share_per_artist": {
+        "max": 1.0,
+        "mean": 0.2482,
+        "n": 22843,
+        "p50": 0.1756,
+        "p90": 0.5536,
+        "p95": 0.7132,
+        "p99": 0.9788
+      },
+      "pooled_no_master_share": 0.2198,
+      "releases": 5417411,
+      "releases_per_artist": {
+        "max": 999,
+        "mean": 237.1585,
+        "n": 22843,
+        "p50": 171,
+        "p90": 470,
+        "p95": 636,
+        "p99": 889
+      }
+    },
+    {
+      "artists": 1454,
+      "band": "1000-9999",
+      "masters_per_artist": {
+        "max": 1573,
+        "mean": 215.4133,
+        "n": 1454,
+        "p50": 169,
+        "p90": 400,
+        "p95": 519,
+        "p99": 947
+      },
+      "no_master_share_per_artist": {
+        "max": 1.0,
+        "mean": 0.141,
+        "n": 1454,
+        "p50": 0.1115,
+        "p90": 0.2498,
+        "p95": 0.3206,
+        "p99": 0.5817
+      },
+      "pooled_no_master_share": 0.1377,
+      "releases": 3163488,
+      "releases_per_artist": {
+        "max": 9959,
+        "mean": 2175.7139,
+        "n": 1454,
+        "p50": 1581,
+        "p90": 4029,
+        "p95": 5314,
+        "p99": 8513
+      }
+    },
+    {
+      "artists": 44,
+      "band": "10000+",
+      "masters_per_artist": {
+        "max": 174943,
+        "mean": 6108.3864,
+        "n": 44,
+        "p50": 1661,
+        "p90": 7007,
+        "p95": 8062,
+        "p99": 174943
+      },
+      "no_master_share_per_artist": {
+        "max": 0.7704,
+        "mean": 0.212,
+        "n": 44,
+        "p50": 0.162,
+        "p90": 0.3017,
+        "p95": 0.6123,
+        "p99": 0.7704
+      },
+      "pooled_no_master_share": 0.4711,
+      "releases": 2241976,
+      "releases_per_artist": {
+        "max": 1356055,
+        "mean": 50954.0,
+        "n": 44,
+        "p50": 14616,
+        "p90": 44659,
+        "p95": 58801,
+        "p99": 1356055
+      }
+    }
+  ],
+  "credits": {
+    "credited_on_rows": 71574944,
+    "distinct_people": 6235586,
+    "distinct_raw_roles": 2656801,
+    "distinct_roles": 9187,
+    "releases_with_credits": 10387326
+  },
+  "largest_artists": [
+    {
+      "masters": 174943,
+      "no_master_share": 0.6123,
+      "no_year": 176818,
+      "rank": 1,
+      "releases": 1356055
+    },
+    {
+      "masters": 9362,
+      "no_master_share": 0.7704,
+      "no_year": 42591,
+      "rank": 2,
+      "releases": 87683
+    },
+    {
+      "masters": 7343,
+      "no_master_share": 0.2183,
+      "no_year": 19216,
+      "rank": 3,
+      "releases": 58801
+    },
+    {
+      "masters": 8062,
+      "no_master_share": 0.2544,
+      "no_year": 16729,
+      "rank": 4,
+      "releases": 54065
+    },
+    {
+      "masters": 7007,
+      "no_master_share": 0.2852,
+      "no_year": 13447,
+      "rank": 5,
+      "releases": 44659
+    },
+    {
+      "masters": 1627,
+      "no_master_share": 0.116,
+      "no_year": 9656,
+      "rank": 6,
+      "releases": 36434
+    },
+    {
+      "masters": 1996,
+      "no_master_share": 0.1479,
+      "no_year": 6554,
+      "rank": 7,
+      "releases": 30448
+    },
+    {
+      "masters": 3731,
+      "no_master_share": 0.2005,
+      "no_year": 10137,
+      "rank": 8,
+      "releases": 29871
+    },
+    {
+      "masters": 1324,
+      "no_master_share": 0.1615,
+      "no_year": 5333,
+      "rank": 9,
+      "releases": 26074
+    },
+    {
+      "masters": 3367,
+      "no_master_share": 0.2637,
+      "no_year": 7214,
+      "rank": 10,
+      "releases": 25237
+    }
+  ],
+  "per_artist": {
+    "artists": 2882133,
+    "artists_with_no_master_at_all": 2061842,
+    "masters_per_artist": {
+      "max": 174943,
+      "mean": 1.1606,
+      "n": 2882133,
+      "p50": 0,
+      "p90": 2,
+      "p95": 4,
+      "p99": 16
+    },
+    "no_master_share_per_artist": {
+      "max": 1.0,
+      "mean": 0.7972,
+      "n": 2882133,
+      "p50": 1.0,
+      "p90": 1.0,
+      "p95": 1.0,
+      "p99": 1.0
+    },
+    "releases_per_artist": {
+      "max": 1356055,
+      "mean": 8.1941,
+      "n": 2882133,
+      "p50": 2,
+      "p90": 10,
+      "p95": 20,
+      "p99": 86
+    }
+  },
+  "per_master": {
+    "credit_fan_out": {
+      "by_artists_per_master": {
+        "max": 31,
+        "mean": 1.2872,
+        "n": 2598573,
+        "p50": 1,
+        "p90": 2,
+        "p95": 3,
+        "p99": 5
+      },
+      "credited_on_edges_per_master": {
+        "max": 16727,
+        "mean": 21.2082,
+        "n": 2598573,
+        "p50": 4,
+        "p90": 41,
+        "p95": 75,
+        "p99": 271
+      },
+      "credited_people_per_master": {
+        "max": 531,
+        "mean": 5.2951,
+        "n": 2598573,
+        "p50": 3,
+        "p90": 14,
+        "p95": 19,
+        "p99": 37
+      },
+      "master_artists_per_master": {
+        "max": 26,
+        "mean": 1.2227,
+        "n": 2598573,
+        "p50": 1,
+        "p90": 2,
+        "p95": 2,
+        "p99": 4
+      },
+      "masters_with_more_than_one_by_artist": 433410,
+      "masters_with_more_than_one_master_artist": 361318,
+      "masters_with_no_credited_people": 717786,
+      "raw_roles_per_master": {
+        "max": 561,
+        "mean": 5.4024,
+        "n": 2598573,
+        "p50": 2,
+        "p90": 14,
+        "p95": 20,
+        "p99": 41
+      },
+      "roles_per_master": {
+        "max": 128,
+        "mean": 5.1749,
+        "n": 2598573,
+        "p50": 3,
+        "p90": 14,
+        "p95": 19,
+        "p99": 29
+      }
+    },
+    "masters_in_dump": 2598586,
+    "masters_with_a_release": 2598573,
+    "masters_with_no_release_in_dump": 113,
+    "release_master_ids_missing_from_masters_dump": 100,
+    "releases_per_master": {
+      "max": 1542,
+      "mean": 4.381,
+      "n": 2598573,
+      "p50": 2,
+      "p90": 7,
+      "p95": 12,
+      "p99": 32
+    }
+  },
+  "releases": {
+    "by_status": {
+      "(none)": 19492392
+    },
+    "no_by_artist": 23,
+    "no_master": 8108112,
+    "no_master_and_no_year": 1115951,
+    "no_master_share": 0.416,
+    "no_year": 2593700,
+    "no_year_share": 0.1331,
+    "total": 19492392
+  },
+  "years": {
+    "masterless_releases_with_no_year": 1115951,
+    "masters_with_no_year": 173720,
+    "of_which_the_master_has_a_year": 1069174,
+    "releases_with_a_master_and_no_year": 1477749,
+    "releases_with_no_year_even_after_master_fallback": 1524526
+  }
+}

@@ -1,0 +1,314 @@
+{
+  "anonymous_user": "00000000-0000-7000-8000-000000000000",
+  "bands": {
+    "1-9": {
+      "artists": 30,
+      "artists_measured": 30,
+      "queries": {
+        "count_releases": {
+          "first_run_max_ms": 0.1,
+          "first_run_p50_ms": 0.1,
+          "max_ms": 0.1,
+          "p50_ms": 0.1,
+          "p95_ms": 0.1,
+          "rows_max": 1,
+          "runs": 150
+        },
+        "expand_releases": {
+          "first_run_max_ms": 2.6,
+          "first_run_p50_ms": 0.9,
+          "max_ms": 0.2,
+          "p50_ms": 0.1,
+          "p95_ms": 0.2,
+          "rows_max": 7,
+          "runs": 150
+        },
+        "explore": {
+          "first_run_max_ms": 3.4,
+          "first_run_p50_ms": 0.8,
+          "max_ms": 0.6,
+          "p50_ms": 0.2,
+          "p95_ms": 0.3,
+          "rows_max": 1,
+          "runs": 150
+        },
+        "strata_credits": {
+          "first_run_max_ms": 0.5,
+          "first_run_p50_ms": 0.2,
+          "max_ms": 0.4,
+          "p50_ms": 0.2,
+          "p95_ms": 0.4,
+          "rows_max": 1,
+          "runs": 150
+        },
+        "strata_ladder": {
+          "first_run_max_ms": 0.3,
+          "first_run_p50_ms": 0.2,
+          "max_ms": 0.3,
+          "p50_ms": 0.2,
+          "p95_ms": 0.3,
+          "rows_max": 2,
+          "runs": 150
+        }
+      }
+    },
+    "10-99": {
+      "artists": 30,
+      "artists_measured": 30,
+      "queries": {
+        "count_releases": {
+          "first_run_max_ms": 0.2,
+          "first_run_p50_ms": 0.1,
+          "max_ms": 0.2,
+          "p50_ms": 0.1,
+          "p95_ms": 0.1,
+          "rows_max": 1,
+          "runs": 150
+        },
+        "expand_releases": {
+          "first_run_max_ms": 9.7,
+          "first_run_p50_ms": 2.3,
+          "max_ms": 0.3,
+          "p50_ms": 0.1,
+          "p95_ms": 0.3,
+          "rows_max": 50,
+          "runs": 150
+        },
+        "explore": {
+          "first_run_max_ms": 2.1,
+          "first_run_p50_ms": 1.4,
+          "max_ms": 0.5,
+          "p50_ms": 0.2,
+          "p95_ms": 0.4,
+          "rows_max": 1,
+          "runs": 150
+        },
+        "strata_credits": {
+          "first_run_max_ms": 3.1,
+          "first_run_p50_ms": 0.3,
+          "max_ms": 0.5,
+          "p50_ms": 0.2,
+          "p95_ms": 0.4,
+          "rows_max": 1,
+          "runs": 150
+        },
+        "strata_ladder": {
+          "first_run_max_ms": 2.8,
+          "first_run_p50_ms": 0.3,
+          "max_ms": 0.6,
+          "p50_ms": 0.3,
+          "p95_ms": 0.5,
+          "rows_max": 13,
+          "runs": 150
+        }
+      }
+    },
+    "100-999": {
+      "artists": 30,
+      "artists_measured": 30,
+      "queries": {
+        "count_releases": {
+          "first_run_max_ms": 1.0,
+          "first_run_p50_ms": 0.3,
+          "max_ms": 0.9,
+          "p50_ms": 0.2,
+          "p95_ms": 0.8,
+          "rows_max": 1,
+          "runs": 150
+        },
+        "expand_releases": {
+          "first_run_max_ms": 85.3,
+          "first_run_p50_ms": 15.9,
+          "max_ms": 1.9,
+          "p50_ms": 0.5,
+          "p95_ms": 1.7,
+          "rows_max": 50,
+          "runs": 150
+        },
+        "explore": {
+          "first_run_max_ms": 4.0,
+          "first_run_p50_ms": 1.8,
+          "max_ms": 3.5,
+          "p50_ms": 0.7,
+          "p95_ms": 2.6,
+          "rows_max": 1,
+          "runs": 150
+        },
+        "strata_credits": {
+          "first_run_max_ms": 9.8,
+          "first_run_p50_ms": 1.5,
+          "max_ms": 4.1,
+          "p50_ms": 0.7,
+          "p95_ms": 2.7,
+          "rows_max": 1,
+          "runs": 150
+        },
+        "strata_ladder": {
+          "first_run_max_ms": 65.2,
+          "first_run_p50_ms": 5.4,
+          "max_ms": 4.4,
+          "p50_ms": 1.1,
+          "p95_ms": 3.5,
+          "rows_max": 161,
+          "runs": 150
+        }
+      }
+    },
+    "1000-9999": {
+      "artists": 30,
+      "artists_measured": 30,
+      "queries": {
+        "count_releases": {
+          "first_run_max_ms": 6.5,
+          "first_run_p50_ms": 1.5,
+          "max_ms": 6.3,
+          "p50_ms": 1.6,
+          "p95_ms": 5.2,
+          "rows_max": 1,
+          "runs": 150
+        },
+        "expand_releases": {
+          "first_run_max_ms": 297.6,
+          "first_run_p50_ms": 98.6,
+          "max_ms": 11.8,
+          "p50_ms": 2.9,
+          "p95_ms": 10.8,
+          "rows_max": 50,
+          "runs": 150
+        },
+        "explore": {
+          "first_run_max_ms": 25.6,
+          "first_run_p50_ms": 6.7,
+          "max_ms": 24.8,
+          "p50_ms": 5.0,
+          "p95_ms": 17.8,
+          "rows_max": 1,
+          "runs": 150
+        },
+        "strata_credits": {
+          "first_run_max_ms": 77.4,
+          "first_run_p50_ms": 7.3,
+          "max_ms": 28.5,
+          "p50_ms": 4.9,
+          "p95_ms": 14.5,
+          "rows_max": 1,
+          "runs": 150
+        },
+        "strata_ladder": {
+          "first_run_max_ms": 381.3,
+          "first_run_p50_ms": 42.9,
+          "max_ms": 37.9,
+          "p50_ms": 8.3,
+          "p95_ms": 35.2,
+          "rows_max": 925,
+          "runs": 150
+        }
+      }
+    },
+    "10000+": {
+      "artists": 30,
+      "artists_measured": 30,
+      "queries": {
+        "count_releases": {
+          "first_run_max_ms": 41.6,
+          "first_run_p50_ms": 12.2,
+          "max_ms": 42.8,
+          "p50_ms": 11.4,
+          "p95_ms": 26.3,
+          "rows_max": 1,
+          "runs": 150
+        },
+        "expand_releases": {
+          "first_run_max_ms": 1376.3,
+          "first_run_p50_ms": 265.4,
+          "max_ms": 80.2,
+          "p50_ms": 24.9,
+          "p95_ms": 49.4,
+          "rows_max": 50,
+          "runs": 135
+        },
+        "explore": {
+          "first_run_max_ms": 161.5,
+          "first_run_p50_ms": 48.1,
+          "max_ms": 160.3,
+          "p50_ms": 46.0,
+          "p95_ms": 99.7,
+          "rows_max": 1,
+          "runs": 135
+        },
+        "strata_credits": {
+          "first_run_max_ms": 375.9,
+          "first_run_p50_ms": 62.3,
+          "max_ms": 235.2,
+          "p50_ms": 41.8,
+          "p95_ms": 213.4,
+          "rows_max": 1,
+          "runs": 150
+        },
+        "strata_ladder": {
+          "first_run_max_ms": 2455.2,
+          "first_run_p50_ms": 345.7,
+          "max_ms": 777.0,
+          "p50_ms": 87.8,
+          "p95_ms": 328.3,
+          "rows_max": 31526,
+          "runs": 150
+        }
+      }
+    },
+    "largest10": {
+      "artists": 10,
+      "artists_measured": 10,
+      "queries": {
+        "count_releases": {
+          "first_run_max_ms": 40.2,
+          "first_run_p50_ms": 20.9,
+          "max_ms": 42.0,
+          "p50_ms": 21.1,
+          "p95_ms": 40.9,
+          "rows_max": 1,
+          "runs": 50
+        },
+        "expand_releases": {
+          "first_run_max_ms": 337.8,
+          "first_run_p50_ms": 41.0,
+          "max_ms": 82.6,
+          "p50_ms": 43.8,
+          "p95_ms": 73.8,
+          "rows_max": 50,
+          "runs": 40
+        },
+        "explore": {
+          "first_run_max_ms": 170.4,
+          "first_run_p50_ms": 91.9,
+          "max_ms": 181.4,
+          "p50_ms": 92.0,
+          "p95_ms": 171.0,
+          "rows_max": 1,
+          "runs": 40
+        },
+        "strata_credits": {
+          "first_run_max_ms": 259.9,
+          "first_run_p50_ms": 104.7,
+          "max_ms": 227.4,
+          "p50_ms": 101.6,
+          "p95_ms": 218.4,
+          "rows_max": 1,
+          "runs": 50
+        },
+        "strata_ladder": {
+          "first_run_max_ms": 1561.6,
+          "first_run_p50_ms": 181.4,
+          "max_ms": 786.5,
+          "p50_ms": 184.3,
+          "p95_ms": 779.5,
+          "rows_max": 31526,
+          "runs": 50
+        }
+      }
+    }
+  },
+  "per_band": 30,
+  "repeats": 5,
+  "timing": "server-side, datetime.realtime() around each statement; transfer excluded"
+}
