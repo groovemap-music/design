@@ -1,0 +1,305 @@
+{
+  "work": {
+    "gm_id": "00000000-0000-4000-8000-000000000101",
+    "state": "linked",
+    "providers": [
+      {
+        "provider": "discogs",
+        "external_id": "900101",
+        "valid_from": "2026-08-01T02:00:00Z",
+        "valid_to": null
+      },
+      {
+        "provider": "musicbrainz",
+        "external_id": "00000000-0000-4000-9000-0000000000b1",
+        "valid_from": "2026-08-03T05:00:01Z",
+        "valid_to": null
+      }
+    ]
+  },
+  "as_of": "2026-09-01T12:00:00Z",
+  "editions": [
+    {
+      "gm_id": "00000000-0000-4000-8000-000000000001",
+      "state": "linked",
+      "works": [
+        "00000000-0000-4000-8000-000000000101"
+      ],
+      "work_disagreement": false,
+      "provider_rows": [
+        {
+          "provider": "discogs",
+          "external_id": "900001"
+        },
+        {
+          "provider": "musicbrainz",
+          "external_id": "00000000-0000-4000-9000-000000000001",
+          "names_discogs_release": "900001"
+        }
+      ],
+      "former_items": [],
+      "evidence": [
+        {
+          "provider": "barcode",
+          "external_id": "synthetic-barcode-1",
+          "source": "catalog",
+          "held_by": "00000000-0000-4000-8000-000000000001",
+          "valid_from": "2026-08-01T02:00:00Z",
+          "valid_to": null,
+          "opened_by": "mint",
+          "closed_by": null
+        },
+        {
+          "provider": "discogs",
+          "external_id": "900001",
+          "source": "catalog",
+          "held_by": "00000000-0000-4000-8000-000000000001",
+          "valid_from": "2026-08-01T02:00:00Z",
+          "valid_to": null,
+          "opened_by": "mint",
+          "closed_by": null
+        },
+        {
+          "provider": "catalog_number",
+          "external_id": "synthetic-catno-1",
+          "source": "catalog",
+          "held_by": "00000000-0000-4000-8000-000000000001",
+          "valid_from": "2026-08-03T05:00:10Z",
+          "valid_to": null,
+          "opened_by": "later",
+          "closed_by": null
+        },
+        {
+          "provider": "musicbrainz",
+          "external_id": "00000000-0000-4000-9000-000000000001",
+          "source": "catalog",
+          "held_by": "00000000-0000-4000-8000-000000000001",
+          "valid_from": "2026-08-03T05:00:10Z",
+          "valid_to": null,
+          "opened_by": "later",
+          "closed_by": null
+        }
+      ],
+      "events": [
+        {
+          "at": "2026-08-01T02:00:00Z",
+          "type": "minted",
+          "item": "00000000-0000-4000-8000-000000000001",
+          "providers": [
+            "barcode",
+            "discogs"
+          ],
+          "rule": "ADR 0009: minted at ingest through common.identity"
+        },
+        {
+          "at": "2026-08-03T05:00:10Z",
+          "type": "evidence_attached",
+          "provider": "catalog_number",
+          "source": "catalog",
+          "rule": "ADR 0011 identifier aliases; attach_aliases never overwrites"
+        },
+        {
+          "at": "2026-08-03T05:00:10Z",
+          "type": "linked_at_ingest",
+          "item": "00000000-0000-4000-8000-000000000001",
+          "rule": "ADR 0014 Context: musicbrainz-sql-loader attaches to a Discogs item that already resolves"
+        }
+      ]
+    },
+    {
+      "gm_id": "00000000-0000-4000-8000-000000000002",
+      "state": "discogs_only",
+      "works": [
+        "00000000-0000-4000-8000-000000000101"
+      ],
+      "work_disagreement": false,
+      "provider_rows": [
+        {
+          "provider": "discogs",
+          "external_id": "900002"
+        },
+        {
+          "provider": "musicbrainz",
+          "external_id": "00000000-0000-4000-9000-000000000002",
+          "names_discogs_release": "900002"
+        }
+      ],
+      "former_items": [],
+      "evidence": [
+        {
+          "provider": "discogs",
+          "external_id": "900002",
+          "source": "catalog",
+          "held_by": "00000000-0000-4000-8000-000000000002",
+          "valid_from": "2026-08-01T02:00:00Z",
+          "valid_to": null,
+          "opened_by": "mint",
+          "closed_by": null
+        }
+      ],
+      "events": [
+        {
+          "at": "2026-08-01T02:00:00Z",
+          "type": "minted",
+          "item": "00000000-0000-4000-8000-000000000002",
+          "providers": [
+            "discogs"
+          ],
+          "rule": "ADR 0009: minted at ingest through common.identity"
+        }
+      ]
+    },
+    {
+      "gm_id": "00000000-0000-4000-8000-000000000004",
+      "state": "discogs_only",
+      "works": [
+        "00000000-0000-4000-8000-000000000101"
+      ],
+      "work_disagreement": false,
+      "provider_rows": [
+        {
+          "provider": "discogs",
+          "external_id": "900004"
+        }
+      ],
+      "former_items": [],
+      "evidence": [
+        {
+          "provider": "discogs",
+          "external_id": "900004",
+          "source": "catalog",
+          "held_by": "00000000-0000-4000-8000-000000000004",
+          "valid_from": "2026-08-01T02:00:00Z",
+          "valid_to": null,
+          "opened_by": "mint",
+          "closed_by": null
+        }
+      ],
+      "events": [
+        {
+          "at": "2026-08-01T02:00:00Z",
+          "type": "minted",
+          "item": "00000000-0000-4000-8000-000000000004",
+          "providers": [
+            "discogs"
+          ],
+          "rule": "ADR 0009: minted at ingest through common.identity"
+        }
+      ]
+    },
+    {
+      "gm_id": "00000000-0000-4000-8000-000000000003",
+      "state": "split",
+      "works": [
+        "00000000-0000-4000-8000-000000000101"
+      ],
+      "work_disagreement": false,
+      "provider_rows": [
+        {
+          "provider": "discogs",
+          "external_id": "900003"
+        },
+        {
+          "provider": "musicbrainz",
+          "external_id": "00000000-0000-4000-9000-000000000003",
+          "names_discogs_release": "900003"
+        }
+      ],
+      "former_items": [],
+      "evidence": [
+        {
+          "provider": "barcode",
+          "external_id": "synthetic-barcode-3",
+          "source": "catalog",
+          "held_by": "00000000-0000-4000-8000-000000000013",
+          "valid_from": "2026-08-03T05:00:11Z",
+          "valid_to": null,
+          "opened_by": "mint",
+          "closed_by": null
+        },
+        {
+          "provider": "musicbrainz",
+          "external_id": "00000000-0000-4000-9000-000000000003",
+          "source": "catalog",
+          "held_by": "00000000-0000-4000-8000-000000000013",
+          "valid_from": "2026-08-03T05:00:11Z",
+          "valid_to": null,
+          "opened_by": "mint",
+          "closed_by": null
+        },
+        {
+          "provider": "discogs",
+          "external_id": "900003",
+          "source": "catalog",
+          "held_by": "00000000-0000-4000-8000-000000000003",
+          "valid_from": "2026-09-01T02:00:00Z",
+          "valid_to": null,
+          "opened_by": "mint",
+          "closed_by": null
+        }
+      ],
+      "events": [
+        {
+          "at": "2026-08-03T05:00:11Z",
+          "type": "minted",
+          "item": "00000000-0000-4000-8000-000000000013",
+          "providers": [
+            "barcode",
+            "musicbrainz"
+          ],
+          "rule": "ADR 0009: minted at ingest through common.identity"
+        },
+        {
+          "at": "2026-09-01T02:00:00Z",
+          "type": "minted",
+          "item": "00000000-0000-4000-8000-000000000003",
+          "providers": [
+            "discogs"
+          ],
+          "rule": "ADR 0009: minted at ingest through common.identity"
+        }
+      ]
+    },
+    {
+      "gm_id": "00000000-0000-4000-8000-000000000005",
+      "state": "musicbrainz_only",
+      "works": [
+        "00000000-0000-4000-8000-000000000101"
+      ],
+      "work_disagreement": false,
+      "provider_rows": [
+        {
+          "provider": "musicbrainz",
+          "external_id": "00000000-0000-4000-9000-000000000005",
+          "names_discogs_release": null
+        }
+      ],
+      "former_items": [],
+      "evidence": [
+        {
+          "provider": "musicbrainz",
+          "external_id": "00000000-0000-4000-9000-000000000005",
+          "source": "catalog",
+          "held_by": "00000000-0000-4000-8000-000000000005",
+          "valid_from": "2026-08-03T05:00:12Z",
+          "valid_to": null,
+          "opened_by": "mint",
+          "closed_by": null
+        }
+      ],
+      "events": [
+        {
+          "at": "2026-08-03T05:00:12Z",
+          "type": "minted",
+          "item": "00000000-0000-4000-8000-000000000005",
+          "providers": [
+            "musicbrainz"
+          ],
+          "rule": "ADR 0009: minted at ingest through common.identity"
+        }
+      ]
+    }
+  ],
+  "edition_count": 5,
+  "truncated": false
+}

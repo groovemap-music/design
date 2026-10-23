@@ -1,0 +1,11 @@
+{
+ "database": "predecessor catalog: both dumps loaded, no native identity",
+ "measured_on": "2026-10-23",
+ "missing_tables": [
+  "catalog_items",
+  "provider_aliases",
+  "catalog_item_supersessions",
+  "catalog_item_moves"
+ ],
+ "status": "DEFER"
+}
