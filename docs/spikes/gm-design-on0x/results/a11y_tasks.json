@@ -1,0 +1,1987 @@
+{
+ "budget": "3,12,16",
+ "layout": "spaced",
+ "browser": "chromium 156.0.8078.4",
+ "runs": [
+  {
+   "renderer": "webgl",
+   "scale": 50,
+   "keyboard": {
+    "ok": true,
+    "drilledWithEnter": false,
+    "siblingHops": 0,
+    "keys": "PageDown PageDown PageDown PageUp PageUp Escape",
+    "levels": "0 1 2 1 0 -",
+    "panelAriaLive": "polite",
+    "focusable": [
+     "All planes",
+     "L0 Artist credits",
+     "L1 Masters",
+     "L2 Releases",
+     "Discography strata: cred",
+     "Zoom in",
+     "Zoom out",
+     "Reset view",
+     "valid",
+     "tx",
+     "Table of every credit, m"
+    ]
+   },
+   "table": {
+    "rows": 50,
+    "oracleRows": 50,
+    "blockedRows": 2,
+    "oracleBlocked": 2,
+    "renderMs": 1,
+    "match": true
+   },
+   "tasks": {
+    "t1": {
+     "ownedMastersWithGaps": 3,
+     "mastersDrawn": 3,
+     "mastersClickable": 3,
+     "missingPressings": 7,
+     "missingDrawn": 2,
+     "actions": "select the master (1); its pressings and their states list in the panel; a folded master needs its count node opened first",
+     "drill": {
+      "targets": 0,
+      "reached": 0,
+      "clickableAfter": 0,
+      "ringShare": null,
+      "medianActions": null,
+      "maxActions": null
+     },
+     "drillMissing": {
+      "targets": 5,
+      "reached": 5,
+      "clickableAfter": 5,
+      "ringShare": 1,
+      "medianActions": 1,
+      "maxActions": 1
+     }
+    },
+    "t2": {
+     "blocked": 2,
+     "drawn": 0,
+     "clickable": 0,
+     "actions": "a red ring marks a drawn blocked pressing; selecting it shows the reason (1); the table lists every blocked item with its reason (1)",
+     "drill": {
+      "targets": 2,
+      "reached": 2,
+      "clickableAfter": 2,
+      "ringShare": 1,
+      "medianActions": 1,
+      "maxActions": 1
+     }
+    },
+    "t3": {
+     "releasesDrawn": 9,
+     "clickable": 9,
+     "cylinderReachesCredit": 9,
+     "actions": "select the pressing (1): the highlight runs up through its master to its credit; PageUp twice walks it by keyboard",
+     "drill": {
+      "targets": 8,
+      "reached": 8,
+      "clickableAfter": 8,
+      "ringShare": 1,
+      "medianActions": 2,
+      "maxActions": 4
+     }
+    }
+   },
+   "reducedMotion": {
+    "no-preference": {
+     "reduce": false,
+     "tweenFrames": 63,
+     "simAlpha": null
+    },
+    "reduce": {
+     "reduce": true,
+     "tweenFrames": 0,
+     "simAlpha": null
+    }
+   }
+  },
+  {
+   "renderer": "webgl",
+   "scale": 500,
+   "keyboard": {
+    "ok": true,
+    "drilledWithEnter": false,
+    "siblingHops": 0,
+    "keys": "PageDown PageDown PageDown PageUp PageUp Escape",
+    "levels": "0 1 2 1 0 -",
+    "panelAriaLive": "polite",
+    "focusable": [
+     "All planes",
+     "L0 Artist credits",
+     "L1 Masters",
+     "L2 Releases",
+     "Discography strata: cred",
+     "Zoom in",
+     "Zoom out",
+     "Reset view",
+     "valid",
+     "tx",
+     "Table of every credit, m"
+    ]
+   },
+   "table": {
+    "rows": 500,
+    "oracleRows": 500,
+    "blockedRows": 28,
+    "oracleBlocked": 28,
+    "renderMs": 3,
+    "match": true
+   },
+   "tasks": {
+    "t1": {
+     "ownedMastersWithGaps": 15,
+     "mastersDrawn": 6,
+     "mastersClickable": 6,
+     "missingPressings": 166,
+     "missingDrawn": 0,
+     "actions": "select the master (1); its pressings and their states list in the panel; a folded master needs its count node opened first",
+     "drill": {
+      "targets": 9,
+      "reached": 9,
+      "clickableAfter": 9,
+      "ringShare": 1,
+      "medianActions": 5,
+      "maxActions": 10
+     },
+     "drillMissing": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 11,
+      "ringShare": 0.948,
+      "medianActions": 7,
+      "maxActions": 11
+     }
+    },
+    "t2": {
+     "blocked": 28,
+     "drawn": 0,
+     "clickable": 0,
+     "actions": "a red ring marks a drawn blocked pressing; selecting it shows the reason (1); the table lists every blocked item with its reason (1)",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 6,
+      "maxActions": 11
+     }
+    },
+    "t3": {
+     "releasesDrawn": 2,
+     "clickable": 2,
+     "cylinderReachesCredit": 2,
+     "actions": "select the pressing (1): the highlight runs up through its master to its credit; PageUp twice walks it by keyboard",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 11,
+      "ringShare": 0.948,
+      "medianActions": 6,
+      "maxActions": 28
+     }
+    }
+   },
+   "reducedMotion": {
+    "no-preference": {
+     "reduce": false,
+     "tweenFrames": 63,
+     "simAlpha": null
+    },
+    "reduce": {
+     "reduce": true,
+     "tweenFrames": 0,
+     "simAlpha": null
+    }
+   }
+  },
+  {
+   "renderer": "webgl",
+   "scale": 5000,
+   "keyboard": {
+    "ok": true,
+    "drilledWithEnter": false,
+    "siblingHops": 0,
+    "keys": "PageDown PageDown PageDown PageUp PageUp Escape",
+    "levels": "0 1 2 1 0 -",
+    "panelAriaLive": "polite",
+    "focusable": [
+     "All planes",
+     "L0 Artist credits",
+     "L1 Masters",
+     "L2 Releases",
+     "Discography strata: cred",
+     "Zoom in",
+     "Zoom out",
+     "Reset view",
+     "valid",
+     "tx",
+     "Table of every credit, m"
+    ]
+   },
+   "table": {
+    "rows": 5000,
+    "oracleRows": 5000,
+    "blockedRows": 277,
+    "oracleBlocked": 277,
+    "renderMs": 28,
+    "match": true
+   },
+   "tasks": {
+    "t1": {
+     "ownedMastersWithGaps": 36,
+     "mastersDrawn": 2,
+     "mastersClickable": 2,
+     "missingPressings": 663,
+     "missingDrawn": 0,
+     "actions": "select the master (1); its pressings and their states list in the panel; a folded master needs its count node opened first",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 0.896,
+      "medianActions": 7,
+      "maxActions": 34
+     },
+     "drillMissing": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 6,
+      "maxActions": 7
+     }
+    },
+    "t2": {
+     "blocked": 277,
+     "drawn": 0,
+     "clickable": 0,
+     "actions": "a red ring marks a drawn blocked pressing; selecting it shows the reason (1); the table lists every blocked item with its reason (1)",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 19,
+      "maxActions": 31
+     }
+    },
+    "t3": {
+     "releasesDrawn": 0,
+     "clickable": 0,
+     "cylinderReachesCredit": 0,
+     "actions": "select the pressing (1): the highlight runs up through its master to its credit; PageUp twice walks it by keyboard",
+     "drill": {
+      "targets": 12,
+      "reached": 10,
+      "clickableAfter": 9,
+      "ringShare": 0.925,
+      "medianActions": 13,
+      "maxActions": 146
+     }
+    }
+   },
+   "reducedMotion": {
+    "no-preference": {
+     "reduce": false,
+     "tweenFrames": 63,
+     "simAlpha": null
+    },
+    "reduce": {
+     "reduce": true,
+     "tweenFrames": 0,
+     "simAlpha": null
+    }
+   }
+  },
+  {
+   "renderer": "webgl",
+   "scale": 20000,
+   "keyboard": {
+    "ok": true,
+    "drilledWithEnter": false,
+    "siblingHops": 0,
+    "keys": "PageDown PageDown PageDown PageUp PageUp Escape",
+    "levels": "0 1 2 1 0 -",
+    "panelAriaLive": "polite",
+    "focusable": [
+     "All planes",
+     "L0 Artist credits",
+     "L1 Masters",
+     "L2 Releases",
+     "Discography strata: cred",
+     "Zoom in",
+     "Zoom out",
+     "Reset view",
+     "valid",
+     "tx",
+     "Table of every credit, m"
+    ]
+   },
+   "table": {
+    "rows": 20000,
+    "oracleRows": 20000,
+    "blockedRows": 1042,
+    "oracleBlocked": 1042,
+    "renderMs": 87,
+    "match": true
+   },
+   "tasks": {
+    "t1": {
+     "ownedMastersWithGaps": 51,
+     "mastersDrawn": 2,
+     "mastersClickable": 2,
+     "missingPressings": 2823,
+     "missingDrawn": 0,
+     "actions": "select the master (1); its pressings and their states list in the panel; a folded master needs its count node opened first",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 0.938,
+      "medianActions": 16,
+      "maxActions": 36
+     },
+     "drillMissing": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 45,
+      "maxActions": 139
+     }
+    },
+    "t2": {
+     "blocked": 1042,
+     "drawn": 0,
+     "clickable": 0,
+     "actions": "a red ring marks a drawn blocked pressing; selecting it shows the reason (1); the table lists every blocked item with its reason (1)",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 40,
+      "maxActions": 64
+     }
+    },
+    "t3": {
+     "releasesDrawn": 0,
+     "clickable": 0,
+     "cylinderReachesCredit": 0,
+     "actions": "select the pressing (1): the highlight runs up through its master to its credit; PageUp twice walks it by keyboard",
+     "drill": {
+      "targets": 12,
+      "reached": 11,
+      "clickableAfter": 11,
+      "ringShare": 1,
+      "medianActions": 20,
+      "maxActions": 67
+     }
+    }
+   },
+   "reducedMotion": {
+    "no-preference": {
+     "reduce": false,
+     "tweenFrames": 63,
+     "simAlpha": null
+    },
+    "reduce": {
+     "reduce": true,
+     "tweenFrames": 0,
+     "simAlpha": null
+    }
+   }
+  },
+  {
+   "renderer": "webgl-inst:depth",
+   "scale": 50,
+   "keyboard": {
+    "ok": true,
+    "drilledWithEnter": false,
+    "siblingHops": 0,
+    "keys": "PageDown PageDown PageDown PageUp PageUp Escape",
+    "levels": "0 1 2 1 0 -",
+    "panelAriaLive": "polite",
+    "focusable": [
+     "All planes",
+     "L0 Artist credits",
+     "L1 Masters",
+     "L2 Releases",
+     "Discography strata: cred",
+     "Zoom in",
+     "Zoom out",
+     "Reset view",
+     "valid",
+     "tx",
+     "Table of every credit, m"
+    ]
+   },
+   "table": {
+    "rows": 50,
+    "oracleRows": 50,
+    "blockedRows": 2,
+    "oracleBlocked": 2,
+    "renderMs": 1,
+    "match": true
+   },
+   "tasks": {
+    "t1": {
+     "ownedMastersWithGaps": 3,
+     "mastersDrawn": 3,
+     "mastersClickable": 3,
+     "missingPressings": 7,
+     "missingDrawn": 2,
+     "actions": "select the master (1); its pressings and their states list in the panel; a folded master needs its count node opened first",
+     "drill": {
+      "targets": 0,
+      "reached": 0,
+      "clickableAfter": 0,
+      "ringShare": null,
+      "medianActions": null,
+      "maxActions": null
+     },
+     "drillMissing": {
+      "targets": 5,
+      "reached": 5,
+      "clickableAfter": 5,
+      "ringShare": 1,
+      "medianActions": 1,
+      "maxActions": 1
+     }
+    },
+    "t2": {
+     "blocked": 2,
+     "drawn": 0,
+     "clickable": 0,
+     "actions": "a red ring marks a drawn blocked pressing; selecting it shows the reason (1); the table lists every blocked item with its reason (1)",
+     "drill": {
+      "targets": 2,
+      "reached": 2,
+      "clickableAfter": 2,
+      "ringShare": 1,
+      "medianActions": 1,
+      "maxActions": 1
+     }
+    },
+    "t3": {
+     "releasesDrawn": 9,
+     "clickable": 9,
+     "cylinderReachesCredit": 9,
+     "actions": "select the pressing (1): the highlight runs up through its master to its credit; PageUp twice walks it by keyboard",
+     "drill": {
+      "targets": 8,
+      "reached": 8,
+      "clickableAfter": 8,
+      "ringShare": 1,
+      "medianActions": 2,
+      "maxActions": 4
+     }
+    }
+   },
+   "reducedMotion": {
+    "no-preference": {
+     "reduce": false,
+     "tweenFrames": 63,
+     "simAlpha": null
+    },
+    "reduce": {
+     "reduce": true,
+     "tweenFrames": 0,
+     "simAlpha": null
+    }
+   }
+  },
+  {
+   "renderer": "webgl-inst:depth",
+   "scale": 500,
+   "keyboard": {
+    "ok": true,
+    "drilledWithEnter": false,
+    "siblingHops": 0,
+    "keys": "PageDown PageDown PageDown PageUp PageUp Escape",
+    "levels": "0 1 2 1 0 -",
+    "panelAriaLive": "polite",
+    "focusable": [
+     "All planes",
+     "L0 Artist credits",
+     "L1 Masters",
+     "L2 Releases",
+     "Discography strata: cred",
+     "Zoom in",
+     "Zoom out",
+     "Reset view",
+     "valid",
+     "tx",
+     "Table of every credit, m"
+    ]
+   },
+   "table": {
+    "rows": 500,
+    "oracleRows": 500,
+    "blockedRows": 28,
+    "oracleBlocked": 28,
+    "renderMs": 3,
+    "match": true
+   },
+   "tasks": {
+    "t1": {
+     "ownedMastersWithGaps": 15,
+     "mastersDrawn": 6,
+     "mastersClickable": 6,
+     "missingPressings": 166,
+     "missingDrawn": 0,
+     "actions": "select the master (1); its pressings and their states list in the panel; a folded master needs its count node opened first",
+     "drill": {
+      "targets": 9,
+      "reached": 9,
+      "clickableAfter": 9,
+      "ringShare": 1,
+      "medianActions": 5,
+      "maxActions": 10
+     },
+     "drillMissing": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 11,
+      "ringShare": 0.948,
+      "medianActions": 7,
+      "maxActions": 11
+     }
+    },
+    "t2": {
+     "blocked": 28,
+     "drawn": 0,
+     "clickable": 0,
+     "actions": "a red ring marks a drawn blocked pressing; selecting it shows the reason (1); the table lists every blocked item with its reason (1)",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 6,
+      "maxActions": 11
+     }
+    },
+    "t3": {
+     "releasesDrawn": 2,
+     "clickable": 2,
+     "cylinderReachesCredit": 2,
+     "actions": "select the pressing (1): the highlight runs up through its master to its credit; PageUp twice walks it by keyboard",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 11,
+      "ringShare": 0.948,
+      "medianActions": 6,
+      "maxActions": 28
+     }
+    }
+   },
+   "reducedMotion": {
+    "no-preference": {
+     "reduce": false,
+     "tweenFrames": 63,
+     "simAlpha": null
+    },
+    "reduce": {
+     "reduce": true,
+     "tweenFrames": 0,
+     "simAlpha": null
+    }
+   }
+  },
+  {
+   "renderer": "webgl-inst:depth",
+   "scale": 5000,
+   "keyboard": {
+    "ok": true,
+    "drilledWithEnter": false,
+    "siblingHops": 0,
+    "keys": "PageDown PageDown PageDown PageUp PageUp Escape",
+    "levels": "0 1 2 1 0 -",
+    "panelAriaLive": "polite",
+    "focusable": [
+     "All planes",
+     "L0 Artist credits",
+     "L1 Masters",
+     "L2 Releases",
+     "Discography strata: cred",
+     "Zoom in",
+     "Zoom out",
+     "Reset view",
+     "valid",
+     "tx",
+     "Table of every credit, m"
+    ]
+   },
+   "table": {
+    "rows": 5000,
+    "oracleRows": 5000,
+    "blockedRows": 277,
+    "oracleBlocked": 277,
+    "renderMs": 27,
+    "match": true
+   },
+   "tasks": {
+    "t1": {
+     "ownedMastersWithGaps": 36,
+     "mastersDrawn": 2,
+     "mastersClickable": 2,
+     "missingPressings": 663,
+     "missingDrawn": 0,
+     "actions": "select the master (1); its pressings and their states list in the panel; a folded master needs its count node opened first",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 0.896,
+      "medianActions": 7,
+      "maxActions": 34
+     },
+     "drillMissing": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 6,
+      "maxActions": 7
+     }
+    },
+    "t2": {
+     "blocked": 277,
+     "drawn": 0,
+     "clickable": 0,
+     "actions": "a red ring marks a drawn blocked pressing; selecting it shows the reason (1); the table lists every blocked item with its reason (1)",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 19,
+      "maxActions": 31
+     }
+    },
+    "t3": {
+     "releasesDrawn": 0,
+     "clickable": 0,
+     "cylinderReachesCredit": 0,
+     "actions": "select the pressing (1): the highlight runs up through its master to its credit; PageUp twice walks it by keyboard",
+     "drill": {
+      "targets": 12,
+      "reached": 10,
+      "clickableAfter": 9,
+      "ringShare": 0.925,
+      "medianActions": 13,
+      "maxActions": 146
+     }
+    }
+   },
+   "reducedMotion": {
+    "no-preference": {
+     "reduce": false,
+     "tweenFrames": 63,
+     "simAlpha": null
+    },
+    "reduce": {
+     "reduce": true,
+     "tweenFrames": 0,
+     "simAlpha": null
+    }
+   }
+  },
+  {
+   "renderer": "webgl-inst:depth",
+   "scale": 20000,
+   "keyboard": {
+    "ok": true,
+    "drilledWithEnter": false,
+    "siblingHops": 0,
+    "keys": "PageDown PageDown PageDown PageUp PageUp Escape",
+    "levels": "0 1 2 1 0 -",
+    "panelAriaLive": "polite",
+    "focusable": [
+     "All planes",
+     "L0 Artist credits",
+     "L1 Masters",
+     "L2 Releases",
+     "Discography strata: cred",
+     "Zoom in",
+     "Zoom out",
+     "Reset view",
+     "valid",
+     "tx",
+     "Table of every credit, m"
+    ]
+   },
+   "table": {
+    "rows": 20000,
+    "oracleRows": 20000,
+    "blockedRows": 1042,
+    "oracleBlocked": 1042,
+    "renderMs": 86,
+    "match": true
+   },
+   "tasks": {
+    "t1": {
+     "ownedMastersWithGaps": 51,
+     "mastersDrawn": 2,
+     "mastersClickable": 2,
+     "missingPressings": 2823,
+     "missingDrawn": 0,
+     "actions": "select the master (1); its pressings and their states list in the panel; a folded master needs its count node opened first",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 0.938,
+      "medianActions": 16,
+      "maxActions": 36
+     },
+     "drillMissing": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 45,
+      "maxActions": 139
+     }
+    },
+    "t2": {
+     "blocked": 1042,
+     "drawn": 0,
+     "clickable": 0,
+     "actions": "a red ring marks a drawn blocked pressing; selecting it shows the reason (1); the table lists every blocked item with its reason (1)",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 40,
+      "maxActions": 64
+     }
+    },
+    "t3": {
+     "releasesDrawn": 0,
+     "clickable": 0,
+     "cylinderReachesCredit": 0,
+     "actions": "select the pressing (1): the highlight runs up through its master to its credit; PageUp twice walks it by keyboard",
+     "drill": {
+      "targets": 12,
+      "reached": 11,
+      "clickableAfter": 11,
+      "ringShare": 1,
+      "medianActions": 20,
+      "maxActions": 67
+     }
+    }
+   },
+   "reducedMotion": {
+    "no-preference": {
+     "reduce": false,
+     "tweenFrames": 63,
+     "simAlpha": null
+    },
+    "reduce": {
+     "reduce": true,
+     "tweenFrames": 0,
+     "simAlpha": null
+    }
+   }
+  },
+  {
+   "renderer": "webgl-inst",
+   "scale": 50,
+   "keyboard": {
+    "ok": true,
+    "drilledWithEnter": false,
+    "siblingHops": 0,
+    "keys": "PageDown PageDown PageDown PageUp PageUp Escape",
+    "levels": "0 1 2 1 0 -",
+    "panelAriaLive": "polite",
+    "focusable": [
+     "All planes",
+     "L0 Artist credits",
+     "L1 Masters",
+     "L2 Releases",
+     "Discography strata: cred",
+     "Zoom in",
+     "Zoom out",
+     "Reset view",
+     "valid",
+     "tx",
+     "Table of every credit, m"
+    ]
+   },
+   "table": {
+    "rows": 50,
+    "oracleRows": 50,
+    "blockedRows": 2,
+    "oracleBlocked": 2,
+    "renderMs": 1,
+    "match": true
+   },
+   "tasks": {
+    "t1": {
+     "ownedMastersWithGaps": 3,
+     "mastersDrawn": 3,
+     "mastersClickable": 3,
+     "missingPressings": 7,
+     "missingDrawn": 2,
+     "actions": "select the master (1); its pressings and their states list in the panel; a folded master needs its count node opened first",
+     "drill": {
+      "targets": 0,
+      "reached": 0,
+      "clickableAfter": 0,
+      "ringShare": null,
+      "medianActions": null,
+      "maxActions": null
+     },
+     "drillMissing": {
+      "targets": 5,
+      "reached": 5,
+      "clickableAfter": 5,
+      "ringShare": 1,
+      "medianActions": 1,
+      "maxActions": 1
+     }
+    },
+    "t2": {
+     "blocked": 2,
+     "drawn": 0,
+     "clickable": 0,
+     "actions": "a red ring marks a drawn blocked pressing; selecting it shows the reason (1); the table lists every blocked item with its reason (1)",
+     "drill": {
+      "targets": 2,
+      "reached": 2,
+      "clickableAfter": 2,
+      "ringShare": 1,
+      "medianActions": 1,
+      "maxActions": 1
+     }
+    },
+    "t3": {
+     "releasesDrawn": 9,
+     "clickable": 9,
+     "cylinderReachesCredit": 9,
+     "actions": "select the pressing (1): the highlight runs up through its master to its credit; PageUp twice walks it by keyboard",
+     "drill": {
+      "targets": 8,
+      "reached": 8,
+      "clickableAfter": 8,
+      "ringShare": 1,
+      "medianActions": 2,
+      "maxActions": 4
+     }
+    }
+   },
+   "reducedMotion": {
+    "no-preference": {
+     "reduce": false,
+     "tweenFrames": 63,
+     "simAlpha": null
+    },
+    "reduce": {
+     "reduce": true,
+     "tweenFrames": 0,
+     "simAlpha": null
+    }
+   }
+  },
+  {
+   "renderer": "webgl-inst",
+   "scale": 500,
+   "keyboard": {
+    "ok": true,
+    "drilledWithEnter": false,
+    "siblingHops": 0,
+    "keys": "PageDown PageDown PageDown PageUp PageUp Escape",
+    "levels": "0 1 2 1 0 -",
+    "panelAriaLive": "polite",
+    "focusable": [
+     "All planes",
+     "L0 Artist credits",
+     "L1 Masters",
+     "L2 Releases",
+     "Discography strata: cred",
+     "Zoom in",
+     "Zoom out",
+     "Reset view",
+     "valid",
+     "tx",
+     "Table of every credit, m"
+    ]
+   },
+   "table": {
+    "rows": 500,
+    "oracleRows": 500,
+    "blockedRows": 28,
+    "oracleBlocked": 28,
+    "renderMs": 3,
+    "match": true
+   },
+   "tasks": {
+    "t1": {
+     "ownedMastersWithGaps": 15,
+     "mastersDrawn": 6,
+     "mastersClickable": 6,
+     "missingPressings": 166,
+     "missingDrawn": 0,
+     "actions": "select the master (1); its pressings and their states list in the panel; a folded master needs its count node opened first",
+     "drill": {
+      "targets": 9,
+      "reached": 9,
+      "clickableAfter": 9,
+      "ringShare": 0.986,
+      "medianActions": 5,
+      "maxActions": 10
+     },
+     "drillMissing": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 7,
+      "maxActions": 11
+     }
+    },
+    "t2": {
+     "blocked": 28,
+     "drawn": 0,
+     "clickable": 0,
+     "actions": "a red ring marks a drawn blocked pressing; selecting it shows the reason (1); the table lists every blocked item with its reason (1)",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 6,
+      "maxActions": 11
+     }
+    },
+    "t3": {
+     "releasesDrawn": 2,
+     "clickable": 2,
+     "cylinderReachesCredit": 2,
+     "actions": "select the pressing (1): the highlight runs up through its master to its credit; PageUp twice walks it by keyboard",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 6,
+      "maxActions": 28
+     }
+    }
+   },
+   "reducedMotion": {
+    "no-preference": {
+     "reduce": false,
+     "tweenFrames": 63,
+     "simAlpha": null
+    },
+    "reduce": {
+     "reduce": true,
+     "tweenFrames": 0,
+     "simAlpha": null
+    }
+   }
+  },
+  {
+   "renderer": "webgl-inst",
+   "scale": 5000,
+   "keyboard": {
+    "ok": true,
+    "drilledWithEnter": false,
+    "siblingHops": 0,
+    "keys": "PageDown PageDown PageDown PageUp PageUp Escape",
+    "levels": "0 1 2 1 0 -",
+    "panelAriaLive": "polite",
+    "focusable": [
+     "All planes",
+     "L0 Artist credits",
+     "L1 Masters",
+     "L2 Releases",
+     "Discography strata: cred",
+     "Zoom in",
+     "Zoom out",
+     "Reset view",
+     "valid",
+     "tx",
+     "Table of every credit, m"
+    ]
+   },
+   "table": {
+    "rows": 5000,
+    "oracleRows": 5000,
+    "blockedRows": 277,
+    "oracleBlocked": 277,
+    "renderMs": 27,
+    "match": true
+   },
+   "tasks": {
+    "t1": {
+     "ownedMastersWithGaps": 36,
+     "mastersDrawn": 2,
+     "mastersClickable": 2,
+     "missingPressings": 663,
+     "missingDrawn": 0,
+     "actions": "select the master (1); its pressings and their states list in the panel; a folded master needs its count node opened first",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 7,
+      "maxActions": 34
+     },
+     "drillMissing": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 6,
+      "maxActions": 7
+     }
+    },
+    "t2": {
+     "blocked": 277,
+     "drawn": 0,
+     "clickable": 0,
+     "actions": "a red ring marks a drawn blocked pressing; selecting it shows the reason (1); the table lists every blocked item with its reason (1)",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 19,
+      "maxActions": 31
+     }
+    },
+    "t3": {
+     "releasesDrawn": 0,
+     "clickable": 0,
+     "cylinderReachesCredit": 0,
+     "actions": "select the pressing (1): the highlight runs up through its master to its credit; PageUp twice walks it by keyboard",
+     "drill": {
+      "targets": 12,
+      "reached": 10,
+      "clickableAfter": 10,
+      "ringShare": 1,
+      "medianActions": 13,
+      "maxActions": 146
+     }
+    }
+   },
+   "reducedMotion": {
+    "no-preference": {
+     "reduce": false,
+     "tweenFrames": 63,
+     "simAlpha": null
+    },
+    "reduce": {
+     "reduce": true,
+     "tweenFrames": 0,
+     "simAlpha": null
+    }
+   }
+  },
+  {
+   "renderer": "webgl-inst",
+   "scale": 20000,
+   "keyboard": {
+    "ok": true,
+    "drilledWithEnter": false,
+    "siblingHops": 0,
+    "keys": "PageDown PageDown PageDown PageUp PageUp Escape",
+    "levels": "0 1 2 1 0 -",
+    "panelAriaLive": "polite",
+    "focusable": [
+     "All planes",
+     "L0 Artist credits",
+     "L1 Masters",
+     "L2 Releases",
+     "Discography strata: cred",
+     "Zoom in",
+     "Zoom out",
+     "Reset view",
+     "valid",
+     "tx",
+     "Table of every credit, m"
+    ]
+   },
+   "table": {
+    "rows": 20000,
+    "oracleRows": 20000,
+    "blockedRows": 1042,
+    "oracleBlocked": 1042,
+    "renderMs": 85,
+    "match": true
+   },
+   "tasks": {
+    "t1": {
+     "ownedMastersWithGaps": 51,
+     "mastersDrawn": 2,
+     "mastersClickable": 2,
+     "missingPressings": 2823,
+     "missingDrawn": 0,
+     "actions": "select the master (1); its pressings and their states list in the panel; a folded master needs its count node opened first",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 0.99,
+      "medianActions": 16,
+      "maxActions": 36
+     },
+     "drillMissing": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 45,
+      "maxActions": 139
+     }
+    },
+    "t2": {
+     "blocked": 1042,
+     "drawn": 0,
+     "clickable": 0,
+     "actions": "a red ring marks a drawn blocked pressing; selecting it shows the reason (1); the table lists every blocked item with its reason (1)",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 40,
+      "maxActions": 64
+     }
+    },
+    "t3": {
+     "releasesDrawn": 0,
+     "clickable": 0,
+     "cylinderReachesCredit": 0,
+     "actions": "select the pressing (1): the highlight runs up through its master to its credit; PageUp twice walks it by keyboard",
+     "drill": {
+      "targets": 12,
+      "reached": 11,
+      "clickableAfter": 11,
+      "ringShare": 1,
+      "medianActions": 20,
+      "maxActions": 67
+     }
+    }
+   },
+   "reducedMotion": {
+    "no-preference": {
+     "reduce": false,
+     "tweenFrames": 63,
+     "simAlpha": null
+    },
+    "reduce": {
+     "reduce": true,
+     "tweenFrames": 0,
+     "simAlpha": null
+    }
+   }
+  },
+  {
+   "renderer": "iso",
+   "scale": 50,
+   "keyboard": {
+    "ok": true,
+    "drilledWithEnter": false,
+    "siblingHops": 0,
+    "keys": "PageDown PageDown PageDown PageUp PageUp Escape",
+    "levels": "0 1 2 1 0 -",
+    "panelAriaLive": "polite",
+    "focusable": [
+     "All planes",
+     "L0 Artist credits",
+     "L1 Masters",
+     "L2 Releases",
+     "Discography strata: cred",
+     "Zoom in",
+     "Zoom out",
+     "Reset view",
+     "valid",
+     "tx",
+     "Table of every credit, m"
+    ]
+   },
+   "table": {
+    "rows": 50,
+    "oracleRows": 50,
+    "blockedRows": 2,
+    "oracleBlocked": 2,
+    "renderMs": 1,
+    "match": true
+   },
+   "tasks": {
+    "t1": {
+     "ownedMastersWithGaps": 3,
+     "mastersDrawn": 3,
+     "mastersClickable": 3,
+     "missingPressings": 7,
+     "missingDrawn": 2,
+     "actions": "select the master (1); its pressings and their states list in the panel; a folded master needs its count node opened first",
+     "drill": {
+      "targets": 0,
+      "reached": 0,
+      "clickableAfter": 0,
+      "ringShare": null,
+      "medianActions": null,
+      "maxActions": null
+     },
+     "drillMissing": {
+      "targets": 5,
+      "reached": 5,
+      "clickableAfter": 5,
+      "ringShare": 1,
+      "medianActions": 1,
+      "maxActions": 1
+     }
+    },
+    "t2": {
+     "blocked": 2,
+     "drawn": 0,
+     "clickable": 0,
+     "actions": "a red ring marks a drawn blocked pressing; selecting it shows the reason (1); the table lists every blocked item with its reason (1)",
+     "drill": {
+      "targets": 2,
+      "reached": 2,
+      "clickableAfter": 2,
+      "ringShare": 1,
+      "medianActions": 1,
+      "maxActions": 1
+     }
+    },
+    "t3": {
+     "releasesDrawn": 9,
+     "clickable": 9,
+     "cylinderReachesCredit": 9,
+     "actions": "select the pressing (1): the highlight runs up through its master to its credit; PageUp twice walks it by keyboard",
+     "drill": {
+      "targets": 8,
+      "reached": 8,
+      "clickableAfter": 8,
+      "ringShare": 1,
+      "medianActions": 2,
+      "maxActions": 4
+     }
+    }
+   },
+   "reducedMotion": {
+    "no-preference": {
+     "reduce": false,
+     "tweenFrames": 63,
+     "simAlpha": null
+    },
+    "reduce": {
+     "reduce": true,
+     "tweenFrames": 0,
+     "simAlpha": null
+    }
+   }
+  },
+  {
+   "renderer": "iso",
+   "scale": 500,
+   "keyboard": {
+    "ok": true,
+    "drilledWithEnter": false,
+    "siblingHops": 0,
+    "keys": "PageDown PageDown PageDown PageUp PageUp Escape",
+    "levels": "0 1 2 1 0 -",
+    "panelAriaLive": "polite",
+    "focusable": [
+     "All planes",
+     "L0 Artist credits",
+     "L1 Masters",
+     "L2 Releases",
+     "Discography strata: cred",
+     "Zoom in",
+     "Zoom out",
+     "Reset view",
+     "valid",
+     "tx",
+     "Table of every credit, m"
+    ]
+   },
+   "table": {
+    "rows": 500,
+    "oracleRows": 500,
+    "blockedRows": 28,
+    "oracleBlocked": 28,
+    "renderMs": 4,
+    "match": true
+   },
+   "tasks": {
+    "t1": {
+     "ownedMastersWithGaps": 15,
+     "mastersDrawn": 6,
+     "mastersClickable": 6,
+     "missingPressings": 166,
+     "missingDrawn": 0,
+     "actions": "select the master (1); its pressings and their states list in the panel; a folded master needs its count node opened first",
+     "drill": {
+      "targets": 9,
+      "reached": 9,
+      "clickableAfter": 9,
+      "ringShare": 0.972,
+      "medianActions": 5,
+      "maxActions": 10
+     },
+     "drillMissing": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 7,
+      "maxActions": 11
+     }
+    },
+    "t2": {
+     "blocked": 28,
+     "drawn": 0,
+     "clickable": 0,
+     "actions": "a red ring marks a drawn blocked pressing; selecting it shows the reason (1); the table lists every blocked item with its reason (1)",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 6,
+      "maxActions": 11
+     }
+    },
+    "t3": {
+     "releasesDrawn": 2,
+     "clickable": 2,
+     "cylinderReachesCredit": 2,
+     "actions": "select the pressing (1): the highlight runs up through its master to its credit; PageUp twice walks it by keyboard",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 6,
+      "maxActions": 28
+     }
+    }
+   },
+   "reducedMotion": {
+    "no-preference": {
+     "reduce": false,
+     "tweenFrames": 63,
+     "simAlpha": null
+    },
+    "reduce": {
+     "reduce": true,
+     "tweenFrames": 0,
+     "simAlpha": null
+    }
+   }
+  },
+  {
+   "renderer": "iso",
+   "scale": 5000,
+   "keyboard": {
+    "ok": true,
+    "drilledWithEnter": false,
+    "siblingHops": 0,
+    "keys": "PageDown PageDown PageDown PageUp PageUp Escape",
+    "levels": "0 1 2 1 0 -",
+    "panelAriaLive": "polite",
+    "focusable": [
+     "All planes",
+     "L0 Artist credits",
+     "L1 Masters",
+     "L2 Releases",
+     "Discography strata: cred",
+     "Zoom in",
+     "Zoom out",
+     "Reset view",
+     "valid",
+     "tx",
+     "Table of every credit, m"
+    ]
+   },
+   "table": {
+    "rows": 5000,
+    "oracleRows": 5000,
+    "blockedRows": 277,
+    "oracleBlocked": 277,
+    "renderMs": 29,
+    "match": true
+   },
+   "tasks": {
+    "t1": {
+     "ownedMastersWithGaps": 36,
+     "mastersDrawn": 2,
+     "mastersClickable": 2,
+     "missingPressings": 663,
+     "missingDrawn": 0,
+     "actions": "select the master (1); its pressings and their states list in the panel; a folded master needs its count node opened first",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 0.979,
+      "medianActions": 7,
+      "maxActions": 34
+     },
+     "drillMissing": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 6,
+      "maxActions": 7
+     }
+    },
+    "t2": {
+     "blocked": 277,
+     "drawn": 0,
+     "clickable": 0,
+     "actions": "a red ring marks a drawn blocked pressing; selecting it shows the reason (1); the table lists every blocked item with its reason (1)",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 19,
+      "maxActions": 31
+     }
+    },
+    "t3": {
+     "releasesDrawn": 0,
+     "clickable": 0,
+     "cylinderReachesCredit": 0,
+     "actions": "select the pressing (1): the highlight runs up through its master to its credit; PageUp twice walks it by keyboard",
+     "drill": {
+      "targets": 12,
+      "reached": 10,
+      "clickableAfter": 10,
+      "ringShare": 1,
+      "medianActions": 13,
+      "maxActions": 146
+     }
+    }
+   },
+   "reducedMotion": {
+    "no-preference": {
+     "reduce": false,
+     "tweenFrames": 63,
+     "simAlpha": null
+    },
+    "reduce": {
+     "reduce": true,
+     "tweenFrames": 0,
+     "simAlpha": null
+    }
+   }
+  },
+  {
+   "renderer": "iso",
+   "scale": 20000,
+   "keyboard": {
+    "ok": true,
+    "drilledWithEnter": false,
+    "siblingHops": 0,
+    "keys": "PageDown PageDown PageDown PageUp PageUp Escape",
+    "levels": "0 1 2 1 0 -",
+    "panelAriaLive": "polite",
+    "focusable": [
+     "All planes",
+     "L0 Artist credits",
+     "L1 Masters",
+     "L2 Releases",
+     "Discography strata: cred",
+     "Zoom in",
+     "Zoom out",
+     "Reset view",
+     "valid",
+     "tx",
+     "Table of every credit, m"
+    ]
+   },
+   "table": {
+    "rows": 20000,
+    "oracleRows": 20000,
+    "blockedRows": 1042,
+    "oracleBlocked": 1042,
+    "renderMs": 84,
+    "match": true
+   },
+   "tasks": {
+    "t1": {
+     "ownedMastersWithGaps": 51,
+     "mastersDrawn": 2,
+     "mastersClickable": 2,
+     "missingPressings": 2823,
+     "missingDrawn": 0,
+     "actions": "select the master (1); its pressings and their states list in the panel; a folded master needs its count node opened first",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 0.938,
+      "medianActions": 16,
+      "maxActions": 36
+     },
+     "drillMissing": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 45,
+      "maxActions": 139
+     }
+    },
+    "t2": {
+     "blocked": 1042,
+     "drawn": 0,
+     "clickable": 0,
+     "actions": "a red ring marks a drawn blocked pressing; selecting it shows the reason (1); the table lists every blocked item with its reason (1)",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 40,
+      "maxActions": 64
+     }
+    },
+    "t3": {
+     "releasesDrawn": 0,
+     "clickable": 0,
+     "cylinderReachesCredit": 0,
+     "actions": "select the pressing (1): the highlight runs up through its master to its credit; PageUp twice walks it by keyboard",
+     "drill": {
+      "targets": 12,
+      "reached": 11,
+      "clickableAfter": 11,
+      "ringShare": 1,
+      "medianActions": 20,
+      "maxActions": 67
+     }
+    }
+   },
+   "reducedMotion": {
+    "no-preference": {
+     "reduce": false,
+     "tweenFrames": 63,
+     "simAlpha": null
+    },
+    "reduce": {
+     "reduce": true,
+     "tweenFrames": 0,
+     "simAlpha": null
+    }
+   }
+  },
+  {
+   "renderer": "d3",
+   "scale": 50,
+   "keyboard": {
+    "ok": true,
+    "drilledWithEnter": false,
+    "siblingHops": 0,
+    "keys": "PageDown PageDown PageDown PageUp PageUp Escape",
+    "levels": "0 1 2 1 0 -",
+    "panelAriaLive": "polite",
+    "focusable": [
+     "All planes",
+     "L0 Artist credits",
+     "L1 Masters",
+     "L2 Releases",
+     "Discography strata: cred",
+     "Zoom in",
+     "Zoom out",
+     "Reset view",
+     "valid",
+     "tx",
+     "Table of every credit, m"
+    ]
+   },
+   "table": {
+    "rows": 50,
+    "oracleRows": 50,
+    "blockedRows": 2,
+    "oracleBlocked": 2,
+    "renderMs": 1,
+    "match": true
+   },
+   "tasks": {
+    "t1": {
+     "ownedMastersWithGaps": 3,
+     "mastersDrawn": 3,
+     "mastersClickable": 1,
+     "missingPressings": 7,
+     "missingDrawn": 2,
+     "actions": "select the master (1); its pressings and their states list in the panel; a folded master needs its count node opened first",
+     "drill": {
+      "targets": 0,
+      "reached": 0,
+      "clickableAfter": 0,
+      "ringShare": null,
+      "medianActions": null,
+      "maxActions": null
+     },
+     "drillMissing": {
+      "targets": 5,
+      "reached": 5,
+      "clickableAfter": 5,
+      "ringShare": 0.975,
+      "medianActions": 1,
+      "maxActions": 1
+     }
+    },
+    "t2": {
+     "blocked": 2,
+     "drawn": 0,
+     "clickable": 0,
+     "actions": "a red ring marks a drawn blocked pressing; selecting it shows the reason (1); the table lists every blocked item with its reason (1)",
+     "drill": {
+      "targets": 2,
+      "reached": 2,
+      "clickableAfter": 2,
+      "ringShare": 1,
+      "medianActions": 1,
+      "maxActions": 1
+     }
+    },
+    "t3": {
+     "releasesDrawn": 9,
+     "clickable": 2,
+     "cylinderReachesCredit": 9,
+     "actions": "select the pressing (1): the highlight runs up through its master to its credit; PageUp twice walks it by keyboard",
+     "drill": {
+      "targets": 8,
+      "reached": 8,
+      "clickableAfter": 7,
+      "ringShare": 0.922,
+      "medianActions": 2,
+      "maxActions": 4
+     }
+    }
+   },
+   "reducedMotion": {
+    "no-preference": {
+     "reduce": false,
+     "tweenFrames": 0,
+     "simAlpha": 0.0009999999999999966
+    },
+    "reduce": {
+     "reduce": true,
+     "tweenFrames": 0,
+     "simAlpha": 0.0009999999999999966
+    }
+   }
+  },
+  {
+   "renderer": "d3",
+   "scale": 500,
+   "keyboard": {
+    "ok": true,
+    "drilledWithEnter": false,
+    "siblingHops": 0,
+    "keys": "PageDown PageDown PageDown PageUp PageUp Escape",
+    "levels": "0 1 2 1 0 -",
+    "panelAriaLive": "polite",
+    "focusable": [
+     "All planes",
+     "L0 Artist credits",
+     "L1 Masters",
+     "L2 Releases",
+     "Discography strata: cred",
+     "Zoom in",
+     "Zoom out",
+     "Reset view",
+     "valid",
+     "tx",
+     "Table of every credit, m"
+    ]
+   },
+   "table": {
+    "rows": 500,
+    "oracleRows": 500,
+    "blockedRows": 28,
+    "oracleBlocked": 28,
+    "renderMs": 4,
+    "match": true
+   },
+   "tasks": {
+    "t1": {
+     "ownedMastersWithGaps": 15,
+     "mastersDrawn": 6,
+     "mastersClickable": 2,
+     "missingPressings": 166,
+     "missingDrawn": 0,
+     "actions": "select the master (1); its pressings and their states list in the panel; a folded master needs its count node opened first",
+     "drill": {
+      "targets": 9,
+      "reached": 9,
+      "clickableAfter": 9,
+      "ringShare": 1,
+      "medianActions": 5,
+      "maxActions": 10
+     },
+     "drillMissing": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 0.938,
+      "medianActions": 7,
+      "maxActions": 11
+     }
+    },
+    "t2": {
+     "blocked": 28,
+     "drawn": 0,
+     "clickable": 0,
+     "actions": "a red ring marks a drawn blocked pressing; selecting it shows the reason (1); the table lists every blocked item with its reason (1)",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 0.938,
+      "medianActions": 6,
+      "maxActions": 11
+     }
+    },
+    "t3": {
+     "releasesDrawn": 2,
+     "clickable": 1,
+     "cylinderReachesCredit": 2,
+     "actions": "select the pressing (1): the highlight runs up through its master to its credit; PageUp twice walks it by keyboard",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 0.896,
+      "medianActions": 6,
+      "maxActions": 28
+     }
+    }
+   },
+   "reducedMotion": {
+    "no-preference": {
+     "reduce": false,
+     "tweenFrames": 0,
+     "simAlpha": 0.0009999999999999966
+    },
+    "reduce": {
+     "reduce": true,
+     "tweenFrames": 0,
+     "simAlpha": 0.0009999999999999966
+    }
+   }
+  },
+  {
+   "renderer": "d3",
+   "scale": 5000,
+   "keyboard": {
+    "ok": true,
+    "drilledWithEnter": false,
+    "siblingHops": 0,
+    "keys": "PageDown PageDown PageDown PageUp PageUp Escape",
+    "levels": "0 1 2 1 0 -",
+    "panelAriaLive": "polite",
+    "focusable": [
+     "All planes",
+     "L0 Artist credits",
+     "L1 Masters",
+     "L2 Releases",
+     "Discography strata: cred",
+     "Zoom in",
+     "Zoom out",
+     "Reset view",
+     "valid",
+     "tx",
+     "Table of every credit, m"
+    ]
+   },
+   "table": {
+    "rows": 5000,
+    "oracleRows": 5000,
+    "blockedRows": 277,
+    "oracleBlocked": 277,
+    "renderMs": 29,
+    "match": true
+   },
+   "tasks": {
+    "t1": {
+     "ownedMastersWithGaps": 36,
+     "mastersDrawn": 2,
+     "mastersClickable": 0,
+     "missingPressings": 663,
+     "missingDrawn": 0,
+     "actions": "select the master (1); its pressings and their states list in the panel; a folded master needs its count node opened first",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 0.969,
+      "medianActions": 7,
+      "maxActions": 34
+     },
+     "drillMissing": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 11,
+      "ringShare": 0.865,
+      "medianActions": 6,
+      "maxActions": 7
+     }
+    },
+    "t2": {
+     "blocked": 277,
+     "drawn": 0,
+     "clickable": 0,
+     "actions": "a red ring marks a drawn blocked pressing; selecting it shows the reason (1); the table lists every blocked item with its reason (1)",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 0.948,
+      "medianActions": 19,
+      "maxActions": 31
+     }
+    },
+    "t3": {
+     "releasesDrawn": 0,
+     "clickable": 0,
+     "cylinderReachesCredit": 0,
+     "actions": "select the pressing (1): the highlight runs up through its master to its credit; PageUp twice walks it by keyboard",
+     "drill": {
+      "targets": 12,
+      "reached": 10,
+      "clickableAfter": 9,
+      "ringShare": 0.912,
+      "medianActions": 13,
+      "maxActions": 146
+     }
+    }
+   },
+   "reducedMotion": {
+    "no-preference": {
+     "reduce": false,
+     "tweenFrames": 0,
+     "simAlpha": 0.0009999999999999966
+    },
+    "reduce": {
+     "reduce": true,
+     "tweenFrames": 0,
+     "simAlpha": 0.0009999999999999966
+    }
+   }
+  },
+  {
+   "renderer": "d3",
+   "scale": 20000,
+   "keyboard": {
+    "ok": true,
+    "drilledWithEnter": false,
+    "siblingHops": 0,
+    "keys": "PageDown PageDown PageDown PageUp PageUp Escape",
+    "levels": "0 1 2 1 0 -",
+    "panelAriaLive": "polite",
+    "focusable": [
+     "All planes",
+     "L0 Artist credits",
+     "L1 Masters",
+     "L2 Releases",
+     "Discography strata: cred",
+     "Zoom in",
+     "Zoom out",
+     "Reset view",
+     "valid",
+     "tx",
+     "Table of every credit, m"
+    ]
+   },
+   "table": {
+    "rows": 20000,
+    "oracleRows": 20000,
+    "blockedRows": 1042,
+    "oracleBlocked": 1042,
+    "renderMs": 83,
+    "match": true
+   },
+   "tasks": {
+    "t1": {
+     "ownedMastersWithGaps": 51,
+     "mastersDrawn": 2,
+     "mastersClickable": 0,
+     "missingPressings": 2823,
+     "missingDrawn": 0,
+     "actions": "select the master (1); its pressings and their states list in the panel; a folded master needs its count node opened first",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 1,
+      "medianActions": 16,
+      "maxActions": 36
+     },
+     "drillMissing": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 2,
+      "ringShare": 0.583,
+      "medianActions": 45,
+      "maxActions": 139
+     }
+    },
+    "t2": {
+     "blocked": 1042,
+     "drawn": 0,
+     "clickable": 0,
+     "actions": "a red ring marks a drawn blocked pressing; selecting it shows the reason (1); the table lists every blocked item with its reason (1)",
+     "drill": {
+      "targets": 12,
+      "reached": 12,
+      "clickableAfter": 12,
+      "ringShare": 0.865,
+      "medianActions": 40,
+      "maxActions": 64
+     }
+    },
+    "t3": {
+     "releasesDrawn": 0,
+     "clickable": 0,
+     "cylinderReachesCredit": 0,
+     "actions": "select the pressing (1): the highlight runs up through its master to its credit; PageUp twice walks it by keyboard",
+     "drill": {
+      "targets": 12,
+      "reached": 11,
+      "clickableAfter": 6,
+      "ringShare": 0.716,
+      "medianActions": 20,
+      "maxActions": 67
+     }
+    }
+   },
+   "reducedMotion": {
+    "no-preference": {
+     "reduce": false,
+     "tweenFrames": 0,
+     "simAlpha": 0.0009999999999999966
+    },
+    "reduce": {
+     "reduce": true,
+     "tweenFrames": 0,
+     "simAlpha": 0.0009999999999999966
+    }
+   }
+  }
+ ]
+}

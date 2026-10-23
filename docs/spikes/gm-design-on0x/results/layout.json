@@ -1,0 +1,351 @@
+{
+ "seeds": 10,
+ "bands": "Discogs 20261001 via gm-design-1h2l's spike.duckdb (load_db.py); query: scripts/size_bands_discogs.py",
+ "layout": "spaced",
+ "raw": {
+  "mockup": [
+   {
+    "scale": 50,
+    "perPlane": [
+     4,
+     10,
+     36
+    ],
+    "intrusions": [
+     0,
+     0,
+     0
+    ],
+    "overlaps": [
+     0,
+     0,
+     6
+    ],
+    "crossingsAllEdges": 0,
+    "crossingsPlanar": 0,
+    "edgesAll": 7,
+    "edgesPlanar": 4
+   },
+   {
+    "scale": 500,
+    "perPlane": [
+     11,
+     55,
+     436
+    ],
+    "intrusions": [
+     4,
+     41,
+     193
+    ],
+    "overlaps": [
+     4,
+     27,
+     602
+    ],
+    "crossingsAllEdges": 56,
+    "crossingsPlanar": 0,
+    "edgesAll": 52,
+    "edgesPlanar": 22
+   },
+   {
+    "scale": 5000,
+    "perPlane": [
+     35,
+     320,
+     4649
+    ],
+    "intrusions": [
+     96,
+     909,
+     11346
+    ],
+    "overlaps": [
+     80,
+     840,
+     88520
+    ],
+    "crossingsAllEdges": 5712,
+    "crossingsPlanar": 0,
+    "edgesAll": 433,
+    "edgesPlanar": 142
+   },
+   {
+    "scale": 20000,
+    "perPlane": [
+     71,
+     1351,
+     18689
+    ],
+    "intrusions": [
+     672,
+     9184,
+     102525
+    ],
+    "overlaps": [
+     526,
+     13871,
+     1069495
+    ],
+    "crossingsAllEdges": 86002,
+    "crossingsPlanar": 0,
+    "edgesAll": 1742,
+    "edgesPlanar": 583
+   }
+  ],
+  "spaced": [
+   {
+    "scale": 50,
+    "perPlane": [
+     4,
+     10,
+     36
+    ],
+    "intrusions": [
+     0,
+     0,
+     0
+    ],
+    "overlaps": [
+     0,
+     0,
+     6
+    ],
+    "crossingsAllEdges": 0,
+    "crossingsPlanar": 0,
+    "edgesAll": 7,
+    "edgesPlanar": 4
+   },
+   {
+    "scale": 500,
+    "perPlane": [
+     11,
+     55,
+     436
+    ],
+    "intrusions": [
+     4,
+     39,
+     194
+    ],
+    "overlaps": [
+     4,
+     27,
+     612
+    ],
+    "crossingsAllEdges": 56,
+    "crossingsPlanar": 0,
+    "edgesAll": 52,
+    "edgesPlanar": 22
+   },
+   {
+    "scale": 5000,
+    "perPlane": [
+     35,
+     320,
+     4649
+    ],
+    "intrusions": [
+     96,
+     908,
+     11345
+    ],
+    "overlaps": [
+     80,
+     838,
+     88703
+    ],
+    "crossingsAllEdges": 5712,
+    "crossingsPlanar": 0,
+    "edgesAll": 433,
+    "edgesPlanar": 142
+   },
+   {
+    "scale": 20000,
+    "perPlane": [
+     71,
+     1351,
+     18689
+    ],
+    "intrusions": [
+     672,
+     9177,
+     102524
+    ],
+    "overlaps": [
+     527,
+     13864,
+     1069478
+    ],
+    "crossingsAllEdges": 86010,
+    "crossingsPlanar": 0,
+    "edgesAll": 1742,
+    "edgesPlanar": 583
+   }
+  ]
+ },
+ "sweep": {
+  "configurations": 672,
+  "passing": 336,
+  "best": {
+   "sizeScale": 1,
+   "gutter": 0,
+   "budget": [
+    6,
+    12,
+    25
+   ],
+   "pass": true,
+   "worst": {
+    "intrusions": 0,
+    "overlaps": 0,
+    "crossings": 0,
+    "overBudget": 0
+   },
+   "maxPlane": [
+    6,
+    12,
+    21
+   ]
+  },
+  "frontier": [
+   {
+    "gutter": 0,
+    "budget": [
+     6,
+     12,
+     25
+    ],
+    "maxPlane": [
+     6,
+     12,
+     21
+    ]
+   }
+  ],
+  "perPlaneMax": [
+   6,
+   12,
+   21
+  ],
+  "nearFailures": [],
+  "halfSize": {
+   "sizeScale": 0.5,
+   "gutter": 0,
+   "budget": [
+    3,
+    25,
+    40
+   ],
+   "pass": true,
+   "worst": {
+    "intrusions": 0,
+    "overlaps": 0,
+    "crossings": 0,
+    "overBudget": 0
+   },
+   "maxPlane": [
+    3,
+    23,
+    36
+   ]
+  }
+ },
+ "expansion": {
+  "pinAll": {
+   "opened": 40,
+   "worst": {
+    "intrusions": 3,
+    "overlaps": 21306,
+    "crossings": 0
+   },
+   "maxPlane": [
+    4,
+    11,
+    918
+   ]
+  },
+  "focusPaged": {
+   "opened": 40,
+   "worst": {
+    "intrusions": 0,
+    "overlaps": 0,
+    "crossings": 0
+   },
+   "maxPlane": [
+    5,
+    11,
+    21
+   ]
+  }
+ },
+ "drillDownPageMax": 12,
+ "masterPages": [
+  {
+   "per": 2,
+   "opened": 30,
+   "violations": 0,
+   "overBudget": 0,
+   "maxPlane": [
+    5,
+    12,
+    8
+   ]
+  },
+  {
+   "per": 4,
+   "opened": 30,
+   "violations": 0,
+   "overBudget": 0,
+   "maxPlane": [
+    5,
+    12,
+    12
+   ]
+  },
+  {
+   "per": 6,
+   "opened": 30,
+   "violations": 0,
+   "overBudget": 0,
+   "maxPlane": [
+    4,
+    12,
+    10
+   ]
+  },
+  {
+   "per": 8,
+   "opened": 30,
+   "violations": 0,
+   "overBudget": 0,
+   "maxPlane": [
+    3,
+    12,
+    11
+   ]
+  },
+  {
+   "per": 10,
+   "opened": 30,
+   "violations": 0,
+   "overBudget": 23,
+   "maxPlane": [
+    3,
+    14,
+    12
+   ]
+  },
+  {
+   "per": 12,
+   "opened": 30,
+   "violations": 221,
+   "overBudget": 23,
+   "maxPlane": [
+    3,
+    16,
+    13
+   ]
+  }
+ ]
+}
