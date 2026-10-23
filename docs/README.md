@@ -30,6 +30,7 @@ maintained current state.
 - [Native identity and first-party events program rollout](programs/native-identity-and-events.md) records the four-wave delivery plan for ADR 0009 and ADR 0010, the artifacts each wave pins, and the gaps it deliberately leaves to their own records.
 - [Catalog-identifiers program rollout](programs/catalog-identifiers.md) records the delivery of ADR 0011 across the organization in five waves, complete except mcp-server's company-credit surface in wave 4.
 - [PostgreSQL SQL/PGQ pause and Neo4j continuity program](programs/neo4j-to-postgresql-graph.md) records the stopped cutover, preservation refs, retained relational consumers, and owner-hive pause work required by ADR 0012's 2026-10-02 amendment.
+- [Strata program rollout](programs/strata.md) tracks delivery of ADR 0016 across repositories: the M1 to M5 molecules, the order, the cross-repository handoffs, and the first-deployment checks.
 
 ## Design spikes
 
