@@ -110,14 +110,42 @@ def read_ids(path: Path) -> np.ndarray:
         return np.unique(np.asarray([int(line.split("\t", 1)[0]) for line in handle], dtype=np.int64))
 
 
-def link_history(core: Path, derived: Path) -> dict[str, tuple[int, int, int, str]]:
-    """mbid -> (L, C, Discogs id of the earliest link, release group mbid), for linked releases."""
+def creation_bound(row_ids: np.ndarray, all_row_ids: np.ndarray, all_updated: np.ndarray) -> np.ndarray:
+    """Proxy 2's c(k): the minimum `last_updated` over release-URL rows with id >= k.
+
+    A zero (unparsed) `last_updated` is ignored, so one bad row cannot pull every earlier
+    row back to 1970.
+    """
+    order = np.argsort(all_row_ids)
+    ids = all_row_ids[order]
+    updated = np.where(all_updated[order] > 0, all_updated[order], np.iinfo(np.int64).max)
+    suffix_min = np.minimum.accumulate(updated[::-1])[::-1]
+    return suffix_min[np.searchsorted(ids, row_ids)]
+
+
+def read_release_masters(path: Path) -> tuple[np.ndarray, np.ndarray]:
+    """Release ids and their master ids (0 for none) from gm-design-loj9's `extract_discogs.py` output."""
+    ids, masters = [], []
+    with gzip.open(path, "rt") as handle:
+        for line in handle:
+            release, master = line.rstrip("\n").split("\t")
+            ids.append(int(release))
+            masters.append(int(master) if master.isdigit() else 0)
+    return np.asarray(ids, dtype=np.int64), np.asarray(masters, dtype=np.int64)
+
+
+def link_history(core: Path, derived: Path, proxy: int = 1) -> dict[str, tuple[int, int, int, str]]:
+    """mbid -> (L, C, Discogs id of the earliest link, release group mbid), for linked releases.
+
+    Proxy 1 dates a link by its `last_updated`. Proxy 2 dates it by `creation_bound`.
+    """
     links = np.load(core)
     meta = np.load(derived)
     added = dict(zip(meta["release_id"].tolist(), meta["date_added"].tolist(), strict=True))
+    dated = links["last_updated"] if proxy == 1 else creation_bound(links["row_id"], links["all_row_id"], links["all_last_updated"])
     out: dict[str, tuple[int, int, int, str]] = {}
     for rid, did, updated, mbid, group in zip(links["release_id"].tolist(), links["discogs_id"].tolist(),
-                                               links["last_updated"].tolist(), links["mbid"].tolist(),
+                                               dated.tolist(), links["mbid"].tolist(),
                                                links["group_mbid"].tolist(), strict=True):
         current = out.get(mbid)
         if current is None or updated < current[0]:
@@ -130,9 +158,9 @@ def link_history(core: Path, derived: Path) -> dict[str, tuple[int, int, int, st
 # ---------------------------------------------------------------------------
 
 
-def validate(history: dict, json_a: dict, json_b: dict) -> dict[str, Any]:
+def validate(history: dict, json_a: dict, json_b: dict, t_a: int = T_A, t_b: int = T_B) -> dict[str, Any]:
     exact = {m for m, (did, _) in json_b.items() if did and m in json_a and not json_a[m][0]}
-    proxy = {m for m, (link, created, _, _) in history.items() if created <= T_A and T_A < link <= T_B}
+    proxy = {m for m, (link, created, _, _) in history.items() if created <= t_a and t_a < link <= t_b}
     hit = exact & proxy
     false_pos = Counter()
     for m in proxy - exact:
@@ -149,9 +177,9 @@ def validate(history: dict, json_a: dict, json_b: dict) -> dict[str, Any]:
         link, created, _, _ = history.get(m, (None, None, None, None))
         if link is None:
             false_neg["no_discogs_link_in_full_export"] += 1
-        elif created > T_A:
+        elif created > t_a:
             false_neg["created_after_dump_a_per_date_added"] += 1
-        elif link <= T_A:
+        elif link <= t_a:
             false_neg["link_dated_before_window"] += 1
         else:
             false_neg["link_dated_after_window (edited later)"] += 1
@@ -159,9 +187,9 @@ def validate(history: dict, json_a: dict, json_b: dict) -> dict[str, Any]:
     recall = len(hit) / len(exact) if exact else 0.0
     # Secondary: releases new in dump B that carry a link, against the proxy's creation in W.
     new_linked = {m for m, (did, _) in json_b.items() if did and m not in json_a}
-    proxy_new = {m for m, (link, created, _, _) in history.items() if T_A < created <= T_B and link <= T_B}
+    proxy_new = {m for m, (link, created, _, _) in history.items() if t_a < created <= t_b and link <= t_b}
     return {
-        "window": "2026-10-17 00:10:01 to 2026-10-21 00:10:01 UTC",
+        "window": f"{datetime.fromtimestamp(t_a, UTC):%Y-%m-%d %H:%M:%S} to {datetime.fromtimestamp(t_b, UTC):%Y-%m-%d %H:%M:%S} UTC",
         "exact_link_added": len(exact),
         "proxy_link_added": len(proxy),
         "both": len(hit),
@@ -189,10 +217,15 @@ def months_between(first: tuple[int, int], last: tuple[int, int]) -> list[str]:
     return out
 
 
-def model(history: dict, json_b: dict) -> tuple[dict[int, dict[str, set[str]]], Counter, Counter, int]:
+def model(history: dict, json_b: dict, targets: np.ndarray | None = None) -> tuple[dict[int, dict[str, set[str]]], Counter, Counter, int, Counter]:
     """Per edition (Discogs release id), its event months by kind; per month, re-attachments and links at ingest.
 
-    Returns (events, reattached per run month, linked at ingest per month, pending after the last run).
+    With `targets` (sorted Discogs release ids of a dump), a row whose Discogs release is not
+    in it neither attaches nor re-attaches: it stays `unresolved` (`_LINKED` in
+    `api/reattach.py` needs a current Discogs alias). Those rows are counted per month instead.
+
+    Returns (events, reattached per run month, linked at ingest per month, pending after the
+    last run, unresolved per month).
     """
     first_load_start = month_start(*FIRST_LOAD_MONTH)
     dumps = dump_instants(datetime(2000, 1, 1, tzinfo=UTC), datetime(2027, 12, 31, tzinfo=UTC))
@@ -204,12 +237,19 @@ def model(history: dict, json_b: dict) -> tuple[dict[int, dict[str, set[str]]], 
     loaded = np.maximum(next_dump(dumps, created), first_load)
     linked_at = next_dump(dumps, link)
     events: dict[int, dict[str, set[str]]] = defaultdict(lambda: defaultdict(set))
-    reattached, at_ingest = Counter(), Counter()
+    reattached, at_ingest, unresolved = Counter(), Counter(), Counter()
     pending = 0
+    known = None
+    if targets is not None:
+        editions = np.asarray([json_b.get(m, (0, ""))[0] or history[m][2] for m in mbids], dtype=np.int64)
+        known = np.isin(editions, targets)
     for i, mbid in enumerate(mbids):
         if loaded[i] > T_B:
             continue  # first loaded after the last dump read
         edition = json_b.get(mbid, (0, ""))[0] or history[mbid][2]
+        if known is not None and not known[i]:
+            unresolved[month_of(max(loaded[i], linked_at[i]))] += 1
+            continue
         if link[i] < loaded[i]:
             month = month_of(loaded[i])
             at_ingest[month] += 1
@@ -223,7 +263,7 @@ def model(history: dict, json_b: dict) -> tuple[dict[int, dict[str, set[str]]], 
         events[edition]["reattached"].add(month_of(run))
         if loaded[i] > first_load:
             events[edition]["musicbrainz_item_minted"].add(month_of(loaded[i]))
-    return events, reattached, at_ingest, pending
+    return events, reattached, at_ingest, pending, unresolved
 
 
 def g2(events: dict, parents: dict[int, set], include_mint: bool, after_first_load: bool = False) -> dict[str, Any]:
@@ -251,10 +291,9 @@ def g2(events: dict, parents: dict[int, set], include_mint: bool, after_first_lo
     }
 
 
-def work_parents(events: dict, history: dict, json_b: dict, groups_b: dict, releases_b: Path, masters_b: np.ndarray) -> dict[int, set]:
-    """gm-design-loj9's work parents, as of 20261021: the Discogs master, and each MusicBrainz row's release group."""
-    with np.load(releases_b) as arrays:
-        ids, masters = arrays["id"], arrays["master"]
+def work_parents(events: dict, history: dict, json_b: dict, groups_b: dict, ids: np.ndarray, masters: np.ndarray,
+                 masters_b: np.ndarray) -> dict[int, set]:
+    """gm-design-loj9's work parents: the Discogs master, and each MusicBrainz row's release group."""
     order = np.argsort(ids)
     ids, masters = ids[order], masters[order]
     wanted = np.fromiter(events, dtype=np.int64, count=len(events))
@@ -278,11 +317,17 @@ def work_parents(events: dict, history: dict, json_b: dict, groups_b: dict, rele
 
 
 def evaluate(history: dict, json_b: dict, groups_b: dict, releases_b: Path, masters_b: np.ndarray) -> dict[str, Any]:
-    events, reattached, at_ingest, pending = model(history, json_b)
-    parents = work_parents(events, history, json_b, groups_b, releases_b, masters_b)
+    if releases_b.suffix == ".npz":
+        with np.load(releases_b) as arrays:
+            ids, masters = arrays["id"], arrays["master"]
+    else:
+        ids, masters = read_release_masters(releases_b)
+    events, reattached, at_ingest, pending, unresolved = model(history, json_b, np.sort(ids))
+    parents = work_parents(events, history, json_b, groups_b, ids, masters, masters_b)
     runs = months_between((FIRST_LOAD_MONTH[0], FIRST_LOAD_MONTH[1] + 1), LAST_RUN_MONTH)
     first = f"{FIRST_LOAD_MONTH[0]:04d}-{FIRST_LOAD_MONTH[1]:02d}"
     per_month = {m: {"reattached": reattached.get(m, 0), "linked_at_ingest": at_ingest.get(m, 0),
+                     "unresolved_target_not_in_discogs_dump": unresolved.get(m, 0),
                      "G1_run_writes": reattached.get(m, 0) > 0} for m in runs}
     g3_total = sum(reattached.get(m, 0) for m in runs)
     lower = g2(events, parents, include_mint=False)
@@ -308,17 +353,30 @@ def main() -> None:
     from guard import assert_aggregate_only
 
     loj9, data, releases_b, out = Path(sys.argv[1]), Path(sys.argv[2]), Path(sys.argv[3]), Path(sys.argv[4])
-    history = link_history(data / "mbhist_core_20261021-002201.npz", data / "mbhist_derived_20261021-002201.npz")
+    core, derived = data / "mbhist_core_20261021-002201.npz", data / "mbhist_derived_20261021-002201.npz"
     json_a = read_json_releases(loj9 / "mb_release_20261017-001001.tsv.gz")
     json_b = read_json_releases(loj9 / "mb_release_20261021-001001.tsv.gz")
-    result: dict[str, Any] = {"validation": validate(history, json_a, json_b)}
-    print(json.dumps(result["validation"], indent=1), file=sys.stderr)
-    if result["validation"]["passes"]:
-        groups_b = read_json_groups(loj9 / "mb_release-group_20261021-001001.tsv.gz")
-        masters_b = read_ids(loj9 / "discogs_masters_20261001.tsv.gz")
-        result["months"] = evaluate(history, json_b, groups_b, releases_b, masters_b)
-    else:
-        result["months"] = {"status": "DEFER: the proxy failed its validation bar and is not used"}
+    result: dict[str, Any] = {}
+
+    # Proxy 1: pre-registered at 9e9440a. Its validation on this window is binding.
+    history = link_history(core, derived, proxy=1)
+    result["proxy_1"] = {"validation": validate(history, json_a, json_b)}
+    if not result["proxy_1"]["validation"]["passes"]:
+        result["proxy_1"]["months"] = "not evaluated: the proxy failed its validation bar"
+
+    # Proxy 2: registered at 8f7a5ed, after proxy 1 failed. On this window its validation is
+    # a diagnostic; the binding window is 20261021 -> 20261024. Its months are conditional on
+    # passing that window.
+    history = link_history(core, derived, proxy=2)
+    groups_b = read_json_groups(loj9 / "mb_release-group_20261021-001001.tsv.gz")
+    masters_b = read_ids(loj9 / "discogs_masters_20261001.tsv.gz")
+    result["proxy_2"] = {
+        "validation_in_sample_diagnostic": validate(history, json_a, json_b),
+        "validation_out_of_sample": "pending: JSON 20261021 -> 20261024 against full export 20261024",
+        "months_conditional_on_out_of_sample_validation": evaluate(history, json_b, groups_b, releases_b, masters_b),
+    }
+    for name in ("proxy_1", "proxy_2"):
+        print(name, json.dumps(result[name], indent=1)[:1500], file=sys.stderr)
     assert_aggregate_only(result)
     out.write_text(json.dumps(result, indent=1, sort_keys=True) + "\n")
     print(f"wrote {out}", file=sys.stderr)

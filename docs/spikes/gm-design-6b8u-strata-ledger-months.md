@@ -1,9 +1,19 @@
 # Spike: concept D's ledger bar on real months, from the MusicBrainz full export
 
-Status: **DEFER**. The pre-registered proxy failed its validation bar. Its precision is
-0.8223 against a bar of 0.90, because edits to older links date them into the window. So
-it is not used, and the bar is not evaluated on months. The method below was committed
-(`9e9440a`) before any data was read.  
+Status: **DEFER**, pending one binding check.
+
+- **Proxy 1 fails its bar.** It was pre-registered at `9e9440a`, before any data was
+  read. Its precision is 0.8223 against 0.90, because edits to older links date them into
+  the window. So it is not used.
+- **Proxy 2 clears every bar, but is not yet validated.** It was registered at `8f7a5ed`,
+  after proxy 1 failed, and it has no free parameter. On 12 real months it clears G1, G2,
+  and G3 by wide margins: 12 months, 35,434 works, and 35,467 re-attachments. Its
+  validation on the same window passes (precision 0.9868, recall 0.9239), but that window
+  is in-sample, so the result is only a diagnostic.
+- **What decides it.** Proxy 2's binding validation is the unseen 20261021 → 20261024
+  window, which can run once the 20261024 dumps are published. If it passes, the verdict
+  is GO. If it fails, the verdict stays DEFER.
+
 Spike: `gm-design-6b8u` (epic `gm-design-cgh9`)  
 Prior spike: gm-design-loj9 (`docs/spikes/gm-design-loj9-strata-ledger.md` on the Strata
 epic branch `wt/bead/epic/gm-design-uq8t`, merged at `3fdb051`). That spike holds the
@@ -140,3 +150,148 @@ show it.
   export.
 - **Diagnostic only: the in-sample window.** Proxy 2 is also scored on the 20261017 →
   20261021 window, but that score cannot pass or fail it.
+
+## Evidence
+
+Everything below is **predicted from the MusicBrainz full export `20261021`**. It is
+not recorded history. `results/months.json` holds every figure.
+
+### Validation on 2026-10-17 00:10:01 → 2026-10-21 00:10:01 UTC
+
+| | Proxy 1 (binding) | Proxy 2 (in-sample diagnostic) |
+| --- | ---: | ---: |
+| Exact diff additions (E) | 565 | 565 |
+| Proxy-dated additions (P) | 647 | 529 |
+| Both | 532 | 522 |
+| **Precision** | **0.8223** ✗ | 0.9868 |
+| **Recall** | 0.9416 | 0.9239 |
+| False positives: the release was already linked in dump A (an older link, edited) | 115 | 7 |
+| False negatives: no Discogs link in the full export | 33 | 33 |
+| False negatives: link dated before the window | 0 | 10 |
+| Secondary check: new releases linked at creation (exact / proxy / both) | 1,369 / 1,380 / 1,358 | the same |
+
+How edits are told apart or bounded:
+
+- **Proxy 1** cannot tell an edit from a creation. Its false positives are exactly the
+  case the method predicted: 115 releases already linked in dump A whose link's
+  `last_updated` moved during the window.
+- **Proxy 2** dates a link by the creation bound of its row id, so an edit moves it only
+  if MusicBrainz replaced the row. 7 such false positives remain. Its 10 new false
+  negatives are links whose row ids are older than the window but which the diff adds,
+  such as a link re-added by an edit that kept an old row.
+- **The 33 links in the diff but absent from the full export** affect both proxies
+  equally. They are links present in JSON `20261021` and missing from the
+  `20261021-002201` full export. Removal or timing between the two exports is the likely
+  cause, but the core tables cannot tell which.
+
+### Proxy 2 on 12 real months (conditional on its binding validation)
+
+The modelled first load is October 2025. The table gives each monthly run's release
+re-attachments, links at ingest of new releases, and rows left `unresolved` because their
+Discogs release is missing from `discogs_20260901`, the only full Discogs release list at
+hand.
+
+| Run month | Re-attachments (G3) | G1: the run writes | Linked at ingest | Unresolved (target not in the dump) |
+| --- | ---: | :---: | ---: | ---: |
+| 2025-11 | 2,508 | yes | 12,307 | 26 |
+| 2025-12 | 2,975 | yes | 12,029 | 11 |
+| 2026-01 | 2,980 | yes | 12,029 | 20 |
+| 2026-02 | 2,892 | yes | 10,064 | 7 |
+| 2026-03 | 2,559 | yes | 10,410 | 12 |
+| 2026-04 | 2,764 | yes | 11,104 | 22 |
+| 2026-05 | 3,418 | yes | 10,379 | 8 |
+| 2026-06 | 3,292 | yes | 9,619 | 8 |
+| 2026-07 | 2,522 | yes | 11,575 | 17 |
+| 2026-08 | 3,287 | yes | 10,958 | 5 |
+| 2026-09 | 3,159 | yes | 11,756 | 502 |
+| 2026-10 | 3,111 | yes | 7,169 | 599 |
+| **12 runs** | **35,467** | **12 of 12** | 129,399 | 1,237 |
+
+The first load (2025-10) links 1,715,875 releases at ingest. 2,482 links appear after the
+October 2026 run and fall to the November run.
+
+The September and October 2026 unresolved counts are high only because the target list is
+`discogs_20260901`. That list cannot contain Discogs releases created during September,
+so for those two months the re-attachment and ingest counts are lower bounds.
+
+| Bar (gm-design-loj9, unchanged) | Figure | Bar | |
+| --- | ---: | ---: | --- |
+| G1: months with a writing run | 12 | ≥ 2 | clears |
+| G2 lower bound: works with ≥ 2 evented editions whose events span ≥ 2 months, MusicBrainz mints excluded | **35,434** | ≥ 1,000 | clears |
+| G2 counting MusicBrainz mint months | 35,548 | ≥ 1,000 | clears |
+| G2 counting only events after the first load (extra check) | 5,980 | ≥ 1,000 | clears |
+| G3: release re-attachments over 12 runs | 35,467 | ≥ 1,000 | clears |
+
+- **Works.** 1,927,335 works have evented editions, and 259,329 have two or more.
+  Evented editions per work: 50th percentile 1, 90th 2, 99th 5, maximum 200.
+- **Edition parents.** Of the 1,863,889 editions with events, 562,721 have two or more
+  work parents. That matches gm-design-loj9's link-structure finding.
+- **Where parents come from.** Discogs master parents come from `discogs_20260901`, the
+  release-to-master list at hand. MusicBrainz parents come from the `20261021`
+  release-group extract.
+
+**No four-day rate is scaled.** Every monthly figure counts links the full export dates
+into that month, under the edit bound above. Links added in a month and removed later are
+missing, so older months are lower bounds.
+
+## Verdict
+
+**DEFER.** Proxy 1, the one registered before any data was read, failed its bar, so it is
+not used.
+
+Proxy 2 clears G1, G2, and G3 by wide margins on 12 real months. G2 is 35 times its bar
+at the lower bound, and 6 times its bar when the first load is left out. But proxy 2 was
+designed after proxy 1's errors were seen, so its only validation so far is in-sample.
+The pre-registered rule makes the unseen 20261021 → 20261024 window binding:
+
+- if proxy 2 passes it (precision ≥ 0.90 and recall ≥ 0.90), the verdict is **GO** for the
+  history-only ledger;
+- if it fails, the verdict stays **DEFER**.
+
+For gm-design-loj9: its four-day replay found G2 = 743. That figure measured one
+hypothetical cycle, not a shortage of history. On real months the history shows change
+across months for tens of thousands of works.
+
+## Recommendation
+
+1. **Run proxy 2's binding validation once the 20261024 dumps are out.** The full export
+   is expected around 05:00 UTC on 2026-10-24, and the JSON `release` member around 15:00
+   UTC. It needs about 30 GB streamed and about an hour, with no code change. The
+   README gives the commands. Then commit `results/oos_validation.json` and set the
+   verdict by the rule above. The JSON dumps that window needs are deleted within a week,
+   so it has to run soon after they appear.
+2. **If it passes, the decision bead `gm-design-7xo5` takes concept D as GO** for a
+   history-only ledger. Use the shape gm-design-loj9 drafted: the PostgreSQL route, the
+   state vocabulary, `work_disagreement` with a primary parent, and no lateral identifier
+   edges.
+3. **If it fails, D's first build waits.** It is not a table yet, because neither proxy
+   would then have shown that the history is too sparse. Re-measure once a GrooveMap
+   catalog exists.
+
+## Missing evidence and failure modes
+
+- **One validation window.** Both proxies are scored on 4 days of real edits. The
+  out-of-sample window is a second 3 days.
+- **Row-id order is assumed to be creation order.** Proxy 2 relies on MusicBrainz
+  assigning `l_release_url` ids from a sequence. Its precision on the window is
+  consistent with that assumption.
+- **Links removed since they were added** are missing, so older months are undercounted.
+- **Discogs arrivals are not modelled.** A row whose Discogs target missed a dump is
+  re-attached when the target arrives. That would add re-attachments, so G3 is a lower
+  bound.
+- **Work parents are current.** Discogs masters come from `discogs_20260901`, and
+  MusicBrainz release groups from `20261021`.
+- **The first-load month is a modelling choice.** October 2025 gives exactly 12 runs.
+
+No catalog id, user data, or audit row is committed. No product code changed, and no
+bead was filed.
+
+## Sources
+
+- gm-design-loj9: definitions, the bar G1-G3, and the harness this copies (epic branch
+  `wt/bead/epic/gm-design-uq8t`, `docs/spikes/gm-design-loj9/`)
+- MusicBrainz full export `20261021-002201` and JSON dumps `20261017-001001` and
+  `20261021-001001`: [data.metabrainz.org](https://data.metabrainz.org/pub/musicbrainz/data/)
+- Discogs `discogs_20260901` releases and `discogs_20261001` masters, as extracted for
+  gm-design-loj9
+- Harness: [gm-design-6b8u/](gm-design-6b8u/README.md)

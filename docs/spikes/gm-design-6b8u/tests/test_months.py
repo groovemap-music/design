@@ -72,7 +72,7 @@ def history():
 
 
 def test_model_assigns_each_release_its_months(history):
-    events, reattached, at_ingest, pending = model(history, {})
+    events, reattached, at_ingest, pending, unresolved = model(history, {})
     assert dict(at_ingest) == {"2025-10": 1, "2026-06": 1}
     assert dict(reattached) == {"2026-04": 1, "2026-09": 1}
     assert pending == 1
@@ -81,7 +81,7 @@ def test_model_assigns_each_release_its_months(history):
 
 
 def test_g2_counts_works_whose_editions_change_in_two_months(history):
-    events, _, _, _ = model(history, {})
+    events, _, _, _, _ = model(history, {})
     parents = {900001: {("m", 1)}, 900002: {("m", 1)}, 900003: {("m", 1)}, 900004: {("m", 2)}}
     lower = g2(events, parents, include_mint=False)
     assert lower["works_with_2plus_evented_editions"] == 1
@@ -93,3 +93,20 @@ def test_g2_counts_works_whose_editions_change_in_two_months(history):
 
 def test_bar_is_the_pre_registered_one():
     assert months.BAR == {"precision": 0.90, "recall": 0.90, "G2": 1000, "G3": 1000}
+
+
+def test_creation_bound_ignores_edits_and_bad_rows():
+    from months import creation_bound
+
+    all_ids = np.asarray([5, 1, 2, 3, 4])
+    # Row 2 was created at 200 and edited at 900. Row 4 has an unparsed time.
+    all_updated = np.asarray([500, 100, 900, 300, 0])
+    assert creation_bound(np.asarray([2, 1, 5]), all_ids, all_updated).tolist() == [300, 100, 500]
+
+
+def test_a_link_to_a_discogs_release_missing_from_the_dump_stays_unresolved(history):
+    targets = np.asarray([900001, 900003, 900004, 900005])  # 900002 is not in the dump
+    events, reattached, _, _, unresolved = model(history, {}, targets)
+    assert dict(reattached) == {"2026-09": 1}
+    assert dict(unresolved) == {"2026-03": 1}
+    assert 900002 not in events

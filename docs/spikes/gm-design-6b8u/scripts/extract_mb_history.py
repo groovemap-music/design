@@ -13,7 +13,8 @@ show months. The full export's PostgreSQL tables carry two timestamps that can:
   time forward) or removed (which drops the row).
 - `release_meta.date_added`: when the release was added to MusicBrainz.
 
-`core` keeps, for every relationship of the `discogs` release-URL type whose URL parses as
+`core` keeps every release-URL row's id and `last_updated` (any link type), for the row-id
+creation bound proxy 2 uses. It also keeps, for every relationship of the `discogs` release-URL type whose URL parses as
 a Discogs release (the `musicbrainz-ingestion` rule, as in `extract_mb.py`), the release
 id, the Discogs id, and `last_updated`. It also keeps the release's MBID and its release
 group's MBID. `derived` keeps `release_meta.date_added` per release id. Tables arrive in
@@ -46,10 +47,10 @@ def _rows(member_file):
 
 
 def core(stream, out: str) -> None:
-    link_type_id = None
+    link_type_ids: set[int] = set()
     link_types: dict[int, int] = {}
     discogs_urls: dict[int, int] = {}
-    l_release, l_url, l_link, l_time = [], [], [], []
+    l_id, l_release, l_url, l_link, l_time = [], [], [], [], []
     release_gid: dict[int, tuple[str, int]] = {}
     group_gid: dict[int, str] = {}
     with tarfile.open(fileobj=stream, mode="r|") as tar:
@@ -62,7 +63,7 @@ def core(stream, out: str) -> None:
                 # id, parent, child_order, gid, entity_type0, entity_type1, name, ...
                 for cells in _rows(handle):
                     if cells[4] == "release" and cells[5] == "url" and cells[6] == "discogs":
-                        link_type_id = int(cells[0])
+                        link_type_ids.add(int(cells[0]))
             elif name == "link":
                 # id, link_type, ...
                 for cells in _rows(handle):
@@ -76,6 +77,7 @@ def core(stream, out: str) -> None:
             elif name == "l_release_url":
                 # id, link, entity0 (release), entity1 (url), edits_pending, last_updated, ...
                 for cells in _rows(handle):
+                    l_id.append(int(cells[0]))
                     l_link.append(int(cells[1]))
                     l_release.append(int(cells[2]))
                     l_url.append(int(cells[3]))
@@ -89,19 +91,22 @@ def core(stream, out: str) -> None:
                 for cells in _rows(handle):
                     group_gid[int(cells[0])] = cells[1]
             print(f"{name} read", file=sys.stderr)
-    if link_type_id is None:
+    if not link_type_ids:
         sys.exit("no discogs release-url link type")
-    keep = [i for i in range(len(l_link)) if link_types.get(l_link[i]) == link_type_id and l_url[i] in discogs_urls]
+    keep = [i for i in range(len(l_link)) if link_types.get(l_link[i]) in link_type_ids and l_url[i] in discogs_urls]
     releases = [l_release[i] for i in keep]
     np.savez(
         out,
         release_id=np.asarray(releases, dtype=np.int64),
+        row_id=np.asarray([l_id[i] for i in keep], dtype=np.int64),
+        all_row_id=np.asarray(l_id, dtype=np.int64),
+        all_last_updated=np.asarray(l_time, dtype=np.int64),
         discogs_id=np.asarray([discogs_urls[l_url[i]] for i in keep], dtype=np.int64),
         last_updated=np.asarray([l_time[i] for i in keep], dtype=np.int64),
         mbid=np.asarray([release_gid[r][0] for r in releases]),
         group_mbid=np.asarray([group_gid.get(release_gid[r][1], "") for r in releases]),
     )
-    print(f"core: {len(keep)} discogs release links of {len(l_link)} release-url rows", file=sys.stderr)
+    print(f"core: {len(keep)} discogs release links of {len(l_link)} release-url rows; discogs link types {len(link_type_ids)}", file=sys.stderr)
 
 
 def derived(stream, out: str) -> None:

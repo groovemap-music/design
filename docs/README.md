@@ -55,6 +55,10 @@ maintained current state.
   dumps predicts too little change after the first load. The entry also covers the transition
   table today's code allows, the work-level split in the catalogs' own links, and the draft
   admin route.
+- [Concept D's ledger bar on real months](spikes/gm-design-6b8u-strata-ledger-months.md)
+  records the DEFER on the history-only Strata ledger: the pre-registered full-export proxy
+  failed its bar, and a second proxy clears G1-G3 on 12 months, pending its out-of-sample
+  validation.
 
 ## Verification reports
 
