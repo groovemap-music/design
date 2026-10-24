@@ -1,7 +1,7 @@
 # ADR 0016: Strata, the level-of-detail bi-temporal graph view
 
-- Status: Accepted on 2026-10-23 (`gm-design-7w18`, epic `gm-design-t55n`)
-- Concept D's backfill branch: pending `gm-design-6b8u`
+- Status: Accepted on 2026-10-23 (`gm-design-7w18`, epic `gm-design-t55n`); amended 2026-10-24
+- Concept D's backfill branch: backfill from the MusicBrainz full export, then record live, decided by the [2026-10-24 amendment](#2026-10-24-concept-ds-backfill-branch-and-m6)
 
 ## Context
 
@@ -68,10 +68,10 @@ Facts that bound the decision:
 | A | **GO on 3D** (`webgl-inst`), by the maintainer's choice, on conditions | `gm-design-on0x` Verdict and section "The maintainer's judgment"; `gm-design-1h2l` Verdict |
 | B | **GO** | `gm-design-4804` Verdict B |
 | C | **GO in reduced scope (C′)**. Full C as mocked is **NO-GO**. Real-user validation is **DEFER** | `gm-design-4804` Verdict C; `gm-design-7xo5` comment of 2026-10-23 |
-| D | **GO** by the maintainer, as a history ledger. The backfill branch is **pending `gm-design-6b8u`** | `gm-design-7xo5` comments of 2026-10-23; `gm-design-loj9` Verdict |
+| D | **GO** by the maintainer, as a history ledger. The backfill branch was pending `gm-design-6b8u` and is decided by the [2026-10-24 amendment](#2026-10-24-concept-ds-backfill-branch-and-m6): backfill from the full export, then record live | `gm-design-7xo5` comments of 2026-10-23; `gm-design-loj9` Verdict |
 
 The roadmap order holds, as `gm-design-7xo5`'s close reason records: M1 (this record), then
-M2 and M3, then M4 and M5. M6, concept D, is filed after epic `gm-design-cgh9` finishes.
+M2 and M3, then M4 and M5. M6, concept D, was filed after epic `gm-design-cgh9` finished; see the 2026-10-24 amendment.
 
 ## Decision
 
@@ -304,6 +304,9 @@ The verdict no longer depends on further measurement. One branch is still open:
 (`gm-design-7xo5` comment of 2026-10-23). M6 is filed by `/bh:replan` when `gm-design-cgh9`
 finishes, and the branch is recorded here by amendment.
 
+The branch is decided. The [2026-10-24 amendment](#2026-10-24-concept-ds-backfill-branch-and-m6)
+records it, and this section is otherwise unchanged.
+
 ### Rejected alternatives and conditions for revisiting
 
 - **2.5D (`iso`) for concept A.** Rejected by the maintainer's judgment of 2026-10-23. It is
@@ -368,7 +371,8 @@ Repositories affected:
 
 These are not settled by the evidence, and this record does not guess them:
 
-- **D's backfill branch.** Backfill-from-fullexport or forward-only, from `gm-design-6b8u`.
+- **D's backfill branch.** Settled by the 2026-10-24 amendment: backfill from the full export,
+  then record live. It is no longer open.
 - **Roots above 134,051 releases.** Their strata read was not measured at GrooveMap's size.
   M2 chooses a per-artist summary or a refusal or cap, and re-measures on the first deployment.
 - **B's transaction time.** Whether the Genre Atlas offers a control over its monthly
@@ -379,3 +383,50 @@ These are not settled by the evidence, and this record does not guess them:
 - **Real devices and real collections.** No real phone, mid-range laptop, or real user
   collection was measured. C′'s real-user validation stays DEFER (`gm-design-on0x` and
   `gm-design-4804`, "Missing evidence").
+
+## Amendments
+
+### 2026-10-24: Concept D's backfill branch and M6
+
+Section 7 left one branch open: backfill-from-fullexport or forward-only. Follow-on spike
+`gm-design-6b8u` (epic `gm-design-cgh9`) decided it, and this amendment records the result.
+Sections 1 to 7 above stand as accepted. This amendment adds to section 7 and does not
+replace any of it.
+
+- **The branch is backfill from the full export.** The spike registered a dating proxy
+  before it read any data. Proxy 1 failed its bar (precision 0.8223 against 0.90) and is not
+  used. Proxy 2 was registered after that failure, has no free parameter, and was scored on
+  the unseen 20261021 to 20261024 window (out of sample). Its precision was 0.912 and its
+  recall 0.9771, against a bar of 0.90 for each. It clears the precision bar by 1.2 points.
+  Each Discogs link is dated by the proxy's row-id creation bound, which gives the ledger the
+  past 12 or more months on its first day (`gm-design-6b8u` Verdict and Recommendation 1).
+  The forward-only plan was the fallback had the check failed, and it is not taken.
+- **The DEFER of `gm-design-loj9` stands for its four-day window.** On 12 real months,
+  proxy 2 gives 12 of 12 months with a writing run, 35,434 works with evented editions
+  changing in two or more months, and 35,467 release re-attachments, against bars of 2, 1,000,
+  and 1,000. These are lower bounds. The maintainer's GO of 2026-10-23 stands, and the rule
+  fixed in advance now gives the same answer.
+- **Backfilled events carry a provenance label.** About 9% of the links proxy 2 dates into a
+  period are older links whose rows MusicBrainz replaced. The backfill therefore labels its
+  events "dated from the MusicBrainz full export", not "recorded". The label lets a reader tell a
+  dated event from a recorded one.
+- **From the first load, live recording at load.** Link changes are recorded when
+  `musicbrainz-sql-loader` loads a dump, and those diffs are exact. The maintainer decided on
+  2026-10-24 that recording happens at load, not in a later job.
+- **The first build is a table.** The first console screen is a paged table of works with
+  their editions' identity events in transaction time, plus a per-month density strip. It uses
+  `gm-design-loj9`'s state vocabulary and draft `admin_identity_ledger_*` routes. A layered
+  Strata view comes later.
+- **Unchanged.** The PostgreSQL-route exception for D, recorded under the routes and stores
+  decision, stands as written. Edition candidates stay out while section 6 of ADR 0014 stands
+  at DEFER. The console keeps classic scripts only.
+
+M6 is filed as five epics, one per repository. The cross-repository order is held by
+kickoff, not by bead dependencies, and the program document
+[`docs/programs/strata.md`](../programs/strata.md) lists the epics, their order, and which
+kickoffs are held.
+
+Open questions after this amendment: the backfilled links' older months are lower bounds
+because links removed since they were added are missing, and proxy 2 was scored on two short
+windows (4 days in sample and 3 days out of sample). Both are recorded in `gm-design-6b8u`
+"Missing evidence and failure modes".
