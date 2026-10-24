@@ -1,7 +1,7 @@
 # Strata program rollout
 
-**Status: M1 to M5 filed on 2026-10-23. M6 (concept D) is a placeholder, filed after epic
-`gm-design-cgh9` finishes. Bead state is authoritative; this document records order and
+**Status: M1 to M5 filed on 2026-10-23. M6 (concept D) filed on 2026-10-24 as five epics, the
+last two with held kickoffs. Bead state is authoritative; this document records order and
 handoffs, not progress.**
 
 This document tracks delivery of [ADR 0016](../adr/0016-strata-graph-view.md), which decides
@@ -41,7 +41,11 @@ repository's checkout.
 | M4 | B | graph-explorer | `gm-graph-explorer-q3e` | The Genre Atlas in Genres and Insights |
 | M5 | C′ | catalog-api | `gm-catalog-api-r8c7` | The extended Fit route (`gm-catalog-api-l23k`) and the taste projection route (`gm-catalog-api-qcnx`) |
 | M5 | C′ | graph-explorer | `gm-graph-explorer-lyd` | Taste Strata, the Fit landing point, and Discover outcomes |
-| M6 | D | operations-console, catalog-api | not filed | See [M6](#m6-concept-d-placeholder) |
+| M6 | D | database-schema | `gm-database-schema-09mv` | `public.identity_link_events`, the ledger table and its contract |
+| M6 | D | catalog-api | `gm-catalog-api-za77` | The one-time full-export backfill command |
+| M6 | D | musicbrainz-sql-loader | `gm-musicbrainz-sql-loader-nxc` | Link-change recording at load |
+| M6 | D | catalog-api | `gm-catalog-api-cn2v` | The three `admin_identity_ledger_*` routes (kickoff held) |
+| M6 | D | operations-console | `gm-operations-console-6qpy` | Contract promotion, the proxy, and the Ledger tab (kickoff held) |
 
 The child beads inside each epic carry their own dependencies. Notable in-epic order:
 
@@ -78,7 +82,7 @@ In words:
    beside M2. M3's Explore integration (`gm-graph-explorer-1v9`) needs M2's route promoted.
 3. **M4 and M5** follow M3, because the Genre Atlas and Taste Strata reuse its engine. M5 also
    starts after M4 lands, because C′ layers the collector's taste on the Genre Atlas.
-4. **M6** is filed later and does not block M1 to M5.
+4. **M6** follows its own order, below, and does not block M1 to M5.
 
 ## Handoffs
 
@@ -161,19 +165,40 @@ These are not settled by the evidence. Each is owned by a record, not by a guess
 
 | Question | Decided by |
 | --- | --- |
-| D's backfill branch: backfill-from-fullexport or forward-only | `gm-design-6b8u` in epic `gm-design-cgh9`, recorded by amendment to ADR 0016 |
+| D's backfill branch: backfill-from-fullexport or forward-only | Decided: backfill from the full export, then record live. `gm-design-6b8u` in epic `gm-design-cgh9`, recorded by the 2026-10-24 amendment to ADR 0016 |
 | Roots above 134,051 releases: a per-artist master summary, or a refusal or cap | M2, `gm-catalog-api-owym`, with the first-deployment latency check |
 | Whether the Genre Atlas offers a control over its monthly `computed_at` recomputations | Not decided; M4 does not assume one |
 | A strata activity surface: `taxonomy/events/v1` has none, so a strata node cannot carry Discover outcomes today. Adding one changes ADR 0010's closed vocabulary | Its own decision; M5's Discover outcomes (`gm-graph-explorer-07j`) follow ADR 0010 consent and are never collector state |
 | Real devices and real collections: no real phone, mid-range laptop, or real user collection was measured. C′'s real-user validation stays DEFER | Later evidence, after M5 ships |
 | M4 fixes the insights table names and the in-sector placement from the measured trade-off | M4, `gm-database-schema-0bv9` and `gm-analytics-engine-cvk` |
 
-## M6: concept D (placeholder)
+## M6: concept D
 
-Concept D, the Identity Ledger, is GO as a history ledger whose first build is a table or
-timeline (ADR 0016 section 7). Its molecule is **not filed**. `/bh:replan` files it when epic
-`gm-design-cgh9` (spike `gm-design-6b8u`) finishes, because that spike decides the open
-backfill branch.
+Concept D, the Identity Ledger, is GO as a history ledger whose first build is a table
+(ADR 0016 section 7). Spike `gm-design-6b8u` (epic `gm-design-cgh9`) decided the open
+backfill branch, and the [2026-10-24 amendment](../adr/0016-strata-graph-view.md#2026-10-24-concept-ds-backfill-branch-and-m6)
+records it: backfill from the MusicBrainz full export, labeled "dated from the MusicBrainz
+full export", then record live at load. The first console screen is a paged table plus a
+per-month density strip.
+
+M6 is five epics, one per repository. Read one with `bh plan show <epic>` from that
+repository's checkout.
+
+| Order | Repository | Epic | Delivers | Kickoff |
+| --- | --- | --- | --- | --- |
+| 1 | database-schema | `gm-database-schema-09mv` | `public.identity_link_events`. This table is the contract the other four read or write | Open |
+| 2 | catalog-api | `gm-catalog-api-za77` | The one-time full-export backfill command | Open |
+| 3 | musicbrainz-sql-loader | `gm-musicbrainz-sql-loader-nxc` | Recording link changes at load, from exact diffs | Open |
+| 4 | catalog-api | `gm-catalog-api-cn2v` | The three read-only `admin_identity_ledger_*` routes behind `require_admin` | Held |
+| 5 | operations-console | `gm-operations-console-6qpy` | Contract promotion, the proxy, and the Ledger tab | Held |
+
+The order is held by kickoff, not by bead dependencies, because the epics live in different
+repositories. Epic 1 comes first, because every other epic consumes its table. Epics 2 and 3
+follow it. Epics 4 and 5 wait: their kickoffs stay held until
+the catalog-api and operations-console work already under way in those repositories has
+reached its main branch, so the ledger routes and the Ledger tab are built on top of it and
+not beside it. Epic 5 also follows epic 4, because it promotes the contract that epic 4
+extends.
 
 What is already fixed, and what M6 inherits:
 
@@ -182,9 +207,8 @@ What is already fixed, and what M6 inherits:
   rule that Strata graph reads are Neo4j queries.
 - The ledger screen belongs to operations-console. It promotes the engine only when a 3D view
   of D is planned, and only after that plan settles the module-script question.
+- The console keeps classic scripts only, with no ES modules.
 - No edition candidates, while ADR 0014 section 6 stands at DEFER.
-
-This section is replaced with an epic id and its beads when M6 is filed.
 
 ## Explicit non-goals of this program
 
