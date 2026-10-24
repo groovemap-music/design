@@ -1,0 +1,185 @@
+{
+ "proxy_1": {
+  "months": "not evaluated: the proxy failed its validation bar",
+  "validation": {
+   "bar": {
+    "precision": 0.9,
+    "recall": 0.9
+   },
+   "both": 532,
+   "exact_link_added": 565,
+   "false_negatives": {
+    "no_discogs_link_in_full_export": 33
+   },
+   "false_positives": {
+    "linked_in_dump_a (an older link edited in the window)": 115
+   },
+   "passes": false,
+   "precision": 0.8223,
+   "proxy_link_added": 647,
+   "recall": 0.9416,
+   "secondary_new_and_linked": {
+    "both": 1358,
+    "exact": 1369,
+    "proxy": 1380
+   },
+   "window": "2026-10-17 00:10:01 to 2026-10-21 00:10:01 UTC"
+  }
+ },
+ "proxy_2": {
+  "months_conditional_on_out_of_sample_validation": {
+   "G1": {
+    "bar": 2,
+    "months_with_a_writing_run": 12
+   },
+   "G2_after_first_load_only": {
+    "evented_editions_per_work": {
+     "max": 83,
+     "p50": 1,
+     "p90": 1,
+     "p99": 3
+    },
+    "works_with_2plus_evented_editions": 13395,
+    "works_with_2plus_evented_editions_multi_month": 5980,
+    "works_with_evented_editions": 198311
+   },
+   "G2_lower_bound": {
+    "bar": 1000,
+    "evented_editions_per_work": {
+     "max": 200,
+     "p50": 1,
+     "p90": 2,
+     "p99": 5
+    },
+    "works_with_2plus_evented_editions": 259329,
+    "works_with_2plus_evented_editions_multi_month": 35434,
+    "works_with_evented_editions": 1927335
+   },
+   "G2_with_musicbrainz_mint_months": {
+    "bar": 1000,
+    "evented_editions_per_work": {
+     "max": 200,
+     "p50": 1,
+     "p90": 2,
+     "p99": 5
+    },
+    "works_with_2plus_evented_editions": 259329,
+    "works_with_2plus_evented_editions_multi_month": 35548,
+    "works_with_evented_editions": 1927335
+   },
+   "G3": {
+    "bar": 1000,
+    "release_reattachments_12_runs": 35467
+   },
+   "editions_by_work_parents": {
+    "1": 1301168,
+    "2+": 562721
+   },
+   "editions_with_events": 1863889,
+   "first_load_linked_at_ingest": 1715875,
+   "first_load_month": "2025-10",
+   "per_month": {
+    "2025-11": {
+     "G1_run_writes": true,
+     "linked_at_ingest": 12307,
+     "reattached": 2508,
+     "unresolved_target_not_in_discogs_dump": 26
+    },
+    "2025-12": {
+     "G1_run_writes": true,
+     "linked_at_ingest": 12029,
+     "reattached": 2975,
+     "unresolved_target_not_in_discogs_dump": 11
+    },
+    "2026-01": {
+     "G1_run_writes": true,
+     "linked_at_ingest": 12029,
+     "reattached": 2980,
+     "unresolved_target_not_in_discogs_dump": 20
+    },
+    "2026-02": {
+     "G1_run_writes": true,
+     "linked_at_ingest": 10064,
+     "reattached": 2892,
+     "unresolved_target_not_in_discogs_dump": 7
+    },
+    "2026-03": {
+     "G1_run_writes": true,
+     "linked_at_ingest": 10410,
+     "reattached": 2559,
+     "unresolved_target_not_in_discogs_dump": 12
+    },
+    "2026-04": {
+     "G1_run_writes": true,
+     "linked_at_ingest": 11104,
+     "reattached": 2764,
+     "unresolved_target_not_in_discogs_dump": 22
+    },
+    "2026-05": {
+     "G1_run_writes": true,
+     "linked_at_ingest": 10379,
+     "reattached": 3418,
+     "unresolved_target_not_in_discogs_dump": 8
+    },
+    "2026-06": {
+     "G1_run_writes": true,
+     "linked_at_ingest": 9619,
+     "reattached": 3292,
+     "unresolved_target_not_in_discogs_dump": 8
+    },
+    "2026-07": {
+     "G1_run_writes": true,
+     "linked_at_ingest": 11575,
+     "reattached": 2522,
+     "unresolved_target_not_in_discogs_dump": 17
+    },
+    "2026-08": {
+     "G1_run_writes": true,
+     "linked_at_ingest": 10958,
+     "reattached": 3287,
+     "unresolved_target_not_in_discogs_dump": 5
+    },
+    "2026-09": {
+     "G1_run_writes": true,
+     "linked_at_ingest": 11756,
+     "reattached": 3159,
+     "unresolved_target_not_in_discogs_dump": 502
+    },
+    "2026-10": {
+     "G1_run_writes": true,
+     "linked_at_ingest": 7169,
+     "reattached": 3111,
+     "unresolved_target_not_in_discogs_dump": 599
+    }
+   },
+   "prediction": "modelled from the MusicBrainz full export 20261021; not recorded history",
+   "reattached_after_last_run": 2482
+  },
+  "validation_in_sample_diagnostic": {
+   "bar": {
+    "precision": 0.9,
+    "recall": 0.9
+   },
+   "both": 522,
+   "exact_link_added": 565,
+   "false_negatives": {
+    "link_dated_before_window": 10,
+    "no_discogs_link_in_full_export": 33
+   },
+   "false_positives": {
+    "linked_in_dump_a (an older link edited in the window)": 7
+   },
+   "passes": true,
+   "precision": 0.9868,
+   "proxy_link_added": 529,
+   "recall": 0.9239,
+   "secondary_new_and_linked": {
+    "both": 1358,
+    "exact": 1369,
+    "proxy": 1380
+   },
+   "window": "2026-10-17 00:10:01 to 2026-10-21 00:10:01 UTC"
+  },
+  "validation_out_of_sample": "pending: JSON 20261021 -> 20261024 against full export 20261024"
+ }
+}
