@@ -369,17 +369,20 @@ Repositories affected:
 
 ### Open questions
 
-These are not settled by the evidence, and this record does not guess them:
+These were not settled by the evidence, and this record does not guess them. Those marked
+decided are closed by an amendment below:
 
 - **D's backfill branch.** Settled by the 2026-10-24 amendment: backfill from the full export,
   then record live. It is no longer open.
 - **Roots above 134,051 releases.** Their strata read was not measured at GrooveMap's size.
   M2 chooses a per-artist summary or a refusal or cap, and re-measures on the first deployment.
-- **B's transaction time.** Whether the Genre Atlas offers a control over its monthly
-  `computed_at` recomputations is not decided.
-- **A strata activity surface.** `taxonomy/events/v1` has no strata surface, so a strata node
-  cannot carry Discover outcomes today. Adding one changes ADR 0010's closed vocabulary and
-  needs its own decision.
+- **B's transaction time.** Decided by the [2026-10-24 amendment](#2026-10-24-activity-surface-dominant-style-and-atlas-history):
+  the Genre Atlas shows the latest computation only, with no control over its monthly
+  `computed_at` recomputations.
+- **A strata activity surface.** Decided by the [2026-10-24 amendment](#2026-10-24-activity-surface-dominant-style-and-atlas-history):
+  there is none for now. `taxonomy/events/v1` keeps ADR 0010's closed vocabulary.
+- **Taste Strata's dominant style.** Decided by the [2026-10-24 amendment](#2026-10-24-activity-surface-dominant-style-and-atlas-history): the rule is
+  confirmed as built, and it is stated there.
 - **Real devices and real collections.** No real phone, mid-range laptop, or real user
   collection was measured. C′'s real-user validation stays DEFER (`gm-design-on0x` and
   `gm-design-4804`, "Missing evidence").
@@ -430,3 +433,29 @@ Open questions after this amendment: the backfilled links' older months are lowe
 because links removed since they were added are missing, and proxy 2 was scored on two short
 windows (4 days in sample and 3 days out of sample). Both are recorded in `gm-design-6b8u`
 "Missing evidence and failure modes".
+
+### 2026-10-24: Activity surface, dominant style, and atlas history
+
+The maintainer walked three of the open questions above on 2026-10-24 and decided each. The
+decisions add to this record and replace none of its text. Each carries the condition under
+which it is revisited, so later work does not reopen it by accident.
+
+- **No Strata activity surface for now.** `taxonomy/events/v1` keeps ADR 0010's closed
+  vocabulary. Strata nodes record no engagement events of their own, and Discover outcomes on
+  a strata node stay as section 6 states them: activity outcomes against an impression a
+  recommendation or fit surface recorded, never collector state. *Revisit* only when a
+  concrete analytics or Discover need on Strata exists. Adding a surface then changes ADR
+  0010's vocabulary and needs its own decision.
+- **The dominant-style rule is confirmed exactly as built.** Taste Strata places a collector
+  master in a style cell by this rule (`gm-graph-explorer-0av`):
+  1. A landmark master uses its best-ranked landmark style.
+  2. Any other master uses, among its drawn styles, the style in which this collector holds
+     the most items. Ties are broken by style name.
+
+  Positions therefore depend on the viewer's collection. That suits a personal layer, which
+  never appears in a shareable snapshot (section 6). *Revisit* if Taste Strata is ever drawn
+  in a view that is shared or compared between collectors, because then a viewer-dependent
+  position stops being a fit.
+- **The Genre Atlas shows the latest computation only.** It offers no control over the
+  monthly `computed_at` recomputations and no comparison between months. *Revisit* if users
+  ask to compare months.
