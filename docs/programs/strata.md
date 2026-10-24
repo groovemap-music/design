@@ -161,14 +161,16 @@ check. Keep that reference pointing at this section.
 
 ## Open questions from ADR 0016
 
-These are not settled by the evidence. Each is owned by a record, not by a guess.
+These were not settled by the evidence. Each is owned by a record, not by a guess. Rows marked
+decided are closed by an amendment to ADR 0016.
 
 | Question | Decided by |
 | --- | --- |
 | D's backfill branch: backfill-from-fullexport or forward-only | Decided: backfill from the full export, then record live. `gm-design-6b8u` in epic `gm-design-cgh9`, recorded by the 2026-10-24 amendment to ADR 0016 |
 | Roots above 134,051 releases: a per-artist master summary, or a refusal or cap | M2, `gm-catalog-api-owym`, with the first-deployment latency check |
-| Whether the Genre Atlas offers a control over its monthly `computed_at` recomputations | Not decided; M4 does not assume one |
-| A strata activity surface: `taxonomy/events/v1` has none, so a strata node cannot carry Discover outcomes today. Adding one changes ADR 0010's closed vocabulary | Its own decision; M5's Discover outcomes (`gm-graph-explorer-07j`) follow ADR 0010 consent and are never collector state |
+| Whether the Genre Atlas offers a control over its monthly `computed_at` recomputations | Decided: the atlas shows the latest computation only, with no control. Revisit if users ask to compare months. Recorded by the [2026-10-24 amendment](../adr/0016-strata-graph-view.md#2026-10-24-activity-surface-dominant-style-and-atlas-history) to ADR 0016 |
+| A strata activity surface: `taxonomy/events/v1` has none, so a strata node cannot carry Discover outcomes today. Adding one changes ADR 0010's closed vocabulary | Decided: none for now. Revisit only when a concrete analytics or Discover need on Strata exists, as its own decision. Recorded by the [2026-10-24 amendment](../adr/0016-strata-graph-view.md#2026-10-24-activity-surface-dominant-style-and-atlas-history). M5's Discover outcomes (`gm-graph-explorer-07j`) follow ADR 0010 consent and are never collector state |
+| Taste Strata's dominant style for a non-landmark collector master | Decided: confirmed as built in `gm-graph-explorer-0av`. Revisit if Taste Strata is drawn in a shared view. Recorded by the [2026-10-24 amendment](../adr/0016-strata-graph-view.md#2026-10-24-activity-surface-dominant-style-and-atlas-history) |
 | Real devices and real collections: no real phone, mid-range laptop, or real user collection was measured. C′'s real-user validation stays DEFER | Later evidence, after M5 ships |
 | M4 fixes the insights table names and the in-sector placement from the measured trade-off | M4, `gm-database-schema-0bv9` and `gm-analytics-engine-cvk` |
 
