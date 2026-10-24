@@ -22,7 +22,7 @@ maintained current state.
 - [ADR 0013: pgvector in PostgreSQL for catalog embeddings](adr/0013-pgvector-catalog-embeddings.md)
 - [ADR 0014: Ownership of cross-catalog release-edition candidates](adr/0014-cross-catalog-edition-candidates.md)
 - [ADR 0015: Valkey replaces Redis](adr/0015-valkey-replaces-redis.md)
-- [ADR 0016: Strata, the level-of-detail bi-temporal graph view](adr/0016-strata-graph-view.md) records the GO verdicts for concepts A to D, the 3D renderer, routes and stores, state vocabularies, clocks, and data rules. Concept D's backfill branch is pending `gm-design-6b8u`.
+- [ADR 0016: Strata, the level-of-detail bi-temporal graph view](adr/0016-strata-graph-view.md) records the GO verdicts for concepts A to D, the 3D renderer, routes and stores, state vocabularies, clocks, and data rules. Concept D's backfill branch, backfill from the full export and then record live, is decided by its 2026-10-24 amendment.
 - [ADR 0017: Broker metrics come from rabbitmq_prometheus](adr/0017-broker-metrics-from-rabbitmq-prometheus.md)
 - [ADR 0018: The operations console is one authenticated, data-driven shell](adr/0018-operations-console-single-shell.md) records the authenticated single shell, the `catalog-api` session boundary, VictoriaMetrics history with 90-day retention, and retirement of the PostgreSQL metrics tables. The Overview uses an entity by consumer matrix as its primary view, with run progress and an ETA headline as a secondary view, and the flow diagram is not adopted.
 
@@ -32,7 +32,7 @@ maintained current state.
 - [Native identity and first-party events program rollout](programs/native-identity-and-events.md) records the four-wave delivery plan for ADR 0009 and ADR 0010, the artifacts each wave pins, and the gaps it deliberately leaves to their own records.
 - [Catalog-identifiers program rollout](programs/catalog-identifiers.md) records the delivery of ADR 0011 across the organization in five waves, complete except mcp-server's company-credit surface in wave 4.
 - [PostgreSQL SQL/PGQ pause and Neo4j continuity program](programs/neo4j-to-postgresql-graph.md) records the stopped cutover, preservation refs, retained relational consumers, and owner-hive pause work required by ADR 0012's 2026-10-02 amendment.
-- [Strata program rollout](programs/strata.md) tracks delivery of ADR 0016 across repositories: the M1 to M5 molecules, the order, the cross-repository handoffs, and the first-deployment checks.
+- [Strata program rollout](programs/strata.md) tracks delivery of ADR 0016 across repositories: the M1 to M6 molecules, the order, the cross-repository handoffs, and the first-deployment checks.
 
 ## Design spikes
 
