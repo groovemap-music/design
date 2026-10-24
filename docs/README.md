@@ -23,6 +23,7 @@ maintained current state.
 - [ADR 0014: Ownership of cross-catalog release-edition candidates](adr/0014-cross-catalog-edition-candidates.md)
 - [ADR 0015: Valkey replaces Redis](adr/0015-valkey-replaces-redis.md)
 - [ADR 0016: Strata, the level-of-detail bi-temporal graph view](adr/0016-strata-graph-view.md) records the GO verdicts for concepts A to D, the 3D renderer, routes and stores, state vocabularies, clocks, and data rules. Concept D's backfill branch is pending `gm-design-6b8u`.
+- [ADR 0017: Broker metrics come from rabbitmq_prometheus](adr/0017-broker-metrics-from-rabbitmq-prometheus.md)
 
 ## Program rollout plans
 
