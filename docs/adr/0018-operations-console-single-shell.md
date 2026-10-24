@@ -29,7 +29,7 @@ Two further problems share this boundary:
   needs hand edits to HTML and JavaScript. The dials do not show where a pipeline
   is stuck or when an extraction will finish.
 
-ADR 0017 (broker metrics from `rabbitmq_prometheus`) changes where the
+[ADR 0017](0017-broker-metrics-from-rabbitmq-prometheus.md) changes where the
 console reads live broker numbers. This decision covers who may see them, where
 history comes from, and how the layout is produced.
 
