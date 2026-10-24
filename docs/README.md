@@ -56,9 +56,9 @@ maintained current state.
   table today's code allows, the work-level split in the catalogs' own links, and the draft
   admin route.
 - [Concept D's ledger bar on real months](spikes/gm-design-6b8u-strata-ledger-months.md)
-  records the GO on the history-only Strata ledger, by the maintainer's decision. The
-  pre-registered full-export proxy failed its bar. A second proxy clears G1-G3 on 12 months
-  in-sample, and its out-of-sample check decides the backfill.
+  records the GO on the history-only Strata ledger. The maintainer decided GO, and a
+  second full-export proxy then passed its out-of-sample check and clears G1-G3 on 12
+  months. The pre-registered proxy failed its bar and is not used.
 
 ## Verification reports
 

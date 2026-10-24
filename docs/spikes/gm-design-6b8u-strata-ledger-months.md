@@ -1,19 +1,19 @@
 # Spike: concept D's ledger bar on real months, from the MusicBrainz full export
 
-Status: **GO** for concept D's history-only ledger, **by the maintainer's decision** of
-2026-10-23: "Please do not DEFER D. Let's change that to a GO". The pre-registered rule
-alone would still read DEFER, pending one out-of-sample check. The evidence below is
-unchanged:
+Status: **GO** for concept D's history-only ledger. The maintainer decided it on
+2026-10-23: "Please do not DEFER D. Let's change that to a GO". The rule fixed in advance
+now agrees, because proxy 2 passed its binding out-of-sample check on 2026-10-24
+(precision 0.912, recall 0.9771, against 0.90). The ledger is backfilled from the
+full-export series.
 
 - **Proxy 1 fails its bar.** It was pre-registered at `9e9440a`, before any data was
   read. Its precision is 0.8223 against 0.90, because edits to older links date them into
   the window. So it is not used.
-- **Proxy 2 clears every bar, but only in-sample.** It was registered at `8f7a5ed`, after
-  proxy 1 failed, and it has no free parameter. On 12 real months it clears G1, G2, and G3
-  by wide margins: 12 months, 35,434 works, and 35,467 re-attachments. Its validation on
-  the same window passes (precision 0.9868, recall 0.9239), but that window is in-sample.
-- **The out-of-sample check no longer gates the verdict.** The unseen 20261021 → 20261024
-  window now decides how the ledger is backfilled (see Recommendation).
+- **Proxy 2 passes, in-sample and out of sample.** It was registered at `8f7a5ed`, after
+  proxy 1 failed, and it has no free parameter. In-sample it scored precision 0.9868 and
+  recall 0.9239. On the unseen 20261021 → 20261024 window it scored 0.912 and 0.9771.
+- **12 real months.** Proxy 2 clears G1, G2, and G3 by wide margins: 12 months, 35,434
+  works, and 35,467 re-attachments.
 
 Spike: `gm-design-6b8u` (epic `gm-design-cgh9`)  
 Prior spike: gm-design-loj9 (`docs/spikes/gm-design-loj9-strata-ledger.md` on the Strata
@@ -185,7 +185,32 @@ How edits are told apart or bounded:
   `20261021-002201` full export. Removal or timing between the two exports is the likely
   cause, but the core tables cannot tell which.
 
-### Proxy 2 on 12 real months (conditional on its binding validation)
+### Proxy 2's binding validation, out of sample: 2026-10-21 00:10:01 → 2026-10-24 00:10:01 UTC
+
+Neither proxy had seen this window. Inputs were JSON dumps `20261021-001001` and
+`20261024-001001`, and the full export `20261024-102842`, streamed on 2026-10-24 into
+`results/oos_validation.json`.
+
+| | Proxy 2 (binding) |
+| --- | ---: |
+| Exact diff additions (E) | 350 |
+| Proxy-dated additions (P) | 375 |
+| Both | 342 |
+| **Precision** | **0.9120** ✓ (bar 0.90) |
+| **Recall** | **0.9771** ✓ (bar 0.90) |
+| False positives: the release was already linked in dump A (an older link, edited or replaced) | 33 |
+| False negatives: link dated after the window (edited later) | 5 |
+| False negatives: link dated before the window | 3 |
+| Secondary check: new releases linked at creation (exact / proxy / both) | 1,098 / 1,113 / 1,076 |
+
+- **It passes.** Precision clears its bar by only 1.2 points. About 9% of the links
+  proxy 2 dates into a period are older links whose rows MusicBrainz replaced. The monthly
+  figures below are reported raw, without that correction, as the method requires.
+- **Recall is better than in-sample.** The 33 "no Discogs link in the full export" misses
+  from the first window do not recur. That is despite a 10-hour gap between this full
+  export's snapshot (10:28 UTC) and the end of the window.
+
+### Proxy 2 on 12 real months (validated out of sample)
 
 The modelled first load is October 2025. The table gives each monthly run's release
 re-attachments, links at ingest of new releases, and rows left `unresolved` because their
@@ -237,23 +262,24 @@ missing, so older months are lower bounds.
 
 ## Verdict
 
-**GO** for concept D's history-only ledger. This is the maintainer's decision of
-2026-10-23: "Please do not DEFER D. Let's change that to a GO".
+**GO** for concept D's history-only ledger.
 
-Applied alone, the bar fixed in advance would not yet give GO:
+The maintainer decided GO on 2026-10-23, before the out-of-sample result existed. The
+rule fixed in advance now gives the same answer:
 
 - **Proxy 1 failed.** Registered before any data was read, it failed its validation bar
-  (precision 0.8223), so it is not used.
-- **Proxy 2 clears the bar only in-sample.** It clears G1, G2, and G3 on 12 real months:
-  G1 is 12 months, G2 is 35,434 works at the lower bound (5,980 counting only changes
-  after the first load), and G3 is 35,467 re-attachments. But it was designed after proxy
-  1's errors were seen, and its only validation (precision 0.9868, recall 0.9239) is on the
-  same window.
-- **The rule would wait.** It would have held DEFER until the unseen 20261021 → 20261024
-  window.
+  (precision 0.8223), and it stays unused.
+- **Proxy 2 passed out of sample.** Registered after proxy 1 failed, it passed its binding
+  check on the unseen 20261021 → 20261024 window: precision 0.912 and recall 0.9771,
+  against 0.90.
+- **All three bars clear on 12 real months:**
+  - G1: 12 of 12 months have a run that writes;
+  - G2: 35,434 works at the lower bound, or 5,980 counting only changes after the first
+    load, against 1,000;
+  - G3: 35,467 release re-attachments, against 1,000.
 
-The maintainer has accepted that residual risk. The out-of-sample result is still run and
-recorded, and it now decides how the ledger's past is filled in, not whether D is built.
+  The history shows change across months for tens of thousands of works, which a log
+  table would not.
 
 gm-design-loj9's DEFER stands as the record for its four-day window, and its merged
 document is unchanged. Its four-day replay found G2 = 743. That figure measured one
@@ -262,17 +288,17 @@ hypothetical cycle, not a shortage of history. Its G1 and G2 are restated as DEF
 
 ## Recommendation
 
-1. **Run the out-of-sample check, and let it decide the backfill.** Run `scripts/oos.py`
-   on the unseen 20261021 → 20261024 window as soon as the 20261024 full export and JSON
-   `release` member are published. The bar is unchanged: precision ≥ 0.90 and
-   recall ≥ 0.90.
-   - **If proxy 2 passes:** backfill D's history from the full-export series. Each Discogs
-     link is dated by proxy 2's row-id creation bound, which gives the ledger the past 12
-     or more months on its first day.
-   - **If proxy 2 fails:** the ledger records forward only, from live dump diffs. Each
-     MusicBrainz load's diff against the previous one gives exact link additions, as in
-     this spike's validation set E. The backfill waits for a proxy that passes a fresh
-     unseen window. Until then, D shows history from its first load onward.
+1. **Backfill from the full export. The out-of-sample check selected this branch.**
+   Proxy 2 passed on the unseen window, so D's history is backfilled from the
+   full-export series. Each Discogs link is dated by proxy 2's row-id creation bound, which
+   gives the ledger the past 12 or more months on its first day.
+   - About 9% of backfilled link dates belong to older links whose rows MusicBrainz
+     replaced (precision 0.912). The backfill should label its events "dated from the
+     MusicBrainz full export", not "recorded".
+   - From the first load onward, record from live dump diffs. Those diffs are exact, as in
+     this spike's validation set E.
+   - Had the check failed, the plan was forward-only recording from live diffs, with the
+     backfill waiting for a better proxy. That branch is not taken.
 2. **GO conditions, carried from gm-design-loj9 for the decision bead `gm-design-7xo5`
    and implementation molecule M6:**
    - **PostgreSQL route.** The admin route reads PostgreSQL, the identity authority under
@@ -297,8 +323,8 @@ hypothetical cycle, not a shortage of history. Its G1 and G2 are restated as DEF
 
 ## Missing evidence and failure modes
 
-- **One validation window.** Both proxies are scored on 4 days of real edits. The
-  out-of-sample window is a second 3 days.
+- **Two short validation windows.** Proxy 2 is scored on 4 days in-sample and 3 days out
+  of sample. Its out-of-sample precision clears the bar by 1.2 points.
 - **Row-id order is assumed to be creation order.** Proxy 2 relies on MusicBrainz
   assigning `l_release_url` ids from a sequence. Its precision on the window is
   consistent with that assumption.
