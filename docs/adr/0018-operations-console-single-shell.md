@@ -1,7 +1,7 @@
 # ADR 0018: The operations console is one authenticated, data-driven shell
 
 - Status: Accepted on 2026-10-24 (`gm-design-3qbr`, epic `gm-design-x0mf`)
-- Pipeline visualization: pending the operations-console spike verdict
+- Pipeline visualization: decided on 2026-10-24 from spike `gm-operations-console-2rf` (`gm-design-d0z3`, epic `gm-design-8oet`)
 
 ## Context
 
@@ -107,13 +107,68 @@ sampled history at cutover, which this record accepts.
 
 ### Pipeline visualization
 
-Pending. The console's primary Overview visualization is chosen by the
-operations-console spike from three candidates: a left-to-right flow diagram with
-throughput, health, backlog, and drain estimate; an entity by consumer matrix of
-backlog and lag; and per-extraction-run progress with percent loaded and
-estimated completion. The spike's decision bead files a design-hive bead that
-amends this section with the verdict. Until then, the shell and topology work do
-not depend on the choice.
+The operations-console spike `gm-operations-console-2rf` compared three candidates
+against shared fixtures. Its record is `docs/spikes/gm-operations-console-2rf-pipeline-visualization.md`
+in `groovemap-music/operations-console`. The maintainer confirmed the verdict on
+2026-10-24.
+
+| Candidate | Decision |
+| --- | --- |
+| Entity by consumer matrix of backlog and lag | **Primary Overview view.** One matrix per pipeline, rendered from `/api/topology`. |
+| Per-extraction-run progress with percent loaded and ETA | **Secondary view.** Its headline ("Finishes in X, bottleneck Y" or "Cannot finish: ...") also appears above each matrix. Until the data below exists, the headline reads "ETA unavailable" instead of a guessed number. |
+| Left-to-right flow diagram | **Not adopted as an Overview view.** It survives only as an optional, desktop-only, single-pipeline drill-down opened from a matrix row, at the lowest priority. |
+
+**Evidence.** Measured by rendering each view in Chromium at 1440x900 and 390x844:
+
+- **First screen.** The matrix is the only view with both pipelines and every
+  injected fault on the first screen at both widths. The flow at 390 px needs two
+  screens of scrolling and horizontal panning of a 1,080 px diagram.
+- **Growth with twice the consumers.** The matrix stays at 900 px on desktop. The
+  flow grows 78 % taller (1,458 to 2,590 px), and its fan-in edges become
+  unreadable. The matrix needs a stacked layout below 480 px with more than two
+  consumers, because the plain grid breaks 13 words at that width.
+- **Contrast and colour vision.** Every text pair meets 4.5:1 and every graphic pair
+  3:1 in the light and dark themes. State colours stay separable under simulated
+  protanopia, deuteranopia and tritanopia. In greyscale they do not, so the lag ramp
+  steps in lightness and state is never carried by colour alone.
+- **Faults.** All three views found a stalled consumer and a growing dead letter
+  queue, and none raised a critical on the healthy fixture. The matrix costs two
+  extra header lookups to name the fault, and shows no ETA.
+
+**Shared health rules.** Every view and the attention bar use the same rules, kept
+next to the topology so they cannot disagree:
+
+- **Stalled** (critical): backlog above zero, consumers above zero, and no
+  acknowledgements for at least 60 seconds.
+- **No consumer** (critical): backlog above zero and no consumers.
+- **DLQ growing** (critical): dead letter queue depth rose over the last 5 minutes.
+- **DLQ not empty** (warning): depth above zero and flat.
+- Everything else is quiet. A queue filling during extraction is not an alarm.
+
+State is never shown by colour alone. Critical carries a diamond glyph, a text
+label and a heavy border. Warning carries a triangle glyph and a label.
+
+**Limits of the evidence.** The fixtures are synthetic: no extraction could be
+recorded, so sizes and rates are assumptions, though the metric format, parser,
+topology and names are real. "Time to find" is a fixation model with
+conventional weights, not operator trials, and each fixture holds one fault in a
+fixed position. The spike cannot show real reaction times, preference, or how
+operators read ETAs. A short check with an operator on a real run is still worth
+doing before the Overview is considered final.
+
+**Data consequences.** Two requirements apply whichever view ships:
+
+- **Unknown rates are null, not 0.0.** The live model reports 0.0 when a rate
+  cannot be computed, as on the first scrape or after a counter reset (ADR 0017).
+  The stalled rule would fire falsely after a console restart or broker counter
+  reset. The live model carries a nullable rate, or a `rate_known` flag, before
+  the rule ships.
+- **Progress needs expected totals and per-run baselines.** Extractor `/health`
+  reports record counts but no denominator. Expected totals come from the
+  extractor gauge `groovemap_extraction_file_progress_ratio` (bytes read over file
+  size), through VictoriaMetrics or by exposing it on `/health`. Percent loaded
+  and ETA also need a stored acknowledged-count baseline per run, because the
+  broker counter resets when the broker restarts.
 
 ## Consequences
 
@@ -122,7 +177,9 @@ of one login for operators who used the landing page without one. The console
 depends on `catalog-api` for every request that is not cached, and its login form
 reports when `catalog-api` is unreachable. The 30-second cache bounds both load and
 revocation delay. The layout no longer needs hand edits per entity, which lets the
-topology feed any later view.
+topology feed any later view. The Overview becomes a matrix per pipeline with a run-progress
+headline, and it needs a nullable rate and per-run expected totals before its stalled rule and
+ETA can ship.
 
 History depends on the metrics stack and on longer retention, which increases
 VictoriaMetrics storage. The live Overview does not: it reads the broker directly
