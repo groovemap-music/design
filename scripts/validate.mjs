@@ -50,7 +50,7 @@ export {
   validateTelemetryDecision,
 } from "./validation-policy.mjs";
 
-const AUTOMATION_REVISION = "833cb464507678c38ab78bd4718ce697399463e9";
+const AUTOMATION_REVISION = "dbf22ed83d486e9484fc8c6385c7c3e5995700e4";
 const MIT_SHA256 = "9572d39cdc09c0b2cd792a14fef5dcc4ed1b955d9b1ea2a3d0c058221fa5f391";
 const REQUIRED_FILES = [
   ".github/dependabot.yml",
