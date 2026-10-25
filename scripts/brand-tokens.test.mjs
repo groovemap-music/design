@@ -70,12 +70,12 @@ test("a state equal to an entity-type color is rejected in both themes", () => {
 test("a state within the stated distance of an entity-type or brand accent color is rejected", () => {
   const invalid = clone();
   invalid.state.fit.novelty.dark = "#05e87a";
-  invalid.state.fit.bridge.dark = "#00c0d8";
+  invalid.state.fit.bridge.dark = "#a4fcef";
   const errors = validateStateTokens(invalid);
   const nearArtist = errors.find((error) => error.startsWith("state.fit.novelty.dark") && error.includes("artist"));
   assert.ok(nearArtist, errors.join("\n"));
   assert.match(nearArtist, new RegExp(`below ${MIN_ENTITY_DELTA_E}`));
-  assert.ok(errors.some((error) => error.startsWith("state.fit.bridge.dark") && error.includes("brand.cyan")));
+  assert.ok(errors.some((error) => error.startsWith("state.fit.bridge.dark") && error.includes("brand.mint")));
 });
 
 test("a state below AA contrast on its background is rejected in both themes", () => {

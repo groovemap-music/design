@@ -52,6 +52,11 @@ export {
 
 const AUTOMATION_REVISION = "dbf22ed83d486e9484fc8c6385c7c3e5995700e4";
 const MIT_SHA256 = "9572d39cdc09c0b2cd792a14fef5dcc4ed1b955d9b1ea2a3d0c058221fa5f391";
+// Jura and its license as published in google/fonts ofl/jura at 6e4b84c976cadb3c49a40fd9a1c203e4f7fcf2da.
+const BRAND_FONT_SHA256 = {
+  "brand/fonts/Jura[wght].ttf": "188b415d44810d68b4d6b4a8c281f864184c2b8edc5e88e6357c89f7b44075bf",
+  "brand/fonts/OFL.txt": "54d85ef76f1fcf89671e196a9bca6b02683c68277caa89d89ff1b63a5fe9c421",
+};
 const REQUIRED_FILES = [
   ".github/dependabot.yml",
   ".github/workflows/ci.yml",
@@ -67,6 +72,10 @@ const REQUIRED_FILES = [
   "TRADEMARKS.md",
   "brand/README.md",
   "brand/assets.sha256",
+  "brand/font.mjs",
+  "brand/fonts/Jura[wght].ttf",
+  "brand/fonts/OFL.txt",
+  "brand/mark.mjs",
   "brand/render.mjs",
   "brand/tokens.json",
   "catalog/README.md",
@@ -95,6 +104,7 @@ const REQUIRED_FILES = [
   "docs/programs/native-identity-and-events.md",
   "docs/programs/neo4j-to-postgresql-graph.md",
   "fixtures/catalog-valid.json",
+  "scripts/brand-font.test.mjs",
   "scripts/brand-tokens.mjs",
   "scripts/brand-tokens.test.mjs",
   "scripts/build.mjs",
@@ -468,6 +478,10 @@ function checkAssets() {
     requireCondition(actual === expected, `${path} differs from the reviewed infra-source output`);
   }
   console.log("Verified byte identity of 12 reviewed brand outputs.");
+  for (const [path, expected] of Object.entries(BRAND_FONT_SHA256)) {
+    requireCondition(sha256(readFileSync(resolve(ROOT, path))) === expected, `${path} differs from its recorded upstream provenance`);
+  }
+  console.log("Verified the brand font and its license against recorded upstream provenance.");
   const stateErrors = validateStateTokens(JSON.parse(readFileSync(resolve(ROOT, "brand/tokens.json"), "utf8")));
   requireCondition(stateErrors.length === 0, `Strata state tokens are invalid:\n${stateErrors.join("\n")}`);
   console.log("Verified Strata state tokens: distinct from entity-type colors, AA contrast in both themes.");
@@ -478,7 +492,7 @@ function checkLicense() {
   requireCondition(licenseHash === MIT_SHA256, "LICENSE must remain the unmodified approved MIT text");
   const notice = readFileSync(resolve(ROOT, "NOTICE"), "utf8");
   requireCondition(/MIT License/.test(notice) && /does not grant trademark rights/i.test(notice), "NOTICE must retain the copyright/trademark boundary");
-  for (const path of ["Justfile", "scripts/brand-tokens.mjs", "scripts/brand-tokens.test.mjs", "scripts/build.mjs", "scripts/check-governance.mjs", "scripts/check-recipes.mjs", "scripts/check-recipes.test.mjs", "scripts/check-secrets.sh", "scripts/media-mapper.mjs", "scripts/publication-readiness.mjs", "scripts/tooling.mjs", "scripts/validate.mjs", "scripts/validate.test.mjs", "scripts/validation-policy.mjs"]) {
+  for (const path of ["Justfile", "brand/font.mjs", "brand/mark.mjs", "brand/render.mjs", "scripts/brand-font.test.mjs", "scripts/brand-tokens.mjs", "scripts/brand-tokens.test.mjs", "scripts/build.mjs", "scripts/check-governance.mjs", "scripts/check-recipes.mjs", "scripts/check-recipes.test.mjs", "scripts/check-secrets.sh", "scripts/media-mapper.mjs", "scripts/publication-readiness.mjs", "scripts/tooling.mjs", "scripts/validate.mjs", "scripts/validate.test.mjs", "scripts/validation-policy.mjs"]) {
     requireCondition(readFileSync(resolve(ROOT, path), "utf8").includes("SPDX-License-Identifier: MIT"), `${path} is missing MIT license metadata`);
   }
   console.log("Verified MIT license metadata and the separate trademark boundary.");
