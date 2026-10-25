@@ -4,10 +4,11 @@ This directory owns the canonical editable GrooveMap brand. For repository owner
 
 `tokens.json`, `templates/`, `mark.mjs`, and `fonts/` are the sources; `assets/` contains deterministic rendered SVG, manifest, and CSS outputs. Change sources once, run `just brand-render`, review the diff, and promote only generated files to `.github`, the Pages site, applications, or documentation.
 
-The identity is the **Degrees** mark on the **Lagoon** palette, with a lowercase `groovemap` wordmark set in Jura. It replaces the constellation-record mark and the Deep Space + Purple palette that were migrated from the monorepo's `scripts/generate_brand_assets.py`.
+The identity is the **Label web** mark on the **Brass** palette, with a lowercase `groovemap` wordmark set in Jura 300 with wide letter spacing, like the type on a record label. It replaces the Degrees mark and Lagoon palette (Design `7abe13a`), which had replaced the constellation-record mark and the Deep Space + Purple palette migrated from the monorepo's `scripts/generate_brand_assets.py`.
 
-- [`mark.mjs`](mark.mjs) draws the mark in a 100-unit box. A seed sits at the center, and each contour ring is one more degree of separation, with edges running outward ring by ring. The inner ring is a true circle and the outer rings drift into terrain contours. A pin on the outer ring marks the viewer's position. Favicons use a simplified variant with two rings and three nodes.
-- `color.mint` is the dark-theme accent and `color.lagoon` the light-theme accent. On light backgrounds the pin is mint with a lagoon outline, so it stays distinct from the lagoon nodes.
+- [`mark.mjs`](mark.mjs) draws the mark in a 100-unit box: a record with a brass label. A two-level graph is printed on the label and branches out from the spindle hole, which is cut as a map pin, so the hole is the graph's hub. Favicons use a simplified variant without grooves and with three bold nodes on a larger label, so the graph still reads at 16 px.
+- `color.brass` is the label in both themes and the dark-theme accent. `color.oxblood` is the light-theme accent: every darkened brass that reaches 4.5:1 on `lightBackground` falls within 15 CIEDE2000 of a light-theme Strata state. `color.vinyl` is the record on dark backgrounds; on light backgrounds the record is `lightText`.
+- `type.tracking.wordmark` is the wordmark's letter spacing in em (0.12), and `type.weight.wordmark` is 300.
 - `brand.wordmark` is the logo text. The product name in prose, titles, the manifest, and alt text remains `brand.displayName` (GrooveMap).
 
 ## Reproduction
@@ -35,7 +36,7 @@ The renderer uses only pinned Node.js standard-library APIs. Text is never live 
 `just brand` proves, through [`scripts/brand-tokens.mjs`](../scripts/brand-tokens.mjs), that in each theme:
 
 - every state has WCAG 2 contrast of at least 4.5:1 on each background it is drawn on: `void` and `deep` in the dark theme, and `lightBackground` in the light theme. A white card is lighter than `lightBackground`, so it passes too;
-- every state is at least 15 CIEDE2000 from every entity-type color and from the brand mint and lagoon accents;
+- every state is at least 15 CIEDE2000 from every entity-type color and from the brand brass and oxblood accents;
 - states drawn in one view are at least 15 CIEDE2000 apart. C′ is drawn on B's atlas, so the `fit` and `lifecycle` states form one view.
 
 The rendered `tokens.css` names them `--groovemap-entity-<type>` and `--groovemap-state-<vocabulary>-<state>-<light|dark>`. A consumer picks the value for its own theme mechanism. Neutral states (`none`, `absent`, `notRecorded`) are warm grays, so they stay apart from the slate label color.
@@ -43,13 +44,13 @@ The rendered `tokens.css` names them `--groovemap-entity-<type>` and `--groovema
 ## Promotion provenance
 
 Public consumer source records in the organization profile, the Pages site, Graph Explorer,
-and Operations Console pin Design commit `59c9fd3c8bbdfa676e0b7bb3d463fc766c1f3c0d` and its
-asset digests. The Degrees rebrand changes all 12 outputs and renames the accent tokens:
-`--groovemap-cyan`, `--groovemap-cyan-glow`, `--groovemap-purple`, and
-`--groovemap-purple-light` are replaced by `--groovemap-mint` and `--groovemap-lagoon`, and
-`--groovemap-light-muted-text` is new. Consumers keep the earlier bytes until each is
-re-promoted. Those records prove which reviewed Design bytes were promoted; they do not
-authorize this repository to modify a consumer.
+and Operations Console pin Design commit `7abe13ad3e22e81b5437eb92acb8db998730e11a` (Degrees)
+and its asset digests. The Label web rebrand changes all 12 outputs and renames the accent
+tokens: `--groovemap-mint` and `--groovemap-lagoon` are replaced by `--groovemap-brass` and
+`--groovemap-oxblood`, and `--groovemap-vinyl` is new. Every other color token keeps its name
+and takes a new value. Consumers keep the earlier bytes until each is re-promoted. Those
+records prove which reviewed Design bytes were promoted; they do not authorize this repository
+to modify a consumer.
 
 Private promotion systems pin reviewed Design revisions independently and keep their
 operational configuration outside this public repository. A future source change must
