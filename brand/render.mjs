@@ -29,13 +29,15 @@ const [markTemplate, bannerTemplate, ogTemplate] = await Promise.all([
 
 // Brand text is outlined from the vendored font at the px size each layout draws it.
 const weight = tokens.type.weight;
+const tracking = tokens.type.tracking;
 const outline = (text, textWeight, size, tracking = 0) => outlineText(font, [{ text, weight: textWeight, size, tracking }]).d;
 const bannerText = {
-  WORDMARK_PATH: outline(tokens.brand.wordmark, weight.wordmark, 140),
+  WORDMARK_PATH: outline(tokens.brand.wordmark, weight.wordmark, 140, tracking.wordmark),
   TAGLINE_PATH: outline(tokens.brand.tagline, weight.tagline, 38),
 };
 const ogText = {
-  WORDMARK_PATH: outline(tokens.brand.wordmark, weight.wordmark, 120),
+  // 104 px keeps the tracked wordmark inside the 1200 px card.
+  WORDMARK_PATH: outline(tokens.brand.wordmark, weight.wordmark, 104, tracking.wordmark),
   DESCRIPTOR_PATH: outline(tokens.brand.descriptor, weight.descriptor, 40),
   DOMAIN_PATH: outline(tokens.brand.domain, weight.domain, 30, 0.02),
 };
@@ -46,15 +48,16 @@ const shared = {
   DEEP: tokens.color.deep,
 };
 
-// The light pin is mint with a lagoon outline so it stays distinct from the lagoon nodes.
+// The label is brass in both themes. The light accent is oxblood, because every darkened brass
+// falls within 15 CIEDE2000 of a light-theme Strata state.
 const theme = {
   dark: {
-    BACKGROUND: tokens.color.void, TEXT: tokens.color.text, MUTED_TEXT: tokens.color.mutedText, ACCENT: tokens.color.mint,
-    mark: { background: tokens.color.void, accent: tokens.color.mint, pinFill: tokens.color.text, pinStroke: tokens.color.void },
+    BACKGROUND: tokens.color.void, TEXT: tokens.color.text, MUTED_TEXT: tokens.color.mutedText, ACCENT: tokens.color.brass,
+    mark: { background: tokens.color.void, disc: tokens.color.vinyl, edge: tokens.color.border, groove: tokens.color.text, label: tokens.color.brass, print: tokens.color.vinyl },
   },
   light: {
-    BACKGROUND: tokens.color.lightBackground, TEXT: tokens.color.lightText, MUTED_TEXT: tokens.color.lightMutedText, ACCENT: tokens.color.lagoon,
-    mark: { background: tokens.color.lightBackground, accent: tokens.color.lagoon, pinFill: tokens.color.mint, pinStroke: tokens.color.lagoon },
+    BACKGROUND: tokens.color.lightBackground, TEXT: tokens.color.lightText, MUTED_TEXT: tokens.color.lightMutedText, ACCENT: tokens.color.oxblood,
+    mark: { background: tokens.color.lightBackground, disc: tokens.color.lightText, edge: tokens.color.lightText, groove: tokens.color.lightBackground, label: tokens.color.brass, print: tokens.color.lightText },
   },
 };
 
@@ -77,7 +80,8 @@ outputs.set("avatar.svg", icon("dark", 512, 9.38));
 outputs.set("favicon.svg", icon("dark", 64, 12.5, true));
 outputs.set("app-icon-192.svg", icon("dark", 192, 12.5));
 outputs.set("app-icon-512.svg", icon("dark", 512, 12.5));
-outputs.set("og-image.svg", render(ogTemplate, { ...shared, ...theme.dark, ...ogText, WIDTH: 1200, HEIGHT: 630, MARK_BODY: markBody(theme.dark.mark) }));
+// The card's gradient starts at deep behind the mark, so the pin hole is cut in deep.
+outputs.set("og-image.svg", render(ogTemplate, { ...shared, ...theme.dark, ...ogText, WIDTH: 1200, HEIGHT: 630, MARK_BODY: markBody({ ...theme.dark.mark, background: tokens.color.deep }) }));
 outputs.set("social-banner.svg", banner("dark", 1500, 375));
 
 const manifest = {
