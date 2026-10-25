@@ -1,15 +1,14 @@
 :root {
-  --groovemap-border: #1e3050;
-  --groovemap-cyan: #00bcd4;
-  --groovemap-cyan-glow: #00e5ff;
-  --groovemap-deep: #0a1018;
-  --groovemap-light-background: #f0f4f8;
-  --groovemap-light-text: #0d1b2a;
-  --groovemap-muted-text: #4a5e78;
-  --groovemap-purple: #7c4dff;
-  --groovemap-purple-light: #b388ff;
-  --groovemap-text: #f0f4f8;
-  --groovemap-void: #060a12;
+  --groovemap-border: #1e3533;
+  --groovemap-deep: #0a1514;
+  --groovemap-lagoon: #0d353f;
+  --groovemap-light-background: #f2f7f6;
+  --groovemap-light-muted-text: #4e6461;
+  --groovemap-light-text: #0b1716;
+  --groovemap-mint: #a8fff2;
+  --groovemap-muted-text: #8aa5a0;
+  --groovemap-text: #e8f4f1;
+  --groovemap-void: #071211;
   --groovemap-entity-artist: #00e676;
   --groovemap-entity-category: #40c4ff;
   --groovemap-entity-genre: #ffd54f;
