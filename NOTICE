@@ -8,3 +8,10 @@ Repository software, documentation, and design source are offered under the
 MIT License in LICENSE. That copyright license does not grant trademark rights
 in GrooveMap project names, logos, domains, or other source identifiers. See
 TRADEMARKS.md for the separate trademark-use policy.
+
+Third-party material:
+
+brand/fonts/Jura[wght].ttf is Jura, Copyright 2019 The Jura Project Authors
+(https://github.com/ossobuffo/jura). It is licensed under the SIL Open Font
+License, Version 1.1, reproduced in brand/fonts/OFL.txt, and is not covered by
+the MIT License.

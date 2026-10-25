@@ -1,17 +1,23 @@
+// SPDX-License-Identifier: MIT
+
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import { ROOT } from "../scripts/tooling.mjs";
+import { loadFont, outlineText } from "./font.mjs";
+import { markBody } from "./mark.mjs";
 
 const root = join(ROOT, "brand");
 const assetsDir = join(root, "assets");
 const check = process.argv.includes("--check");
 const tokens = JSON.parse(await readFile(join(root, "tokens.json"), "utf8"));
+const font = loadFont(join(root, tokens.type.file));
 
 const escapeXml = (value) => String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
+const RAW = new Set(["MARK_BODY", "WORDMARK_PATH", "TAGLINE_PATH", "DESCRIPTOR_PATH", "DOMAIN_PATH"]);
 const render = (template, values) => template.replace(/\{\{([A-Z0-9_]+)\}\}/g, (_, key) => {
   if (!(key in values)) throw new Error(`Missing template value: ${key}`);
-  if (key === "MARK_BODY") return values[key];
+  if (RAW.has(key)) return values[key];
   return escapeXml(values[key]);
 });
 
@@ -21,43 +27,58 @@ const [markTemplate, bannerTemplate, ogTemplate] = await Promise.all([
   "og.svg.tmpl",
 ].map((name) => readFile(join(root, "templates", name), "utf8")));
 
+// Brand text is outlined from the vendored font at the px size each layout draws it.
+const weight = tokens.type.weight;
+const outline = (text, textWeight, size, tracking = 0) => outlineText(font, [{ text, weight: textWeight, size, tracking }]).d;
+const bannerText = {
+  WORDMARK_PATH: outline(tokens.brand.wordmark, weight.wordmark, 140),
+  TAGLINE_PATH: outline(tokens.brand.tagline, weight.tagline, 38),
+};
+const ogText = {
+  WORDMARK_PATH: outline(tokens.brand.wordmark, weight.wordmark, 120),
+  DESCRIPTOR_PATH: outline(tokens.brand.descriptor, weight.descriptor, 40),
+  DOMAIN_PATH: outline(tokens.brand.domain, weight.domain, 30, 0.02),
+};
+
 const shared = {
   DISPLAY_NAME: tokens.brand.displayName,
-  DOMAIN: tokens.brand.domain,
   TAGLINE: tokens.brand.tagline,
-  BORDER: tokens.color.border,
-  CYAN: tokens.color.cyan,
-  CYAN_GLOW: tokens.color.cyanGlow,
   DEEP: tokens.color.deep,
-  MUTED_TEXT: tokens.color.mutedText,
-  PURPLE: tokens.color.purple,
-  PURPLE_LIGHT: tokens.color.purpleLight,
 };
 
+// The light pin is mint with a lagoon outline so it stays distinct from the lagoon nodes.
 const theme = {
-  dark: { BACKGROUND: tokens.color.void, TEXT: tokens.color.text },
-  light: { BACKGROUND: tokens.color.lightBackground, TEXT: tokens.color.lightText },
+  dark: {
+    BACKGROUND: tokens.color.void, TEXT: tokens.color.text, MUTED_TEXT: tokens.color.mutedText, ACCENT: tokens.color.mint,
+    mark: { background: tokens.color.void, accent: tokens.color.mint, pinFill: tokens.color.text, pinStroke: tokens.color.void },
+  },
+  light: {
+    BACKGROUND: tokens.color.lightBackground, TEXT: tokens.color.lightText, MUTED_TEXT: tokens.color.lightMutedText, ACCENT: tokens.color.lagoon,
+    mark: { background: tokens.color.lightBackground, accent: tokens.color.lagoon, pinFill: tokens.color.mint, pinStroke: tokens.color.lagoon },
+  },
 };
 
-const markBody = markTemplate
-  .replace(/^<svg[^>]*>\n/, "")
-  .replace(/<title[^>]*>.*?<\/title>\n/, "")
-  .replace(/<\/svg>\s*$/, "");
+const icon = (variant, size, radius, small = false) => render(markTemplate, {
+  ...shared, ...theme[variant], WIDTH: size, HEIGHT: size, RADIUS: radius, MARK_BODY: markBody(theme[variant].mark, { small }),
+});
+const banner = (variant, width, height) => render(bannerTemplate, {
+  ...shared, ...theme[variant], ...bannerText, WIDTH: width, HEIGHT: height, MARK_BODY: markBody(theme[variant].mark),
+});
 
 const outputs = new Map();
 for (const variant of ["dark", "light"]) {
-  const values = { ...shared, ...theme[variant], WIDTH: 1024, HEIGHT: 1024, RADIUS: 0 };
-  outputs.set(`icon-${variant}.svg`, render(markTemplate, values));
-  outputs.set(`banner-${variant}.svg`, render(bannerTemplate, { ...values, WIDTH: 1600, HEIGHT: 400, MARK_BODY: render(markBody, values) }));
+  outputs.set(`icon-${variant}.svg`, icon(variant, 1024, 0));
+  outputs.set(`banner-${variant}.svg`, banner(variant, 1600, 400));
 }
 
-const dark = { ...shared, ...theme.dark, WIDTH: 512, HEIGHT: 512, RADIUS: 96 };
-outputs.set("avatar.svg", render(markTemplate, dark));
-outputs.set("favicon.svg", render(markTemplate, { ...dark, WIDTH: 64, HEIGHT: 64, RADIUS: 128 }));
-outputs.set("app-icon-192.svg", render(markTemplate, { ...dark, WIDTH: 192, HEIGHT: 192, RADIUS: 128 }));
-outputs.set("app-icon-512.svg", render(markTemplate, { ...dark, WIDTH: 512, HEIGHT: 512, RADIUS: 128 }));
-outputs.set("og-image.svg", render(ogTemplate, { ...dark, WIDTH: 1200, HEIGHT: 630, MARK_BODY: render(markBody, dark) }));
-outputs.set("social-banner.svg", render(bannerTemplate, { ...dark, WIDTH: 1500, HEIGHT: 375, MARK_BODY: render(markBody, dark) }));
+// Radii are in the mark's 100-unit box: 9.38 matches the former 96/1024 avatar corner and
+// 12.5 the former 128/1024 app-icon corner. Favicons use the simplified small mark.
+outputs.set("avatar.svg", icon("dark", 512, 9.38));
+outputs.set("favicon.svg", icon("dark", 64, 12.5, true));
+outputs.set("app-icon-192.svg", icon("dark", 192, 12.5));
+outputs.set("app-icon-512.svg", icon("dark", 512, 12.5));
+outputs.set("og-image.svg", render(ogTemplate, { ...shared, ...theme.dark, ...ogText, WIDTH: 1200, HEIGHT: 630, MARK_BODY: markBody(theme.dark.mark) }));
+outputs.set("social-banner.svg", banner("dark", 1500, 375));
 
 const manifest = {
   name: tokens.brand.displayName,

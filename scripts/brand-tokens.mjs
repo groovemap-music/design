@@ -108,7 +108,7 @@ export const deltaE2000 = (first, second) => deltaE2000Lab(toLab(first), toLab(s
 
 function flatten(tokens) {
   const entity = tokens.entity ?? {};
-  const accents = Object.fromEntries(["cyan", "cyanGlow", "purple", "purpleLight"].map((name) => [name, tokens.color?.[name]]));
+  const accents = Object.fromEntries(["mint", "lagoon"].map((name) => [name, tokens.color?.[name]]));
   return { entity: { ...entity, ...Object.fromEntries(Object.entries(accents).map(([name, value]) => [`brand.${name}`, value])) } };
 }
 
