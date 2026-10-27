@@ -70,8 +70,9 @@ shasum -a 256 taxonomy/company-roles/v1/company-roles.json
 
 The canonical v1 bytes have SHA-256
 `03ab8689ba14768dceffb756a71475c01797caea8d18ba9943cd5f69b3d705de`.
-No consumer has vendored the vocabulary yet; the first source records are written in wave 1 of
-the rollout order ADR 0011 records. Consumer source records are promotion provenance; each
+The source records in `discogs-ingestion` and `python-libraries` pin Design commit
+`d06e1571f6acce6a246e4c0b6be866ecbea44c72` with that digest, as the
+[catalog-identifiers program](../../docs/programs/catalog-identifiers.md) records. Consumer source records are promotion provenance; each
 consumer remains responsible for reviewing and validating its vendored copy.
 
 ## Changing the vocabulary

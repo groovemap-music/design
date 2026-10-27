@@ -44,11 +44,11 @@ The rendered `tokens.css` names them `--groovemap-entity-<type>` and `--groovema
 ## Promotion provenance
 
 Public consumer source records in the organization profile, the Pages site, Graph Explorer,
-and Operations Console pin Design commit `7abe13ad3e22e81b5437eb92acb8db998730e11a` (Degrees)
-and its asset digests. The Label web rebrand changes all 12 outputs and renames the accent
-tokens: `--groovemap-mint` and `--groovemap-lagoon` are replaced by `--groovemap-brass` and
-`--groovemap-oxblood`, and `--groovemap-vinyl` is new. Every other color token keeps its name
-and takes a new value. Consumers keep the earlier bytes until each is re-promoted. Those
+and Operations Console pin Design commit `41be7cbe738f40df0c75ad7065475e91d6cc2aa4` (Label web)
+and its asset digests. The Label web rebrand changed all 12 outputs from the Degrees revision
+(`7abe13ad3e22e81b5437eb92acb8db998730e11a`) and renamed the accent tokens: `--groovemap-mint`
+and `--groovemap-lagoon` were replaced by `--groovemap-brass` and `--groovemap-oxblood`, and
+`--groovemap-vinyl` is new. Every other color token kept its name and took a new value. Those
 records prove which reviewed Design bytes were promoted; they do not authorize this repository
 to modify a consumer.
 

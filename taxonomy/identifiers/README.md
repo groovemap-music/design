@@ -54,8 +54,9 @@ shasum -a 256 taxonomy/identifiers/v1/identifier-types.json
 
 The canonical v1 bytes have SHA-256
 `87b844a20f35d45e7ba176df58d6ccf3d7bc88beecda90457b1a2afb3432fb34`.
-No consumer has vendored the vocabulary yet; the first source records are written in wave 1 of
-the rollout order ADR 0011 records. Consumer source records are promotion provenance; each
+The source records in `discogs-ingestion`, `musicbrainz-ingestion`, and `python-libraries`
+pin Design commit `5bfdf1005c5d95c99143e8c2acd189e127e1cb10` with that digest, as the
+[catalog-identifiers program](../../docs/programs/catalog-identifiers.md) records. Consumer source records are promotion provenance; each
 consumer remains responsible for reviewing and validating its vendored copy.
 
 ## Changing the vocabulary

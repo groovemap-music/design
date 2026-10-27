@@ -1,8 +1,9 @@
 # Strata program rollout
 
 **Status: M1 to M5 filed on 2026-10-23. M6 (concept D) filed on 2026-10-24 as five epics, the
-last two with held kickoffs. Bead state is authoritative; this document records order and
-handoffs, not progress.**
+last two with held kickoffs that were later released. All fourteen epics in the Molecules table
+were closed by 2026-10-25. The first-deployment checks remain open. Bead state is authoritative;
+this document records order and handoffs, not progress.**
 
 This document tracks delivery of [ADR 0016](../adr/0016-strata-graph-view.md), which decides
 that Strata, the level-of-detail bi-temporal graph view, is built as concepts A, B, C′, and D
@@ -162,17 +163,17 @@ check. Keep that reference pointing at this section.
 ## Open questions from ADR 0016
 
 These were not settled by the evidence. Each is owned by a record, not by a guess. Rows marked
-decided are closed by an amendment to ADR 0016.
+decided name the amendment to ADR 0016 or the merged bead that closed them.
 
 | Question | Decided by |
 | --- | --- |
 | D's backfill branch: backfill-from-fullexport or forward-only | Decided: backfill from the full export, then record live. `gm-design-6b8u` in epic `gm-design-cgh9`, recorded by the 2026-10-24 amendment to ADR 0016 |
-| Roots above 134,051 releases: a per-artist master summary, or a refusal or cap | M2, `gm-catalog-api-owym`, with the first-deployment latency check |
+| Roots above 134,051 releases: a per-artist master summary, or a refusal or cap | Decided: a root above 134,051 releases is refused with a 422, not capped, and no summary is built yet. The first-deployment latency check confirms or moves the ceiling. Recorded by `gm-catalog-api-owym` in catalog-api's route documentation |
 | Whether the Genre Atlas offers a control over its monthly `computed_at` recomputations | Decided: the atlas shows the latest computation only, with no control. Revisit if users ask to compare months. Recorded by the [2026-10-24 amendment](../adr/0016-strata-graph-view.md#2026-10-24-activity-surface-dominant-style-and-atlas-history) to ADR 0016 |
 | A strata activity surface: `taxonomy/events/v1` has none, so a strata node cannot carry Discover outcomes today. Adding one changes ADR 0010's closed vocabulary | Decided: none for now. Revisit only when a concrete analytics or Discover need on Strata exists, as its own decision. Recorded by the [2026-10-24 amendment](../adr/0016-strata-graph-view.md#2026-10-24-activity-surface-dominant-style-and-atlas-history). M5's Discover outcomes (`gm-graph-explorer-07j`) follow ADR 0010 consent and are never collector state |
 | Taste Strata's dominant style for a non-landmark collector master | Decided: confirmed as built in `gm-graph-explorer-0av`. Revisit if Taste Strata is drawn in a shared view. Recorded by the [2026-10-24 amendment](../adr/0016-strata-graph-view.md#2026-10-24-activity-surface-dominant-style-and-atlas-history) |
 | Real devices and real collections: no real phone, mid-range laptop, or real user collection was measured. C′'s real-user validation stays DEFER | Later evidence, after M5 ships |
-| M4 fixes the insights table names and the in-sector placement from the measured trade-off | M4, `gm-database-schema-0bv9` and `gm-analytics-engine-cvk` |
+| M4 fixes the insights table names and the in-sector placement from the measured trade-off | Decided: `gm-database-schema-0bv9` added `insights.style_year_counts`, `insights.style_parents`, and `insights.style_atlas_layout`, with the genre ring later split into `insights.genre_atlas_sectors`, and `gm-analytics-engine-cvk` places nodes by lean × emergence rank, with co-tag MDS recorded as the measured alternative |
 
 ## M6: concept D
 
@@ -191,8 +192,8 @@ repository's checkout.
 | 1 | database-schema | `gm-database-schema-09mv` | `public.identity_link_events`. This table is the contract the other four read or write | Open |
 | 2 | catalog-api | `gm-catalog-api-za77` | The one-time full-export backfill command | Open |
 | 3 | musicbrainz-sql-loader | `gm-musicbrainz-sql-loader-nxc` | Recording link changes at load, from exact diffs | Open |
-| 4 | catalog-api | `gm-catalog-api-cn2v` | The three read-only `admin_identity_ledger_*` routes behind `require_admin` | Held |
-| 5 | operations-console | `gm-operations-console-6qpy` | Contract promotion, the proxy, and the Ledger tab | Held |
+| 4 | catalog-api | `gm-catalog-api-cn2v` | The three read-only `admin_identity_ledger_*` routes behind `require_admin` | Held, then released |
+| 5 | operations-console | `gm-operations-console-6qpy` | Contract promotion, the proxy, and the Ledger tab | Held, then released |
 
 The order is held by kickoff, not by bead dependencies, because the epics live in different
 repositories. Epic 1 comes first, because every other epic consumes its table. Epics 2 and 3

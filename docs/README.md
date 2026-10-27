@@ -26,11 +26,17 @@ maintained current state.
 - [ADR 0017: Broker metrics come from rabbitmq_prometheus](adr/0017-broker-metrics-from-rabbitmq-prometheus.md)
 - [ADR 0018: The operations console is one authenticated, data-driven shell](adr/0018-operations-console-single-shell.md) records the authenticated single shell, the `catalog-api` session boundary, VictoriaMetrics history with 90-day retention, and retirement of the PostgreSQL metrics tables. The Overview uses an entity by consumer matrix as its primary view, with run progress and an ETA headline as a secondary view, and the flow diagram is not adopted.
 
+## Provider research
+
+- [Provider licensing and commercial use](research/provider-licensing.md) compares Discogs,
+  MusicBrainz, and twelve candidate providers, including commercial permissions, API and
+  redistribution restrictions, required agreements, and links to official terms.
+
 ## Program rollout plans
 
 - [Media-taxonomy program rollout](programs/media-taxonomy.md) records the completed delivery of ADR 0007 across the organization in five waves.
-- [Native identity and first-party events program rollout](programs/native-identity-and-events.md) records the four-wave delivery plan for ADR 0009 and ADR 0010, the artifacts each wave pins, and the gaps it deliberately leaves to their own records.
-- [Catalog-identifiers program rollout](programs/catalog-identifiers.md) records the delivery of ADR 0011 across the organization in five waves, complete except mcp-server's company-credit surface in wave 4.
+- [Native identity and first-party events program rollout](programs/native-identity-and-events.md) records the delivery of ADR 0009 and ADR 0010: waves 1 to 4 and the later `fit` surface have landed on each owning repository's `main`. It keeps the four-wave plan of record, the artifacts each wave pins, and the gaps it deliberately leaves to their own records.
+- [Catalog-identifiers program rollout](programs/catalog-identifiers.md) records the delivery of ADR 0011 across the organization in five waves. Waves 0 to 4 are implemented, including mcp-server's company-credit surface, and wave 5's released-image identifier-lookup smoke passed.
 - [PostgreSQL SQL/PGQ pause and Neo4j continuity program](programs/neo4j-to-postgresql-graph.md) records the stopped cutover, preservation refs, retained relational consumers, and owner-hive pause work required by ADR 0012's 2026-10-02 amendment.
 - [Strata program rollout](programs/strata.md) tracks delivery of ADR 0016 across repositories: the M1 to M6 molecules, the order, the cross-repository handoffs, and the first-deployment checks.
 
@@ -61,6 +67,15 @@ maintained current state.
   records the GO on the history-only Strata ledger. The maintainer decided GO, and a
   second full-export proxy then passed its out-of-sample check and clears G1-G3 on 12
   months. The pre-registered proxy failed its bar and is not used.
+- [The credit, master, release ladder and a strata route on Neo4j](spikes/gm-design-1h2l-strata-ladder.md)
+  records the conditional GO: masterless and undated releases get their own lanes, and
+  collector state is observed from Discogs only.
+- [Genre and style lifecycles and taste projection](spikes/gm-design-4804-strata-atlas.md)
+  records the GO on Strata concept B and the NO-GO on concept C as mocked up.
+- [Concept A's strata renderer at catalog scale](spikes/gm-design-on0x-strata-renderer.md)
+  records the maintainer's GO on a 3D WebGL renderer for concept A.
+- [Non-Latin candidate recall with a realistic candidate pool](spikes/gm-design-e0b.1-nonlatin-identity.md)
+  records the narrow, uneven GO, reported as exact artist and label aggregates against the bar.
 
 ## Verification reports
 
@@ -72,3 +87,9 @@ maintained current state.
   gates, delivery-model boundaries, and fix-one-fix-all ownership guidance.
 - [Organization-wide verification — 2026-09-13](audits/organization-wide-verification-2026-09-13.md)
   records the final sanitized 21-repository maintenance matrix and diagram audit.
+- [Controlled third targeted defect audit — 2026-09-14](audits/targeted-defect-audit-2026-09-14.md)
+  records the pass: zero P2-or-higher root causes in the three frozen causal classes.
+- [Bug-supply remediation effectiveness verdict — 2026-09-14](audits/portfolio-effectiveness-2026-09-14.md)
+  records the close-portfolio disposition after every material-improvement threshold passed.
+- [Code comment review — 2026-10-02](audits/code-comment-review-2026-10-02.md)
+  records the recheck of executable maintenance comments and the accuracy corrections it made.

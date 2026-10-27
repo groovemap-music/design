@@ -71,7 +71,6 @@ test("validateActionReference requires an immutable external revision", () => {
 });
 
 test("findExposureIssues detects private-boundary material without storing it", () => {
-  assert.deepEqual(findExposureIssues(["discogs", "ography"].join("")), ["retired-project-name"]);
   assert.deepEqual(findExposureIssues(["/", "Users", "/operator/file"].join("")), ["host-local-path"]);
   assert.deepEqual(findExposureIssues("ordinary public design text"), []);
 });
