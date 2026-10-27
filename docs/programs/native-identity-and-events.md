@@ -1,6 +1,8 @@
 # Native identity and first-party events program rollout
 
-**Status: wave 0 published 2026-09-13. Waves 1 to 4 are not started.**
+**Status: wave 0 published 2026-09-13. Waves 1 to 4 and the post-wave-0 `fit` surface have
+landed on each owning repository's `main`. The wave sections below remain the plan of record;
+they are not rewritten as retrospective prose.**
 
 This document records the rollout plan for
 [ADR 0009](../adr/0009-native-identity-and-provider-aliases.md) and

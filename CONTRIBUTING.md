@@ -6,7 +6,7 @@ Thank you for improving GrooveMap's design system. Contributions should be revie
 
 1. Open an issue before a material change to the visual identity, asset contract, or licensing guidance.
 2. Work in a focused branch or fork and keep commits small enough to review.
-3. Update canonical sources in `brand/tokens.json` or `brand/templates/`, then run `just brand-render` and include the corresponding generated assets.
+3. Update canonical sources in `brand/tokens.json`, `brand/templates/`, or `brand/mark.mjs`, then run `just brand-render` and include the corresponding generated assets.
 4. Run `just check` before opening a pull request.
 5. Describe the intent, visual impact, provenance, and validation in the pull request.
 

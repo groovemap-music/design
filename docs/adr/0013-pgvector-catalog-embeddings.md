@@ -1,6 +1,6 @@
 # ADR 0013: pgvector in PostgreSQL for catalog embeddings
 
-- Status: Accepted
+- Status: Accepted; amended 2026-09-24, 2026-09-25, 2026-09-26, and 2026-09-29
 
 ## Context
 

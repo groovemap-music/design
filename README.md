@@ -39,8 +39,8 @@ Repository-specific recipes keep design capabilities visible instead of hiding t
 | `taxonomy` | Validate the canonical media vocabulary, schemas, mapper, and conformance fixtures. |
 | `identity` | Validate the native identity vocabulary and its schema. |
 | `events` | Validate the first-party event vocabulary, both envelope schemas, and the conformance fixtures. |
-| `identifiers` | Validate the catalog identifier vocabulary, its block schema, and the conformance fixtures. |
-| `company-roles` | Validate the company-role vocabulary, its block schema, and the conformance fixtures. |
+| `identifiers` | Validate the catalog identifier vocabulary, both schemas, and the conformance fixtures. |
+| `company-roles` | Validate the company-role vocabulary, both schemas, and the conformance fixtures. |
 | `brand` | Prove generated assets match canonical sources and the reviewed checksum manifest. |
 | `brand-render` | Regenerate brand assets explicitly after canonical source changes. |
 | `publication-readiness` | Repeat the full gate and emit an immutable, non-publishing handoff for separately approved infrastructure work. |

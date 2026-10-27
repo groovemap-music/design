@@ -26,7 +26,7 @@ Adding a type is additive within version 1 and requires a new surface or a new v
 
 ## Vendoring rule
 
-The vocabulary is vendored verbatim, byte for byte, into every repository that writes or reads first-party events, beginning with `python-libraries`, `catalog-api`, and `analytics-engine`. A vendored copy sits beside a source record naming the design commit and the SHA-256 of this file, and each repository's check gate fails when the copy's digest differs from that record. Compute the digest from the exact bytes of the file:
+The vocabulary and both envelope schemas are vendored verbatim, byte for byte, into `python-libraries`, whose `common.events` module in `groovemap-runtime` builds and validates envelopes. The repositories that write or read first-party events, including `catalog-api`, `analytics-engine`, and `mcp-server`, consume it through their pinned `groovemap-runtime` revision rather than vendoring their own copy. A vendored copy sits beside a source record naming the design commit and the SHA-256 of this file, and each repository's check gate fails when the copy's digest differs from that record. Compute the digest from the exact bytes of the file:
 
 ```console
 shasum -a 256 taxonomy/events/v1/event-types.json
@@ -40,9 +40,10 @@ The canonical v1 bytes have SHA-256
 `920a63d1eda5e909e6d6bd4850df005a17e592fbfc6f8f3152a15833f74fa8ad`.
 This digest reflects the `fit` surface added after wave 0 published; see
 [the program's addendum](../../docs/programs/native-identity-and-events.md#post-wave-0-addition-the-fit-surface)
-for the consumers that must re-vendor and in what order.
-No consumer has vendored the vocabulary yet; the first source records are written in wave 1
-of the [native identity and first-party events program](../../docs/programs/native-identity-and-events.md).
+for the re-vendoring order it set. The source record in `python-libraries`
+(`src/common/event_vocabulary/source.json`) pins Design commit
+`5bfdf1005c5d95c99143e8c2acd189e127e1cb10` with that digest and the digests of both envelope
+schemas.
 Consumer source records are promotion provenance; each consumer remains responsible for
 reviewing and validating its vendored copy.
 

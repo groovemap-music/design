@@ -1,6 +1,6 @@
 # ADR 0012: Catalog graph engine and the PostgreSQL SQL/PGQ evaluation
 
-- Status: Accepted; active decision amended 2026-10-02
+- Status: Accepted; amended 2026-09-25; active decision amended 2026-10-02
 
 ## Context
 

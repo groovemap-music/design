@@ -6,6 +6,9 @@ gives 1,204 release re-attachments. It gives only **743** works whose evented ed
 change in more than one month, against a bar of 1,000. On this data, the history shows
 no more than a log table would. The two MusicBrainz dumps still online are only 4 days
 apart. Re-run the replay on one true monthly cycle once `discogs_20261101` is published.  
+Superseded 2026-10-24: [gm-design-6b8u](gm-design-6b8u-strata-ledger-months.md) records the GO
+on the history-only ledger, decided by ADR 0016's
+[2026-10-24 amendment](../adr/0016-strata-graph-view.md#2026-10-24-concept-ds-backfill-branch-and-m6).  
 Evidence date: 2026-10-23 (UTC)  
 Spike: `gm-design-loj9` (epic `gm-design-uq8t`, concept D)  
 Harness: [gm-design-loj9/](gm-design-loj9/README.md)  

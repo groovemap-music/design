@@ -20,7 +20,7 @@
 
 ## Vendoring rule
 
-The vocabulary is vendored verbatim, byte for byte, into every repository that mints or resolves native identifiers, beginning with `python-libraries`, `discogs-sql-loader`, `musicbrainz-sql-loader`, and `catalog-api`. A vendored copy sits beside a source record naming the design commit and the SHA-256 of this file, and each repository's check gate fails when the copy's digest differs from that record. Compute the digest from the exact bytes of the file:
+The vocabulary is vendored verbatim, byte for byte, into `python-libraries`, whose `common.identity` helper in `groovemap-runtime` is the one lookup-or-create implementation ADR 0009 calls for. The repositories that mint or resolve native identifiers, `discogs-sql-loader`, `musicbrainz-sql-loader`, and `catalog-api`, consume it through their pinned `groovemap-runtime` revision rather than vendoring their own copy. A vendored copy sits beside a source record naming the design commit and the SHA-256 of this file, and each repository's check gate fails when the copy's digest differs from that record. Compute the digest from the exact bytes of the file:
 
 ```console
 shasum -a 256 taxonomy/identity/v1/identity-vocabulary.json
@@ -32,8 +32,10 @@ shasum -a 256 taxonomy/identity/v1/identity-vocabulary.json
 
 The canonical v1 bytes have SHA-256
 `001db32e91c851d49d252c945c1862e47763462acd44fc6ca84df13bae12e3de`.
-No consumer has vendored the vocabulary yet; the first source records are written in wave 1
-of the [native identity and first-party events program](../../docs/programs/native-identity-and-events.md).
+The source record in `python-libraries` (`src/common/identity_vocabulary/source.json`) pins
+Design commit `14aa2d70dded6b0854569cc4909afc5ae4ebe03f` with that digest, as wave 1 of the
+[native identity and first-party events program](../../docs/programs/native-identity-and-events.md)
+planned.
 Consumer source records are promotion provenance; each consumer remains responsible for
 reviewing and validating its vendored copy.
 
