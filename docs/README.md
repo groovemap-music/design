@@ -26,6 +26,12 @@ maintained current state.
 - [ADR 0017: Broker metrics come from rabbitmq_prometheus](adr/0017-broker-metrics-from-rabbitmq-prometheus.md)
 - [ADR 0018: The operations console is one authenticated, data-driven shell](adr/0018-operations-console-single-shell.md) records the authenticated single shell, the `catalog-api` session boundary, VictoriaMetrics history with 90-day retention, and retirement of the PostgreSQL metrics tables. The Overview uses an entity by consumer matrix as its primary view, with run progress and an ETA headline as a secondary view, and the flow diagram is not adopted.
 
+## Provider research
+
+- [Provider licensing and commercial use](research/provider-licensing.md) compares Discogs,
+  MusicBrainz, and twelve candidate providers, including commercial permissions, API and
+  redistribution restrictions, required agreements, and links to official terms.
+
 ## Program rollout plans
 
 - [Media-taxonomy program rollout](programs/media-taxonomy.md) records the completed delivery of ADR 0007 across the organization in five waves.
