@@ -45,8 +45,8 @@ repository's checkout.
 | M6 | D | database-schema | `gm-database-schema-09mv` | `public.identity_link_events`, the ledger table and its contract |
 | M6 | D | catalog-api | `gm-catalog-api-za77` | The one-time full-export backfill command |
 | M6 | D | musicbrainz-sql-loader | `gm-musicbrainz-sql-loader-nxc` | Link-change recording at load |
-| M6 | D | catalog-api | `gm-catalog-api-cn2v` | The three `admin_identity_ledger_*` routes (kickoff held) |
-| M6 | D | operations-console | `gm-operations-console-6qpy` | Contract promotion, the proxy, and the Ledger tab (kickoff held) |
+| M6 | D | catalog-api | `gm-catalog-api-cn2v` | The three `admin_identity_ledger_*` routes (kickoff was held, since released) |
+| M6 | D | operations-console | `gm-operations-console-6qpy` | Contract promotion, the proxy, and the Ledger tab (kickoff was held, since released) |
 
 The child beads inside each epic carry their own dependencies. Notable in-epic order:
 
