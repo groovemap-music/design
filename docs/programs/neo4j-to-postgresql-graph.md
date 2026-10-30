@@ -20,7 +20,7 @@ The phase order is a dependency order, not a schedule. Every later phase consume
 earlier phase publishes, so a phase begins when its entry criteria hold at a reviewed commit and
 not when the previous phase is declared finished.
 
-Two properties of this program differ from the earlier rollouts in this directory. The first is
+As originally planned (before the 2026-10-02 pause), two properties of this program differ from the earlier rollouts in this directory. The first is
 that it is gated in the middle: phases 0 and 1 are filed now, and phases 2 to 5 are scoped here
 but deliberately not filed, because a feasibility spike sits between them and can close the
 program instead of continuing it. The second is that it depends on a PostgreSQL release that is

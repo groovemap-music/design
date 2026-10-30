@@ -38,6 +38,8 @@ The two vocabulary digests at the commit that published this program:
 f64f03164c208477e8ae9c6bc547bba7342f23df96f6b10f21f7fa6f1d21ba74  taxonomy/events/v1/event-types.json
 ```
 
+The events digest changed when the `fit` surface was added (see the addendum below); the current value is in [`taxonomy/events/README.md`](../../taxonomy/events/README.md#current-promotion-record). The identity digest is unchanged.
+
 Regenerate them from the exact bytes with `shasum -a 256`; `just publication-readiness` prints
 the same values as `identity_vocabulary_sha256` and `event_types_sha256`. A consumer pins the
 design commit and the digest together, so a vocabulary change is always a re-vendoring with a

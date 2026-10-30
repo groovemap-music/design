@@ -8,7 +8,7 @@ You need [`mise`](https://mise.jdx.dev/) to install the pinned toolchain (Node.j
 
 ```sh
 just setup   # install the pinned tools with mise
-just check   # run the complete validation gate
+just check   # run the complete validation gate (the same command CI runs)
 just --list  # list every recipe
 ```
 
@@ -20,7 +20,7 @@ To change the brand, edit the sources in `brand/`, run `just brand-render`, and 
 | --- | --- |
 | [`brand/`](brand/README.md) | Editable design tokens, SVG templates, the vendored font, and the generated brand assets. Applications and documentation consume the generated assets rather than keeping their own copies. |
 | [`catalog/`](catalog/README.md) | [`repositories.json`](catalog/repositories.json), the public map of all 21 organization repositories: 19 public repositories plus the private `infra` and `planning-archive` boundaries. Its deliberately narrow schema excludes provider identifiers, access policy, secret distribution, source-extraction paths, and other operational configuration. |
-| [`docs/`](docs/README.md) | Public architecture decisions (ADRs), program rollout plans, design spikes, provider research, and verification reports. |
+| [`docs/`](docs/README.md) | Public architecture decisions (ADRs), program rollout plans, design spikes, provider research, audits, and verification reports. |
 | [`taxonomy/media/`](taxonomy/media/README.md) | The canonical media vocabulary, its schemas, and the conformance fixtures that every service vendors under [ADR 0007](docs/adr/0007-canonical-media-taxonomy.md). |
 | [`taxonomy/identity/`](taxonomy/identity/README.md) | The native identity vocabulary under [ADR 0009](docs/adr/0009-native-identity-and-provider-aliases.md). |
 | [`taxonomy/events/`](taxonomy/events/README.md) | The first-party event vocabulary, its two envelope schemas, and their conformance fixtures under [ADR 0010](docs/adr/0010-first-party-events-consent-and-deletion.md). |
