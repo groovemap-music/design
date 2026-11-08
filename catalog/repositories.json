@@ -372,6 +372,21 @@
       "publication_status": "private"
     },
     {
+      "name": "postgres",
+      "url": "https://github.com/groovemap-music/postgres",
+      "description": "GrooveMap's PostgreSQL image: the official postgres:18-alpine image with pgvector added.",
+      "responsibilities": ["Build and publish the one PostgreSQL image GrooveMap runs", "Pin the PostgreSQL base and the pgvector release"],
+      "relationships": [{ "repository": "deployment", "kind": "deployed-by" }],
+      "homepage": null,
+      "languages": ["Dockerfile", "Python", "SQL", "Shell"],
+      "topics": ["alpine", "docker", "pgvector", "postgresql"],
+      "license": "MIT",
+      "commercial_license_available": false,
+      "release_units": ["container image"],
+      "destination_visibility": "public",
+      "publication_status": "public"
+    },
+    {
       "name": "python-libraries",
       "url": "https://github.com/groovemap-music/python-libraries",
       "description": "Versioned Python runtime, resilience, and agent-tool libraries shared by GrooveMap services.",

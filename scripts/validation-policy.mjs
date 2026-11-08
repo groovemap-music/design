@@ -38,6 +38,7 @@ const EXPECTED_REPOSITORIES = [
   "operations-console",
   "operations-toolkit",
   "planning-archive",
+  "postgres",
   "python-libraries",
 ];
 const PRIVATE_REPOSITORIES = new Set(["infra", "planning-archive"]);
@@ -177,11 +178,19 @@ export function validateCanonicalCatalog(catalog) {
   return errors;
 }
 
-export function validateOrganizationVerification(report, catalog) {
+const ADDITION_FIELDS = ["basis", "evidence_roots", "maintained_mermaid", "name", "reviewed_on", "revision", "tree", "verdict"];
+
+function additionNames(additions) {
+  return new Set((additions?.repositories ?? []).map((addition) => addition?.name));
+}
+
+export function validateOrganizationVerification(report, catalog, additions = { repositories: [] }) {
   const errors = [];
   const repositories = report?.repositories ?? [];
   const names = repositories.map((repository) => repository.name);
-  const catalogNames = (catalog?.repositories ?? []).map((repository) => repository.name);
+  const added = additionNames(additions);
+  // The sealed matrix covers the catalog as it stood on its reviewed date; later additions are recorded separately.
+  const catalogNames = (catalog?.repositories ?? []).map((repository) => repository.name).filter((name) => !added.has(name));
   if (report?.schema_version !== 1) errors.push("organization verification must use schema version 1");
   if (report?.reviewed_on !== "2026-09-13") errors.push("organization verification date must remain versioned");
   if (!/^[a-f0-9]{40}$/.test(report?.design_input_revision ?? "")) {
@@ -233,6 +242,47 @@ export function validateOrganizationVerification(report, catalog) {
     .filter((repository) => !PRIVATE_REPOSITORIES.has(repository.name))
     .reduce((total, repository) => total + (repository.maintained_mermaid ?? 0), 0);
   if (publicMermaid !== 92) errors.push("public repository Mermaid counts differ from the reviewed matrix");
+  return errors;
+}
+
+export function validateRepositoryAdditions(additions, sealed, catalog) {
+  const errors = [];
+  if (additions?.schema_version !== 1) errors.push("repository additions must use schema version 1");
+  const entries = Array.isArray(additions?.repositories) ? additions.repositories : [];
+  const catalogNames = new Set((catalog?.repositories ?? []).map((repository) => repository.name));
+  const sealedNames = new Set((sealed?.repositories ?? []).map((repository) => repository.name));
+  const sealedDate = sealed?.reviewed_on ?? "";
+  const seen = new Set();
+  for (const entry of entries) {
+    const name = entry?.name;
+    const label = name ?? "(unnamed)";
+    if (JSON.stringify(Object.keys(entry ?? {}).sort()) !== JSON.stringify(ADDITION_FIELDS)) {
+      errors.push(`${label}: addition must carry exactly ${ADDITION_FIELDS.join(", ")}`);
+    }
+    if (!catalogNames.has(name)) errors.push(`${label}: addition names a repository absent from the catalog`);
+    if (seen.has(name)) errors.push(`${label}: addition appears more than once`);
+    seen.add(name);
+    if (sealedNames.has(name)) errors.push(`${label}: repository is already covered by the sealed matrix and must not get an addition`);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(entry?.reviewed_on ?? "") || !(entry.reviewed_on > sealedDate)) {
+      errors.push(`${label}: addition must be reviewed after the sealed matrix (${sealedDate})`);
+    }
+    if (!/^[a-f0-9]{40}$/.test(entry?.revision ?? "")) errors.push(`${label}: reviewed revision must be a full commit`);
+    if (!/^[a-f0-9]{40}$/.test(entry?.tree ?? "")) errors.push(`${label}: exact-tree evidence is missing`);
+    if (entry?.verdict !== "pass") errors.push(`${label}: exact-tree verdict must be pass`);
+    if (!Number.isInteger(entry?.maintained_mermaid) || entry.maintained_mermaid < 0) {
+      errors.push(`${label}: maintained Mermaid count is invalid`);
+    }
+    if (!Array.isArray(entry?.evidence_roots) || entry.evidence_roots.length === 0) errors.push(`${label}: evidence roots are missing`);
+    if (typeof entry?.basis !== "string" || entry.basis.trim() === "") errors.push(`${label}: reviewer basis is missing`);
+  }
+  for (const name of catalogNames) {
+    if (!sealedNames.has(name) && !seen.has(name)) {
+      errors.push(`catalog repository ${name} has no reviewed evidence in the sealed matrix or an addition`);
+    }
+  }
+  for (const name of sealedNames) {
+    if (!catalogNames.has(name)) errors.push(`sealed matrix repository ${name} is absent from the catalog`);
+  }
   return errors;
 }
 

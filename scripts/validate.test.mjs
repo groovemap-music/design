@@ -17,6 +17,7 @@ import {
   validateFixtureSet,
   validateOrganizationVerification,
   validatePortfolioEffectiveness,
+  validateRepositoryAdditions,
   validateRepowiseDefectRisk,
   validateSharedDeliveryRollout,
   validateTargetedDefectAudit,
@@ -28,6 +29,7 @@ import schema from "../catalog/repositories.schema.json" with { type: "json" };
 import fixture from "../fixtures/catalog-valid.json" with { type: "json" };
 import catalog from "../catalog/repositories.json" with { type: "json" };
 import organizationVerification from "../verification/organization-wide-v1.json" with { type: "json" };
+import repositoryAdditions from "../verification/repository-additions-v1.json" with { type: "json" };
 import portfolioEffectiveness from "../verification/portfolio-effectiveness-v1.json" with { type: "json" };
 import repowiseDefectRisk from "../verification/repowise-defect-risk-v1.json" with { type: "json" };
 import sharedDeliveryRollout from "../verification/shared-delivery-rollout-v1.json" with { type: "json" };
@@ -111,8 +113,8 @@ test("catalog schema retains the exact public field boundary", () => {
 
 test("canonical catalog contains the exact repository set and decided deployment ownership", () => {
   assert.deepEqual(validateCanonicalCatalog(catalog), []);
-  assert.equal(catalog.repositories.length, 21);
-  assert.equal(catalog.repositories.filter((repository) => repository.publication_status === "public").length, 19);
+  assert.equal(catalog.repositories.length, 22);
+  assert.equal(catalog.repositories.filter((repository) => repository.publication_status === "public").length, 20);
   assert.deepEqual(
     catalog.repositories.filter((repository) => repository.publication_status === "private").map((repository) => repository.name),
     ["infra", "planning-archive"],
@@ -141,19 +143,87 @@ test("canonical catalog rejects stale publication state and cross-source produce
 });
 
 test("organization verification pins the final repository and diagram evidence", () => {
-  assert.deepEqual(validateOrganizationVerification(organizationVerification, catalog), []);
+  assert.deepEqual(validateOrganizationVerification(organizationVerification, catalog, repositoryAdditions), []);
 
   const mutableRevision = structuredClone(organizationVerification);
   mutableRevision.repositories[0].revision = "main";
-  assert.ok(validateOrganizationVerification(mutableRevision, catalog).some((error) => /full commit/.test(error)));
+  assert.ok(validateOrganizationVerification(mutableRevision, catalog, repositoryAdditions).some((error) => /full commit/.test(error)));
 
   const expandedPrivateEvidence = structuredClone(organizationVerification);
   expandedPrivateEvidence.repositories.find((repository) => repository.name === "infra").tree = "a".repeat(40);
-  assert.ok(validateOrganizationVerification(expandedPrivateEvidence, catalog).some((error) => /private evidence must remain/.test(error)));
+  assert.ok(validateOrganizationVerification(expandedPrivateEvidence, catalog, repositoryAdditions).some((error) => /private evidence must remain/.test(error)));
 
   const missingDiagram = structuredClone(organizationVerification);
   missingDiagram.diagram_audit.maintained_mermaid -= 1;
-  assert.ok(validateOrganizationVerification(missingDiagram, catalog).some((error) => /94 \+ 6 Mermaid baseline/.test(error)));
+  assert.ok(validateOrganizationVerification(missingDiagram, catalog, repositoryAdditions).some((error) => /94 \+ 6 Mermaid baseline/.test(error)));
+
+  // The sealed 2026-09-13 matrix must not gain a row for a repository that did not exist then.
+  assert.ok(
+    validateOrganizationVerification(organizationVerification, catalog).some((error) => /repository order/.test(error)),
+    "without the dated additions, the sealed matrix must not cover postgres",
+  );
+  const backfilled = structuredClone(organizationVerification);
+  backfilled.repositories.push({ ...repositoryAdditions.repositories[0] });
+  assert.ok(validateOrganizationVerification(backfilled, catalog, repositoryAdditions).some((error) => /repository order/.test(error)));
+});
+
+test("repository additions cover exactly the catalog repositories outside the sealed matrix", () => {
+  assert.deepEqual(validateRepositoryAdditions(repositoryAdditions, organizationVerification, catalog), []);
+  assert.deepEqual(repositoryAdditions.repositories.map((addition) => addition.name), ["postgres"]);
+
+  const uncovered = structuredClone(repositoryAdditions);
+  uncovered.repositories = [];
+  assert.ok(validateRepositoryAdditions(uncovered, organizationVerification, catalog).some((error) => /postgres has no reviewed evidence/.test(error)));
+
+  const sealedRepository = structuredClone(repositoryAdditions);
+  sealedRepository.repositories.push({ ...sealedRepository.repositories[0], name: "design" });
+  assert.ok(validateRepositoryAdditions(sealedRepository, organizationVerification, catalog).some((error) => /already covered by the sealed matrix/.test(error)));
+
+  const backfilledMatrix = structuredClone(organizationVerification);
+  backfilledMatrix.repositories.push({ name: "postgres" });
+  assert.ok(validateRepositoryAdditions(repositoryAdditions, backfilledMatrix, catalog).some((error) => /already covered by the sealed matrix/.test(error)));
+
+  for (const reviewedOn of ["2026-09-13", "2026-09-01"]) {
+    const earlier = structuredClone(repositoryAdditions);
+    earlier.repositories[0].reviewed_on = reviewedOn;
+    assert.ok(validateRepositoryAdditions(earlier, organizationVerification, catalog).some((error) => /reviewed after the sealed matrix/.test(error)), reviewedOn);
+  }
+
+  const unknown = structuredClone(repositoryAdditions);
+  unknown.repositories.push({ ...unknown.repositories[0], name: "not-a-repository" });
+  assert.ok(validateRepositoryAdditions(unknown, organizationVerification, catalog).some((error) => /absent from the catalog/.test(error)));
+
+  const duplicated = structuredClone(repositoryAdditions);
+  duplicated.repositories.push({ ...duplicated.repositories[0] });
+  assert.ok(validateRepositoryAdditions(duplicated, organizationVerification, catalog).some((error) => /more than once/.test(error)));
+
+  const mutableRevision = structuredClone(repositoryAdditions);
+  mutableRevision.repositories[0].revision = "main";
+  assert.ok(validateRepositoryAdditions(mutableRevision, organizationVerification, catalog).some((error) => /full commit/.test(error)));
+
+  const missingTree = structuredClone(repositoryAdditions);
+  missingTree.repositories[0].tree = "";
+  assert.ok(validateRepositoryAdditions(missingTree, organizationVerification, catalog).some((error) => /exact-tree evidence is missing/.test(error)));
+
+  const failedVerdict = structuredClone(repositoryAdditions);
+  failedVerdict.repositories[0].verdict = "fail";
+  assert.ok(validateRepositoryAdditions(failedVerdict, organizationVerification, catalog).some((error) => /verdict must be pass/.test(error)));
+
+  const missingBasis = structuredClone(repositoryAdditions);
+  missingBasis.repositories[0].basis = " ";
+  assert.ok(validateRepositoryAdditions(missingBasis, organizationVerification, catalog).some((error) => /basis is missing/.test(error)));
+
+  const extraField = structuredClone(repositoryAdditions);
+  extraField.repositories[0].owner = "someone";
+  assert.ok(validateRepositoryAdditions(extraField, organizationVerification, catalog).some((error) => /must carry exactly/.test(error)));
+
+  const wrongSchema = structuredClone(repositoryAdditions);
+  wrongSchema.schema_version = 2;
+  assert.ok(validateRepositoryAdditions(wrongSchema, organizationVerification, catalog).some((error) => /schema version 1/.test(error)));
+
+  const droppedRepository = structuredClone(catalog);
+  droppedRepository.repositories = droppedRepository.repositories.filter((repository) => repository.name !== "design");
+  assert.ok(validateRepositoryAdditions(repositoryAdditions, organizationVerification, droppedRepository).some((error) => /sealed matrix repository design is absent/.test(error)));
 });
 
 test("shared-delivery rollout pins the runtime, consumers, gates, and ownership boundary", () => {
