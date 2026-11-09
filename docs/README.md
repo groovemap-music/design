@@ -25,6 +25,7 @@ maintained current state.
 - [ADR 0016: Strata, the level-of-detail bi-temporal graph view](adr/0016-strata-graph-view.md) records the GO verdicts for concepts A to D, the 3D renderer, routes and stores, state vocabularies, clocks, and data rules. Concept D's backfill branch, backfill from the full export and then record live, is decided by its 2026-10-24 amendment.
 - [ADR 0017: Broker metrics come from rabbitmq_prometheus](adr/0017-broker-metrics-from-rabbitmq-prometheus.md)
 - [ADR 0018: The operations console is one authenticated, data-driven shell](adr/0018-operations-console-single-shell.md) records the authenticated single shell, the `catalog-api` session boundary, VictoriaMetrics history with 90-day retention, and retirement of the PostgreSQL metrics tables. The Overview uses an entity by consumer matrix as its primary view, with run progress and an ETA headline as a secondary view, and the flow diagram is not adopted.
+- [ADR 0019: Placement and evidence boundaries for metadata and collection prototypes](adr/0019-metadata-and-collection-prototype-boundaries.md) places eight bounded offline prototypes on existing owners and surfaces, separates catalog, owner, and operator evidence, and keeps production candidate generation and launch separately gated.
 
 ## Provider research
 
