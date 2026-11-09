@@ -19,7 +19,7 @@ if (status !== "") throw new Error("publication readiness requires a clean revie
 
 const catalogBytes = readFileSync(resolve(root, "catalog/repositories.json"));
 const catalog = JSON.parse(catalogBytes.toString("utf8"));
-if (catalog.schema_version !== 1 || catalog.repositories.length !== 21) {
+if (catalog.schema_version !== 1 || catalog.repositories.length !== 22) {
   throw new Error("catalog identity changed after validation");
 }
 const catalogSourceRepositories = ["discogs-ingestion", "musicbrainz-ingestion"];

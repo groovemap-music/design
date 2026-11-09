@@ -25,6 +25,7 @@ import {
   validateIdentityVocabulary,
   validateOrganizationVerification,
   validatePortfolioEffectiveness,
+  validateRepositoryAdditions,
   validateRepowiseDefectRisk,
   validateSharedDeliveryRollout,
   validateTargetedDefectAudit,
@@ -44,6 +45,7 @@ export {
   validateIdentityVocabulary,
   validateOrganizationVerification,
   validatePortfolioEffectiveness,
+  validateRepositoryAdditions,
   validateRepowiseDefectRisk,
   validateSharedDeliveryRollout,
   validateTargetedDefectAudit,
@@ -186,6 +188,7 @@ const REQUIRED_FILES = [
   "taxonomy/media/v1/media-taxonomy.json",
   "taxonomy/media/v1/media-taxonomy.schema.json",
   "verification/organization-wide-v1.json",
+  "verification/repository-additions-v1.json",
   "verification/portfolio-effectiveness-v1.json",
   "verification/repowise-defect-risk-v1.json",
   "verification/shared-delivery-rollout-v1.json",
@@ -532,11 +535,14 @@ function checkPolicy() {
   const targetedProtocol = JSON.parse(readFileSync(resolve(ROOT, "verification/targeted-defect-audit-protocol-v1.json"), "utf8"));
   const targetedAudit = JSON.parse(readFileSync(resolve(ROOT, "verification/targeted-defect-audit-v1.json"), "utf8"));
   const catalog = JSON.parse(readFileSync(resolve(ROOT, "catalog/repositories.json"), "utf8"));
-  const verificationErrors = validateOrganizationVerification(verification, catalog);
+  const additions = JSON.parse(readFileSync(resolve(ROOT, "verification/repository-additions-v1.json"), "utf8"));
+  const additionErrors = validateRepositoryAdditions(additions, verification, catalog);
+  const verificationErrors = validateOrganizationVerification(verification, catalog, additions);
   const effectivenessErrors = validatePortfolioEffectiveness(effectiveness, rollout, repowise, targetedAudit);
   const repowiseErrors = validateRepowiseDefectRisk(repowise);
   const rolloutErrors = validateSharedDeliveryRollout(rollout);
   const targetedAuditErrors = validateTargetedDefectAudit(targetedAudit, targetedProtocol);
+  requireCondition(additionErrors.length === 0, `repository additions contract:\n- ${additionErrors.join("\n- ")}`);
   requireCondition(verificationErrors.length === 0, `organization verification contract:\n- ${verificationErrors.join("\n- ")}`);
   requireCondition(effectivenessErrors.length === 0, `portfolio effectiveness contract:\n- ${effectivenessErrors.join("\n- ")}`);
   requireCondition(repowiseErrors.length === 0, `Repowise defect-risk contract:\n- ${repowiseErrors.join("\n- ")}`);
@@ -573,7 +579,7 @@ function checkPolicy() {
     "the 2026-09-13 narrative verification changed after the rollout audit",
   );
   console.log("Verified the amended telemetry decision contract.");
-  console.log("Verified the versioned organization-wide verification matrix.");
+  console.log("Verified the versioned organization-wide verification matrix and its dated repository additions.");
   console.log("Verified the versioned Repowise defect-risk evidence.");
   console.log("Verified the versioned shared-delivery rollout attestation.");
   console.log("Verified the frozen protocol and versioned targeted defect audit.");

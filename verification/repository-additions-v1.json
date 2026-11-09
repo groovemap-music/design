@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "sealed_matrix": {
+    "path": "verification/organization-wide-v1.json",
+    "reviewed_on": "2026-09-13"
+  },
+  "repositories": [
+    {
+      "name": "postgres",
+      "reviewed_on": "2026-11-08",
+      "revision": "4da4772cd9a2c364b6969e1bb59a3db7c149360e",
+      "tree": "a88c03e4c22bb37f52dff451095ff7889add57e2",
+      "verdict": "pass",
+      "maintained_mermaid": 0,
+      "evidence_roots": ["README.md", "AGENTS.md", "Dockerfile", ".github/workflows/"],
+      "basis": "Dispatcher review of gm-deployment-p9ql's image and repository: collation proof and pgvector scenarios. README.md, AGENTS.md and CHANGELOG.md contain no Mermaid diagrams."
+    }
+  ]
+}

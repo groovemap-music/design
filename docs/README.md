@@ -87,6 +87,11 @@ maintained current state.
   gates, delivery-model boundaries, and fix-one-fix-all ownership guidance.
 - [Organization-wide verification — 2026-09-13](audits/organization-wide-verification-2026-09-13.md)
   records the final sanitized 21-repository maintenance matrix and diagram audit.
+  That matrix is sealed. Repositories added to the catalog afterwards are recorded, with their
+  own reviewed revision, tree and basis, in
+  [`verification/repository-additions-v1.json`](../verification/repository-additions-v1.json),
+  which is validated against the catalog so every repository has reviewed evidence. The
+  `postgres` repository (reviewed 2026-11-08) is the first such addition.
 - [Controlled third targeted defect audit — 2026-09-14](audits/targeted-defect-audit-2026-09-14.md)
   records the pass: zero P2-or-higher root causes in the three frozen causal classes.
 - [Bug-supply remediation effectiveness verdict — 2026-09-14](audits/portfolio-effectiveness-2026-09-14.md)
