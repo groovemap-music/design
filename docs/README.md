@@ -100,3 +100,5 @@ maintained current state.
   records the close-portfolio disposition after every material-improvement threshold passed.
 - [Code comment review — 2026-10-02](audits/code-comment-review-2026-10-02.md)
   records the recheck of executable maintenance comments and the accuracy corrections it made.
+- [Performance roadmap — 2026-11-09](audits/performance-roadmap-2026-11-09.md)
+  ranks the query performance audit's findings across repositories, with measured evidence, proposed route and load targets, and the open decisions.
