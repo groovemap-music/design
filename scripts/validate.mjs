@@ -5,7 +5,7 @@ import { dirname, extname, relative, resolve, sep } from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
-import { validateStateTokens } from "./brand-tokens.mjs";
+import { validateAccentTokens, validateStateTokens } from "./brand-tokens.mjs";
 import { validateTaxonomy } from "./media-mapper.mjs";
 import {
   extractLinks,
@@ -487,6 +487,9 @@ function checkAssets() {
   console.log("Verified the brand font and its license against recorded upstream provenance.");
   const stateErrors = validateStateTokens(JSON.parse(readFileSync(resolve(ROOT, "brand/tokens.json"), "utf8")));
   requireCondition(stateErrors.length === 0, `Strata state tokens are invalid:\n${stateErrors.join("\n")}`);
+  const accentErrors = validateAccentTokens(JSON.parse(readFileSync(resolve(ROOT, "brand/tokens.json"), "utf8")));
+  requireCondition(accentErrors.length === 0, `Accent shade tokens are invalid:\n${accentErrors.join("\n")}`);
+  console.log("Verified accent shade tokens: brass 700/tint on dark, oxblood 700/tint on light.");
   console.log("Verified Strata state tokens: distinct from entity-type colors, AA contrast in both themes.");
 }
 
