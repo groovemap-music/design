@@ -101,6 +101,7 @@ outputs.set("site.webmanifest", `${JSON.stringify(manifest, null, 2)}\n`);
 const kebab = (name) => name.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
 const cssVariables = [
   ...Object.entries(tokens.color).map(([name, value]) => [kebab(name), value]),
+  ...Object.entries(tokens.accent).flatMap(([name, shades]) => Object.entries(shades).map(([shade, value]) => [`accent-${kebab(name)}-${shade}`, value])),
   ...Object.entries(tokens.entity).map(([name, value]) => [`entity-${kebab(name)}`, value]),
   ...Object.entries(tokens.state).flatMap(([vocabulary, states]) => Object.entries(states).flatMap(([name, themes]) => (
     Object.entries(themes).map(([themeName, value]) => [`state-${kebab(vocabulary)}-${kebab(name)}-${themeName}`, value])

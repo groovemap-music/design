@@ -179,3 +179,31 @@ export function validateStateTokens(tokens) {
   }
   return errors;
 }
+
+// The derived accent shades: brass is the accent on dark surfaces, oxblood on light ones.
+// Each 700 shade is a hover/border/non-text shade (3:1 against its canvas) and each tint is
+// a quiet fill under body text (AA for text on the tint in its own theme).
+export const ACCENT_SHADES = { brass: { theme: "dark", canvas: "void", text: "text" }, oxblood: { theme: "light", canvas: "lightBackground", text: "lightText" } };
+export const MIN_ACCENT_NON_TEXT_CONTRAST = 3;
+
+export function validateAccentTokens(tokens) {
+  const errors = [];
+  for (const [name, { canvas, text }] of Object.entries(ACCENT_SHADES)) {
+    const shades = tokens.accent?.[name];
+    if (!shades || Object.keys(shades).join(",") !== "700,tint") {
+      errors.push(`accent.${name} must hold exactly 700 and tint`);
+      continue;
+    }
+    try {
+      for (const value of Object.values(shades)) parseHex(value);
+    } catch (error) {
+      errors.push(`accent.${name}: ${error.message}`);
+      continue;
+    }
+    const ratio700 = contrastRatio(shades["700"], tokens.color[canvas]);
+    if (ratio700 < MIN_ACCENT_NON_TEXT_CONTRAST) errors.push(`accent.${name}.700 ${shades["700"]} has contrast ${ratio700.toFixed(2)} on ${canvas}, below ${MIN_ACCENT_NON_TEXT_CONTRAST}`);
+    const ratioText = contrastRatio(tokens.color[text], shades.tint);
+    if (ratioText < MIN_CONTRAST) errors.push(`${text} on accent.${name}.tint ${shades.tint} has contrast ${ratioText.toFixed(2)}, below ${MIN_CONTRAST}`);
+  }
+  return errors;
+}

@@ -15,6 +15,7 @@ import {
   contrastRatio,
   deltaE2000,
   deltaE2000Lab,
+  validateAccentTokens,
   validateStateTokens,
 } from "./brand-tokens.mjs";
 
@@ -122,4 +123,21 @@ test("the rendered stylesheet carries every entity and state token for both them
   const declared = css.match(/--groovemap-state-[a-z-]+: #[0-9a-f]{6};/g) ?? [];
   const expected = Object.values(STATE_VOCABULARIES).reduce((total, names) => total + names.length, 0) * THEMES.length;
   assert.equal(declared.length, expected);
+});
+
+test("accent shades keep the graph-explorer derived values and meet their contrast floors", () => {
+  assert.deepEqual(tokens.accent, { brass: { 700: "#8a6f1f", tint: "#3a2f12" }, oxblood: { 700: "#6b1027", tint: "#f3e3e6" } });
+  assert.deepEqual(validateAccentTokens(tokens), []);
+  const css = readFileSync(resolve(root, "brand/assets/tokens.css"), "utf8");
+  assert.match(css, /--groovemap-accent-brass-700: #8a6f1f;/);
+  assert.match(css, /--groovemap-accent-oxblood-tint: #f3e3e6;/);
+});
+
+test("accent shades that lose contrast or shape are rejected", () => {
+  const faded = clone();
+  faded.accent.brass["700"] = "#2a2418";
+  assert.ok(validateAccentTokens(faded).some((error) => error.startsWith("accent.brass.700")));
+  const missing = clone();
+  delete missing.accent.oxblood.tint;
+  assert.ok(validateAccentTokens(missing).some((error) => error.includes("accent.oxblood must hold")));
 });
