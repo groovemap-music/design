@@ -1,6 +1,6 @@
 # ADR 0013: pgvector in PostgreSQL for catalog embeddings
 
-- Status: Accepted; amended 2026-09-24, 2026-09-25, 2026-09-26, and 2026-09-29
+- Status: Accepted; amended 2026-09-24, 2026-09-25, 2026-09-26, 2026-09-29, and 2026-11-11
 
 ## Context
 
@@ -756,3 +756,42 @@ precondition under "Preconditions before production use" is closed by this amend
 decision, not by a passing measurement: no `ef_search` cleared the bar on either the `i37` or
 `8ts` configuration, and the decision above is to not depend on the index for serving rather
 than to keep sweeping toward it.
+
+## Amendment: embedding_pipeline read-only grant on the loader latch (2026-11-11)
+
+The 2026-09-24 amendment says the `embedding_pipeline` role "holds no other privilege". That held
+when it was written, but `analytics-engine` v0.9.0's nightly similar-artists job now needs one
+read it did not have: before each run it reads `public.loader_extraction_latch` and skips while a
+Discogs or MusicBrainz load holds the latch. Without the read, the job fails outright every night
+rather than skipping. This amendment records the one grant that adds, and restates the role's
+complete privilege list so no reader has to reconstruct it from the earlier amendments.
+
+- **The grant.** `SELECT` on `public.loader_extraction_latch`, and nothing else on that table. The
+  role cannot write the latch, truncate it, or alter it. The latch holds only `loader`, `version`,
+  `signals` and timestamps, with no catalog data, so the read exposes no catalog content.
+- **Where it is applied.** `database-schema` grants it in `_PIPELINE_ROLE_STATEMENTS`, so schema-init
+  applies it on every run, guarded on the role's existence like the other role grants. A rerun is a
+  no-op. The latch table is created unconditionally, so the grant does not depend on the `vector`
+  extension guard.
+- **Cross-references.** Implemented by `gm-database-schema-37cl` (`database-schema` release
+  v0.15.1), which also mirrors this list into the privilege table in `docs/architecture.md`. The
+  consuming job is `gm-analytics-engine-d6vm`.
+
+The complete privilege list for `embedding_pipeline`, as of this amendment:
+
+- `USAGE` on schema `public`, which every `public.*` grant below needs. It is a schema gate, not an
+  object privilege. A stock database grants it to `PUBLIC` already; it matters only where that
+  default was revoked.
+- `USAGE` on schema `graph`, and `SELECT` on all tables in schema `graph`. The schema-wide form
+  covers the graph's vertex and edge relations, and any relation added to the schema later.
+- `SELECT, INSERT, UPDATE, DELETE` on `public.artist_embeddings`, the embedding table the pipeline
+  writes.
+- `SELECT, INSERT, UPDATE, DELETE` on `public.artist_similar_artists` and
+  `public.artist_embedding_releases`, the similarity tables the monthly batch job fills.
+- `USAGE` on sequence `public.artist_embedding_releases_release_id_seq`, which the batch job needs
+  to insert into `artist_embedding_releases`.
+- `SELECT` on `public.loader_extraction_latch`, the read-only grant this amendment records.
+
+No other privilege is held: no `TRUNCATE`, no DDL, no ownership, and nothing on `public`'s catalog
+document tables, `insights`, `musicbrainz`, or any other schema. The login that is a member of the
+role is provisioned outside this repository, as the 2026-09-24 amendment describes.
