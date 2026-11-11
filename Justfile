@@ -29,6 +29,9 @@ lint:
     {{tool}} node --check scripts/genre-tree.test.mjs
     {{tool}} node --check scripts/mb-tag-genre.mjs
     {{tool}} node --check scripts/mb-tag-genre.test.mjs
+    {{tool}} node --check scripts/mb-tag-review.mjs
+    {{tool}} node --check scripts/mb-tag-review.test.mjs
+    {{tool}} node --check taxonomy/mb-tag-genre/review/core.js
     {{tool}} node --check scripts/media-mapper.mjs
     {{tool}} node --check scripts/publication-readiness.mjs
     {{tool}} node --check scripts/tooling.mjs
@@ -61,6 +64,19 @@ catalog:
 # Validate the canonical media taxonomy, its schemas, and the conformance fixtures.
 taxonomy:
     {{tool}} node scripts/validate.mjs --taxonomy
+
+# Serve the mb-tag-genre review page on localhost (no network calls; Ctrl-C stops it), or open it as a file.
+tag-review:
+    @echo "Review page: http://127.0.0.1:8765/index.html  (Ctrl-C to stop; the page also works from file://)"
+    {{tool}} python3 -I -m http.server 8765 --bind 127.0.0.1 --directory taxonomy/mb-tag-genre/review
+
+# Rebuild the review page's data from the lookup (run after a merge).
+tag-review-build:
+    {{tool}} node scripts/mb-tag-review.mjs build
+
+# Apply a review export to the lookup: just tag-review-merge ~/Downloads/mb-tag-genre-review-....json
+tag-review-merge export:
+    {{tool}} node scripts/mb-tag-review.mjs merge --export {{export}}
 
 # Validate the native identity vocabulary and its schema.
 identity:

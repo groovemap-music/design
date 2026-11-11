@@ -31,6 +31,9 @@ const DOMAIN_RECIPES = new Set([
   "links",
   "policy-check",
   "publication-readiness",
+  "tag-review",
+  "tag-review-build",
+  "tag-review-merge",
   "taxonomy",
 ]);
 
