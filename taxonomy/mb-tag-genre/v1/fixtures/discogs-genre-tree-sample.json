@@ -1,0 +1,80 @@
+{
+ "counts": {
+  "genres": 3,
+  "max_children": 2,
+  "pairs": 4,
+  "styles": 3,
+  "styles_with_2plus_parents": 1
+ },
+ "genres": [
+  {
+   "children": [
+    {
+     "genre_records": 1,
+     "records": 1,
+     "style": "Z"
+    }
+   ],
+   "genre": "Jazz",
+   "records": 2
+  },
+  {
+   "children": [
+    {
+     "genre_records": 2,
+     "records": 10,
+     "style": "X"
+    }
+   ],
+   "genre": "Pop",
+   "records": 2
+  },
+  {
+   "children": [
+    {
+     "genre_records": 7,
+     "records": 10,
+     "style": "X"
+    },
+    {
+     "genre_records": 1,
+     "records": 1,
+     "style": "Y"
+    }
+   ],
+   "genre": "Rock",
+   "records": 9
+  }
+ ],
+ "license": "MIT",
+ "rule": {
+  "description": "A style's parents are the genres carried by at least share_threshold of the style's records (masters plus releases). The dominant parent is always kept. Junk genres are dropped.",
+  "dominant_parent_always_kept": true,
+  "dropped_genres": [
+   "1"
+  ],
+  "max_children_per_genre": 255,
+  "share_threshold": "0.20"
+ },
+ "source": {
+  "dump_date": "20990101",
+  "inputs": [
+   {
+    "file": "discogs_20990101_masters.xml.gz",
+    "kind": "masters",
+    "records": 6,
+    "sha256": "0c2e841aae3b71a375f25caa7e1bd2700498f51fb599d9101e0ba3145a0feb9b"
+   },
+   {
+    "file": "discogs_20990101_releases.xml.gz",
+    "kind": "releases",
+    "records": 7,
+    "sha256": "94e51cdaddd389a4c14efffb57aa55ff2b1bcc2ab3334db25f5486db49461fe2"
+   }
+  ],
+  "license": "CC0-1.0",
+  "name": "Discogs monthly data dump",
+  "url": "https://data.discogs.com/"
+ },
+ "tree_version": "1"
+}
