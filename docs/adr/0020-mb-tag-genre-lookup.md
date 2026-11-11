@@ -116,9 +116,18 @@ stay available for consumers that pin them.
 
 ### Drift check
 
-A script diffs the current MusicBrainz dump's tags with 20 or more uses against the lookup. It
-lists new tags and tree changes as review work. The drift check runs offline in CI and makes
-no model calls.
+`scripts/mb-tag-drift.mjs` diffs the lookup with a newer vocabulary (tags with 20 or more uses) and
+a newer tree. It reports new tags, tags that fell out of scope, tree paths that no longer exist,
+and use-count changes as a summary. It lists new tags and broken paths as review work and exits
+non-zero on broken paths. It runs offline, makes no model calls and never runs the generator.
+
+CI runs the structural part (lookup against its own tree, schemas, review-state invariants) in
+`just check` on every change. The dump-based part is a documented command, run when a new dump or
+tree is adopted. The command is in the [README](../../taxonomy/mb-tag-genre/README.md#drift-check).
+
+Cut `v2` when the drift check finds a broken path, when the tree dump changes, when new tags
+exceed about 10% of the lookup's tags, or when `min_uses` or a model pin changes. A smaller
+tag-only change on the same tree and dump is a patch of the current version.
 
 ## Evidence
 
@@ -199,5 +208,5 @@ requests. It took 4,654 s wall time at 4 workers. The lookup and its captures ar
   candidate set. The spike estimates that it roughly triples the review work for about 2% more
   uses. A later version can add it once the v1 review pace is known.
 - The deterministic Discogs tree export, the generator, the review workflow, the enricher
-  projection, and the drift-check script and CI job are separate work, each gated by its own
+  projection, and the drift-check script are separate work, each gated by its own
   record. This ADR records the rule they build to.
