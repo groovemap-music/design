@@ -74,4 +74,38 @@ Measured cost, from the token counts in the captures at list prices read 2026-11
 
 The `estimate` step had predicted $45.11. Claude wrote 62.6 output tokens per tag against the spike's 53, which adds $1.72; Jev came in $0.13 under. The captures are model output over public CC0 tag names. They hold no credentials, and their `at` and `latency_s` fields are the only run telemetry.
 
+## Review loop (v1)
+
+The operator reviews the 4,415 pending rows in a local page, [`review/index.html`](review/index.html), and a script merges the result into the lookup. Nothing here calls a network or a model. A model-proposed genre reaches the lookup only with a named reviewer.
+
+1. **Open the page.** `just tag-review` serves it at `http://127.0.0.1:8765/index.html` (localhost only, Ctrl-C stops it). Opening `review/index.html` straight from disk (`file://`) works too. The page has no CDN, font or request of any kind (its Content-Security-Policy forbids them). It loads [`review/data.js`](review/data.js), which holds the queue, the Discogs tree and the lookup's SHA-256, and [`review/core.js`](review/core.js).
+2. **Type your name** in the Reviewer box. It is recorded on every decision.
+3. **Review one row at a time.** The page shows the tag, its uses, both proposals with full tree paths (Claude's answer is the default, Jev's when Claude gave none), Jev's top three paths, and progress: decided of 4,415 with counts by decision.
+
+   | Key | Action |
+   | --- | --- |
+   | `Enter` or `a` | accept the default |
+   | `o` | accept the other model's answer |
+   | `n` | NONE, leave the tag unmapped |
+   | `p` or `/` | pick another path: fuzzy search over every genre and style, `Up`/`Down`, `Enter` to pick, `Esc` to cancel |
+   | `1` `2` `3` | pick one of Jev's top three |
+   | `s` | skip; skipped rows come back after the open ones |
+   | `u` / `Ctrl+Z`, `y` | undo, redo (every action, as many as you like) |
+   | `[` `]` | previous or next row without deciding |
+   | `e`, `i`, `?` | export, import, help |
+
+4. **Progress is saved in the browser** (`localStorage`) after every action, so you can stop and resume. It is keyed on the queue version, the MusicBrainz dump and the tree date, which a merge does not change, and each decision is keyed by tag and bound to a hash of the row you were shown (bucket and both proposals). A cleared browser loses it, so press `e` now and then: the page counts the decisions not yet exported and turns the count amber at 200. The export is a JSON progress file; `i` imports one (a later decision for a tag wins), which also moves progress between browsers. The page refuses a file for another queue, dump or tree, and ignores rows whose hash no longer matches.
+5. **Merge.** `just tag-review-merge ~/Downloads/mb-tag-genre-review-<dump>-<time>.json` runs `scripts/mb-tag-review.mjs merge`. For each exported row it writes `result`, `review_state: reviewed`, `reviewer`, `decision` and `reviewed_at`, then rewrites [`v1/mb-tag-genre.json`](v1/mb-tag-genre.json), [`v1/review-queue.json`](v1/review-queue.json) (the rows still pending) and `review/data.js`. The merge checks **each row**, not the file:
+   - a row is applied when its tag is still pending and its row hash matches the lookup's,
+   - a row for a tag already reviewed with the same result is a no-op, so merging the same export twice changes nothing,
+   - a row for a tag already reviewed with a different result, a row whose hash differs (the proposals changed since you decided), a tag that is not a queue row, a repeated tag, a missing reviewer or timestamp, a pick that is not a genre or style path in the tree, or a decision whose result does not follow from it, is **rejected**. By default any rejected row fails the whole merge, lists every conflict and writes nothing. `just tag-review-merge <file> --skip-rejected` applies the other rows and prints the rejected ones,
+   - an export for a different `queue_version`, MusicBrainz dump or tree date is always refused,
+   - the merged files are validated with the same checks as `just taxonomy` before anything is written,
+   - the result is deterministic: the same lookup and export give the same bytes, whatever the row order.
+6. **Reload and commit.** Reload the page after a merge. Rows now in the lookup show as done and count as decided, your unmerged decisions are kept, and the counts stay out of 4,415. Commit the three regenerated files. Because decisions survive merges, you can export, keep reviewing, and merge that earlier export later: the later decisions are still in the page and still merge.
+
+Partial review is valid. While `publishable` is `false`, the validator accepts pending rows and reviewed rows together, so the lookup stays committable after every session. The merge sets `publishable: true` only when the queue is empty and the lookup was built from a whole, checksummed dump. From then on `just taxonomy` rejects any model-proposed genre row that lacks a reviewer, and any pending row (`unreviewed model rows never ship`, ADR 0020).
+
+`just tag-review-build` rebuilds `review/data.js` from the lookup, and a test fails when the committed file differs.
+
 **Regression fixture.** [`v1/fixtures/spike-569/`](v1/fixtures/spike-569/README.md) replays the spike's recorded answers for its 200-tag labelled sample. `scripts/mb-tag-genre.test.mjs` checks that the replay reproduces the spike's cascade figures (43 string matches, 40 agreements at 97.5%, 80 both-NONE, 37 disagreements where Claude is right 86.5% of the time), and that a capture miss or a foreign model fails the run.

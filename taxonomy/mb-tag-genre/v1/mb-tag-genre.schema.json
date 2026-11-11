@@ -119,7 +119,9 @@
             ]
           },
           "review_state": { "enum": ["not_required", "pending", "reviewed"] },
-          "reviewer": { "oneOf": [{ "type": "string", "minLength": 1 }, { "type": "null" }] }
+          "reviewer": { "oneOf": [{ "type": "string", "minLength": 1 }, { "type": "null" }] },
+          "decision": { "enum": ["accept_default", "accept_other", "none", "pick"], "description": "How the reviewer decided, written by scripts/mb-tag-review.mjs merge. Present only on a reviewed row." },
+          "reviewed_at": { "type": "string", "format": "date-time", "description": "When the reviewer decided, as the review page recorded it. Present only on a reviewed row." }
         }
       }
     }

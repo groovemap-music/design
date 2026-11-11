@@ -50,6 +50,7 @@ export function validateTagLookup(lookup, tree) {
     if (index) for (const path of paths) if (!pathInTree(index, path)) errors.push(`${where} names ${show(path)}, which is not in the tree`);
 
     if (row.review_state === "reviewed" && !row.reviewer) errors.push(`${where} is reviewed but names no reviewer`);
+    if (row.review_state !== "reviewed" && (row.decision !== undefined || row.reviewed_at !== undefined)) errors.push(`${where} carries a review decision but is ${row.review_state}`);
     if (row.review_state !== "reviewed" && row.reviewer !== null) errors.push(`${where} names a reviewer but is ${row.review_state}`);
 
     switch (row.bucket) {
