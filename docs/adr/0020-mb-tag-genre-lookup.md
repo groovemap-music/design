@@ -154,13 +154,19 @@ in the both-NONE bucket are missed genres, not wrong ones. Leaving them unmapped
 
 **Review queue.** The review covers the agreed genre proposals and the disagreements,
 about **4,200 tags** for the 20-or-more-uses vocabulary. The sample is 200 tags, so the
-estimate carries a wide margin.
+estimate carries a wide margin. `gm-design-uvs4` measured it on the v1 run (export
+`20261111-002335`, 9,899 tags): **4,415** rows, 2,410 agreements and 2,005 disagreements.
 
 **Cost and time.** Measured on the sample at list prices read 2026-11-01, extrapolated to the
 9,880 tags with 20 or more uses: Jev is **$2.08** and about **0.6 h** sequentially, and flat
 Claude is **about $53**. Together that is about $55 of model calls, once. Cost does not decide
 between the two methods. Jev is a cheap independent second opinion, and agreement with it is what
 makes Claude's proposals quick to review.
+
+The v1 run (`gm-design-uvs4`, 2026-11-11) cost **$46.65** at the same list prices, from the token
+counts in its committed captures: Jev $1.76 for 28,243 requests, and Claude $44.89 for 8,978
+requests. It took 4,654 s wall time at 4 workers. The lookup and its captures are in
+[`taxonomy/mb-tag-genre/`](../../taxonomy/mb-tag-genre/README.md).
 
 ## Alternatives considered
 

@@ -143,6 +143,23 @@ test("a replay rebuilds the committed lookup and queue byte-identically with the
   });
 });
 
+test("the committed v1 lookup and queue replay byte-identically from the committed captures, with the network unavailable", (t) => {
+  if (pythonMissing) return t.skip("python3 is unavailable");
+  const V1 = resolve(ROOT, "taxonomy/mb-tag-genre/v1");
+  withTemp("mbtag-v1-replay", (dir) => {
+    const site = join(dir, "site");
+    mkdirSync(site);
+    writeFileSync(join(site, "anthropic.py"), "raise SystemExit('anthropic imported during a replay')\n");
+    writeFileSync(join(site, "typesafe_sdk.py"), "raise SystemExit('typesafe_sdk imported during a replay')\n");
+    writeFileSync(join(site, "sitecustomize.py"), "import socket\n\ndef _refuse(self, *a, **k):\n    raise SystemExit('socket opened during a replay')\n\nsocket.socket.__init__ = _refuse\n");
+    const out = join(dir, "out");
+    const run = propose(join(V1, "captures"), out, { vocab: join(V1, "mb-tag-vocabulary.json"), tree: join(V1, "discogs-genre-tree.json"), isolated: false, env: { PYTHONPATH: site } });
+    assert.equal(run.status, 0, run.stderr);
+    assert.match(run.stderr, /"new_captures": 0/);
+    for (const file of ["mb-tag-genre.json", "review-queue.json"]) assert.equal(readFileSync(join(out, file), "utf8"), readFileSync(join(V1, file), "utf8"), `${file} differs from its replay`);
+  });
+});
+
 test("a capture miss fails the replay instead of calling out, and writes nothing", (t) => {
   if (pythonMissing) return t.skip("python3 is unavailable");
   withTemp("mbtag-miss", (dir) => {

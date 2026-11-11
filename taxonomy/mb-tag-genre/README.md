@@ -1,6 +1,6 @@
 # mb-tag-genre
 
-The reviewed MusicBrainz tag to Discogs genre and style lookup decided in [ADR 0020](../../docs/adr/0020-mb-tag-genre-lookup.md). This directory holds the lookup's frozen target tree, the tag vocabulary it covers, the generator's schemas, and a recorded regression fixture. The proposals for the named dump land here after the operator's paid run.
+The reviewed MusicBrainz tag to Discogs genre and style lookup decided in [ADR 0020](../../docs/adr/0020-mb-tag-genre-lookup.md). This directory holds the lookup's frozen target tree, the tag vocabulary it covers, the generator's schemas, the model proposals for the named dump with their recorded captures and review queue, and a recorded regression fixture.
 
 ## Discogs genre tree (v1)
 
@@ -61,5 +61,17 @@ uv run --no-project --with typesafe-sdk --with anthropic python -I scripts/mb-ta
 # Anyone, afterwards: rebuild both files from the committed captures with zero network calls.
 python3 -I scripts/mb-tag-genre.py propose --vocab ... --tree ... --captures ... --out-lookup ... --out-queue ...
 ```
+
+**Proposals (v1).** [`v1/mb-tag-genre.json`](v1/mb-tag-genre.json) and [`v1/review-queue.json`](v1/review-queue.json) cover the 9,899 tags of the vocabulary above (export `20261111-002335`) against the v1 tree (`20261101`). The operator ran `--live` on 2026-11-11: a 20-tag smoke run, then the full run, 4,654 s wall time at 4 workers. `v1/captures/` holds every answer: 28,243 Jev requests and 8,978 Claude requests, all reporting the pinned models. Outcome: 921 string matches, 4,563 both-NONE, 2,410 agreements and 2,005 disagreements, so the review queue holds **4,415** rows and nothing is reviewed yet (`publishable: false`). A test replays the captures with the network and both SDKs unavailable and checks both files byte for byte.
+
+Measured cost, from the token counts in the captures at list prices read 2026-11-01 (Jev $0.042 per million input tokens, output free; Claude Opus 5.5 $4 input, $5 cache write, $0.20 cache read and $20 output per million tokens):
+
+| Model | Requests | Tokens | Cost |
+| --- | ---: | --- | ---: |
+| `jev-1.14.0` | 28,243 | 41.94M input (18.50M output, not billed) | $1.76 |
+| `claude-opus-5-5` | 8,978 | 18,244 cache write (once), 163.78M cache read, 0.20M input, 0.56M output | $44.89 |
+| **Total** | 37,221 | | **$46.65** |
+
+The `estimate` step had predicted $45.11. Claude wrote 62.6 output tokens per tag against the spike's 53, which adds $1.72; Jev came in $0.13 under. The captures are model output over public CC0 tag names. They hold no credentials, and their `at` and `latency_s` fields are the only run telemetry.
 
 **Regression fixture.** [`v1/fixtures/spike-569/`](v1/fixtures/spike-569/README.md) replays the spike's recorded answers for its 200-tag labelled sample. `scripts/mb-tag-genre.test.mjs` checks that the replay reproduces the spike's cascade figures (43 string matches, 40 agreements at 97.5%, 80 both-NONE, 37 disagreements where Claude is right 86.5% of the time), and that a capture miss or a foreign model fails the run.

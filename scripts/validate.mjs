@@ -192,6 +192,8 @@ const REQUIRED_FILES = [
   "taxonomy/identity/v1/identity-vocabulary.json",
   "taxonomy/identity/v1/identity-vocabulary.schema.json",
   "taxonomy/mb-tag-genre/README.md",
+  "taxonomy/mb-tag-genre/v1/captures/claude-opus-5-5.jsonl",
+  "taxonomy/mb-tag-genre/v1/captures/jev-1.14.0.jsonl",
   "taxonomy/mb-tag-genre/v1/discogs-genre-tree.json",
   "taxonomy/mb-tag-genre/v1/discogs-genre-tree.schema.json",
   "taxonomy/mb-tag-genre/v1/fixtures/discogs-genre-tree-sample.json",
@@ -199,7 +201,9 @@ const REQUIRED_FILES = [
   "taxonomy/mb-tag-genre/v1/fixtures/spike-569/mb-tag-genre.json",
   "taxonomy/mb-tag-genre/v1/fixtures/spike-569/review-queue.json",
   "taxonomy/mb-tag-genre/v1/mb-tag-genre-review-queue.schema.json",
+  "taxonomy/mb-tag-genre/v1/mb-tag-genre.json",
   "taxonomy/mb-tag-genre/v1/mb-tag-genre.schema.json",
+  "taxonomy/mb-tag-genre/v1/review-queue.json",
   "taxonomy/mb-tag-genre/v1/mb-tag-vocabulary.json",
   "taxonomy/mb-tag-genre/v1/mb-tag-vocabulary.schema.json",
   "taxonomy/media/README.md",
@@ -320,7 +324,8 @@ function checkGenreTree() {
 // mb-tag-genre/v1 (ADR 0020): the vocabulary, every lookup with its review queue, and their schemas. A lookup
 // is checked against the tree it names; a publishable lookup must carry no unreviewed model-proposed row.
 const TAG_LOOKUPS = [
-  { lookup: "fixtures/spike-569/mb-tag-genre.json", queue: "fixtures/spike-569/review-queue.json", tree: "fixtures/spike-569/discogs-genre-tree-spike.json" },
+  { lookup: "mb-tag-genre.json", queue: "review-queue.json", tree: "discogs-genre-tree.json", vocabulary: "mb-tag-vocabulary.json" },
+  { lookup: "fixtures/spike-569/mb-tag-genre.json", queue: "fixtures/spike-569/review-queue.json", tree: "fixtures/spike-569/discogs-genre-tree-spike.json", vocabulary: "fixtures/spike-569/vocabulary.json" },
 ];
 
 function checkTagLookup() {
@@ -340,6 +345,12 @@ function checkTagLookup() {
     const lookup = JSON.parse(readFileSync(entry.lookup, "utf8"));
     const tree = JSON.parse(readFileSync(entry.tree, "utf8"));
     requireCondition(lookup.source.tree.sha256 === sha256(readFileSync(entry.tree)), `${relative(ROOT, entry.lookup)} was built from a different ${relative(ROOT, entry.tree)}`);
+    // Every vocabulary tag at the lookup's min_uses has exactly one row, with the same uses, from the same dump.
+    const vocab = JSON.parse(readFileSync(entry.vocabulary, "utf8"));
+    const kept = vocab.tags.filter((row) => row.uses >= lookup.source.musicbrainz.min_uses);
+    const rowsOf = (rows) => JSON.stringify(rows.map((row) => [row.tag, row.uses]).sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0)));
+    requireCondition(rowsOf(lookup.rows) === rowsOf(kept), `${relative(ROOT, entry.lookup)} rows are not the tags of ${relative(ROOT, entry.vocabulary)} with >= ${lookup.source.musicbrainz.min_uses} uses`);
+    requireCondition(lookup.source.musicbrainz.dump === vocab.source.dump && lookup.source.musicbrainz.sha256 === vocab.source.sha256, `${relative(ROOT, entry.lookup)} names a different dump than ${relative(ROOT, entry.vocabulary)}`);
     const errors = [...validateTagLookup(lookup, tree), ...validateReviewQueue(JSON.parse(readFileSync(entry.queue, "utf8")), lookup)];
     requireCondition(errors.length === 0, `${relative(ROOT, entry.lookup)}:\n- ${errors.join("\n- ")}`);
   }
