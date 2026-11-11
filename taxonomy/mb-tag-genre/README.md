@@ -74,6 +74,39 @@ Measured cost, from the token counts in the captures at list prices read 2026-11
 
 The `estimate` step had predicted $45.11. Claude wrote 62.6 output tokens per tag against the spike's 53, which adds $1.72; Jev came in $0.13 under. The captures are model output over public CC0 tag names. They hold no credentials, and their `at` and `latency_s` fields are the only run telemetry.
 
+## Drift check
+
+The lookup goes stale as MusicBrainz tags and the Discogs tree change. `scripts/mb-tag-drift.mjs` compares the committed lookup with a newer vocabulary, a newer tree, or both. It reads local files only: no network, no model calls, and it never runs the generator. `just tag-drift` fills in the committed lookup and tree.
+
+**When a new dump or tree is adopted**, build the newer inputs with the commands above (`vocab` for a MusicBrainz dump, `discogs-genre-tree.py` for a Discogs dump) into a scratch directory, not over `v1/`, then run:
+
+```console
+just tag-drift --new-vocab /tmp/drift/mb-tag-vocabulary.json --new-tree /tmp/drift/discogs-genre-tree.json \
+  --out /tmp/drift/report.json --out-review /tmp/drift/review-work.json
+```
+
+Either `--new-vocab` or `--new-tree` alone works. The JSON report goes to `--out` (stdout without it) and a short summary to stderr. It lists:
+
+- `new_tags`: tags at or above the lookup's `min_uses` that the lookup does not have, most-used first.
+- `fell_below_scope` and `vanished`: lookup tags that the newer vocabulary lists under `min_uses` (only possible when it was built with a lower `--min-uses`), or does not list at all.
+- `broken_paths`: every `result`, Jev or Claude path of a lookup row that the newer tree no longer has, with the genres a moved style now sits under (`candidates`). `tree_changes` (needs `--tree`, the old tree) lists genres and pairs added or removed.
+- `use_changes`: a summary only (tags up, down, unchanged and the total delta).
+
+**Exit status:** 0 when no path is broken (new, dropped and recounted tags are review work, not failure), 1 when any path is broken, 2 for bad usage or an unreadable or invalid input.
+
+**Drift becomes review work.** `--out-review` writes `propose` (the new tags, with uses) and `reverify` (rows whose path broke, or reviewed rows whose tag left scope, with the candidate replacements). To act on it, run `propose` on the newer vocabulary and tree: it carries reviewed rows whose proposals are unchanged, replays committed captures and makes no call, and `estimate` counts the misses and prices a `--live` run (operator only). The new rows arrive as `pending` queue rows for the review loop below. Nothing in the drift check writes the lookup or the queue.
+
+**CI.** `just check` runs on every pull request and every push to `main` (`.github/workflows/ci.yml`, no path filter). It runs the structural part through `just taxonomy` (`scripts/validate.mjs --taxonomy`): the lookup against its own tree, the schemas, and the review-state invariants. It also runs the drift script's tests (`just test`) on small synthetic fixtures. The dump-based part is the command above, run by hand when a dump is adopted, because dumps are too large for CI.
+
+**Patch v1 or cut v2.** Patch v1 (a reviewed row corrected, a few new tags proposed and reviewed, `propose` rerun on the same tree) only while the tree and the vocabulary's dump stay the same. Cut `v2` when any of these holds:
+
+- the drift check exits 1: a newer tree changed paths a row already names, and the tree is frozen from a named dump;
+- the tree dump changes at all, even with no broken path, because the lookup records which tree it was reviewed against;
+- the MusicBrainz dump changes and new tags exceed about 10% of the lookup's tags (`new_tags` over `counts.tags`), or `min_uses` changes;
+- the model pins change.
+
+A smaller tag-only change on the same tree and dump can stay in v1 as a patch. `v1` stays in place for consumers that pin it.
+
 ## Review loop (v1)
 
 The operator reviews the 4,415 pending rows in a local page, [`review/index.html`](review/index.html), and a script merges the result into the lookup. Nothing here calls a network or a model. A model-proposed genre reaches the lookup only with a named reviewer.

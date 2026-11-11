@@ -122,6 +122,8 @@ const REQUIRED_FILES = [
   "scripts/discogs-genre-tree.py",
   "scripts/genre-tree.mjs",
   "scripts/genre-tree.test.mjs",
+  "scripts/mb-tag-drift.mjs",
+  "scripts/mb-tag-drift.test.mjs",
   "scripts/mb-tag-genre.mjs",
   "scripts/mb-tag-genre.py",
   "scripts/mb-tag-genre.test.mjs",

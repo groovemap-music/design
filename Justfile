@@ -27,6 +27,8 @@ lint:
     {{tool}} node --check scripts/check-recipes.test.mjs
     {{tool}} node --check scripts/genre-tree.mjs
     {{tool}} node --check scripts/genre-tree.test.mjs
+    {{tool}} node --check scripts/mb-tag-drift.mjs
+    {{tool}} node --check scripts/mb-tag-drift.test.mjs
     {{tool}} node --check scripts/mb-tag-genre.mjs
     {{tool}} node --check scripts/mb-tag-genre.test.mjs
     {{tool}} node --check scripts/mb-tag-review.mjs
@@ -73,6 +75,11 @@ tag-review:
 # Rebuild the review page's data from the lookup (run after a merge).
 tag-review-build:
     {{tool}} node scripts/mb-tag-review.mjs build
+
+# Offline drift check of the lookup against a newer vocabulary and/or tree; exits 1 on broken paths.
+# just tag-drift --new-vocab new-vocab.json --new-tree new-tree.json --out drift.json --out-review review-work.json
+tag-drift *flags:
+    {{tool}} node scripts/mb-tag-drift.mjs --lookup taxonomy/mb-tag-genre/v1/mb-tag-genre.json --tree taxonomy/mb-tag-genre/v1/discogs-genre-tree.json {{flags}}
 
 # Apply a review export to the lookup: just tag-review-merge ~/Downloads/mb-tag-genre-review-....json
 tag-review-merge export *flags:
