@@ -50,10 +50,9 @@ ships with a JSON Schema and conformance fixtures.
   These are the four entity types whose tags MusicBrainz ingestion keeps.
 - **Discogs tree:** v1 is built from **releases plus masters of one named Discogs dump**, streamed.
   The spike built its tree from the masters dump `discogs_20261101_masters.xml.gz` alone
-  (2,608,936 masters) and did not stream the releases dump. The v1 tree therefore has to be
-  re-measured from releases plus masters; the spike's figures below come from the masters-only
-  tree and are the measured example until that re-measurement, owned by the Discogs tree export
-  bead (`gm-design-d7xz`), is done.
+  (2,608,936 masters) and did not stream the releases dump. `gm-design-d7xz` re-measured it from
+  releases plus masters of dump 20261101 (19,575,942 releases and 2,608,936 masters); the frozen
+  tree is [`taxonomy/mb-tag-genre/v1/discogs-genre-tree.json`](../../taxonomy/mb-tag-genre/v1/discogs-genre-tree.json).
 - **v1 scope:** tags with **20 or more uses**. In the spike's example dump that is **9,880 tags**,
   which carry about 95% of tag uses. The count is re-measured on the dump the generator uses.
   Tags with 5 to 19 uses are excluded from v1 (see *Future work*).
@@ -62,10 +61,12 @@ ships with a JSON Schema and conformance fixtures.
 
 The tree is frozen from a named dump with the share rule that `insights.style_parents` already
 applies (parents at share >= 0.20 of a style's masters, the rule the Atlas spike measured). The
-dominant parent of each style is always kept. The spike's masters-only tree has **15 genres,
-756 styles and 1,276 parent pairs**. Those figures are the measured example and will be
-re-measured by `gm-design-d7xz` on releases plus masters. Each genre has at most 248 children, under TypeSafe's 255-option Choice
-limit.
+dominant parent of each style is always kept. The v1 tree, built from releases plus masters of
+dump 20261101, has **15 genres, 757 styles and 1,234 parent pairs**. 352 styles have two or more
+parents, and no genre has more than 240 children, under TypeSafe's 255-option Choice limit. The
+spike's masters-only tree, kept here only as the comparison, had 15 genres, 756 styles and 1,276
+parent pairs, and at most 248 children per genre. The alternatives below were measured on that
+masters-only tree.
 
 Two alternatives were measured and rejected as trees. Observed co-occurrence gives 8,886 pairs,
 and 685 of 756 styles then have six or more parent genres. The `graph.part_of` rule (masters

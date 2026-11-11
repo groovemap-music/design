@@ -6,6 +6,7 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 import { validateAccentTokens, validateStateTokens } from "./brand-tokens.mjs";
+import { validateGenreTree } from "./genre-tree.mjs";
 import { validateTaxonomy } from "./media-mapper.mjs";
 import {
   extractLinks,
@@ -117,6 +118,9 @@ const REQUIRED_FILES = [
   "scripts/check-recipes.mjs",
   "scripts/check-recipes.test.mjs",
   "scripts/check-secrets.sh",
+  "scripts/discogs-genre-tree.py",
+  "scripts/genre-tree.mjs",
+  "scripts/genre-tree.test.mjs",
   "scripts/media-mapper.mjs",
   "scripts/publication-readiness.mjs",
   "scripts/tooling.mjs",
@@ -183,6 +187,10 @@ const REQUIRED_FILES = [
   "taxonomy/identity/README.md",
   "taxonomy/identity/v1/identity-vocabulary.json",
   "taxonomy/identity/v1/identity-vocabulary.schema.json",
+  "taxonomy/mb-tag-genre/README.md",
+  "taxonomy/mb-tag-genre/v1/discogs-genre-tree.json",
+  "taxonomy/mb-tag-genre/v1/discogs-genre-tree.schema.json",
+  "taxonomy/mb-tag-genre/v1/fixtures/discogs-genre-tree-sample.json",
   "taxonomy/media/README.md",
   "taxonomy/media/v1/media-block.schema.json",
   "taxonomy/media/v1/media-taxonomy.json",
@@ -279,6 +287,22 @@ function checkTaxonomy() {
   runJsonSchema(["validate", blockSchema, ...expectedPaths, "--format-assertion"], "a fixture's expected media block does not satisfy the media block schema");
   rmSync(expectedDirectory, { recursive: true, force: true });
   console.log(`Verified the media taxonomy, its schemas, and ${fixtures.length} conformance fixtures against the reference mapper.`);
+  checkGenreTree();
+}
+
+function checkGenreTree() {
+  const base = resolve(ROOT, "taxonomy/mb-tag-genre/v1");
+  const schemaPath = resolve(base, "discogs-genre-tree.schema.json");
+  const treePath = resolve(base, "discogs-genre-tree.json");
+  const fixturePath = resolve(base, "fixtures/discogs-genre-tree-sample.json");
+  runJsonSchema(["metaschema", schemaPath], `${relative(ROOT, schemaPath)} is not a valid 2020-12 schema`);
+  runJsonSchema(["validate", schemaPath, treePath, fixturePath, "--format-assertion"], "a Discogs genre tree does not satisfy its schema");
+  for (const path of [treePath, fixturePath]) {
+    const errors = validateGenreTree(JSON.parse(readFileSync(path, "utf8")));
+    requireCondition(errors.length === 0, `${relative(ROOT, path)}:\n- ${errors.join("\n- ")}`);
+  }
+  const tree = JSON.parse(readFileSync(treePath, "utf8"));
+  console.log(`Verified the Discogs genre tree (dump ${tree.source.dump_date}): ${tree.counts.genres} genres, ${tree.counts.styles} styles, ${tree.counts.pairs} pairs.`);
 }
 
 function expectJsonSchemaFailure(arguments_, message) {
