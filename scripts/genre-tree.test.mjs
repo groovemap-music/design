@@ -86,6 +86,10 @@ test("the generator rebuilds the tree byte-identically from a dump stream, apply
     assert.deepEqual(byGenre, { Jazz: ["Z"], Pop: ["X"], Rock: ["X", "Y"] });
     assert.deepEqual(built.counts, { genres: 3, styles: 3, pairs: 4, styles_with_2plus_parents: 1, max_children: 2 });
     for (const input of built.source.inputs) assert.match(input.sha256, /^[0-9a-f]{64}$/);
+    // The committed sample fixture was produced before the iterparse root was cleared; same records, same tree.
+    const sample = JSON.parse(readFileSync(resolve(ROOT, "taxonomy/mb-tag-genre/v1/fixtures/discogs-genre-tree-sample.json"), "utf8"));
+    assert.deepEqual(built.genres, sample.genres);
+    assert.deepEqual(built.counts, sample.counts);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

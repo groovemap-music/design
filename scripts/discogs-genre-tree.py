@@ -53,8 +53,11 @@ def count_stream(path, record_tag, junk=JUNK_GENRES):
     with open(path, "rb") as raw:
         hashed = HashingReader(raw)
         with gzip.GzipFile(fileobj=hashed) as xml:
-            for _, elem in ET.iterparse(xml, events=("end",)):  # noqa: S314 (public dump, own pipeline)
-                if elem.tag != record_tag:
+            root = None
+            for event, elem in ET.iterparse(xml, events=("start", "end")):  # noqa: S314 (public dump, own pipeline)
+                if root is None:
+                    root = elem  # first start event is the document root
+                if event != "end" or elem.tag != record_tag:
                     continue
                 records += 1
                 genres = sorted({g.text for g in elem.iterfind("genres/genre") if g.text and g.text not in junk})
@@ -65,6 +68,7 @@ def count_stream(path, record_tag, junk=JUNK_GENRES):
                     for style in styles:
                         pairs[genre, style] += 1
                 elem.clear()
+                root.clear()  # drop the emptied record from the root so memory stays flat
         # drain so the hash covers trailing bytes past the gzip member
         while hashed.read(1 << 20):
             pass
