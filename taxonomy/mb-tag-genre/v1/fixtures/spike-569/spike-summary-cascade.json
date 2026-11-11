@@ -1,0 +1,52 @@
+{
+ "source": "musicbrainz-graph-enricher spikes/tag-mapping/results/summary.json at ee3efa8a764d180b73ea2dec85fa3d4af08d72d1, cascade section",
+ "cascade": {
+  "string": {
+   "n": 43,
+   "jev_exact": 0.884,
+   "claude_exact": 1.0,
+   "est_tags_ge20_uses": 1172,
+   "est_tags_ge5_uses": 1172,
+   "precision": 1.0
+  },
+  "agree_genre": {
+   "n": 40,
+   "jev_exact": 0.975,
+   "claude_exact": 0.975,
+   "est_tags_ge20_uses": 1987,
+   "est_tags_ge5_uses": 5697
+  },
+  "agree_none": {
+   "n": 80,
+   "jev_exact": 0.875,
+   "claude_exact": 0.875,
+   "est_tags_ge20_uses": 4546,
+   "est_tags_ge5_uses": 17797,
+   "missed_genre": [
+    "composer",
+    "french singer",
+    "melodic",
+    "post-whatever",
+    "relax",
+    "schubert",
+    "singer",
+    "star trek",
+    "terry riley",
+    "vomir"
+   ]
+  },
+  "disagree": {
+   "n": 37,
+   "jev_exact": 0.649,
+   "claude_exact": 0.865,
+   "est_tags_ge20_uses": 2174,
+   "est_tags_ge5_uses": 6414
+  },
+  "auto_precision": 0.933,
+  "auto_use_share": 0.921,
+  "review_agree_genre_plus_disagree": {
+   "tags_ge20_uses": 4161,
+   "tags_ge5_uses": 12111
+  }
+ }
+}

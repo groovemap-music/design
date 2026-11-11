@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://groovemap.music/schemas/mb-tag-vocabulary-v1.json",
+  "title": "GrooveMap MusicBrainz tag vocabulary",
+  "description": "The MusicBrainz tags with min_uses or more uses in one named mbdump-derived dump, the input of mb-tag-genre/v1 (ADR 0020). Aggregates only.",
+  "x-license": "MIT",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["vocabulary_version", "license", "source", "rule", "min_uses", "counts", "tags"],
+  "properties": {
+    "vocabulary_version": { "const": "1" },
+    "license": { "const": "MIT" },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "url", "license", "dump", "file", "sha256", "timestamp", "scopes"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "format": "uri" },
+        "license": { "const": "CC0-1.0" },
+        "dump": { "type": "string", "pattern": "^[0-9]{8}-[0-9]{6}$" },
+        "file": { "const": "mbdump-derived.tar.bz2" },
+        "sha256": { "oneOf": [{ "type": "string", "pattern": "^[0-9a-f]{64}$" }, { "type": "null" }] },
+        "timestamp": { "type": ["string", "null"] },
+        "scopes": { "const": ["artist_tag", "label_tag", "release_tag", "release_group_tag"] },
+        "sample": { "type": "string", "minLength": 1 }
+      }
+    },
+    "rule": { "type": "string", "minLength": 1 },
+    "min_uses": { "type": "integer", "minimum": 1 },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tags_kept", "uses_kept"],
+      "properties": {
+        "distinct_tags_in_scope": { "type": "integer", "minimum": 0 },
+        "uses_in_scope": { "type": "integer", "minimum": 0 },
+        "tags_kept": { "type": "integer", "minimum": 0 },
+        "uses_kept": { "type": "integer", "minimum": 0 },
+        "per_scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["artist", "label", "release", "release_group"],
+          "properties": {
+            "artist": { "$ref": "#/$defs/scope" },
+            "label": { "$ref": "#/$defs/scope" },
+            "release": { "$ref": "#/$defs/scope" },
+            "release_group": { "$ref": "#/$defs/scope" }
+          }
+        }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["tag", "uses"],
+        "properties": { "tag": { "type": "string", "minLength": 1 }, "uses": { "type": "integer", "minimum": 1 } }
+      }
+    }
+  },
+  "$defs": {
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["uses", "distinct_tags"],
+      "properties": { "uses": { "type": "integer", "minimum": 0 }, "distinct_tags": { "type": "integer", "minimum": 0 } }
+    }
+  }
+}
