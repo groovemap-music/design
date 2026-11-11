@@ -59,6 +59,10 @@ Repository-specific recipes keep design capabilities visible instead of hiding t
 | `links` | Verify repository-local Markdown references without contacting remote services. |
 | `catalog` | Validate the canonical public repository catalog and its closed schema. |
 | `taxonomy` | Validate the canonical media vocabulary, schemas, mapper, and conformance fixtures. |
+| `tag-drift` | Compare the mb-tag-genre lookup with a newer vocabulary or tree, offline; exits 1 on broken paths and writes review work. |
+| `tag-review` | Serve the mb-tag-genre review page on localhost, offline; the page also opens from `file://`. |
+| `tag-review-build` | Rebuild the review page's data from the lookup after a merge. |
+| `tag-review-merge` | Apply a review export to the lookup, refusing a stale or unknown export. |
 | `identity` | Validate the native identity vocabulary and its schema. |
 | `events` | Validate the first-party event vocabulary, both envelope schemas, and the conformance fixtures. |
 | `identifiers` | Validate the catalog identifier vocabulary, both schemas, and the conformance fixtures. |

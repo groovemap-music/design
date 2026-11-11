@@ -1,0 +1,6302 @@
+{
+ "counts": {
+  "genres": 15,
+  "max_children": 240,
+  "pairs": 1234,
+  "styles": 757,
+  "styles_with_2plus_parents": 352
+ },
+ "genres": [
+  {
+   "children": [
+    {
+     "genre_records": 81035,
+     "records": 238417,
+     "style": "Blues Rock"
+    },
+    {
+     "genre_records": 78889,
+     "records": 232108,
+     "style": "Rhythm & Blues"
+    },
+    {
+     "genre_records": 27387,
+     "records": 27746,
+     "style": "Electric Blues"
+    },
+    {
+     "genre_records": 24939,
+     "records": 25725,
+     "style": "Country Blues"
+    },
+    {
+     "genre_records": 22755,
+     "records": 22796,
+     "style": "Chicago Blues"
+    },
+    {
+     "genre_records": 11184,
+     "records": 11498,
+     "style": "Piano Blues"
+    },
+    {
+     "genre_records": 11037,
+     "records": 11106,
+     "style": "Delta Blues"
+    },
+    {
+     "genre_records": 10607,
+     "records": 10702,
+     "style": "Modern Electric Blues"
+    },
+    {
+     "genre_records": 8499,
+     "records": 8537,
+     "style": "Harmonica Blues"
+    },
+    {
+     "genre_records": 8246,
+     "records": 8385,
+     "style": "Texas Blues"
+    },
+    {
+     "genre_records": 7136,
+     "records": 7440,
+     "style": "Jump Blues"
+    },
+    {
+     "genre_records": 5992,
+     "records": 6742,
+     "style": "Boogie Woogie"
+    },
+    {
+     "genre_records": 6103,
+     "records": 6224,
+     "style": "Louisiana Blues"
+    },
+    {
+     "genre_records": 1202,
+     "records": 3865,
+     "style": "Zydeco"
+    },
+    {
+     "genre_records": 948,
+     "records": 3694,
+     "style": "Bayou Funk"
+    },
+    {
+     "genre_records": 1909,
+     "records": 1938,
+     "style": "Memphis Blues"
+    },
+    {
+     "genre_records": 1733,
+     "records": 1743,
+     "style": "East Coast Blues"
+    },
+    {
+     "genre_records": 1372,
+     "records": 1379,
+     "style": "Piedmont Blues"
+    },
+    {
+     "genre_records": 191,
+     "records": 906,
+     "style": "Stride"
+    },
+    {
+     "genre_records": 479,
+     "records": 690,
+     "style": "Jug Band"
+    },
+    {
+     "genre_records": 438,
+     "records": 440,
+     "style": "Hill Country Blues"
+    },
+    {
+     "genre_records": 127,
+     "records": 270,
+     "style": "Desert Blues"
+    }
+   ],
+   "genre": "Blues",
+   "records": 464880
+  },
+  {
+   "children": [
+    {
+     "genre_records": 28695,
+     "records": 30831,
+     "style": "Marches"
+    },
+    {
+     "genre_records": 17219,
+     "records": 18832,
+     "style": "Brass Band"
+    },
+    {
+     "genre_records": 14770,
+     "records": 15730,
+     "style": "Military"
+    },
+    {
+     "genre_records": 2678,
+     "records": 2945,
+     "style": "Pipe & Drum"
+    },
+    {
+     "genre_records": 2227,
+     "records": 2545,
+     "style": "Concert Band"
+    },
+    {
+     "genre_records": 263,
+     "records": 265,
+     "style": "Guggenmusik"
+    }
+   ],
+   "genre": "Brass & Military",
+   "records": 84290
+  },
+  {
+   "children": [
+    {
+     "genre_records": 55165,
+     "records": 57040,
+     "style": "Story"
+    },
+    {
+     "genre_records": 24967,
+     "records": 53196,
+     "style": "Radioplay"
+    },
+    {
+     "genre_records": 8620,
+     "records": 35784,
+     "style": "Audiobook"
+    },
+    {
+     "genre_records": 18441,
+     "records": 18578,
+     "style": "Nursery Rhymes"
+    },
+    {
+     "genre_records": 15029,
+     "records": 15648,
+     "style": "Educational"
+    },
+    {
+     "genre_records": 468,
+     "records": 1671,
+     "style": "Villancicos"
+    },
+    {
+     "genre_records": 713,
+     "records": 735,
+     "style": "Lullaby"
+    }
+   ],
+   "genre": "Children's",
+   "records": 214991
+  },
+  {
+   "children": [
+    {
+     "genre_records": 353929,
+     "records": 357452,
+     "style": "Romantic"
+    },
+    {
+     "genre_records": 225942,
+     "records": 228365,
+     "style": "Classical"
+    },
+    {
+     "genre_records": 163217,
+     "records": 163554,
+     "style": "Baroque"
+    },
+    {
+     "genre_records": 157399,
+     "records": 158464,
+     "style": "Modern"
+    },
+    {
+     "genre_records": 124555,
+     "records": 125267,
+     "style": "Opera"
+    },
+    {
+     "genre_records": 111422,
+     "records": 116545,
+     "style": "Contemporary"
+    },
+    {
+     "genre_records": 29218,
+     "records": 102396,
+     "style": "Religious"
+    },
+    {
+     "genre_records": 64878,
+     "records": 74551,
+     "style": "Choral"
+    },
+    {
+     "genre_records": 19622,
+     "records": 69878,
+     "style": "Modern Classical"
+    },
+    {
+     "genre_records": 63782,
+     "records": 64330,
+     "style": "Orchestra"
+    },
+    {
+     "genre_records": 36512,
+     "records": 36525,
+     "style": "Concerto"
+    },
+    {
+     "genre_records": 35032,
+     "records": 35334,
+     "style": "Piano"
+    },
+    {
+     "genre_records": 28605,
+     "records": 32769,
+     "style": "Neo-Classical"
+    },
+    {
+     "genre_records": 29978,
+     "records": 30105,
+     "style": "Renaissance"
+    },
+    {
+     "genre_records": 25906,
+     "records": 25939,
+     "style": "Symphony"
+    },
+    {
+     "genre_records": 23609,
+     "records": 23660,
+     "style": "String Instrument"
+    },
+    {
+     "genre_records": 23324,
+     "records": 23465,
+     "style": "Impressionist"
+    },
+    {
+     "genre_records": 21275,
+     "records": 22003,
+     "style": "Operetta"
+    },
+    {
+     "genre_records": 18840,
+     "records": 19901,
+     "style": "Organ"
+    },
+    {
+     "genre_records": 19703,
+     "records": 19737,
+     "style": "Chamber Music"
+    },
+    {
+     "genre_records": 18292,
+     "records": 18293,
+     "style": "Sonata"
+    },
+    {
+     "genre_records": 15119,
+     "records": 17258,
+     "style": "Medieval"
+    },
+    {
+     "genre_records": 15788,
+     "records": 16327,
+     "style": "Neo-Romantic"
+    },
+    {
+     "genre_records": 12910,
+     "records": 12941,
+     "style": "String Ensemble"
+    },
+    {
+     "genre_records": 11738,
+     "records": 11739,
+     "style": "Late Romantic"
+    },
+    {
+     "genre_records": 10024,
+     "records": 10051,
+     "style": "Oratorio"
+    },
+    {
+     "genre_records": 9719,
+     "records": 9744,
+     "style": "Suite"
+    },
+    {
+     "genre_records": 9640,
+     "records": 9706,
+     "style": "Solo"
+    },
+    {
+     "genre_records": 7442,
+     "records": 7859,
+     "style": "Post-Modern"
+    },
+    {
+     "genre_records": 6330,
+     "records": 6333,
+     "style": "Cantata"
+    },
+    {
+     "genre_records": 6244,
+     "records": 6254,
+     "style": "Mass"
+    },
+    {
+     "genre_records": 5388,
+     "records": 5592,
+     "style": "Ballet"
+    },
+    {
+     "genre_records": 5350,
+     "records": 5359,
+     "style": "Program Music"
+    },
+    {
+     "genre_records": 5015,
+     "records": 5020,
+     "style": "Theme With Variations"
+    },
+    {
+     "genre_records": 4519,
+     "records": 4524,
+     "style": "Overture"
+    },
+    {
+     "genre_records": 3891,
+     "records": 4132,
+     "style": "Dances"
+    },
+    {
+     "genre_records": 3911,
+     "records": 3913,
+     "style": "Prelude"
+    },
+    {
+     "genre_records": 3480,
+     "records": 3539,
+     "style": "Lied"
+    },
+    {
+     "genre_records": 3415,
+     "records": 3435,
+     "style": "Keyboard"
+    },
+    {
+     "genre_records": 3322,
+     "records": 3330,
+     "style": "Fantasia"
+    },
+    {
+     "genre_records": 3265,
+     "records": 3265,
+     "style": "Requiem"
+    },
+    {
+     "genre_records": 3025,
+     "records": 3164,
+     "style": "Early"
+    },
+    {
+     "genre_records": 3139,
+     "records": 3148,
+     "style": "Serenade"
+    },
+    {
+     "genre_records": 3028,
+     "records": 3031,
+     "style": "Harpsichord"
+    },
+    {
+     "genre_records": 2804,
+     "records": 2805,
+     "style": "Tone Poem"
+    },
+    {
+     "genre_records": 2698,
+     "records": 2753,
+     "style": "Zarzuela"
+    },
+    {
+     "genre_records": 2586,
+     "records": 2610,
+     "style": "Art Song"
+    },
+    {
+     "genre_records": 2533,
+     "records": 2548,
+     "style": "Woodwind Instrument"
+    },
+    {
+     "genre_records": 1599,
+     "records": 2545,
+     "style": "Concert Band"
+    },
+    {
+     "genre_records": 2320,
+     "records": 2321,
+     "style": "Rhapsody"
+    },
+    {
+     "genre_records": 2060,
+     "records": 2061,
+     "style": "Passion"
+    },
+    {
+     "genre_records": 2049,
+     "records": 2050,
+     "style": "Motet"
+    },
+    {
+     "genre_records": 1991,
+     "records": 1991,
+     "style": "Plainchant"
+    },
+    {
+     "genre_records": 1907,
+     "records": 1907,
+     "style": "Etude"
+    },
+    {
+     "genre_records": 1856,
+     "records": 1864,
+     "style": "Twelve-tone"
+    },
+    {
+     "genre_records": 1852,
+     "records": 1852,
+     "style": "Concerto Grosso"
+    },
+    {
+     "genre_records": 390,
+     "records": 1619,
+     "style": "Andalusian Classical"
+    },
+    {
+     "genre_records": 1546,
+     "records": 1547,
+     "style": "Nocturne"
+    },
+    {
+     "genre_records": 1456,
+     "records": 1458,
+     "style": "Capriccio"
+    },
+    {
+     "genre_records": 1313,
+     "records": 1353,
+     "style": "Brass Instrument"
+    },
+    {
+     "genre_records": 1290,
+     "records": 1311,
+     "style": "Wind Ensemble"
+    },
+    {
+     "genre_records": 1260,
+     "records": 1261,
+     "style": "Madrigal"
+    },
+    {
+     "genre_records": 1209,
+     "records": 1258,
+     "style": "Classical Guitar"
+    },
+    {
+     "genre_records": 267,
+     "records": 1238,
+     "style": "Sephardic"
+    },
+    {
+     "genre_records": 890,
+     "records": 890,
+     "style": "Divertimento"
+    },
+    {
+     "genre_records": 842,
+     "records": 872,
+     "style": "Serial"
+    },
+    {
+     "genre_records": 788,
+     "records": 788,
+     "style": "Magnificat"
+    },
+    {
+     "genre_records": 283,
+     "records": 702,
+     "style": "Gagaku"
+    },
+    {
+     "genre_records": 701,
+     "records": 701,
+     "style": "Te Deum"
+    },
+    {
+     "genre_records": 528,
+     "records": 579,
+     "style": "Minimalism"
+    },
+    {
+     "genre_records": 575,
+     "records": 577,
+     "style": "Bel Canto"
+    },
+    {
+     "genre_records": 436,
+     "records": 440,
+     "style": "Incidental Music"
+    },
+    {
+     "genre_records": 180,
+     "records": 254,
+     "style": "Percussion Ensemble"
+    },
+    {
+     "genre_records": 118,
+     "records": 127,
+     "style": "Atonal"
+    },
+    {
+     "genre_records": 26,
+     "records": 100,
+     "style": "Byzantine"
+    },
+    {
+     "genre_records": 23,
+     "records": 96,
+     "style": "Sokyoku"
+    },
+    {
+     "genre_records": 86,
+     "records": 86,
+     "style": "Grand Opera"
+    },
+    {
+     "genre_records": 83,
+     "records": 83,
+     "style": "Style Galant"
+    },
+    {
+     "genre_records": 78,
+     "records": 79,
+     "style": "Expressionist"
+    },
+    {
+     "genre_records": 64,
+     "records": 65,
+     "style": "Spectralism"
+    },
+    {
+     "genre_records": 53,
+     "records": 61,
+     "style": "Aleatoric"
+    },
+    {
+     "genre_records": 51,
+     "records": 51,
+     "style": "Verismo"
+    },
+    {
+     "genre_records": 47,
+     "records": 47,
+     "style": "Singspiel"
+    },
+    {
+     "genre_records": 32,
+     "records": 36,
+     "style": "Microtonal"
+    },
+    {
+     "genre_records": 31,
+     "records": 34,
+     "style": "Futurism"
+    },
+    {
+     "genre_records": 8,
+     "records": 8,
+     "style": "Formes Fixes"
+    }
+   ],
+   "genre": "Classical",
+   "records": 1403446
+  },
+  {
+   "children": [
+    {
+     "genre_records": 824730,
+     "records": 826226,
+     "style": "House"
+    },
+    {
+     "genre_records": 602918,
+     "records": 735051,
+     "style": "Experimental"
+    },
+    {
+     "genre_records": 583876,
+     "records": 605126,
+     "style": "Synth-pop"
+    },
+    {
+     "genre_records": 583886,
+     "records": 584049,
+     "style": "Techno"
+    },
+    {
+     "genre_records": 520216,
+     "records": 529461,
+     "style": "Ambient"
+    },
+    {
+     "genre_records": 168829,
+     "records": 503384,
+     "style": "Hardcore"
+    },
+    {
+     "genre_records": 274758,
+     "records": 491691,
+     "style": "Disco"
+    },
+    {
+     "genre_records": 383815,
+     "records": 397820,
+     "style": "Electro"
+    },
+    {
+     "genre_records": 344996,
+     "records": 345163,
+     "style": "Trance"
+    },
+    {
+     "genre_records": 301231,
+     "records": 306531,
+     "style": "Downtempo"
+    },
+    {
+     "genre_records": 236347,
+     "records": 298422,
+     "style": "Noise"
+    },
+    {
+     "genre_records": 64403,
+     "records": 274467,
+     "style": "Funk"
+    },
+    {
+     "genre_records": 252682,
+     "records": 252694,
+     "style": "Tech House"
+    },
+    {
+     "genre_records": 245290,
+     "records": 245380,
+     "style": "Deep House"
+    },
+    {
+     "genre_records": 210394,
+     "records": 231724,
+     "style": "Industrial"
+    },
+    {
+     "genre_records": 106651,
+     "records": 230224,
+     "style": "New Wave"
+    },
+    {
+     "genre_records": 215897,
+     "records": 215929,
+     "style": "Progressive House"
+    },
+    {
+     "genre_records": 214167,
+     "records": 214388,
+     "style": "Drum n Bass"
+    },
+    {
+     "genre_records": 200077,
+     "records": 200668,
+     "style": "Euro House"
+    },
+    {
+     "genre_records": 181639,
+     "records": 185372,
+     "style": "Abstract"
+    },
+    {
+     "genre_records": 79186,
+     "records": 168882,
+     "style": "Europop"
+    },
+    {
+     "genre_records": 161490,
+     "records": 163658,
+     "style": "Minimal"
+    },
+    {
+     "genre_records": 36928,
+     "records": 149493,
+     "style": "Indie Pop"
+    },
+    {
+     "genre_records": 133664,
+     "records": 137640,
+     "style": "Drone"
+    },
+    {
+     "genre_records": 72547,
+     "records": 135507,
+     "style": "Dub"
+    },
+    {
+     "genre_records": 132731,
+     "records": 133204,
+     "style": "Breakbeat"
+    },
+    {
+     "genre_records": 121358,
+     "records": 121360,
+     "style": "Progressive Trance"
+    },
+    {
+     "genre_records": 30574,
+     "records": 118629,
+     "style": "Contemporary R&B"
+    },
+    {
+     "genre_records": 113013,
+     "records": 113068,
+     "style": "IDM"
+    },
+    {
+     "genre_records": 26693,
+     "records": 107306,
+     "style": "Post-Punk"
+    },
+    {
+     "genre_records": 103426,
+     "records": 106896,
+     "style": "Dance-pop"
+    },
+    {
+     "genre_records": 104328,
+     "records": 105298,
+     "style": "Dark Ambient"
+    },
+    {
+     "genre_records": 104375,
+     "records": 105158,
+     "style": "Breaks"
+    },
+    {
+     "genre_records": 22663,
+     "records": 104538,
+     "style": "Art Rock"
+    },
+    {
+     "genre_records": 35646,
+     "records": 98469,
+     "style": "Pop Rap"
+    },
+    {
+     "genre_records": 20831,
+     "records": 93816,
+     "style": "Instrumental"
+    },
+    {
+     "genre_records": 33231,
+     "records": 93158,
+     "style": "Avantgarde"
+    },
+    {
+     "genre_records": 90436,
+     "records": 90492,
+     "style": "Electro House"
+    },
+    {
+     "genre_records": 89033,
+     "records": 89108,
+     "style": "Acid"
+    },
+    {
+     "genre_records": 17830,
+     "records": 88394,
+     "style": "Score"
+    },
+    {
+     "genre_records": 86969,
+     "records": 86979,
+     "style": "Hard Trance"
+    },
+    {
+     "genre_records": 24437,
+     "records": 85821,
+     "style": "Lo-Fi"
+    },
+    {
+     "genre_records": 31485,
+     "records": 78286,
+     "style": "RnB/Swing"
+    },
+    {
+     "genre_records": 76614,
+     "records": 78162,
+     "style": "Leftfield"
+    },
+    {
+     "genre_records": 23352,
+     "records": 78115,
+     "style": "Post Rock"
+    },
+    {
+     "genre_records": 77037,
+     "records": 77044,
+     "style": "Psy-Trance"
+    },
+    {
+     "genre_records": 67293,
+     "records": 75566,
+     "style": "New Age"
+    },
+    {
+     "genre_records": 74549,
+     "records": 74723,
+     "style": "Dubstep"
+    },
+    {
+     "genre_records": 17014,
+     "records": 71285,
+     "style": "J-pop"
+    },
+    {
+     "genre_records": 64806,
+     "records": 71201,
+     "style": "Hip Hop"
+    },
+    {
+     "genre_records": 19663,
+     "records": 70823,
+     "style": "Goth Rock"
+    },
+    {
+     "genre_records": 63896,
+     "records": 69878,
+     "style": "Modern Classical"
+    },
+    {
+     "genre_records": 16918,
+     "records": 66607,
+     "style": "Free Improvisation"
+    },
+    {
+     "genre_records": 66009,
+     "records": 66017,
+     "style": "Hard House"
+    },
+    {
+     "genre_records": 58032,
+     "records": 62208,
+     "style": "Trip Hop"
+    },
+    {
+     "genre_records": 16062,
+     "records": 60496,
+     "style": "Shoegaze"
+    },
+    {
+     "genre_records": 60221,
+     "records": 60265,
+     "style": "EBM"
+    },
+    {
+     "genre_records": 57590,
+     "records": 58031,
+     "style": "Italo-Disco"
+    },
+    {
+     "genre_records": 57263,
+     "records": 57340,
+     "style": "Jungle"
+    },
+    {
+     "genre_records": 27726,
+     "records": 56750,
+     "style": "Field Recording"
+    },
+    {
+     "genre_records": 56729,
+     "records": 56735,
+     "style": "Hardstyle"
+    },
+    {
+     "genre_records": 56056,
+     "records": 56259,
+     "style": "Synthwave"
+    },
+    {
+     "genre_records": 52303,
+     "records": 53245,
+     "style": "Darkwave"
+    },
+    {
+     "genre_records": 18267,
+     "records": 52945,
+     "style": "Trap"
+    },
+    {
+     "genre_records": 51183,
+     "records": 51348,
+     "style": "Garage House"
+    },
+    {
+     "genre_records": 50884,
+     "records": 51199,
+     "style": "Eurodance"
+    },
+    {
+     "genre_records": 51044,
+     "records": 51140,
+     "style": "Vaporwave"
+    },
+    {
+     "genre_records": 48204,
+     "records": 48210,
+     "style": "Happy Hardcore"
+    },
+    {
+     "genre_records": 47622,
+     "records": 47783,
+     "style": "UK Garage"
+    },
+    {
+     "genre_records": 45830,
+     "records": 47326,
+     "style": "Tribal"
+    },
+    {
+     "genre_records": 43040,
+     "records": 43121,
+     "style": "Italodance"
+    },
+    {
+     "genre_records": 34502,
+     "records": 37937,
+     "style": "Latin"
+    },
+    {
+     "genre_records": 36576,
+     "records": 37120,
+     "style": "Future Jazz"
+    },
+    {
+     "genre_records": 36458,
+     "records": 36655,
+     "style": "Harsh Noise Wall"
+    },
+    {
+     "genre_records": 36405,
+     "records": 36472,
+     "style": "Glitch"
+    },
+    {
+     "genre_records": 35421,
+     "records": 35424,
+     "style": "Dub Techno"
+    },
+    {
+     "genre_records": 10012,
+     "records": 34558,
+     "style": "Space Rock"
+    },
+    {
+     "genre_records": 17913,
+     "records": 34200,
+     "style": "Krautrock"
+    },
+    {
+     "genre_records": 33834,
+     "records": 33841,
+     "style": "Gabber"
+    },
+    {
+     "genre_records": 32802,
+     "records": 32808,
+     "style": "Breakcore"
+    },
+    {
+     "genre_records": 10309,
+     "records": 32769,
+     "style": "Neo-Classical"
+    },
+    {
+     "genre_records": 31407,
+     "records": 31479,
+     "style": "Power Electronics"
+    },
+    {
+     "genre_records": 31239,
+     "records": 31392,
+     "style": "Hi NRG"
+    },
+    {
+     "genre_records": 30869,
+     "records": 31097,
+     "style": "Dungeon Synth"
+    },
+    {
+     "genre_records": 11253,
+     "records": 31094,
+     "style": "Reggae-Pop"
+    },
+    {
+     "genre_records": 14013,
+     "records": 31020,
+     "style": "Boogie"
+    },
+    {
+     "genre_records": 30497,
+     "records": 30510,
+     "style": "Acid House"
+    },
+    {
+     "genre_records": 30295,
+     "records": 30300,
+     "style": "Minimal Techno"
+    },
+    {
+     "genre_records": 28763,
+     "records": 28901,
+     "style": "Nu-Disco"
+    },
+    {
+     "genre_records": 27562,
+     "records": 28433,
+     "style": "Musique Concrète"
+    },
+    {
+     "genre_records": 19931,
+     "records": 27504,
+     "style": "Bass Music"
+    },
+    {
+     "genre_records": 26034,
+     "records": 26132,
+     "style": "Chiptune"
+    },
+    {
+     "genre_records": 25341,
+     "records": 25347,
+     "style": "Berlin-School"
+    },
+    {
+     "genre_records": 23626,
+     "records": 25281,
+     "style": "Acid Jazz"
+    },
+    {
+     "genre_records": 24969,
+     "records": 25246,
+     "style": "Freestyle"
+    },
+    {
+     "genre_records": 24732,
+     "records": 24750,
+     "style": "Tribal House"
+    },
+    {
+     "genre_records": 24157,
+     "records": 24235,
+     "style": "Big Beat"
+    },
+    {
+     "genre_records": 4970,
+     "records": 23547,
+     "style": "Psychedelic"
+    },
+    {
+     "genre_records": 6835,
+     "records": 22931,
+     "style": "Neo Soul"
+    },
+    {
+     "genre_records": 22617,
+     "records": 22709,
+     "style": "Broken Beat"
+    },
+    {
+     "genre_records": 12897,
+     "records": 22551,
+     "style": "Neofolk"
+    },
+    {
+     "genre_records": 10913,
+     "records": 22427,
+     "style": "Ethereal"
+    },
+    {
+     "genre_records": 10121,
+     "records": 22104,
+     "style": "Video Game Music"
+    },
+    {
+     "genre_records": 4906,
+     "records": 21456,
+     "style": "Afrobeat"
+    },
+    {
+     "genre_records": 20685,
+     "records": 20774,
+     "style": "Chillwave"
+    },
+    {
+     "genre_records": 5241,
+     "records": 20272,
+     "style": "Lounge"
+    },
+    {
+     "genre_records": 20027,
+     "records": 20027,
+     "style": "Deep Techno"
+    },
+    {
+     "genre_records": 5975,
+     "records": 19937,
+     "style": "Dream Pop"
+    },
+    {
+     "genre_records": 19381,
+     "records": 19892,
+     "style": "Euro-Disco"
+    },
+    {
+     "genre_records": 5330,
+     "records": 19876,
+     "style": "K-pop"
+    },
+    {
+     "genre_records": 16493,
+     "records": 19451,
+     "style": "Grime"
+    },
+    {
+     "genre_records": 18793,
+     "records": 19319,
+     "style": "Hip-House"
+    },
+    {
+     "genre_records": 18903,
+     "records": 18910,
+     "style": "Goa Trance"
+    },
+    {
+     "genre_records": 18538,
+     "records": 18540,
+     "style": "Hard Techno"
+    },
+    {
+     "genre_records": 5632,
+     "records": 17740,
+     "style": "City Pop"
+    },
+    {
+     "genre_records": 17602,
+     "records": 17607,
+     "style": "Tech Trance"
+    },
+    {
+     "genre_records": 16977,
+     "records": 17077,
+     "style": "Rhythmic Noise"
+    },
+    {
+     "genre_records": 5638,
+     "records": 16767,
+     "style": "Cut-up/DJ"
+    },
+    {
+     "genre_records": 16022,
+     "records": 16022,
+     "style": "Hands Up"
+    },
+    {
+     "genre_records": 15969,
+     "records": 15976,
+     "style": "Speedcore"
+    },
+    {
+     "genre_records": 4946,
+     "records": 15971,
+     "style": "New Jack Swing"
+    },
+    {
+     "genre_records": 15345,
+     "records": 15364,
+     "style": "Eurobeat"
+    },
+    {
+     "genre_records": 3960,
+     "records": 15214,
+     "style": "Ragga"
+    },
+    {
+     "genre_records": 4488,
+     "records": 14707,
+     "style": "Alt-Pop"
+    },
+    {
+     "genre_records": 4206,
+     "records": 14651,
+     "style": "Ragga HipHop"
+    },
+    {
+     "genre_records": 14210,
+     "records": 14500,
+     "style": "Sound Collage"
+    },
+    {
+     "genre_records": 3227,
+     "records": 13894,
+     "style": "Reggaeton"
+    },
+    {
+     "genre_records": 2839,
+     "records": 13529,
+     "style": "Noisecore"
+    },
+    {
+     "genre_records": 13096,
+     "records": 13129,
+     "style": "Witch House"
+    },
+    {
+     "genre_records": 13064,
+     "records": 13064,
+     "style": "Freetekno"
+    },
+    {
+     "genre_records": 12184,
+     "records": 12184,
+     "style": "Makina"
+    },
+    {
+     "genre_records": 11895,
+     "records": 12067,
+     "style": "Electroacoustic"
+    },
+    {
+     "genre_records": 10831,
+     "records": 11415,
+     "style": "Jazzdance"
+    },
+    {
+     "genre_records": 6887,
+     "records": 11178,
+     "style": "Coldwave"
+    },
+    {
+     "genre_records": 3161,
+     "records": 10947,
+     "style": "Bubblegum"
+    },
+    {
+     "genre_records": 9698,
+     "records": 9722,
+     "style": "New Beat"
+    },
+    {
+     "genre_records": 9510,
+     "records": 9511,
+     "style": "Italo House"
+    },
+    {
+     "genre_records": 3874,
+     "records": 9321,
+     "style": "Industrial Metal"
+    },
+    {
+     "genre_records": 5029,
+     "records": 9307,
+     "style": "Sound Art"
+    },
+    {
+     "genre_records": 3562,
+     "records": 9194,
+     "style": "Therapy"
+    },
+    {
+     "genre_records": 2789,
+     "records": 9081,
+     "style": "No Wave"
+    },
+    {
+     "genre_records": 2448,
+     "records": 8972,
+     "style": "Cloud Rap"
+    },
+    {
+     "genre_records": 2056,
+     "records": 8652,
+     "style": "Special Effects"
+    },
+    {
+     "genre_records": 8511,
+     "records": 8520,
+     "style": "Jumpstyle"
+    },
+    {
+     "genre_records": 2786,
+     "records": 8368,
+     "style": "Cantopop"
+    },
+    {
+     "genre_records": 1795,
+     "records": 8288,
+     "style": "Latin Pop"
+    },
+    {
+     "genre_records": 8183,
+     "records": 8191,
+     "style": "Speed Garage"
+    },
+    {
+     "genre_records": 1867,
+     "records": 7859,
+     "style": "Post-Modern"
+    },
+    {
+     "genre_records": 1628,
+     "records": 7356,
+     "style": "P.Funk"
+    },
+    {
+     "genre_records": 6832,
+     "records": 6862,
+     "style": "Illbient"
+    },
+    {
+     "genre_records": 6800,
+     "records": 6812,
+     "style": "Bassline"
+    },
+    {
+     "genre_records": 6680,
+     "records": 6681,
+     "style": "Donk"
+    },
+    {
+     "genre_records": 1495,
+     "records": 6521,
+     "style": "Screw"
+    },
+    {
+     "genre_records": 1321,
+     "records": 5772,
+     "style": "Ethno-pop"
+    },
+    {
+     "genre_records": 5466,
+     "records": 5473,
+     "style": "Juke"
+    },
+    {
+     "genre_records": 1518,
+     "records": 5363,
+     "style": "Music Video"
+    },
+    {
+     "genre_records": 5114,
+     "records": 5124,
+     "style": "Electroclash"
+    },
+    {
+     "genre_records": 5077,
+     "records": 5097,
+     "style": "Dark Electro"
+    },
+    {
+     "genre_records": 4538,
+     "records": 4789,
+     "style": "Disco Polo"
+    },
+    {
+     "genre_records": 1081,
+     "records": 4673,
+     "style": "Health-Fitness"
+    },
+    {
+     "genre_records": 4509,
+     "records": 4517,
+     "style": "Tropical House"
+    },
+    {
+     "genre_records": 4491,
+     "records": 4493,
+     "style": "Progressive Breaks"
+    },
+    {
+     "genre_records": 1416,
+     "records": 4444,
+     "style": "DJ Battle Tool"
+    },
+    {
+     "genre_records": 4333,
+     "records": 4382,
+     "style": "Balearic"
+    },
+    {
+     "genre_records": 4337,
+     "records": 4337,
+     "style": "Halftime"
+    },
+    {
+     "genre_records": 1210,
+     "records": 4164,
+     "style": "Turntablism"
+    },
+    {
+     "genre_records": 4083,
+     "records": 4143,
+     "style": "Ghetto"
+    },
+    {
+     "genre_records": 3835,
+     "records": 3887,
+     "style": "Hyperpop"
+    },
+    {
+     "genre_records": 3851,
+     "records": 3861,
+     "style": "Footwork"
+    },
+    {
+     "genre_records": 1636,
+     "records": 3854,
+     "style": "Swingbeat"
+    },
+    {
+     "genre_records": 3645,
+     "records": 3678,
+     "style": "Plunderphonics"
+    },
+    {
+     "genre_records": 1090,
+     "records": 3669,
+     "style": "Free Funk"
+    },
+    {
+     "genre_records": 3466,
+     "records": 3494,
+     "style": "Glitch Hop"
+    },
+    {
+     "genre_records": 3380,
+     "records": 3382,
+     "style": "J-Core"
+    },
+    {
+     "genre_records": 1264,
+     "records": 3205,
+     "style": "Sound Poetry"
+    },
+    {
+     "genre_records": 3137,
+     "records": 3140,
+     "style": "Schranz"
+    },
+    {
+     "genre_records": 3068,
+     "records": 3074,
+     "style": "Doomcore"
+    },
+    {
+     "genre_records": 1358,
+     "records": 3056,
+     "style": "Miami Bass"
+    },
+    {
+     "genre_records": 2944,
+     "records": 2944,
+     "style": "Ghetto House"
+    },
+    {
+     "genre_records": 1697,
+     "records": 2928,
+     "style": "Kwaito"
+    },
+    {
+     "genre_records": 749,
+     "records": 2921,
+     "style": "Movie Effects"
+    },
+    {
+     "genre_records": 2874,
+     "records": 2874,
+     "style": "Bleep"
+    },
+    {
+     "genre_records": 2713,
+     "records": 2714,
+     "style": "Future House"
+    },
+    {
+     "genre_records": 1419,
+     "records": 2465,
+     "style": "NDW"
+    },
+    {
+     "genre_records": 2440,
+     "records": 2443,
+     "style": "Future Bass"
+    },
+    {
+     "genre_records": 669,
+     "records": 2329,
+     "style": "Phonk"
+    },
+    {
+     "genre_records": 850,
+     "records": 2132,
+     "style": "UK Street Soul"
+    },
+    {
+     "genre_records": 2111,
+     "records": 2116,
+     "style": "Ambient House"
+    },
+    {
+     "genre_records": 2027,
+     "records": 2029,
+     "style": "Neo Trance"
+    },
+    {
+     "genre_records": 1905,
+     "records": 1917,
+     "style": "Ghettotech"
+    },
+    {
+     "genre_records": 1783,
+     "records": 1897,
+     "style": "Beatdown"
+    },
+    {
+     "genre_records": 997,
+     "records": 1828,
+     "style": "Favela Funk"
+    },
+    {
+     "genre_records": 1817,
+     "records": 1822,
+     "style": "French House"
+    },
+    {
+     "genre_records": 1500,
+     "records": 1625,
+     "style": "Vocaloid"
+    },
+    {
+     "genre_records": 964,
+     "records": 1616,
+     "style": "Dark Jazz"
+    },
+    {
+     "genre_records": 1517,
+     "records": 1519,
+     "style": "UK Funky"
+    },
+    {
+     "genre_records": 1475,
+     "records": 1477,
+     "style": "Deconstructed Club"
+    },
+    {
+     "genre_records": 1371,
+     "records": 1384,
+     "style": "Electro Swing"
+    },
+    {
+     "genre_records": 1294,
+     "records": 1301,
+     "style": "Baltimore Club"
+    },
+    {
+     "genre_records": 323,
+     "records": 1245,
+     "style": "Overtone Singing"
+    },
+    {
+     "genre_records": 1202,
+     "records": 1202,
+     "style": "Comfy Synth"
+    },
+    {
+     "genre_records": 1125,
+     "records": 1125,
+     "style": "Lento Violento"
+    },
+    {
+     "genre_records": 1072,
+     "records": 1114,
+     "style": "Jersey Club"
+    },
+    {
+     "genre_records": 972,
+     "records": 1011,
+     "style": "Synthpunk"
+    },
+    {
+     "genre_records": 241,
+     "records": 1002,
+     "style": "Beatbox"
+    },
+    {
+     "genre_records": 991,
+     "records": 993,
+     "style": "Hard Beat"
+    },
+    {
+     "genre_records": 670,
+     "records": 952,
+     "style": "Hypnagogic pop"
+    },
+    {
+     "genre_records": 948,
+     "records": 948,
+     "style": "Nerdcore Techno"
+    },
+    {
+     "genre_records": 888,
+     "records": 888,
+     "style": "Microhouse"
+    },
+    {
+     "genre_records": 854,
+     "records": 854,
+     "style": "Euro Trance"
+    },
+    {
+     "genre_records": 610,
+     "records": 850,
+     "style": "Future Pop"
+    },
+    {
+     "genre_records": 831,
+     "records": 831,
+     "style": "Bouncy Techno"
+    },
+    {
+     "genre_records": 818,
+     "records": 826,
+     "style": "Ballroom"
+    },
+    {
+     "genre_records": 247,
+     "records": 763,
+     "style": "Occult"
+    },
+    {
+     "genre_records": 745,
+     "records": 745,
+     "style": "Hyper Techno"
+    },
+    {
+     "genre_records": 722,
+     "records": 725,
+     "style": "Skweee"
+    },
+    {
+     "genre_records": 140,
+     "records": 646,
+     "style": "Kizomba"
+    },
+    {
+     "genre_records": 623,
+     "records": 630,
+     "style": "Moombahton"
+    },
+    {
+     "genre_records": 593,
+     "records": 593,
+     "style": "Funkot"
+    },
+    {
+     "genre_records": 145,
+     "records": 579,
+     "style": "Minimalism"
+    },
+    {
+     "genre_records": 515,
+     "records": 518,
+     "style": "Bitpop"
+    },
+    {
+     "genre_records": 305,
+     "records": 462,
+     "style": "Shibuya-Kei"
+    },
+    {
+     "genre_records": 348,
+     "records": 461,
+     "style": "Nintendocore"
+    },
+    {
+     "genre_records": 445,
+     "records": 459,
+     "style": "Lowercase"
+    },
+    {
+     "genre_records": 346,
+     "records": 361,
+     "style": "Amapiano"
+    },
+    {
+     "genre_records": 72,
+     "records": 360,
+     "style": "Antifolk"
+    },
+    {
+     "genre_records": 251,
+     "records": 307,
+     "style": "Kuduro"
+    },
+    {
+     "genre_records": 88,
+     "records": 301,
+     "style": "Neopagan"
+    },
+    {
+     "genre_records": 298,
+     "records": 300,
+     "style": "Gqom"
+    },
+    {
+     "genre_records": 82,
+     "records": 290,
+     "style": "Bubbling"
+    },
+    {
+     "genre_records": 71,
+     "records": 279,
+     "style": "Zhongguo Feng"
+    },
+    {
+     "genre_records": 164,
+     "records": 164,
+     "style": "Suomisaundi"
+    },
+    {
+     "genre_records": 21,
+     "records": 96,
+     "style": "Motswako"
+    },
+    {
+     "genre_records": 18,
+     "records": 71,
+     "style": "Spaza"
+    },
+    {
+     "genre_records": 20,
+     "records": 65,
+     "style": "Spectralism"
+    },
+    {
+     "genre_records": 19,
+     "records": 64,
+     "style": "Azonto"
+    },
+    {
+     "genre_records": 24,
+     "records": 61,
+     "style": "Aleatoric"
+    },
+    {
+     "genre_records": 40,
+     "records": 43,
+     "style": "Singeli"
+    },
+    {
+     "genre_records": 14,
+     "records": 36,
+     "style": "Microtonal"
+    },
+    {
+     "genre_records": 12,
+     "records": 34,
+     "style": "Futurism"
+    }
+   ],
+   "genre": "Electronic",
+   "records": 5741220
+  },
+  {
+   "children": [
+    {
+     "genre_records": 492010,
+     "records": 502746,
+     "style": "Folk"
+    },
+    {
+     "genre_records": 445388,
+     "records": 449550,
+     "style": "Country"
+    },
+    {
+     "genre_records": 112509,
+     "records": 312993,
+     "style": "Folk Rock"
+    },
+    {
+     "genre_records": 100171,
+     "records": 183993,
+     "style": "Gospel"
+    },
+    {
+     "genre_records": 46596,
+     "records": 160084,
+     "style": "Acoustic"
+    },
+    {
+     "genre_records": 56076,
+     "records": 134579,
+     "style": "Country Rock"
+    },
+    {
+     "genre_records": 43665,
+     "records": 124835,
+     "style": "Holiday"
+    },
+    {
+     "genre_records": 108290,
+     "records": 110817,
+     "style": "African"
+    },
+    {
+     "genre_records": 47106,
+     "records": 102396,
+     "style": "Religious"
+    },
+    {
+     "genre_records": 17411,
+     "records": 75566,
+     "style": "New Age"
+    },
+    {
+     "genre_records": 15295,
+     "records": 74551,
+     "style": "Choral"
+    },
+    {
+     "genre_records": 61895,
+     "records": 62221,
+     "style": "Volksmusik"
+    },
+    {
+     "genre_records": 12917,
+     "records": 56026,
+     "style": "Tango"
+    },
+    {
+     "genre_records": 52234,
+     "records": 52828,
+     "style": "Celtic"
+    },
+    {
+     "genre_records": 51275,
+     "records": 51484,
+     "style": "Bluegrass"
+    },
+    {
+     "genre_records": 49908,
+     "records": 50509,
+     "style": "Laïkó"
+    },
+    {
+     "genre_records": 48326,
+     "records": 49818,
+     "style": "Polka"
+    },
+    {
+     "genre_records": 28328,
+     "records": 45232,
+     "style": "Flamenco"
+    },
+    {
+     "genre_records": 18227,
+     "records": 39295,
+     "style": "Rumba"
+    },
+    {
+     "genre_records": 37974,
+     "records": 39121,
+     "style": "Hindustani"
+    },
+    {
+     "genre_records": 26682,
+     "records": 30876,
+     "style": "Bollywood"
+    },
+    {
+     "genre_records": 6335,
+     "records": 30831,
+     "style": "Marches"
+    },
+    {
+     "genre_records": 11269,
+     "records": 25725,
+     "style": "Country Blues"
+    },
+    {
+     "genre_records": 24510,
+     "records": 24677,
+     "style": "Indian Classical"
+    },
+    {
+     "genre_records": 4787,
+     "records": 23547,
+     "style": "Psychedelic"
+    },
+    {
+     "genre_records": 8935,
+     "records": 23484,
+     "style": "Calypso"
+    },
+    {
+     "genre_records": 8606,
+     "records": 22551,
+     "style": "Neofolk"
+    },
+    {
+     "genre_records": 19951,
+     "records": 21770,
+     "style": "Canzone Napoletana"
+    },
+    {
+     "genre_records": 9032,
+     "records": 21456,
+     "style": "Afrobeat"
+    },
+    {
+     "genre_records": 6065,
+     "records": 20957,
+     "style": "Afro-Cuban"
+    },
+    {
+     "genre_records": 18681,
+     "records": 19442,
+     "style": "Éntekhno"
+    },
+    {
+     "genre_records": 6175,
+     "records": 18832,
+     "style": "Brass Band"
+    },
+    {
+     "genre_records": 3817,
+     "records": 17258,
+     "style": "Medieval"
+    },
+    {
+     "genre_records": 15575,
+     "records": 16129,
+     "style": "Pacific"
+    },
+    {
+     "genre_records": 15459,
+     "records": 15853,
+     "style": "Nordic"
+    },
+    {
+     "genre_records": 14835,
+     "records": 15256,
+     "style": "Honky Tonk"
+    },
+    {
+     "genre_records": 3715,
+     "records": 15204,
+     "style": "Mariachi"
+    },
+    {
+     "genre_records": 4755,
+     "records": 14310,
+     "style": "Political"
+    },
+    {
+     "genre_records": 10213,
+     "records": 14304,
+     "style": "Romani"
+    },
+    {
+     "genre_records": 13818,
+     "records": 14159,
+     "style": "Hawaiian"
+    },
+    {
+     "genre_records": 14088,
+     "records": 14142,
+     "style": "Fado"
+    },
+    {
+     "genre_records": 3587,
+     "records": 13098,
+     "style": "Soca"
+    },
+    {
+     "genre_records": 13006,
+     "records": 13045,
+     "style": "Soukous"
+    },
+    {
+     "genre_records": 12743,
+     "records": 12869,
+     "style": "Highlife"
+    },
+    {
+     "genre_records": 12142,
+     "records": 12367,
+     "style": "Zouk"
+    },
+    {
+     "genre_records": 11040,
+     "records": 11044,
+     "style": "Luk Thung"
+    },
+    {
+     "genre_records": 3564,
+     "records": 10429,
+     "style": "Enka"
+    },
+    {
+     "genre_records": 2553,
+     "records": 10198,
+     "style": "Corrido"
+    },
+    {
+     "genre_records": 3095,
+     "records": 9875,
+     "style": "Forró"
+    },
+    {
+     "genre_records": 8343,
+     "records": 9343,
+     "style": "Bhangra"
+    },
+    {
+     "genre_records": 2824,
+     "records": 9211,
+     "style": "Gypsy Jazz"
+    },
+    {
+     "genre_records": 9011,
+     "records": 9047,
+     "style": "Andean Music"
+    },
+    {
+     "genre_records": 8249,
+     "records": 8377,
+     "style": "Cajun"
+    },
+    {
+     "genre_records": 7834,
+     "records": 7890,
+     "style": "Hillbilly"
+    },
+    {
+     "genre_records": 7513,
+     "records": 7768,
+     "style": "Chinese Classical"
+    },
+    {
+     "genre_records": 6915,
+     "records": 7022,
+     "style": "Raï"
+    },
+    {
+     "genre_records": 6896,
+     "records": 6928,
+     "style": "Rebetiko"
+    },
+    {
+     "genre_records": 3382,
+     "records": 6430,
+     "style": "Beguine"
+    },
+    {
+     "genre_records": 4703,
+     "records": 6024,
+     "style": "Nueva Cancion"
+    },
+    {
+     "genre_records": 5958,
+     "records": 6017,
+     "style": "Western Swing"
+    },
+    {
+     "genre_records": 5910,
+     "records": 5946,
+     "style": "Séga"
+    },
+    {
+     "genre_records": 4111,
+     "records": 5935,
+     "style": "Copla"
+    },
+    {
+     "genre_records": 5848,
+     "records": 5898,
+     "style": "Min'yō"
+    },
+    {
+     "genre_records": 3227,
+     "records": 5772,
+     "style": "Ethno-pop"
+    },
+    {
+     "genre_records": 5529,
+     "records": 5625,
+     "style": "Klezmer"
+    },
+    {
+     "genre_records": 5543,
+     "records": 5550,
+     "style": "Carnatic"
+    },
+    {
+     "genre_records": 5155,
+     "records": 5548,
+     "style": "Pasodoble"
+    },
+    {
+     "genre_records": 5402,
+     "records": 5540,
+     "style": "Aboriginal"
+    },
+    {
+     "genre_records": 3844,
+     "records": 5215,
+     "style": "Compas"
+    },
+    {
+     "genre_records": 4498,
+     "records": 4829,
+     "style": "Catalan Music"
+    },
+    {
+     "genre_records": 4756,
+     "records": 4772,
+     "style": "Appalachian Music"
+    },
+    {
+     "genre_records": 2370,
+     "records": 4696,
+     "style": "Música Criolla"
+    },
+    {
+     "genre_records": 4591,
+     "records": 4668,
+     "style": "Huayno"
+    },
+    {
+     "genre_records": 1040,
+     "records": 4575,
+     "style": "Conjunto"
+    },
+    {
+     "genre_records": 2803,
+     "records": 4537,
+     "style": "Musette"
+    },
+    {
+     "genre_records": 3981,
+     "records": 4072,
+     "style": "Sea Shanties"
+    },
+    {
+     "genre_records": 4033,
+     "records": 4037,
+     "style": "Népzene"
+    },
+    {
+     "genre_records": 3739,
+     "records": 3865,
+     "style": "Zydeco"
+    },
+    {
+     "genre_records": 1258,
+     "records": 3845,
+     "style": "Batucada"
+    },
+    {
+     "genre_records": 3198,
+     "records": 3640,
+     "style": "Quechua"
+    },
+    {
+     "genre_records": 3505,
+     "records": 3572,
+     "style": "Bakersfield Sound"
+    },
+    {
+     "genre_records": 3462,
+     "records": 3466,
+     "style": "Cretan"
+    },
+    {
+     "genre_records": 1412,
+     "records": 3397,
+     "style": "Baião"
+    },
+    {
+     "genre_records": 3310,
+     "records": 3324,
+     "style": "Liscio"
+    },
+    {
+     "genre_records": 791,
+     "records": 3168,
+     "style": "Choro"
+    },
+    {
+     "genre_records": 794,
+     "records": 3164,
+     "style": "Early"
+    },
+    {
+     "genre_records": 3124,
+     "records": 3149,
+     "style": "Sertanejo"
+    },
+    {
+     "genre_records": 1391,
+     "records": 3145,
+     "style": "Steel Band"
+    },
+    {
+     "genre_records": 923,
+     "records": 3120,
+     "style": "Swamp Pop"
+    },
+    {
+     "genre_records": 3095,
+     "records": 3100,
+     "style": "Ghazal"
+    },
+    {
+     "genre_records": 938,
+     "records": 2945,
+     "style": "Pipe & Drum"
+    },
+    {
+     "genre_records": 891,
+     "records": 2928,
+     "style": "Kwaito"
+    },
+    {
+     "genre_records": 1072,
+     "records": 2923,
+     "style": "Skiffle"
+    },
+    {
+     "genre_records": 2859,
+     "records": 2893,
+     "style": "Mizrahi"
+    },
+    {
+     "genre_records": 657,
+     "records": 2753,
+     "style": "Zarzuela"
+    },
+    {
+     "genre_records": 2717,
+     "records": 2750,
+     "style": "Zamba"
+    },
+    {
+     "genre_records": 2745,
+     "records": 2747,
+     "style": "Mo Lam"
+    },
+    {
+     "genre_records": 2643,
+     "records": 2722,
+     "style": "Gamelan"
+    },
+    {
+     "genre_records": 2636,
+     "records": 2636,
+     "style": "Kolo"
+    },
+    {
+     "genre_records": 2622,
+     "records": 2633,
+     "style": "Ottoman Classical"
+    },
+    {
+     "genre_records": 2597,
+     "records": 2626,
+     "style": "Persian Classical"
+    },
+    {
+     "genre_records": 2602,
+     "records": 2610,
+     "style": "Chamamé"
+    },
+    {
+     "genre_records": 2424,
+     "records": 2578,
+     "style": "Spirituals"
+    },
+    {
+     "genre_records": 1518,
+     "records": 2553,
+     "style": "Exotica"
+    },
+    {
+     "genre_records": 961,
+     "records": 2551,
+     "style": "Trova"
+    },
+    {
+     "genre_records": 1386,
+     "records": 2493,
+     "style": "Shidaiqu"
+    },
+    {
+     "genre_records": 2302,
+     "records": 2453,
+     "style": "Basque Music"
+    },
+    {
+     "genre_records": 2414,
+     "records": 2425,
+     "style": "Qawwali"
+    },
+    {
+     "genre_records": 1196,
+     "records": 2421,
+     "style": "Nueva Trova"
+    },
+    {
+     "genre_records": 2346,
+     "records": 2365,
+     "style": "Chacarera"
+    },
+    {
+     "genre_records": 2318,
+     "records": 2328,
+     "style": "Bengali Music"
+    },
+    {
+     "genre_records": 502,
+     "records": 2327,
+     "style": "Gaita"
+    },
+    {
+     "genre_records": 2208,
+     "records": 2242,
+     "style": "Dangdut"
+    },
+    {
+     "genre_records": 2181,
+     "records": 2193,
+     "style": "Luk Krung"
+    },
+    {
+     "genre_records": 1995,
+     "records": 2025,
+     "style": "Chutney"
+    },
+    {
+     "genre_records": 1077,
+     "records": 1992,
+     "style": "Joropo"
+    },
+    {
+     "genre_records": 1907,
+     "records": 1925,
+     "style": "Nhạc Vàng"
+    },
+    {
+     "genre_records": 1519,
+     "records": 1836,
+     "style": "Occitan"
+    },
+    {
+     "genre_records": 1813,
+     "records": 1823,
+     "style": "Caipira"
+    },
+    {
+     "genre_records": 1772,
+     "records": 1775,
+     "style": "Tamil Film Music"
+    },
+    {
+     "genre_records": 410,
+     "records": 1759,
+     "style": "Reggae Gospel"
+    },
+    {
+     "genre_records": 1744,
+     "records": 1744,
+     "style": "Izvorna"
+    },
+    {
+     "genre_records": 677,
+     "records": 1717,
+     "style": "Jibaro"
+    },
+    {
+     "genre_records": 649,
+     "records": 1695,
+     "style": "Marimba"
+    },
+    {
+     "genre_records": 1098,
+     "records": 1671,
+     "style": "Villancicos"
+    },
+    {
+     "genre_records": 1570,
+     "records": 1619,
+     "style": "Andalusian Classical"
+    },
+    {
+     "genre_records": 1547,
+     "records": 1547,
+     "style": "Gusle"
+    },
+    {
+     "genre_records": 1535,
+     "records": 1543,
+     "style": "Keroncong"
+    },
+    {
+     "genre_records": 1365,
+     "records": 1520,
+     "style": "Milonga"
+    },
+    {
+     "genre_records": 1497,
+     "records": 1519,
+     "style": "Kaseko"
+    },
+    {
+     "genre_records": 1486,
+     "records": 1512,
+     "style": "Guarania"
+    },
+    {
+     "genre_records": 956,
+     "records": 1410,
+     "style": "Arabic Pop"
+    },
+    {
+     "genre_records": 1372,
+     "records": 1372,
+     "style": "Morna"
+    },
+    {
+     "genre_records": 474,
+     "records": 1368,
+     "style": "Cape Jazz"
+    },
+    {
+     "genre_records": 1298,
+     "records": 1333,
+     "style": "Maloya"
+    },
+    {
+     "genre_records": 1272,
+     "records": 1303,
+     "style": "Jota"
+    },
+    {
+     "genre_records": 381,
+     "records": 1248,
+     "style": "Mento"
+    },
+    {
+     "genre_records": 1132,
+     "records": 1245,
+     "style": "Overtone Singing"
+    },
+    {
+     "genre_records": 1197,
+     "records": 1238,
+     "style": "Sephardic"
+    },
+    {
+     "genre_records": 1173,
+     "records": 1191,
+     "style": "Galician Traditional"
+    },
+    {
+     "genre_records": 1184,
+     "records": 1191,
+     "style": "Zemer Ivri"
+    },
+    {
+     "genre_records": 398,
+     "records": 1181,
+     "style": "Aguinaldo"
+    },
+    {
+     "genre_records": 1136,
+     "records": 1151,
+     "style": "Salegy"
+    },
+    {
+     "genre_records": 1109,
+     "records": 1110,
+     "style": "Mbalax"
+    },
+    {
+     "genre_records": 1090,
+     "records": 1092,
+     "style": "Griot"
+    },
+    {
+     "genre_records": 573,
+     "records": 1044,
+     "style": "Bambuco"
+    },
+    {
+     "genre_records": 1024,
+     "records": 1026,
+     "style": "Phleng Phuea Chiwit"
+    },
+    {
+     "genre_records": 530,
+     "records": 1004,
+     "style": "Candombe"
+    },
+    {
+     "genre_records": 495,
+     "records": 961,
+     "style": "Cuatro"
+    },
+    {
+     "genre_records": 918,
+     "records": 926,
+     "style": "Thai Classical"
+    },
+    {
+     "genre_records": 906,
+     "records": 917,
+     "style": "Shaabi"
+    },
+    {
+     "genre_records": 863,
+     "records": 877,
+     "style": "Mugham"
+    },
+    {
+     "genre_records": 428,
+     "records": 866,
+     "style": "Champeta"
+    },
+    {
+     "genre_records": 849,
+     "records": 860,
+     "style": "Cantorial"
+    },
+    {
+     "genre_records": 803,
+     "records": 809,
+     "style": "Funaná"
+    },
+    {
+     "genre_records": 319,
+     "records": 737,
+     "style": "Carimbó"
+    },
+    {
+     "genre_records": 682,
+     "records": 702,
+     "style": "Gagaku"
+    },
+    {
+     "genre_records": 471,
+     "records": 690,
+     "style": "Jug Band"
+    },
+    {
+     "genre_records": 681,
+     "records": 684,
+     "style": "Philippine Classical"
+    },
+    {
+     "genre_records": 664,
+     "records": 664,
+     "style": "Geet"
+    },
+    {
+     "genre_records": 654,
+     "records": 662,
+     "style": "Sámi Music"
+    },
+    {
+     "genre_records": 628,
+     "records": 646,
+     "style": "Kizomba"
+    },
+    {
+     "genre_records": 595,
+     "records": 598,
+     "style": "Gwo Ka"
+    },
+    {
+     "genre_records": 572,
+     "records": 575,
+     "style": "Yemenite Jewish"
+    },
+    {
+     "genre_records": 568,
+     "records": 569,
+     "style": "Progressive Bluegrass"
+    },
+    {
+     "genre_records": 145,
+     "records": 569,
+     "style": "V-pop"
+    },
+    {
+     "genre_records": 562,
+     "records": 564,
+     "style": "Cobla"
+    },
+    {
+     "genre_records": 229,
+     "records": 561,
+     "style": "Frevo"
+    },
+    {
+     "genre_records": 503,
+     "records": 529,
+     "style": "Waiata"
+    },
+    {
+     "genre_records": 105,
+     "records": 440,
+     "style": "Hill Country Blues"
+    },
+    {
+     "genre_records": 393,
+     "records": 422,
+     "style": "Mouth Music"
+    },
+    {
+     "genre_records": 292,
+     "records": 411,
+     "style": "Néo Kyma"
+    },
+    {
+     "genre_records": 405,
+     "records": 411,
+     "style": "Taarab"
+    },
+    {
+     "genre_records": 221,
+     "records": 400,
+     "style": "Persian Pop"
+    },
+    {
+     "genre_records": 213,
+     "records": 394,
+     "style": "Junkanoo"
+    },
+    {
+     "genre_records": 389,
+     "records": 390,
+     "style": "Korean Court Music"
+    },
+    {
+     "genre_records": 383,
+     "records": 388,
+     "style": "Rune Singing"
+    },
+    {
+     "genre_records": 367,
+     "records": 382,
+     "style": "Filk"
+    },
+    {
+     "genre_records": 375,
+     "records": 375,
+     "style": "Tamburitza"
+    },
+    {
+     "genre_records": 92,
+     "records": 361,
+     "style": "Amapiano"
+    },
+    {
+     "genre_records": 336,
+     "records": 360,
+     "style": "Antifolk"
+    },
+    {
+     "genre_records": 346,
+     "records": 354,
+     "style": "Cambodian Classical"
+    },
+    {
+     "genre_records": 336,
+     "records": 339,
+     "style": "Piobaireachd"
+    },
+    {
+     "genre_records": 252,
+     "records": 332,
+     "style": "Anatolian Rock"
+    },
+    {
+     "genre_records": 325,
+     "records": 331,
+     "style": "Gnawa"
+    },
+    {
+     "genre_records": 274,
+     "records": 307,
+     "style": "Kuduro"
+    },
+    {
+     "genre_records": 281,
+     "records": 301,
+     "style": "Neopagan"
+    },
+    {
+     "genre_records": 62,
+     "records": 300,
+     "style": "Gqom"
+    },
+    {
+     "genre_records": 73,
+     "records": 279,
+     "style": "Zhongguo Feng"
+    },
+    {
+     "genre_records": 278,
+     "records": 278,
+     "style": "Sean-nós"
+    },
+    {
+     "genre_records": 83,
+     "records": 275,
+     "style": "Rapso"
+    },
+    {
+     "genre_records": 266,
+     "records": 270,
+     "style": "Desert Blues"
+    },
+    {
+     "genre_records": 119,
+     "records": 270,
+     "style": "Duranguense"
+    },
+    {
+     "genre_records": 104,
+     "records": 265,
+     "style": "Guggenmusik"
+    },
+    {
+     "genre_records": 72,
+     "records": 254,
+     "style": "Percussion Ensemble"
+    },
+    {
+     "genre_records": 222,
+     "records": 244,
+     "style": "Rōkyoku"
+    },
+    {
+     "genre_records": 221,
+     "records": 222,
+     "style": "Nagauta"
+    },
+    {
+     "genre_records": 207,
+     "records": 209,
+     "style": "Klasik"
+    },
+    {
+     "genre_records": 205,
+     "records": 206,
+     "style": "Lao Music"
+    },
+    {
+     "genre_records": 188,
+     "records": 188,
+     "style": "Bangladeshi Classical"
+    },
+    {
+     "genre_records": 165,
+     "records": 165,
+     "style": "Għana"
+    },
+    {
+     "genre_records": 158,
+     "records": 164,
+     "style": "Currulao"
+    },
+    {
+     "genre_records": 120,
+     "records": 122,
+     "style": "Khaliji"
+    },
+    {
+     "genre_records": 111,
+     "records": 111,
+     "style": "Yoruba"
+    },
+    {
+     "genre_records": 99,
+     "records": 100,
+     "style": "Byzantine"
+    },
+    {
+     "genre_records": 96,
+     "records": 96,
+     "style": "Sokyoku"
+    },
+    {
+     "genre_records": 86,
+     "records": 91,
+     "style": "Baila"
+    },
+    {
+     "genre_records": 64,
+     "records": 67,
+     "style": "Dabke"
+    },
+    {
+     "genre_records": 23,
+     "records": 64,
+     "style": "Azonto"
+    },
+    {
+     "genre_records": 57,
+     "records": 57,
+     "style": "Jiuta"
+    },
+    {
+     "genre_records": 56,
+     "records": 56,
+     "style": "Shomyo"
+    },
+    {
+     "genre_records": 54,
+     "records": 55,
+     "style": "Trallalero"
+    },
+    {
+     "genre_records": 50,
+     "records": 50,
+     "style": "Honkyoku"
+    },
+    {
+     "genre_records": 39,
+     "records": 43,
+     "style": "Singeli"
+    },
+    {
+     "genre_records": 34,
+     "records": 34,
+     "style": "Ojkača"
+    },
+    {
+     "genre_records": 32,
+     "records": 32,
+     "style": "Bećarac"
+    },
+    {
+     "genre_records": 27,
+     "records": 27,
+     "style": "Rara"
+    },
+    {
+     "genre_records": 24,
+     "records": 24,
+     "style": "Sankyoku"
+    },
+    {
+     "genre_records": 21,
+     "records": 21,
+     "style": "Shinkyoku"
+    },
+    {
+     "genre_records": 18,
+     "records": 18,
+     "style": "Kaskawi"
+    }
+   ],
+   "genre": "Folk, World, & Country",
+   "records": 2924969
+  },
+  {
+   "children": [
+    {
+     "genre_records": 501811,
+     "records": 512271,
+     "style": "Soul"
+    },
+    {
+     "genre_records": 293202,
+     "records": 491691,
+     "style": "Disco"
+    },
+    {
+     "genre_records": 266899,
+     "records": 274467,
+     "style": "Funk"
+    },
+    {
+     "genre_records": 162596,
+     "records": 232108,
+     "style": "Rhythm & Blues"
+    },
+    {
+     "genre_records": 76141,
+     "records": 183993,
+     "style": "Gospel"
+    },
+    {
+     "genre_records": 110403,
+     "records": 118629,
+     "style": "Contemporary R&B"
+    },
+    {
+     "genre_records": 48306,
+     "records": 86697,
+     "style": "Jazz-Funk"
+    },
+    {
+     "genre_records": 24280,
+     "records": 78286,
+     "style": "RnB/Swing"
+    },
+    {
+     "genre_records": 32584,
+     "records": 75659,
+     "style": "Soul-Jazz"
+    },
+    {
+     "genre_records": 19450,
+     "records": 57013,
+     "style": "Doo Wop"
+    },
+    {
+     "genre_records": 11176,
+     "records": 46267,
+     "style": "Smooth Jazz"
+    },
+    {
+     "genre_records": 30454,
+     "records": 31020,
+     "style": "Boogie"
+    },
+    {
+     "genre_records": 8160,
+     "records": 25281,
+     "style": "Acid Jazz"
+    },
+    {
+     "genre_records": 17708,
+     "records": 23547,
+     "style": "Psychedelic"
+    },
+    {
+     "genre_records": 22389,
+     "records": 22931,
+     "style": "Neo Soul"
+    },
+    {
+     "genre_records": 17040,
+     "records": 21456,
+     "style": "Afrobeat"
+    },
+    {
+     "genre_records": 11072,
+     "records": 17740,
+     "style": "City Pop"
+    },
+    {
+     "genre_records": 15031,
+     "records": 15971,
+     "style": "New Jack Swing"
+    },
+    {
+     "genre_records": 2394,
+     "records": 11415,
+     "style": "Jazzdance"
+    },
+    {
+     "genre_records": 2596,
+     "records": 8399,
+     "style": "Boogaloo"
+    },
+    {
+     "genre_records": 7228,
+     "records": 7356,
+     "style": "P.Funk"
+    },
+    {
+     "genre_records": 4034,
+     "records": 4049,
+     "style": "Minneapolis Sound"
+    },
+    {
+     "genre_records": 3613,
+     "records": 3854,
+     "style": "Swingbeat"
+    },
+    {
+     "genre_records": 3624,
+     "records": 3694,
+     "style": "Bayou Funk"
+    },
+    {
+     "genre_records": 3456,
+     "records": 3669,
+     "style": "Free Funk"
+    },
+    {
+     "genre_records": 1932,
+     "records": 2984,
+     "style": "Go-Go"
+    },
+    {
+     "genre_records": 2107,
+     "records": 2132,
+     "style": "UK Street Soul"
+    },
+    {
+     "genre_records": 452,
+     "records": 1897,
+     "style": "Beatdown"
+    },
+    {
+     "genre_records": 202,
+     "records": 809,
+     "style": "Funaná"
+    },
+    {
+     "genre_records": 136,
+     "records": 540,
+     "style": "Break-In"
+    },
+    {
+     "genre_records": 352,
+     "records": 442,
+     "style": "Manila Sound"
+    },
+    {
+     "genre_records": 131,
+     "records": 400,
+     "style": "Persian Pop"
+    },
+    {
+     "genre_records": 71,
+     "records": 279,
+     "style": "Zhongguo Feng"
+    },
+    {
+     "genre_records": 22,
+     "records": 64,
+     "style": "Azonto"
+    }
+   ],
+   "genre": "Funk / Soul",
+   "records": 1511226
+  },
+  {
+   "children": [
+    {
+     "genre_records": 50872,
+     "records": 118629,
+     "style": "Contemporary R&B"
+    },
+    {
+     "genre_records": 102979,
+     "records": 103050,
+     "style": "Gangsta"
+    },
+    {
+     "genre_records": 95347,
+     "records": 98469,
+     "style": "Pop Rap"
+    },
+    {
+     "genre_records": 47355,
+     "records": 93816,
+     "style": "Instrumental"
+    },
+    {
+     "genre_records": 72138,
+     "records": 78286,
+     "style": "RnB/Swing"
+    },
+    {
+     "genre_records": 72415,
+     "records": 73006,
+     "style": "Conscious"
+    },
+    {
+     "genre_records": 50348,
+     "records": 71201,
+     "style": "Hip Hop"
+    },
+    {
+     "genre_records": 16885,
+     "records": 62208,
+     "style": "Trip Hop"
+    },
+    {
+     "genre_records": 47344,
+     "records": 52945,
+     "style": "Trap"
+    },
+    {
+     "genre_records": 48116,
+     "records": 48213,
+     "style": "Hardcore Hip-Hop"
+    },
+    {
+     "genre_records": 44310,
+     "records": 44389,
+     "style": "Boom Bap"
+    },
+    {
+     "genre_records": 30178,
+     "records": 30447,
+     "style": "Jazzy Hip-Hop"
+    },
+    {
+     "genre_records": 17612,
+     "records": 27504,
+     "style": "Bass Music"
+    },
+    {
+     "genre_records": 24013,
+     "records": 24042,
+     "style": "Thug Rap"
+    },
+    {
+     "genre_records": 7322,
+     "records": 22931,
+     "style": "Neo Soul"
+    },
+    {
+     "genre_records": 20363,
+     "records": 20446,
+     "style": "G-Funk"
+    },
+    {
+     "genre_records": 7333,
+     "records": 19451,
+     "style": "Grime"
+    },
+    {
+     "genre_records": 8823,
+     "records": 19319,
+     "style": "Hip-House"
+    },
+    {
+     "genre_records": 15966,
+     "records": 16767,
+     "style": "Cut-up/DJ"
+    },
+    {
+     "genre_records": 7339,
+     "records": 15971,
+     "style": "New Jack Swing"
+    },
+    {
+     "genre_records": 14185,
+     "records": 14651,
+     "style": "Ragga HipHop"
+    },
+    {
+     "genre_records": 5108,
+     "records": 13894,
+     "style": "Reggaeton"
+    },
+    {
+     "genre_records": 13212,
+     "records": 13238,
+     "style": "Horrorcore"
+    },
+    {
+     "genre_records": 8919,
+     "records": 8972,
+     "style": "Cloud Rap"
+    },
+    {
+     "genre_records": 5985,
+     "records": 6521,
+     "style": "Screw"
+    },
+    {
+     "genre_records": 5556,
+     "records": 5615,
+     "style": "Crunk"
+    },
+    {
+     "genre_records": 1247,
+     "records": 5363,
+     "style": "Music Video"
+    },
+    {
+     "genre_records": 4253,
+     "records": 4444,
+     "style": "DJ Battle Tool"
+    },
+    {
+     "genre_records": 3982,
+     "records": 4164,
+     "style": "Turntablism"
+    },
+    {
+     "genre_records": 1230,
+     "records": 4143,
+     "style": "Ghetto"
+    },
+    {
+     "genre_records": 872,
+     "records": 3854,
+     "style": "Swingbeat"
+    },
+    {
+     "genre_records": 3739,
+     "records": 3773,
+     "style": "Bounce"
+    },
+    {
+     "genre_records": 757,
+     "records": 3494,
+     "style": "Glitch Hop"
+    },
+    {
+     "genre_records": 2956,
+     "records": 3056,
+     "style": "Miami Bass"
+    },
+    {
+     "genre_records": 1710,
+     "records": 2984,
+     "style": "Go-Go"
+    },
+    {
+     "genre_records": 2306,
+     "records": 2928,
+     "style": "Kwaito"
+    },
+    {
+     "genre_records": 2213,
+     "records": 2329,
+     "style": "Phonk"
+    },
+    {
+     "genre_records": 2084,
+     "records": 2099,
+     "style": "Drill"
+    },
+    {
+     "genre_records": 2044,
+     "records": 2044,
+     "style": "Britcore"
+    },
+    {
+     "genre_records": 1563,
+     "records": 1828,
+     "style": "Favela Funk"
+    },
+    {
+     "genre_records": 1570,
+     "records": 1570,
+     "style": "Memphis Rap"
+    },
+    {
+     "genre_records": 1512,
+     "records": 1517,
+     "style": "Hyphy"
+    },
+    {
+     "genre_records": 1324,
+     "records": 1355,
+     "style": "Hiplife"
+    },
+    {
+     "genre_records": 448,
+     "records": 1301,
+     "style": "Baltimore Club"
+    },
+    {
+     "genre_records": 303,
+     "records": 1114,
+     "style": "Jersey Club"
+    },
+    {
+     "genre_records": 944,
+     "records": 1002,
+     "style": "Beatbox"
+    },
+    {
+     "genre_records": 224,
+     "records": 725,
+     "style": "Skweee"
+    },
+    {
+     "genre_records": 170,
+     "records": 630,
+     "style": "Moombahton"
+    },
+    {
+     "genre_records": 336,
+     "records": 337,
+     "style": "Low Bap"
+    },
+    {
+     "genre_records": 134,
+     "records": 279,
+     "style": "Zhongguo Feng"
+    },
+    {
+     "genre_records": 236,
+     "records": 236,
+     "style": "Snap"
+    },
+    {
+     "genre_records": 139,
+     "records": 140,
+     "style": "Bongo Flava"
+    },
+    {
+     "genre_records": 96,
+     "records": 96,
+     "style": "Motswako"
+    },
+    {
+     "genre_records": 71,
+     "records": 71,
+     "style": "Spaza"
+    },
+    {
+     "genre_records": 32,
+     "records": 64,
+     "style": "Azonto"
+    },
+    {
+     "genre_records": 2,
+     "records": 8,
+     "style": "Bultrón"
+    }
+   ],
+   "genre": "Hip Hop",
+   "records": 1122202
+  },
+  {
+   "children": [
+    {
+     "genre_records": 218227,
+     "records": 269453,
+     "style": "Easy Listening"
+    },
+    {
+     "genre_records": 148375,
+     "records": 151076,
+     "style": "Swing"
+    },
+    {
+     "genre_records": 143263,
+     "records": 146701,
+     "style": "Big Band"
+    },
+    {
+     "genre_records": 133755,
+     "records": 134245,
+     "style": "Contemporary Jazz"
+    },
+    {
+     "genre_records": 97895,
+     "records": 102802,
+     "style": "Fusion"
+    },
+    {
+     "genre_records": 83015,
+     "records": 86697,
+     "style": "Jazz-Funk"
+    },
+    {
+     "genre_records": 74278,
+     "records": 75659,
+     "style": "Soul-Jazz"
+    },
+    {
+     "genre_records": 71475,
+     "records": 71544,
+     "style": "Bop"
+    },
+    {
+     "genre_records": 62121,
+     "records": 68146,
+     "style": "Jazz-Rock"
+    },
+    {
+     "genre_records": 59983,
+     "records": 66607,
+     "style": "Free Improvisation"
+    },
+    {
+     "genre_records": 60165,
+     "records": 61431,
+     "style": "Latin Jazz"
+    },
+    {
+     "genre_records": 54932,
+     "records": 54934,
+     "style": "Hard Bop"
+    },
+    {
+     "genre_records": 53956,
+     "records": 54350,
+     "style": "Free Jazz"
+    },
+    {
+     "genre_records": 10702,
+     "records": 53254,
+     "style": "Samba"
+    },
+    {
+     "genre_records": 51235,
+     "records": 51250,
+     "style": "Post Bop"
+    },
+    {
+     "genre_records": 50961,
+     "records": 51093,
+     "style": "Cool Jazz"
+    },
+    {
+     "genre_records": 45734,
+     "records": 46267,
+     "style": "Smooth Jazz"
+    },
+    {
+     "genre_records": 41299,
+     "records": 41571,
+     "style": "Dixieland"
+    },
+    {
+     "genre_records": 11824,
+     "records": 37120,
+     "style": "Future Jazz"
+    },
+    {
+     "genre_records": 8399,
+     "records": 36500,
+     "style": "Cha-Cha"
+    },
+    {
+     "genre_records": 32235,
+     "records": 34711,
+     "style": "Bossa Nova"
+    },
+    {
+     "genre_records": 32648,
+     "records": 32976,
+     "style": "Avant-garde Jazz"
+    },
+    {
+     "genre_records": 8424,
+     "records": 27431,
+     "style": "Mambo"
+    },
+    {
+     "genre_records": 6968,
+     "records": 25572,
+     "style": "Bossanova"
+    },
+    {
+     "genre_records": 8990,
+     "records": 25281,
+     "style": "Acid Jazz"
+    },
+    {
+     "genre_records": 5477,
+     "records": 25147,
+     "style": "Light Music"
+    },
+    {
+     "genre_records": 24345,
+     "records": 24452,
+     "style": "Modal"
+    },
+    {
+     "genre_records": 7086,
+     "records": 21456,
+     "style": "Afrobeat"
+    },
+    {
+     "genre_records": 5915,
+     "records": 20957,
+     "style": "Afro-Cuban"
+    },
+    {
+     "genre_records": 8542,
+     "records": 20272,
+     "style": "Lounge"
+    },
+    {
+     "genre_records": 17784,
+     "records": 19587,
+     "style": "Ragtime"
+    },
+    {
+     "genre_records": 13561,
+     "records": 14678,
+     "style": "Space-Age"
+    },
+    {
+     "genre_records": 11942,
+     "records": 12154,
+     "style": "Afro-Cuban Jazz"
+    },
+    {
+     "genre_records": 4662,
+     "records": 11498,
+     "style": "Piano Blues"
+    },
+    {
+     "genre_records": 4036,
+     "records": 11415,
+     "style": "Jazzdance"
+    },
+    {
+     "genre_records": 8738,
+     "records": 9211,
+     "style": "Gypsy Jazz"
+    },
+    {
+     "genre_records": 2910,
+     "records": 7440,
+     "style": "Jump Blues"
+    },
+    {
+     "genre_records": 3021,
+     "records": 6742,
+     "style": "Boogie Woogie"
+    },
+    {
+     "genre_records": 1956,
+     "records": 6682,
+     "style": "Descarga"
+    },
+    {
+     "genre_records": 1315,
+     "records": 6430,
+     "style": "Beguine"
+    },
+    {
+     "genre_records": 1368,
+     "records": 3669,
+     "style": "Free Funk"
+    },
+    {
+     "genre_records": 684,
+     "records": 3168,
+     "style": "Choro"
+    },
+    {
+     "genre_records": 1781,
+     "records": 2553,
+     "style": "Exotica"
+    },
+    {
+     "genre_records": 1721,
+     "records": 1731,
+     "style": "Spiritual Jazz"
+    },
+    {
+     "genre_records": 1568,
+     "records": 1616,
+     "style": "Dark Jazz"
+    },
+    {
+     "genre_records": 462,
+     "records": 1384,
+     "style": "Electro Swing"
+    },
+    {
+     "genre_records": 1354,
+     "records": 1368,
+     "style": "Cape Jazz"
+    },
+    {
+     "genre_records": 903,
+     "records": 906,
+     "style": "Stride"
+    },
+    {
+     "genre_records": 219,
+     "records": 690,
+     "style": "Jug Band"
+    },
+    {
+     "genre_records": 148,
+     "records": 598,
+     "style": "Gwo Ka"
+    },
+    {
+     "genre_records": 101,
+     "records": 462,
+     "style": "Shibuya-Kei"
+    },
+    {
+     "genre_records": 9,
+     "records": 34,
+     "style": "Futurism"
+    },
+    {
+     "genre_records": 8,
+     "records": 21,
+     "style": "Shinkyoku"
+    }
+   ],
+   "genre": "Jazz",
+   "records": 1764483
+  },
+  {
+   "children": [
+    {
+     "genre_records": 80210,
+     "records": 80764,
+     "style": "Bolero"
+    },
+    {
+     "genre_records": 75250,
+     "records": 75394,
+     "style": "Salsa"
+    },
+    {
+     "genre_records": 71218,
+     "records": 71401,
+     "style": "Cumbia"
+    },
+    {
+     "genre_records": 34871,
+     "records": 61431,
+     "style": "Latin Jazz"
+    },
+    {
+     "genre_records": 57238,
+     "records": 57723,
+     "style": "MPB"
+    },
+    {
+     "genre_records": 53220,
+     "records": 56026,
+     "style": "Tango"
+    },
+    {
+     "genre_records": 52643,
+     "records": 53254,
+     "style": "Samba"
+    },
+    {
+     "genre_records": 29954,
+     "records": 45232,
+     "style": "Flamenco"
+    },
+    {
+     "genre_records": 33549,
+     "records": 39295,
+     "style": "Rumba"
+    },
+    {
+     "genre_records": 15302,
+     "records": 37937,
+     "style": "Latin"
+    },
+    {
+     "genre_records": 36591,
+     "records": 36645,
+     "style": "Ranchera"
+    },
+    {
+     "genre_records": 35397,
+     "records": 36500,
+     "style": "Cha-Cha"
+    },
+    {
+     "genre_records": 35727,
+     "records": 35961,
+     "style": "Merengue"
+    },
+    {
+     "genre_records": 17445,
+     "records": 34711,
+     "style": "Bossa Nova"
+    },
+    {
+     "genre_records": 27109,
+     "records": 27431,
+     "style": "Mambo"
+    },
+    {
+     "genre_records": 24670,
+     "records": 25572,
+     "style": "Bossanova"
+    },
+    {
+     "genre_records": 4945,
+     "records": 23484,
+     "style": "Calypso"
+    },
+    {
+     "genre_records": 21535,
+     "records": 21543,
+     "style": "Guaracha"
+    },
+    {
+     "genre_records": 20613,
+     "records": 20957,
+     "style": "Afro-Cuban"
+    },
+    {
+     "genre_records": 17011,
+     "records": 17031,
+     "style": "Son"
+    },
+    {
+     "genre_records": 15464,
+     "records": 15471,
+     "style": "Guaguancó"
+    },
+    {
+     "genre_records": 15116,
+     "records": 15204,
+     "style": "Mariachi"
+    },
+    {
+     "genre_records": 13477,
+     "records": 13894,
+     "style": "Reggaeton"
+    },
+    {
+     "genre_records": 6016,
+     "records": 12154,
+     "style": "Afro-Cuban Jazz"
+    },
+    {
+     "genre_records": 11378,
+     "records": 11422,
+     "style": "Norteño"
+    },
+    {
+     "genre_records": 11176,
+     "records": 11181,
+     "style": "Vallenato"
+    },
+    {
+     "genre_records": 10287,
+     "records": 10316,
+     "style": "Cubano"
+    },
+    {
+     "genre_records": 10159,
+     "records": 10198,
+     "style": "Corrido"
+    },
+    {
+     "genre_records": 9824,
+     "records": 9875,
+     "style": "Forró"
+    },
+    {
+     "genre_records": 9116,
+     "records": 9183,
+     "style": "Tejano"
+    },
+    {
+     "genre_records": 6085,
+     "records": 9047,
+     "style": "Andean Music"
+    },
+    {
+     "genre_records": 8885,
+     "records": 8901,
+     "style": "Porro"
+    },
+    {
+     "genre_records": 8202,
+     "records": 8399,
+     "style": "Boogaloo"
+    },
+    {
+     "genre_records": 6131,
+     "records": 8288,
+     "style": "Latin Pop"
+    },
+    {
+     "genre_records": 7113,
+     "records": 7201,
+     "style": "Pachanga"
+    },
+    {
+     "genre_records": 6847,
+     "records": 6853,
+     "style": "Guajira"
+    },
+    {
+     "genre_records": 6672,
+     "records": 6682,
+     "style": "Descarga"
+    },
+    {
+     "genre_records": 6508,
+     "records": 6508,
+     "style": "Son Montuno"
+    },
+    {
+     "genre_records": 5686,
+     "records": 6430,
+     "style": "Beguine"
+    },
+    {
+     "genre_records": 5461,
+     "records": 6024,
+     "style": "Nueva Cancion"
+    },
+    {
+     "genre_records": 3446,
+     "records": 5935,
+     "style": "Copla"
+    },
+    {
+     "genre_records": 5832,
+     "records": 5856,
+     "style": "Charanga"
+    },
+    {
+     "genre_records": 3750,
+     "records": 5548,
+     "style": "Pasodoble"
+    },
+    {
+     "genre_records": 4373,
+     "records": 5215,
+     "style": "Compas"
+    },
+    {
+     "genre_records": 4681,
+     "records": 4708,
+     "style": "Bachata"
+    },
+    {
+     "genre_records": 4673,
+     "records": 4696,
+     "style": "Música Criolla"
+    },
+    {
+     "genre_records": 3640,
+     "records": 4668,
+     "style": "Huayno"
+    },
+    {
+     "genre_records": 4559,
+     "records": 4575,
+     "style": "Conjunto"
+    },
+    {
+     "genre_records": 2093,
+     "records": 4537,
+     "style": "Musette"
+    },
+    {
+     "genre_records": 4384,
+     "records": 4393,
+     "style": "Danzon"
+    },
+    {
+     "genre_records": 3788,
+     "records": 3845,
+     "style": "Batucada"
+    },
+    {
+     "genre_records": 3511,
+     "records": 3640,
+     "style": "Quechua"
+    },
+    {
+     "genre_records": 3543,
+     "records": 3568,
+     "style": "Plena"
+    },
+    {
+     "genre_records": 3360,
+     "records": 3397,
+     "style": "Baião"
+    },
+    {
+     "genre_records": 3328,
+     "records": 3354,
+     "style": "Lambada"
+    },
+    {
+     "genre_records": 3153,
+     "records": 3168,
+     "style": "Choro"
+    },
+    {
+     "genre_records": 1793,
+     "records": 3149,
+     "style": "Sertanejo"
+    },
+    {
+     "genre_records": 3044,
+     "records": 3056,
+     "style": "Axé"
+    },
+    {
+     "genre_records": 2788,
+     "records": 2793,
+     "style": "Samba-Canção"
+    },
+    {
+     "genre_records": 1911,
+     "records": 2750,
+     "style": "Zamba"
+    },
+    {
+     "genre_records": 1992,
+     "records": 2610,
+     "style": "Chamamé"
+    },
+    {
+     "genre_records": 2519,
+     "records": 2551,
+     "style": "Trova"
+    },
+    {
+     "genre_records": 613,
+     "records": 2493,
+     "style": "Shidaiqu"
+    },
+    {
+     "genre_records": 2399,
+     "records": 2425,
+     "style": "Bomba"
+    },
+    {
+     "genre_records": 2379,
+     "records": 2421,
+     "style": "Nueva Trova"
+    },
+    {
+     "genre_records": 1722,
+     "records": 2365,
+     "style": "Chacarera"
+    },
+    {
+     "genre_records": 2315,
+     "records": 2327,
+     "style": "Gaita"
+    },
+    {
+     "genre_records": 1981,
+     "records": 1992,
+     "style": "Joropo"
+    },
+    {
+     "genre_records": 1889,
+     "records": 1902,
+     "style": "Banda"
+    },
+    {
+     "genre_records": 866,
+     "records": 1828,
+     "style": "Favela Funk"
+    },
+    {
+     "genre_records": 759,
+     "records": 1823,
+     "style": "Caipira"
+    },
+    {
+     "genre_records": 1713,
+     "records": 1717,
+     "style": "Jibaro"
+    },
+    {
+     "genre_records": 1632,
+     "records": 1695,
+     "style": "Marimba"
+    },
+    {
+     "genre_records": 472,
+     "records": 1671,
+     "style": "Villancicos"
+    },
+    {
+     "genre_records": 1364,
+     "records": 1520,
+     "style": "Milonga"
+    },
+    {
+     "genre_records": 381,
+     "records": 1519,
+     "style": "Kaseko"
+    },
+    {
+     "genre_records": 1176,
+     "records": 1512,
+     "style": "Guarania"
+    },
+    {
+     "genre_records": 1500,
+     "records": 1504,
+     "style": "Timba"
+    },
+    {
+     "genre_records": 460,
+     "records": 1372,
+     "style": "Morna"
+    },
+    {
+     "genre_records": 274,
+     "records": 1303,
+     "style": "Jota"
+    },
+    {
+     "genre_records": 1270,
+     "records": 1271,
+     "style": "Marcha Carnavalesca"
+    },
+    {
+     "genre_records": 1169,
+     "records": 1181,
+     "style": "Aguinaldo"
+    },
+    {
+     "genre_records": 1052,
+     "records": 1053,
+     "style": "Pagode"
+    },
+    {
+     "genre_records": 1042,
+     "records": 1044,
+     "style": "Bambuco"
+    },
+    {
+     "genre_records": 985,
+     "records": 1004,
+     "style": "Candombe"
+    },
+    {
+     "genre_records": 958,
+     "records": 961,
+     "style": "Cuatro"
+    },
+    {
+     "genre_records": 862,
+     "records": 866,
+     "style": "Champeta"
+    },
+    {
+     "genre_records": 184,
+     "records": 809,
+     "style": "Funaná"
+    },
+    {
+     "genre_records": 735,
+     "records": 737,
+     "style": "Carimbó"
+    },
+    {
+     "genre_records": 722,
+     "records": 723,
+     "style": "Seresta"
+    },
+    {
+     "genre_records": 687,
+     "records": 689,
+     "style": "Brega"
+    },
+    {
+     "genre_records": 179,
+     "records": 646,
+     "style": "Kizomba"
+    },
+    {
+     "genre_records": 577,
+     "records": 580,
+     "style": "Sonero"
+    },
+    {
+     "genre_records": 561,
+     "records": 561,
+     "style": "Frevo"
+    },
+    {
+     "genre_records": 270,
+     "records": 270,
+     "style": "Duranguense"
+    },
+    {
+     "genre_records": 159,
+     "records": 164,
+     "style": "Currulao"
+    },
+    {
+     "genre_records": 22,
+     "records": 91,
+     "style": "Baila"
+    },
+    {
+     "genre_records": 7,
+     "records": 27,
+     "style": "Rara"
+    },
+    {
+     "genre_records": 7,
+     "records": 8,
+     "style": "Bultrón"
+    }
+   ],
+   "genre": "Latin",
+   "records": 1001151
+  },
+  {
+   "children": [
+    {
+     "genre_records": 26738,
+     "records": 102396,
+     "style": "Religious"
+    },
+    {
+     "genre_records": 73056,
+     "records": 87515,
+     "style": "Comedy"
+    },
+    {
+     "genre_records": 71470,
+     "records": 78157,
+     "style": "Spoken Word"
+    },
+    {
+     "genre_records": 20289,
+     "records": 57040,
+     "style": "Story"
+    },
+    {
+     "genre_records": 43262,
+     "records": 56750,
+     "style": "Field Recording"
+    },
+    {
+     "genre_records": 51500,
+     "records": 53196,
+     "style": "Radioplay"
+    },
+    {
+     "genre_records": 34868,
+     "records": 35784,
+     "style": "Audiobook"
+    },
+    {
+     "genre_records": 27487,
+     "records": 31863,
+     "style": "Poetry"
+    },
+    {
+     "genre_records": 24310,
+     "records": 25315,
+     "style": "Interview"
+    },
+    {
+     "genre_records": 21385,
+     "records": 23366,
+     "style": "Education"
+    },
+    {
+     "genre_records": 15957,
+     "records": 17418,
+     "style": "Dialogue"
+    },
+    {
+     "genre_records": 12291,
+     "records": 15887,
+     "style": "Promotional"
+    },
+    {
+     "genre_records": 3085,
+     "records": 14500,
+     "style": "Sound Collage"
+    },
+    {
+     "genre_records": 9626,
+     "records": 14310,
+     "style": "Political"
+    },
+    {
+     "genre_records": 11430,
+     "records": 12362,
+     "style": "Speech"
+    },
+    {
+     "genre_records": 11679,
+     "records": 12262,
+     "style": "Monolog"
+    },
+    {
+     "genre_records": 8832,
+     "records": 11172,
+     "style": "Public Broadcast"
+    },
+    {
+     "genre_records": 7756,
+     "records": 9307,
+     "style": "Sound Art"
+    },
+    {
+     "genre_records": 7567,
+     "records": 9194,
+     "style": "Therapy"
+    },
+    {
+     "genre_records": 8151,
+     "records": 8652,
+     "style": "Special Effects"
+    },
+    {
+     "genre_records": 5138,
+     "records": 5508,
+     "style": "Sermon"
+    },
+    {
+     "genre_records": 4284,
+     "records": 5003,
+     "style": "Technical"
+    },
+    {
+     "genre_records": 3651,
+     "records": 4673,
+     "style": "Health-Fitness"
+    },
+    {
+     "genre_records": 2782,
+     "records": 3205,
+     "style": "Sound Poetry"
+    },
+    {
+     "genre_records": 2727,
+     "records": 2921,
+     "style": "Movie Effects"
+    },
+    {
+     "genre_records": 1771,
+     "records": 2780,
+     "style": "Erotic"
+    },
+    {
+     "genre_records": 2075,
+     "records": 2134,
+     "style": "Public Service Announcement"
+    },
+    {
+     "genre_records": 1301,
+     "records": 1320,
+     "style": "Medical"
+    },
+    {
+     "genre_records": 290,
+     "records": 1312,
+     "style": "Vaudeville"
+    },
+    {
+     "genre_records": 887,
+     "records": 1032,
+     "style": "Sport"
+    },
+    {
+     "genre_records": 579,
+     "records": 763,
+     "style": "Occult"
+    },
+    {
+     "genre_records": 162,
+     "records": 540,
+     "style": "Break-In"
+    },
+    {
+     "genre_records": 102,
+     "records": 459,
+     "style": "Lowercase"
+    },
+    {
+     "genre_records": 87,
+     "records": 422,
+     "style": "Mouth Music"
+    },
+    {
+     "genre_records": 15,
+     "records": 56,
+     "style": "Shomyo"
+    },
+    {
+     "genre_records": 7,
+     "records": 34,
+     "style": "Futurism"
+    }
+   ],
+   "genre": "Non-Music",
+   "records": 443274
+  },
+  {
+   "children": [
+    {
+     "genre_records": 551844,
+     "records": 1058990,
+     "style": "Pop Rock"
+    },
+    {
+     "genre_records": 690695,
+     "records": 758816,
+     "style": "Vocal"
+    },
+    {
+     "genre_records": 266705,
+     "records": 605126,
+     "style": "Synth-pop"
+    },
+    {
+     "genre_records": 124304,
+     "records": 491691,
+     "style": "Disco"
+    },
+    {
+     "genre_records": 437028,
+     "records": 459897,
+     "style": "Ballad"
+    },
+    {
+     "genre_records": 101987,
+     "records": 380628,
+     "style": "Rock & Roll"
+    },
+    {
+     "genre_records": 351590,
+     "records": 360276,
+     "style": "Chanson"
+    },
+    {
+     "genre_records": 90948,
+     "records": 316632,
+     "style": "Soundtrack"
+    },
+    {
+     "genre_records": 283243,
+     "records": 286794,
+     "style": "Schlager"
+    },
+    {
+     "genre_records": 146259,
+     "records": 269453,
+     "style": "Easy Listening"
+    },
+    {
+     "genre_records": 47455,
+     "records": 232108,
+     "style": "Rhythm & Blues"
+    },
+    {
+     "genre_records": 59786,
+     "records": 230224,
+     "style": "New Wave"
+    },
+    {
+     "genre_records": 49137,
+     "records": 200668,
+     "style": "Euro House"
+    },
+    {
+     "genre_records": 106177,
+     "records": 198063,
+     "style": "Soft Rock"
+    },
+    {
+     "genre_records": 167724,
+     "records": 168882,
+     "style": "Europop"
+    },
+    {
+     "genre_records": 43082,
+     "records": 160084,
+     "style": "Acoustic"
+    },
+    {
+     "genre_records": 33975,
+     "records": 151076,
+     "style": "Swing"
+    },
+    {
+     "genre_records": 145790,
+     "records": 149493,
+     "style": "Indie Pop"
+    },
+    {
+     "genre_records": 35431,
+     "records": 146701,
+     "style": "Big Band"
+    },
+    {
+     "genre_records": 65423,
+     "records": 124835,
+     "style": "Holiday"
+    },
+    {
+     "genre_records": 38187,
+     "records": 118629,
+     "style": "Contemporary R&B"
+    },
+    {
+     "genre_records": 73905,
+     "records": 106896,
+     "style": "Dance-pop"
+    },
+    {
+     "genre_records": 21784,
+     "records": 102396,
+     "style": "Religious"
+    },
+    {
+     "genre_records": 38427,
+     "records": 98469,
+     "style": "Pop Rap"
+    },
+    {
+     "genre_records": 21202,
+     "records": 93816,
+     "style": "Instrumental"
+    },
+    {
+     "genre_records": 47641,
+     "records": 92021,
+     "style": "Beat"
+    },
+    {
+     "genre_records": 37114,
+     "records": 88430,
+     "style": "Theme"
+    },
+    {
+     "genre_records": 20278,
+     "records": 87515,
+     "style": "Comedy"
+    },
+    {
+     "genre_records": 27655,
+     "records": 78286,
+     "style": "RnB/Swing"
+    },
+    {
+     "genre_records": 26160,
+     "records": 75608,
+     "style": "Power Pop"
+    },
+    {
+     "genre_records": 70739,
+     "records": 71285,
+     "style": "J-pop"
+    },
+    {
+     "genre_records": 15250,
+     "records": 63888,
+     "style": "Musical"
+    },
+    {
+     "genre_records": 13080,
+     "records": 58031,
+     "style": "Italo-Disco"
+    },
+    {
+     "genre_records": 17530,
+     "records": 57013,
+     "style": "Doo Wop"
+    },
+    {
+     "genre_records": 12280,
+     "records": 56026,
+     "style": "Tango"
+    },
+    {
+     "genre_records": 15237,
+     "records": 55911,
+     "style": "Surf"
+    },
+    {
+     "genre_records": 18786,
+     "records": 51199,
+     "style": "Eurodance"
+    },
+    {
+     "genre_records": 50152,
+     "records": 50330,
+     "style": "Kayōkyoku"
+    },
+    {
+     "genre_records": 42265,
+     "records": 46434,
+     "style": "Novelty"
+    },
+    {
+     "genre_records": 13415,
+     "records": 44560,
+     "style": "AOR"
+    },
+    {
+     "genre_records": 8180,
+     "records": 39295,
+     "style": "Rumba"
+    },
+    {
+     "genre_records": 16659,
+     "records": 39121,
+     "style": "Hindustani"
+    },
+    {
+     "genre_records": 24907,
+     "records": 38012,
+     "style": "Parody"
+    },
+    {
+     "genre_records": 10692,
+     "records": 37937,
+     "style": "Latin"
+    },
+    {
+     "genre_records": 7304,
+     "records": 36500,
+     "style": "Cha-Cha"
+    },
+    {
+     "genre_records": 7593,
+     "records": 34711,
+     "style": "Bossa Nova"
+    },
+    {
+     "genre_records": 8196,
+     "records": 31392,
+     "style": "Hi NRG"
+    },
+    {
+     "genre_records": 13066,
+     "records": 31094,
+     "style": "Reggae-Pop"
+    },
+    {
+     "genre_records": 26074,
+     "records": 30876,
+     "style": "Bollywood"
+    },
+    {
+     "genre_records": 8318,
+     "records": 26991,
+     "style": "Mod"
+    },
+    {
+     "genre_records": 5624,
+     "records": 25572,
+     "style": "Bossanova"
+    },
+    {
+     "genre_records": 23501,
+     "records": 25147,
+     "style": "Light Music"
+    },
+    {
+     "genre_records": 24758,
+     "records": 24794,
+     "style": "Mandopop"
+    },
+    {
+     "genre_records": 4889,
+     "records": 23547,
+     "style": "Psychedelic"
+    },
+    {
+     "genre_records": 5455,
+     "records": 22931,
+     "style": "Neo Soul"
+    },
+    {
+     "genre_records": 12151,
+     "records": 21770,
+     "style": "Canzone Napoletana"
+    },
+    {
+     "genre_records": 6053,
+     "records": 20438,
+     "style": "Britpop"
+    },
+    {
+     "genre_records": 8332,
+     "records": 20272,
+     "style": "Lounge"
+    },
+    {
+     "genre_records": 9175,
+     "records": 19937,
+     "style": "Dream Pop"
+    },
+    {
+     "genre_records": 7898,
+     "records": 19892,
+     "style": "Euro-Disco"
+    },
+    {
+     "genre_records": 19821,
+     "records": 19876,
+     "style": "K-pop"
+    },
+    {
+     "genre_records": 4040,
+     "records": 19587,
+     "style": "Ragtime"
+    },
+    {
+     "genre_records": 17565,
+     "records": 17740,
+     "style": "City Pop"
+    },
+    {
+     "genre_records": 3853,
+     "records": 16129,
+     "style": "Pacific"
+    },
+    {
+     "genre_records": 4133,
+     "records": 15971,
+     "style": "New Jack Swing"
+    },
+    {
+     "genre_records": 4738,
+     "records": 15887,
+     "style": "Promotional"
+    },
+    {
+     "genre_records": 7156,
+     "records": 15810,
+     "style": "Twist"
+    },
+    {
+     "genre_records": 5408,
+     "records": 15762,
+     "style": "J-Rock"
+    },
+    {
+     "genre_records": 14391,
+     "records": 14707,
+     "style": "Alt-Pop"
+    },
+    {
+     "genre_records": 5956,
+     "records": 14678,
+     "style": "Space-Age"
+    },
+    {
+     "genre_records": 5759,
+     "records": 14304,
+     "style": "Romani"
+    },
+    {
+     "genre_records": 8383,
+     "records": 14241,
+     "style": "Anison"
+    },
+    {
+     "genre_records": 3266,
+     "records": 14159,
+     "style": "Hawaiian"
+    },
+    {
+     "genre_records": 3544,
+     "records": 13894,
+     "style": "Reggaeton"
+    },
+    {
+     "genre_records": 12877,
+     "records": 13604,
+     "style": "Music Hall"
+    },
+    {
+     "genre_records": 3185,
+     "records": 11172,
+     "style": "Public Broadcast"
+    },
+    {
+     "genre_records": 10574,
+     "records": 10947,
+     "style": "Bubblegum"
+    },
+    {
+     "genre_records": 10214,
+     "records": 10429,
+     "style": "Enka"
+    },
+    {
+     "genre_records": 2366,
+     "records": 9343,
+     "style": "Bhangra"
+    },
+    {
+     "genre_records": 8488,
+     "records": 8971,
+     "style": "Karaoke"
+    },
+    {
+     "genre_records": 8359,
+     "records": 8368,
+     "style": "Cantopop"
+    },
+    {
+     "genre_records": 8033,
+     "records": 8288,
+     "style": "Latin Pop"
+    },
+    {
+     "genre_records": 6732,
+     "records": 8243,
+     "style": "Yé-Yé"
+    },
+    {
+     "genre_records": 7267,
+     "records": 7292,
+     "style": "Hokkien Pop"
+    },
+    {
+     "genre_records": 1994,
+     "records": 7128,
+     "style": "Concert Film"
+    },
+    {
+     "genre_records": 6962,
+     "records": 6971,
+     "style": "Dansband"
+    },
+    {
+     "genre_records": 4586,
+     "records": 6541,
+     "style": "Jangle Pop"
+    },
+    {
+     "genre_records": 1783,
+     "records": 6430,
+     "style": "Beguine"
+    },
+    {
+     "genre_records": 6320,
+     "records": 6328,
+     "style": "Russian Pop"
+    },
+    {
+     "genre_records": 5861,
+     "records": 5911,
+     "style": "Levenslied"
+    },
+    {
+     "genre_records": 5622,
+     "records": 5772,
+     "style": "Ethno-pop"
+    },
+    {
+     "genre_records": 1725,
+     "records": 5363,
+     "style": "Music Video"
+    },
+    {
+     "genre_records": 1223,
+     "records": 5124,
+     "style": "Electroclash"
+    },
+    {
+     "genre_records": 1216,
+     "records": 4829,
+     "style": "Catalan Music"
+    },
+    {
+     "genre_records": 988,
+     "records": 4789,
+     "style": "Disco Polo"
+    },
+    {
+     "genre_records": 1062,
+     "records": 4708,
+     "style": "Bachata"
+    },
+    {
+     "genre_records": 3129,
+     "records": 4537,
+     "style": "Musette"
+    },
+    {
+     "genre_records": 1871,
+     "records": 4517,
+     "style": "Tropical House"
+    },
+    {
+     "genre_records": 4308,
+     "records": 4340,
+     "style": "Indo-Pop"
+    },
+    {
+     "genre_records": 886,
+     "records": 4072,
+     "style": "Sea Shanties"
+    },
+    {
+     "genre_records": 2779,
+     "records": 4049,
+     "style": "Minneapolis Sound"
+    },
+    {
+     "genre_records": 2031,
+     "records": 3887,
+     "style": "Hyperpop"
+    },
+    {
+     "genre_records": 1085,
+     "records": 3854,
+     "style": "Swingbeat"
+    },
+    {
+     "genre_records": 909,
+     "records": 3354,
+     "style": "Lambada"
+    },
+    {
+     "genre_records": 730,
+     "records": 3056,
+     "style": "Axé"
+    },
+    {
+     "genre_records": 1171,
+     "records": 3032,
+     "style": "Cabaret"
+    },
+    {
+     "genre_records": 940,
+     "records": 2923,
+     "style": "Skiffle"
+    },
+    {
+     "genre_records": 1084,
+     "records": 2893,
+     "style": "Mizrahi"
+    },
+    {
+     "genre_records": 2086,
+     "records": 2891,
+     "style": "Baroque Pop"
+    },
+    {
+     "genre_records": 708,
+     "records": 2780,
+     "style": "Erotic"
+    },
+    {
+     "genre_records": 2690,
+     "records": 2707,
+     "style": "Ryūkōka"
+    },
+    {
+     "genre_records": 1829,
+     "records": 2553,
+     "style": "Exotica"
+    },
+    {
+     "genre_records": 840,
+     "records": 2545,
+     "style": "Concert Band"
+    },
+    {
+     "genre_records": 2442,
+     "records": 2493,
+     "style": "Shidaiqu"
+    },
+    {
+     "genre_records": 1208,
+     "records": 2465,
+     "style": "NDW"
+    },
+    {
+     "genre_records": 2371,
+     "records": 2459,
+     "style": "Sunshine Pop"
+    },
+    {
+     "genre_records": 615,
+     "records": 2443,
+     "style": "Future Bass"
+    },
+    {
+     "genre_records": 2250,
+     "records": 2302,
+     "style": "Barbershop"
+    },
+    {
+     "genre_records": 451,
+     "records": 2242,
+     "style": "Dangdut"
+    },
+    {
+     "genre_records": 493,
+     "records": 2193,
+     "style": "Luk Krung"
+    },
+    {
+     "genre_records": 955,
+     "records": 2170,
+     "style": "K-Rock"
+    },
+    {
+     "genre_records": 462,
+     "records": 2134,
+     "style": "Public Service Announcement"
+    },
+    {
+     "genre_records": 1116,
+     "records": 2029,
+     "style": "Group Sounds"
+    },
+    {
+     "genre_records": 1498,
+     "records": 1925,
+     "style": "Nhạc Vàng"
+    },
+    {
+     "genre_records": 383,
+     "records": 1828,
+     "style": "Favela Funk"
+    },
+    {
+     "genre_records": 518,
+     "records": 1775,
+     "style": "Tamil Film Music"
+    },
+    {
+     "genre_records": 853,
+     "records": 1671,
+     "style": "Villancicos"
+    },
+    {
+     "genre_records": 1013,
+     "records": 1625,
+     "style": "Vocaloid"
+    },
+    {
+     "genre_records": 366,
+     "records": 1543,
+     "style": "Keroncong"
+    },
+    {
+     "genre_records": 374,
+     "records": 1477,
+     "style": "Deconstructed Club"
+    },
+    {
+     "genre_records": 1225,
+     "records": 1410,
+     "style": "Arabic Pop"
+    },
+    {
+     "genre_records": 504,
+     "records": 1312,
+     "style": "Vaudeville"
+    },
+    {
+     "genre_records": 532,
+     "records": 1191,
+     "style": "Zemer Ivri"
+    },
+    {
+     "genre_records": 345,
+     "records": 1151,
+     "style": "Salegy"
+    },
+    {
+     "genre_records": 894,
+     "records": 952,
+     "style": "Hypnagogic pop"
+    },
+    {
+     "genre_records": 180,
+     "records": 854,
+     "style": "Euro Trance"
+    },
+    {
+     "genre_records": 606,
+     "records": 850,
+     "style": "Future Pop"
+    },
+    {
+     "genre_records": 216,
+     "records": 684,
+     "style": "Philippine Classical"
+    },
+    {
+     "genre_records": 141,
+     "records": 646,
+     "style": "Kizomba"
+    },
+    {
+     "genre_records": 135,
+     "records": 630,
+     "style": "Moombahton"
+    },
+    {
+     "genre_records": 561,
+     "records": 569,
+     "style": "V-pop"
+    },
+    {
+     "genre_records": 515,
+     "records": 540,
+     "style": "Break-In"
+    },
+    {
+     "genre_records": 143,
+     "records": 518,
+     "style": "Bitpop"
+    },
+    {
+     "genre_records": 461,
+     "records": 462,
+     "style": "Shibuya-Kei"
+    },
+    {
+     "genre_records": 432,
+     "records": 442,
+     "style": "Manila Sound"
+    },
+    {
+     "genre_records": 320,
+     "records": 411,
+     "style": "Néo Kyma"
+    },
+    {
+     "genre_records": 399,
+     "records": 400,
+     "style": "Persian Pop"
+    },
+    {
+     "genre_records": 137,
+     "records": 394,
+     "style": "Junkanoo"
+    },
+    {
+     "genre_records": 77,
+     "records": 360,
+     "style": "Antifolk"
+    },
+    {
+     "genre_records": 278,
+     "records": 279,
+     "style": "Zhongguo Feng"
+    },
+    {
+     "genre_records": 68,
+     "records": 244,
+     "style": "Rōkyoku"
+    },
+    {
+     "genre_records": 29,
+     "records": 122,
+     "style": "Khaliji"
+    },
+    {
+     "genre_records": 31,
+     "records": 91,
+     "style": "Baila"
+    },
+    {
+     "genre_records": 19,
+     "records": 64,
+     "style": "Azonto"
+    },
+    {
+     "genre_records": 7,
+     "records": 34,
+     "style": "Ojkača"
+    }
+   ],
+   "genre": "Pop",
+   "records": 4523329
+  },
+  {
+   "children": [
+    {
+     "genre_records": 80474,
+     "records": 135507,
+     "style": "Dub"
+    },
+    {
+     "genre_records": 107026,
+     "records": 108140,
+     "style": "Dancehall"
+    },
+    {
+     "genre_records": 99544,
+     "records": 101547,
+     "style": "Reggae"
+    },
+    {
+     "genre_records": 82739,
+     "records": 82784,
+     "style": "Roots Reggae"
+    },
+    {
+     "genre_records": 40743,
+     "records": 77552,
+     "style": "Ska"
+    },
+    {
+     "genre_records": 28924,
+     "records": 31094,
+     "style": "Reggae-Pop"
+    },
+    {
+     "genre_records": 16309,
+     "records": 23484,
+     "style": "Calypso"
+    },
+    {
+     "genre_records": 21546,
+     "records": 21998,
+     "style": "Rocksteady"
+    },
+    {
+     "genre_records": 18091,
+     "records": 18136,
+     "style": "Lovers Rock"
+    },
+    {
+     "genre_records": 14429,
+     "records": 15214,
+     "style": "Ragga"
+    },
+    {
+     "genre_records": 6728,
+     "records": 14651,
+     "style": "Ragga HipHop"
+    },
+    {
+     "genre_records": 11368,
+     "records": 13098,
+     "style": "Soca"
+    },
+    {
+     "genre_records": 2304,
+     "records": 3145,
+     "style": "Steel Band"
+    },
+    {
+     "genre_records": 686,
+     "records": 2025,
+     "style": "Chutney"
+    },
+    {
+     "genre_records": 1727,
+     "records": 1759,
+     "style": "Reggae Gospel"
+    },
+    {
+     "genre_records": 1495,
+     "records": 1499,
+     "style": "Toasting"
+    },
+    {
+     "genre_records": 1370,
+     "records": 1412,
+     "style": "Dub Poetry"
+    },
+    {
+     "genre_records": 1093,
+     "records": 1248,
+     "style": "Mento"
+    },
+    {
+     "genre_records": 249,
+     "records": 394,
+     "style": "Junkanoo"
+    },
+    {
+     "genre_records": 270,
+     "records": 290,
+     "style": "Bubbling"
+    },
+    {
+     "genre_records": 250,
+     "records": 275,
+     "style": "Rapso"
+    },
+    {
+     "genre_records": 61,
+     "records": 64,
+     "style": "Azonto"
+    },
+    {
+     "genre_records": 4,
+     "records": 18,
+     "style": "Kaskawi"
+    },
+    {
+     "genre_records": 8,
+     "records": 8,
+     "style": "Bultrón"
+    }
+   ],
+   "genre": "Reggae",
+   "records": 515058
+  },
+  {
+   "children": [
+    {
+     "genre_records": 1026568,
+     "records": 1058990,
+     "style": "Pop Rock"
+    },
+    {
+     "genre_records": 236708,
+     "records": 735051,
+     "style": "Experimental"
+    },
+    {
+     "genre_records": 682307,
+     "records": 684220,
+     "style": "Punk"
+    },
+    {
+     "genre_records": 627078,
+     "records": 628645,
+     "style": "Alternative Rock"
+    },
+    {
+     "genre_records": 175803,
+     "records": 605126,
+     "style": "Synth-pop"
+    },
+    {
+     "genre_records": 529902,
+     "records": 531597,
+     "style": "Indie Rock"
+    },
+    {
+     "genre_records": 342531,
+     "records": 503384,
+     "style": "Hardcore"
+    },
+    {
+     "genre_records": 134180,
+     "records": 459897,
+     "style": "Ballad"
+    },
+    {
+     "genre_records": 435776,
+     "records": 435887,
+     "style": "Hard Rock"
+    },
+    {
+     "genre_records": 376247,
+     "records": 380628,
+     "style": "Rock & Roll"
+    },
+    {
+     "genre_records": 338931,
+     "records": 339035,
+     "style": "Heavy Metal"
+    },
+    {
+     "genre_records": 332263,
+     "records": 333763,
+     "style": "Psychedelic Rock"
+    },
+    {
+     "genre_records": 64077,
+     "records": 316632,
+     "style": "Soundtrack"
+    },
+    {
+     "genre_records": 305946,
+     "records": 312993,
+     "style": "Folk Rock"
+    },
+    {
+     "genre_records": 97691,
+     "records": 298422,
+     "style": "Noise"
+    },
+    {
+     "genre_records": 284017,
+     "records": 284782,
+     "style": "Prog Rock"
+    },
+    {
+     "genre_records": 272291,
+     "records": 272615,
+     "style": "Black Metal"
+    },
+    {
+     "genre_records": 266350,
+     "records": 266721,
+     "style": "Classic Rock"
+    },
+    {
+     "genre_records": 236398,
+     "records": 238417,
+     "style": "Blues Rock"
+    },
+    {
+     "genre_records": 75624,
+     "records": 232108,
+     "style": "Rhythm & Blues"
+    },
+    {
+     "genre_records": 71735,
+     "records": 231724,
+     "style": "Industrial"
+    },
+    {
+     "genre_records": 191244,
+     "records": 230224,
+     "style": "New Wave"
+    },
+    {
+     "genre_records": 226370,
+     "records": 226422,
+     "style": "Death Metal"
+    },
+    {
+     "genre_records": 190910,
+     "records": 198063,
+     "style": "Soft Rock"
+    },
+    {
+     "genre_records": 188021,
+     "records": 188334,
+     "style": "Garage Rock"
+    },
+    {
+     "genre_records": 143545,
+     "records": 160084,
+     "style": "Acoustic"
+    },
+    {
+     "genre_records": 157167,
+     "records": 157234,
+     "style": "Thrash"
+    },
+    {
+     "genre_records": 75036,
+     "records": 149493,
+     "style": "Indie Pop"
+    },
+    {
+     "genre_records": 131194,
+     "records": 134579,
+     "style": "Country Rock"
+    },
+    {
+     "genre_records": 106330,
+     "records": 107306,
+     "style": "Post-Punk"
+    },
+    {
+     "genre_records": 104075,
+     "records": 104538,
+     "style": "Art Rock"
+    },
+    {
+     "genre_records": 31476,
+     "records": 102802,
+     "style": "Fusion"
+    },
+    {
+     "genre_records": 99633,
+     "records": 99739,
+     "style": "Doom Metal"
+    },
+    {
+     "genre_records": 85388,
+     "records": 93158,
+     "style": "Avantgarde"
+    },
+    {
+     "genre_records": 88746,
+     "records": 92021,
+     "style": "Beat"
+    },
+    {
+     "genre_records": 85011,
+     "records": 86826,
+     "style": "Rockabilly"
+    },
+    {
+     "genre_records": 77020,
+     "records": 85821,
+     "style": "Lo-Fi"
+    },
+    {
+     "genre_records": 81596,
+     "records": 81870,
+     "style": "Grindcore"
+    },
+    {
+     "genre_records": 20162,
+     "records": 78162,
+     "style": "Leftfield"
+    },
+    {
+     "genre_records": 77091,
+     "records": 78115,
+     "style": "Post Rock"
+    },
+    {
+     "genre_records": 48284,
+     "records": 77552,
+     "style": "Ska"
+    },
+    {
+     "genre_records": 75015,
+     "records": 75608,
+     "style": "Power Pop"
+    },
+    {
+     "genre_records": 74149,
+     "records": 74424,
+     "style": "Glam"
+    },
+    {
+     "genre_records": 17020,
+     "records": 71285,
+     "style": "J-pop"
+    },
+    {
+     "genre_records": 70564,
+     "records": 70823,
+     "style": "Goth Rock"
+    },
+    {
+     "genre_records": 68098,
+     "records": 68838,
+     "style": "Emo"
+    },
+    {
+     "genre_records": 47640,
+     "records": 68146,
+     "style": "Jazz-Rock"
+    },
+    {
+     "genre_records": 61356,
+     "records": 61386,
+     "style": "Stoner Rock"
+    },
+    {
+     "genre_records": 59299,
+     "records": 60496,
+     "style": "Shoegaze"
+    },
+    {
+     "genre_records": 48593,
+     "records": 57013,
+     "style": "Doo Wop"
+    },
+    {
+     "genre_records": 56471,
+     "records": 56636,
+     "style": "Pop Punk"
+    },
+    {
+     "genre_records": 55219,
+     "records": 55911,
+     "style": "Surf"
+    },
+    {
+     "genre_records": 22287,
+     "records": 53245,
+     "style": "Darkwave"
+    },
+    {
+     "genre_records": 52627,
+     "records": 52637,
+     "style": "Oi"
+    },
+    {
+     "genre_records": 52557,
+     "records": 52583,
+     "style": "Metalcore"
+    },
+    {
+     "genre_records": 11422,
+     "records": 46434,
+     "style": "Novelty"
+    },
+    {
+     "genre_records": 46360,
+     "records": 46368,
+     "style": "Progressive Metal"
+    },
+    {
+     "genre_records": 45774,
+     "records": 45814,
+     "style": "Grunge"
+    },
+    {
+     "genre_records": 43573,
+     "records": 44560,
+     "style": "AOR"
+    },
+    {
+     "genre_records": 42498,
+     "records": 42538,
+     "style": "Nu Metal"
+    },
+    {
+     "genre_records": 40942,
+     "records": 40969,
+     "style": "Arena Rock"
+    },
+    {
+     "genre_records": 39196,
+     "records": 39322,
+     "style": "Southern Rock"
+    },
+    {
+     "genre_records": 38890,
+     "records": 39108,
+     "style": "Symphonic Rock"
+    },
+    {
+     "genre_records": 17206,
+     "records": 38012,
+     "style": "Parody"
+    },
+    {
+     "genre_records": 36643,
+     "records": 36646,
+     "style": "Power Metal"
+    },
+    {
+     "genre_records": 35781,
+     "records": 35811,
+     "style": "Post-Hardcore"
+    },
+    {
+     "genre_records": 34116,
+     "records": 34558,
+     "style": "Space Rock"
+    },
+    {
+     "genre_records": 30856,
+     "records": 34200,
+     "style": "Krautrock"
+    },
+    {
+     "genre_records": 32676,
+     "records": 32678,
+     "style": "Speed Metal"
+    },
+    {
+     "genre_records": 7158,
+     "records": 31094,
+     "style": "Reggae-Pop"
+    },
+    {
+     "genre_records": 28909,
+     "records": 28918,
+     "style": "Sludge Metal"
+    },
+    {
+     "genre_records": 11062,
+     "records": 27746,
+     "style": "Electric Blues"
+    },
+    {
+     "genre_records": 26262,
+     "records": 26991,
+     "style": "Mod"
+    },
+    {
+     "genre_records": 6775,
+     "records": 25725,
+     "style": "Country Blues"
+    },
+    {
+     "genre_records": 9221,
+     "records": 25315,
+     "style": "Interview"
+    },
+    {
+     "genre_records": 24483,
+     "records": 24501,
+     "style": "Math Rock"
+    },
+    {
+     "genre_records": 11296,
+     "records": 23547,
+     "style": "Psychedelic"
+    },
+    {
+     "genre_records": 22540,
+     "records": 22557,
+     "style": "Crust"
+    },
+    {
+     "genre_records": 14083,
+     "records": 22551,
+     "style": "Neofolk"
+    },
+    {
+     "genre_records": 19752,
+     "records": 22427,
+     "style": "Ethereal"
+    },
+    {
+     "genre_records": 22163,
+     "records": 22298,
+     "style": "Goregrind"
+    },
+    {
+     "genre_records": 20392,
+     "records": 20438,
+     "style": "Britpop"
+    },
+    {
+     "genre_records": 20362,
+     "records": 20364,
+     "style": "Melodic Death Metal"
+    },
+    {
+     "genre_records": 14646,
+     "records": 20272,
+     "style": "Lounge"
+    },
+    {
+     "genre_records": 18285,
+     "records": 19937,
+     "style": "Dream Pop"
+    },
+    {
+     "genre_records": 19539,
+     "records": 19552,
+     "style": "Gothic Metal"
+    },
+    {
+     "genre_records": 18306,
+     "records": 18315,
+     "style": "Symphonic Metal"
+    },
+    {
+     "genre_records": 7202,
+     "records": 17740,
+     "style": "City Pop"
+    },
+    {
+     "genre_records": 17592,
+     "records": 17670,
+     "style": "Atmospheric Black Metal"
+    },
+    {
+     "genre_records": 17381,
+     "records": 17392,
+     "style": "Psychobilly"
+    },
+    {
+     "genre_records": 12204,
+     "records": 15810,
+     "style": "Twist"
+    },
+    {
+     "genre_records": 15729,
+     "records": 15762,
+     "style": "J-Rock"
+    },
+    {
+     "genre_records": 15551,
+     "records": 15558,
+     "style": "Deathcore"
+    },
+    {
+     "genre_records": 14935,
+     "records": 14936,
+     "style": "Melodic Hardcore"
+    },
+    {
+     "genre_records": 5421,
+     "records": 14707,
+     "style": "Alt-Pop"
+    },
+    {
+     "genre_records": 14174,
+     "records": 14192,
+     "style": "Funk Metal"
+    },
+    {
+     "genre_records": 13526,
+     "records": 13541,
+     "style": "Folk Metal"
+    },
+    {
+     "genre_records": 13364,
+     "records": 13529,
+     "style": "Noisecore"
+    },
+    {
+     "genre_records": 13398,
+     "records": 13451,
+     "style": "Acid Rock"
+    },
+    {
+     "genre_records": 13125,
+     "records": 13131,
+     "style": "Post-Metal"
+    },
+    {
+     "genre_records": 12713,
+     "records": 12722,
+     "style": "Alternative Metal"
+    },
+    {
+     "genre_records": 10402,
+     "records": 11178,
+     "style": "Coldwave"
+    },
+    {
+     "genre_records": 4504,
+     "records": 11172,
+     "style": "Public Broadcast"
+    },
+    {
+     "genre_records": 10962,
+     "records": 10983,
+     "style": "Noise Rock"
+    },
+    {
+     "genre_records": 4593,
+     "records": 10947,
+     "style": "Bubblegum"
+    },
+    {
+     "genre_records": 3671,
+     "records": 10702,
+     "style": "Modern Electric Blues"
+    },
+    {
+     "genre_records": 9212,
+     "records": 9321,
+     "style": "Industrial Metal"
+    },
+    {
+     "genre_records": 8820,
+     "records": 9081,
+     "style": "No Wave"
+    },
+    {
+     "genre_records": 8547,
+     "records": 8550,
+     "style": "Viking Metal"
+    },
+    {
+     "genre_records": 2042,
+     "records": 8537,
+     "style": "Harmonica Blues"
+    },
+    {
+     "genre_records": 2703,
+     "records": 8385,
+     "style": "Texas Blues"
+    },
+    {
+     "genre_records": 1677,
+     "records": 8377,
+     "style": "Cajun"
+    },
+    {
+     "genre_records": 8305,
+     "records": 8328,
+     "style": "Pub Rock"
+    },
+    {
+     "genre_records": 7444,
+     "records": 8243,
+     "style": "Yé-Yé"
+    },
+    {
+     "genre_records": 8145,
+     "records": 8158,
+     "style": "Power Violence"
+    },
+    {
+     "genre_records": 8100,
+     "records": 8100,
+     "style": "Groove Metal"
+    },
+    {
+     "genre_records": 7907,
+     "records": 7913,
+     "style": "Depressive Black Metal"
+    },
+    {
+     "genre_records": 7259,
+     "records": 7263,
+     "style": "Technical Death Metal"
+    },
+    {
+     "genre_records": 4907,
+     "records": 7128,
+     "style": "Concert Film"
+    },
+    {
+     "genre_records": 1531,
+     "records": 6742,
+     "style": "Boogie Woogie"
+    },
+    {
+     "genre_records": 5042,
+     "records": 6541,
+     "style": "Jangle Pop"
+    },
+    {
+     "genre_records": 6267,
+     "records": 6277,
+     "style": "Deathrock"
+    },
+    {
+     "genre_records": 1628,
+     "records": 6224,
+     "style": "Louisiana Blues"
+    },
+    {
+     "genre_records": 5697,
+     "records": 5949,
+     "style": "Horror Rock"
+    },
+    {
+     "genre_records": 2244,
+     "records": 5363,
+     "style": "Music Video"
+    },
+    {
+     "genre_records": 1290,
+     "records": 5124,
+     "style": "Electroclash"
+    },
+    {
+     "genre_records": 4326,
+     "records": 4334,
+     "style": "Funeral Doom Metal"
+    },
+    {
+     "genre_records": 1644,
+     "records": 4049,
+     "style": "Minneapolis Sound"
+    },
+    {
+     "genre_records": 4041,
+     "records": 4047,
+     "style": "Pornogrind"
+    },
+    {
+     "genre_records": 823,
+     "records": 3865,
+     "style": "Zydeco"
+    },
+    {
+     "genre_records": 917,
+     "records": 3694,
+     "style": "Bayou Funk"
+    },
+    {
+     "genre_records": 1117,
+     "records": 3669,
+     "style": "Free Funk"
+    },
+    {
+     "genre_records": 3340,
+     "records": 3343,
+     "style": "Screamo"
+    },
+    {
+     "genre_records": 2966,
+     "records": 3120,
+     "style": "Swamp Pop"
+    },
+    {
+     "genre_records": 2519,
+     "records": 2923,
+     "style": "Skiffle"
+    },
+    {
+     "genre_records": 2594,
+     "records": 2891,
+     "style": "Baroque Pop"
+    },
+    {
+     "genre_records": 2880,
+     "records": 2880,
+     "style": "Brutal Death Metal"
+    },
+    {
+     "genre_records": 2625,
+     "records": 2625,
+     "style": "Blackgaze"
+    },
+    {
+     "genre_records": 814,
+     "records": 2493,
+     "style": "Shidaiqu"
+    },
+    {
+     "genre_records": 2147,
+     "records": 2465,
+     "style": "NDW"
+    },
+    {
+     "genre_records": 1745,
+     "records": 2459,
+     "style": "Sunshine Pop"
+    },
+    {
+     "genre_records": 2434,
+     "records": 2456,
+     "style": "Rock Opera"
+    },
+    {
+     "genre_records": 2382,
+     "records": 2385,
+     "style": "Unblack Metal"
+    },
+    {
+     "genre_records": 2233,
+     "records": 2267,
+     "style": "Slowcore"
+    },
+    {
+     "genre_records": 2159,
+     "records": 2170,
+     "style": "K-Rock"
+    },
+    {
+     "genre_records": 2086,
+     "records": 2091,
+     "style": "Mathcore"
+    },
+    {
+     "genre_records": 1983,
+     "records": 2029,
+     "style": "Group Sounds"
+    },
+    {
+     "genre_records": 1923,
+     "records": 1923,
+     "style": "Crossover thrash"
+    },
+    {
+     "genre_records": 1711,
+     "records": 1713,
+     "style": "Post-Grunge"
+    },
+    {
+     "genre_records": 489,
+     "records": 1625,
+     "style": "Vocaloid"
+    },
+    {
+     "genre_records": 342,
+     "records": 1616,
+     "style": "Dark Jazz"
+    },
+    {
+     "genre_records": 591,
+     "records": 1026,
+     "style": "Phleng Phuea Chiwit"
+    },
+    {
+     "genre_records": 574,
+     "records": 1011,
+     "style": "Synthpunk"
+    },
+    {
+     "genre_records": 1005,
+     "records": 1007,
+     "style": "Anarcho-Punk"
+    },
+    {
+     "genre_records": 270,
+     "records": 1004,
+     "style": "Candombe"
+    },
+    {
+     "genre_records": 979,
+     "records": 980,
+     "style": "Midwest Emo"
+    },
+    {
+     "genre_records": 448,
+     "records": 952,
+     "style": "Hypnagogic pop"
+    },
+    {
+     "genre_records": 169,
+     "records": 763,
+     "style": "Occult"
+    },
+    {
+     "genre_records": 668,
+     "records": 668,
+     "style": "Crossover Thrash"
+    },
+    {
+     "genre_records": 116,
+     "records": 569,
+     "style": "Progressive Bluegrass"
+    },
+    {
+     "genre_records": 156,
+     "records": 540,
+     "style": "Break-In"
+    },
+    {
+     "genre_records": 131,
+     "records": 518,
+     "style": "Bitpop"
+    },
+    {
+     "genre_records": 256,
+     "records": 462,
+     "style": "Shibuya-Kei"
+    },
+    {
+     "genre_records": 452,
+     "records": 461,
+     "style": "Nintendocore"
+    },
+    {
+     "genre_records": 165,
+     "records": 442,
+     "style": "Manila Sound"
+    },
+    {
+     "genre_records": 93,
+     "records": 440,
+     "style": "Hill Country Blues"
+    },
+    {
+     "genre_records": 189,
+     "records": 360,
+     "style": "Antifolk"
+    },
+    {
+     "genre_records": 358,
+     "records": 358,
+     "style": "Neo-Classical Metal"
+    },
+    {
+     "genre_records": 329,
+     "records": 332,
+     "style": "Anatolian Rock"
+    },
+    {
+     "genre_records": 95,
+     "records": 301,
+     "style": "Neopagan"
+    },
+    {
+     "genre_records": 119,
+     "records": 279,
+     "style": "Zhongguo Feng"
+    },
+    {
+     "genre_records": 59,
+     "records": 270,
+     "style": "Desert Blues"
+    },
+    {
+     "genre_records": 9,
+     "records": 34,
+     "style": "Futurism"
+    }
+   ],
+   "genre": "Rock",
+   "records": 7171990
+  },
+  {
+   "children": [
+    {
+     "genre_records": 310467,
+     "records": 316632,
+     "style": "Soundtrack"
+    },
+    {
+     "genre_records": 85987,
+     "records": 88430,
+     "style": "Theme"
+    },
+    {
+     "genre_records": 87851,
+     "records": 88394,
+     "style": "Score"
+    },
+    {
+     "genre_records": 62459,
+     "records": 63888,
+     "style": "Musical"
+    },
+    {
+     "genre_records": 21358,
+     "records": 39121,
+     "style": "Hindustani"
+    },
+    {
+     "genre_records": 28189,
+     "records": 30876,
+     "style": "Bollywood"
+    },
+    {
+     "genre_records": 21707,
+     "records": 22104,
+     "style": "Video Game Music"
+    },
+    {
+     "genre_records": 5792,
+     "records": 17418,
+     "style": "Dialogue"
+    },
+    {
+     "genre_records": 12207,
+     "records": 14241,
+     "style": "Anison"
+    },
+    {
+     "genre_records": 3201,
+     "records": 13604,
+     "style": "Music Hall"
+    },
+    {
+     "genre_records": 4447,
+     "records": 7128,
+     "style": "Concert Film"
+    },
+    {
+     "genre_records": 1292,
+     "records": 5592,
+     "style": "Ballet"
+    },
+    {
+     "genre_records": 2054,
+     "records": 5550,
+     "style": "Carnatic"
+    },
+    {
+     "genre_records": 2843,
+     "records": 5363,
+     "style": "Music Video"
+    },
+    {
+     "genre_records": 620,
+     "records": 3100,
+     "style": "Ghazal"
+    },
+    {
+     "genre_records": 2644,
+     "records": 3032,
+     "style": "Cabaret"
+    },
+    {
+     "genre_records": 1109,
+     "records": 2921,
+     "style": "Movie Effects"
+    },
+    {
+     "genre_records": 1131,
+     "records": 2753,
+     "style": "Zarzuela"
+    },
+    {
+     "genre_records": 1059,
+     "records": 2493,
+     "style": "Shidaiqu"
+    },
+    {
+     "genre_records": 513,
+     "records": 2456,
+     "style": "Rock Opera"
+    },
+    {
+     "genre_records": 1637,
+     "records": 1775,
+     "style": "Tamil Film Music"
+    },
+    {
+     "genre_records": 1184,
+     "records": 1312,
+     "style": "Vaudeville"
+    },
+    {
+     "genre_records": 32,
+     "records": 127,
+     "style": "Atonal"
+    }
+   ],
+   "genre": "Stage & Screen",
+   "records": 680677
+  }
+ ],
+ "license": "MIT",
+ "rule": {
+  "description": "A style's parents are the genres carried by at least share_threshold of the style's records (masters plus releases). The dominant parent is always kept. Junk genres are dropped.",
+  "dominant_parent_always_kept": true,
+  "dropped_genres": [
+   "1"
+  ],
+  "max_children_per_genre": 255,
+  "share_threshold": "0.20"
+ },
+ "source": {
+  "dump_date": "20261101",
+  "inputs": [
+   {
+    "file": "discogs_20261101_masters.xml.gz",
+    "kind": "masters",
+    "records": 2608936,
+    "sha256": "75eb03aeb1d03a07797ffdcb57a4b81c87cf10955353c800fa7b6bc86aac1d67"
+   },
+   {
+    "file": "discogs_20261101_releases.xml.gz",
+    "kind": "releases",
+    "records": 19575942,
+    "sha256": "1d9781c775cf6ae01c9b18e1539a19cbec25dd440c99ba797d68dee8d3f6d01f"
+   }
+  ],
+  "license": "CC0-1.0",
+  "name": "Discogs monthly data dump",
+  "url": "https://data.discogs.com/"
+ },
+ "tree_version": "1"
+}

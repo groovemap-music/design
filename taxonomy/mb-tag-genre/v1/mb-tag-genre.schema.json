@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://groovemap.music/schemas/mb-tag-genre-v1.json",
+  "title": "GrooveMap MusicBrainz tag to Discogs genre and style lookup",
+  "description": "mb-tag-genre/v1 (ADR 0020): one row per MusicBrainz tag with its result, the cascade bucket that produced it, both model proposals, and its review state. Only a file marked publishable ships, and scripts/mb-tag-genre.mjs rejects a publishable file with an unreviewed model-proposed row.",
+  "x-license": "MIT",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["lookup_version", "license", "decision", "publishable", "source", "models", "counts", "rows"],
+  "$defs": {
+    "path": {
+      "description": "[] is NONE (unmapped), [genre] is genre only, [genre, style] is a style under that genre.",
+      "type": "array",
+      "maxItems": 2,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "count": { "type": "integer", "minimum": 0 }
+  },
+  "properties": {
+    "lookup_version": { "const": "1" },
+    "license": { "const": "MIT" },
+    "decision": { "const": "docs/adr/0020-mb-tag-genre-lookup.md" },
+    "publishable": { "type": "boolean" },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["musicbrainz", "tree"],
+      "properties": {
+        "musicbrainz": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "url", "license", "dump", "file", "sha256", "timestamp", "scopes", "min_uses"],
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "url": { "type": "string", "format": "uri" },
+            "license": { "const": "CC0-1.0" },
+            "dump": { "type": "string", "pattern": "^[0-9]{8}-[0-9]{6}$" },
+            "file": { "const": "mbdump-derived.tar.bz2" },
+            "sha256": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+            "timestamp": { "type": ["string", "null"] },
+            "scopes": { "const": ["artist_tag", "label_tag", "release_tag", "release_group_tag"] },
+            "sample": { "type": "string", "minLength": 1, "description": "Set only on a fixture built from a sample rather than a whole dump." },
+            "min_uses": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "tree": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["file", "dump_date", "sha256"],
+          "properties": {
+            "file": { "type": "string", "pattern": "^[a-z0-9-]+\\.json$" },
+            "dump_date": { "type": "string", "pattern": "^[0-9]{8}$" },
+            "sha256": { "$ref": "#/$defs/sha256" }
+          }
+        }
+      }
+    },
+    "models": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["jev", "claude"],
+      "properties": {
+        "jev": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["model", "beam_width"],
+          "properties": { "model": { "const": "jev-1.14.0" }, "beam_width": { "const": 3 } }
+        },
+        "claude": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["model", "effort", "list_sha"],
+          "properties": {
+            "model": { "const": "claude-opus-5-5" },
+            "effort": { "const": "medium" },
+            "list_sha": { "type": "string", "pattern": "^[0-9a-f]{16}$" }
+          }
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tags", "string", "agree_genre", "agree_none", "disagree", "pending", "reviewed"],
+      "properties": {
+        "tags": { "$ref": "#/$defs/count" },
+        "string": { "$ref": "#/$defs/count" },
+        "agree_genre": { "$ref": "#/$defs/count" },
+        "agree_none": { "$ref": "#/$defs/count" },
+        "disagree": { "$ref": "#/$defs/count" },
+        "pending": { "$ref": "#/$defs/count" },
+        "reviewed": { "$ref": "#/$defs/count" }
+      }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["tag", "uses", "bucket", "result", "proposals", "review_state", "reviewer"],
+        "properties": {
+          "tag": { "type": "string", "minLength": 1 },
+          "uses": { "type": "integer", "minimum": 1 },
+          "bucket": { "enum": ["string", "agree_genre", "agree_none", "disagree"] },
+          "result": { "$ref": "#/$defs/path" },
+          "proposals": {
+            "oneOf": [
+              { "type": "null" },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["jev", "claude"],
+                "properties": {
+                  "jev": { "$ref": "#/$defs/path" },
+                  "claude": { "oneOf": [{ "$ref": "#/$defs/path" }, { "type": "null" }] }
+                }
+              }
+            ]
+          },
+          "review_state": { "enum": ["not_required", "pending", "reviewed"] },
+          "reviewer": { "oneOf": [{ "type": "string", "minLength": 1 }, { "type": "null" }] },
+          "decision": { "enum": ["accept_default", "accept_other", "none", "pick"], "description": "How the reviewer decided, written by scripts/mb-tag-review.mjs merge. Present only on a reviewed row." },
+          "reviewed_at": { "type": "string", "format": "date-time", "description": "When the reviewer decided, as the review page recorded it. Present only on a reviewed row." }
+        }
+      }
+    }
+  }
+}

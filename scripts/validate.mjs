@@ -6,6 +6,8 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 import { validateAccentTokens, validateStateTokens } from "./brand-tokens.mjs";
+import { validateGenreTree } from "./genre-tree.mjs";
+import { validateReviewQueue, validateTagLookup, validateTagVocabulary } from "./mb-tag-genre.mjs";
 import { validateTaxonomy } from "./media-mapper.mjs";
 import {
   extractLinks,
@@ -117,6 +119,16 @@ const REQUIRED_FILES = [
   "scripts/check-recipes.mjs",
   "scripts/check-recipes.test.mjs",
   "scripts/check-secrets.sh",
+  "scripts/discogs-genre-tree.py",
+  "scripts/genre-tree.mjs",
+  "scripts/genre-tree.test.mjs",
+  "scripts/mb-tag-drift.mjs",
+  "scripts/mb-tag-drift.test.mjs",
+  "scripts/mb-tag-genre.mjs",
+  "scripts/mb-tag-genre.py",
+  "scripts/mb-tag-genre.test.mjs",
+  "scripts/mb-tag-review.mjs",
+  "scripts/mb-tag-review.test.mjs",
   "scripts/media-mapper.mjs",
   "scripts/publication-readiness.mjs",
   "scripts/tooling.mjs",
@@ -183,6 +195,24 @@ const REQUIRED_FILES = [
   "taxonomy/identity/README.md",
   "taxonomy/identity/v1/identity-vocabulary.json",
   "taxonomy/identity/v1/identity-vocabulary.schema.json",
+  "taxonomy/mb-tag-genre/README.md",
+  "taxonomy/mb-tag-genre/review/core.js",
+  "taxonomy/mb-tag-genre/review/data.js",
+  "taxonomy/mb-tag-genre/review/index.html",
+  "taxonomy/mb-tag-genre/v1/captures/claude-opus-5-5.jsonl",
+  "taxonomy/mb-tag-genre/v1/captures/jev-1.14.0.jsonl",
+  "taxonomy/mb-tag-genre/v1/discogs-genre-tree.json",
+  "taxonomy/mb-tag-genre/v1/discogs-genre-tree.schema.json",
+  "taxonomy/mb-tag-genre/v1/fixtures/discogs-genre-tree-sample.json",
+  "taxonomy/mb-tag-genre/v1/fixtures/spike-569/README.md",
+  "taxonomy/mb-tag-genre/v1/fixtures/spike-569/mb-tag-genre.json",
+  "taxonomy/mb-tag-genre/v1/fixtures/spike-569/review-queue.json",
+  "taxonomy/mb-tag-genre/v1/mb-tag-genre-review-queue.schema.json",
+  "taxonomy/mb-tag-genre/v1/mb-tag-genre.json",
+  "taxonomy/mb-tag-genre/v1/mb-tag-genre.schema.json",
+  "taxonomy/mb-tag-genre/v1/review-queue.json",
+  "taxonomy/mb-tag-genre/v1/mb-tag-vocabulary.json",
+  "taxonomy/mb-tag-genre/v1/mb-tag-vocabulary.schema.json",
   "taxonomy/media/README.md",
   "taxonomy/media/v1/media-block.schema.json",
   "taxonomy/media/v1/media-taxonomy.json",
@@ -279,6 +309,60 @@ function checkTaxonomy() {
   runJsonSchema(["validate", blockSchema, ...expectedPaths, "--format-assertion"], "a fixture's expected media block does not satisfy the media block schema");
   rmSync(expectedDirectory, { recursive: true, force: true });
   console.log(`Verified the media taxonomy, its schemas, and ${fixtures.length} conformance fixtures against the reference mapper.`);
+  checkGenreTree();
+  checkTagLookup();
+}
+
+function checkGenreTree() {
+  const base = resolve(ROOT, "taxonomy/mb-tag-genre/v1");
+  const schemaPath = resolve(base, "discogs-genre-tree.schema.json");
+  const treePath = resolve(base, "discogs-genre-tree.json");
+  const fixturePath = resolve(base, "fixtures/discogs-genre-tree-sample.json");
+  runJsonSchema(["metaschema", schemaPath], `${relative(ROOT, schemaPath)} is not a valid 2020-12 schema`);
+  runJsonSchema(["validate", schemaPath, treePath, fixturePath, "--format-assertion"], "a Discogs genre tree does not satisfy its schema");
+  for (const path of [treePath, fixturePath]) {
+    const errors = validateGenreTree(JSON.parse(readFileSync(path, "utf8")));
+    requireCondition(errors.length === 0, `${relative(ROOT, path)}:\n- ${errors.join("\n- ")}`);
+  }
+  const tree = JSON.parse(readFileSync(treePath, "utf8"));
+  console.log(`Verified the Discogs genre tree (dump ${tree.source.dump_date}): ${tree.counts.genres} genres, ${tree.counts.styles} styles, ${tree.counts.pairs} pairs.`);
+}
+
+// mb-tag-genre/v1 (ADR 0020): the vocabulary, every lookup with its review queue, and their schemas. A lookup
+// is checked against the tree it names; a publishable lookup must carry no unreviewed model-proposed row.
+const TAG_LOOKUPS = [
+  { lookup: "mb-tag-genre.json", queue: "review-queue.json", tree: "discogs-genre-tree.json", vocabulary: "mb-tag-vocabulary.json" },
+  { lookup: "fixtures/spike-569/mb-tag-genre.json", queue: "fixtures/spike-569/review-queue.json", tree: "fixtures/spike-569/discogs-genre-tree-spike.json", vocabulary: "fixtures/spike-569/vocabulary.json" },
+];
+
+function checkTagLookup() {
+  const base = resolve(ROOT, "taxonomy/mb-tag-genre/v1");
+  const schemas = Object.fromEntries(["mb-tag-vocabulary", "mb-tag-genre", "mb-tag-genre-review-queue"].map((name) => [name, resolve(base, `${name}.schema.json`)]));
+  for (const schema of Object.values(schemas)) runJsonSchema(["metaschema", schema], `${relative(ROOT, schema)} is not a valid 2020-12 schema`);
+  const vocabularies = [resolve(base, "mb-tag-vocabulary.json"), resolve(base, "fixtures/spike-569/vocabulary.json")];
+  runJsonSchema(["validate", schemas["mb-tag-vocabulary"], ...vocabularies, "--format-assertion"], "an mb-tag vocabulary does not satisfy its schema");
+  for (const path of vocabularies) {
+    const errors = validateTagVocabulary(JSON.parse(readFileSync(path, "utf8")));
+    requireCondition(errors.length === 0, `${relative(ROOT, path)}:\n- ${errors.join("\n- ")}`);
+  }
+  const resolved = TAG_LOOKUPS.map((entry) => Object.fromEntries(Object.entries(entry).map(([key, path]) => [key, resolve(base, path)])));
+  runJsonSchema(["validate", schemas["mb-tag-genre"], ...resolved.map((entry) => entry.lookup), "--format-assertion"], "an mb-tag-genre lookup does not satisfy its schema");
+  runJsonSchema(["validate", schemas["mb-tag-genre-review-queue"], ...resolved.map((entry) => entry.queue), "--format-assertion"], "an mb-tag-genre review queue does not satisfy its schema");
+  for (const entry of resolved) {
+    const lookup = JSON.parse(readFileSync(entry.lookup, "utf8"));
+    const tree = JSON.parse(readFileSync(entry.tree, "utf8"));
+    requireCondition(lookup.source.tree.sha256 === sha256(readFileSync(entry.tree)), `${relative(ROOT, entry.lookup)} was built from a different ${relative(ROOT, entry.tree)}`);
+    // Every vocabulary tag at the lookup's min_uses has exactly one row, with the same uses, from the same dump.
+    const vocab = JSON.parse(readFileSync(entry.vocabulary, "utf8"));
+    const kept = vocab.tags.filter((row) => row.uses >= lookup.source.musicbrainz.min_uses);
+    const rowsOf = (rows) => JSON.stringify(rows.map((row) => [row.tag, row.uses]).sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0)));
+    requireCondition(rowsOf(lookup.rows) === rowsOf(kept), `${relative(ROOT, entry.lookup)} rows are not the tags of ${relative(ROOT, entry.vocabulary)} with >= ${lookup.source.musicbrainz.min_uses} uses`);
+    requireCondition(lookup.source.musicbrainz.dump === vocab.source.dump && lookup.source.musicbrainz.sha256 === vocab.source.sha256, `${relative(ROOT, entry.lookup)} names a different dump than ${relative(ROOT, entry.vocabulary)}`);
+    const errors = [...validateTagLookup(lookup, tree), ...validateReviewQueue(JSON.parse(readFileSync(entry.queue, "utf8")), lookup)];
+    requireCondition(errors.length === 0, `${relative(ROOT, entry.lookup)}:\n- ${errors.join("\n- ")}`);
+  }
+  const vocabulary = JSON.parse(readFileSync(vocabularies[0], "utf8"));
+  console.log(`Verified the MusicBrainz tag vocabulary (dump ${vocabulary.source.dump}, ${vocabulary.tags.length} tags with >= ${vocabulary.min_uses} uses) and ${resolved.length} mb-tag-genre lookup(s) with their review queues.`);
 }
 
 function expectJsonSchemaFailure(arguments_, message) {
