@@ -27,6 +27,8 @@ lint:
     {{tool}} node --check scripts/check-recipes.test.mjs
     {{tool}} node --check scripts/genre-tree.mjs
     {{tool}} node --check scripts/genre-tree.test.mjs
+    {{tool}} node --check scripts/mb-tag-genre.mjs
+    {{tool}} node --check scripts/mb-tag-genre.test.mjs
     {{tool}} node --check scripts/media-mapper.mjs
     {{tool}} node --check scripts/publication-readiness.mjs
     {{tool}} node --check scripts/tooling.mjs
