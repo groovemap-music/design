@@ -18,8 +18,9 @@ dependencies = [
 
 [tool.uv]
 package = false
-# torch-cluster ships no macOS wheel; it builds against the installed torch.
-no-build-isolation-package = ["torch-cluster"]
+# torch-cluster ships no macOS wheel and its sdist imports setuptools and torch at metadata
+# time, so `uv lock` and Dependabot need both in its isolated build environment.
+extra-build-dependencies = { torch-cluster = ["setuptools", "torch"] }
 
 [tool.uv.sources]
 pyg-lib = { url = "https://data.pyg.org/whl/torch-2.14.0%2Bcpu/pyg_lib-0.9.0%2Bpt214-cp310-abi3-macosx_11_0_arm64.whl" }
