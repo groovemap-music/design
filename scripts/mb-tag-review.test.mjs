@@ -8,7 +8,7 @@ import { join, resolve } from "node:path";
 import test from "node:test";
 
 import { validateReviewQueue, validateTagLookup } from "./mb-tag-genre.mjs";
-import { buildReviewData, itemLines, mergeExport, otherAnswer, renderDocument, renderReviewData } from "./mb-tag-review.mjs";
+import { buildReviewData, itemLines, mergeExport, otherAnswer, renderDocument, renderReviewData, rowHash } from "./mb-tag-review.mjs";
 import { ROOT, sha256 } from "./tooling.mjs";
 
 const V1 = resolve(ROOT, "taxonomy/mb-tag-genre/v1");
@@ -25,8 +25,8 @@ const AT = "2026-11-11T18:00:00.000Z";
 const byTag = (tag) => lookup.rows.find((row) => row.tag === tag);
 const disagree = lookup.rows.find((row) => row.bucket === "disagree" && row.proposals.claude !== null && row.proposals.claude.length > 0 && row.proposals.jev.length > 0);
 const agree = lookup.rows.find((row) => row.bucket === "agree_genre");
-const exportOf = (rows, over = {}) => ({ export_version: "1", queue_version: "1", lookup: { dump: lookup.source.musicbrainz.dump, sha256: SHA }, exported_at: AT, rows, ...over });
-const entry = (row, decision, over = {}) => ({ tag: row.tag, decision, result: decision === "none" ? [] : row.result, reviewer: "robert", at: AT, ...over });
+const exportOf = (rows, over = {}) => ({ export_version: "1", queue_version: "1", lookup: { dump: lookup.source.musicbrainz.dump, tree_dump_date: lookup.source.tree.dump_date }, exported_at: AT, rows, ...over });
+const entry = (row, decision, over = {}) => ({ tag: row.tag, h: rowHash(row), decision, result: decision === "none" ? [] : row.result, reviewer: "robert", at: AT, ...over });
 const merge = (exported) => mergeExport(exported, lookupBytes, lookup, queueText, tree);
 
 test("the writer reproduces the generator's files byte for byte", () => {
@@ -89,20 +89,77 @@ test("an export for a tag that is not in the queue is rejected", () => {
   assert.match(unknown.errors.join("\n"), /not a tag in the queue/);
   assert.equal(unknown.lookup, undefined);
   const string = lookup.rows.find((row) => row.bucket === "string");
-  assert.match(merge(exportOf([entry(string, "accept_default")])).errors.join("\n"), /not pending/);
+  assert.match(merge(exportOf([entry(string, "accept_default")])).errors.join("\n"), /not a queue row/);
   const none = lookup.rows.find((row) => row.bucket === "agree_none");
-  assert.match(merge(exportOf([entry(none, "none")])).errors.join("\n"), /not pending/);
+  assert.match(merge(exportOf([entry(none, "none")])).errors.join("\n"), /not a queue row/);
 });
 
-test("an export made against a different lookup is refused as stale", () => {
-  const stale = merge(exportOf([entry(agree, "accept_default")], { lookup: { dump: lookup.source.musicbrainz.dump, sha256: "0".repeat(64) } }));
-  assert.match(stale.errors.join("\n"), /stale export/);
-  assert.equal(stale.lookup, undefined);
-  // After a merge the lookup changes, so the export that was just merged is stale on a second merge.
-  const first = merge(exportOf([entry(agree, "accept_default")]));
-  const nextBytes = Buffer.from(renderDocument(first.lookup, "rows"));
-  const again = mergeExport(exportOf([entry(disagree, "accept_default")]), nextBytes, first.lookup, queueText, tree);
-  assert.match(again.errors.join("\n"), /stale export/);
+// A second sitting: the operator merges an export, keeps the old lookup's decisions in the page, and exports again.
+const asMerged = (out) => ({ bytes: Buffer.from(renderDocument(out.lookup, "rows")), lookup: out.lookup, queueText: renderDocument(out.queue, "rows", out.queueItems) });
+const mergeOn = (state, exported, flags) => mergeExport(exported, state.bytes, state.lookup, state.queueText, tree, flags);
+
+test("decisions made after an export survive merging that export", () => {
+  const [a, b, c] = queue.rows.slice(0, 3).map((row) => byTag(row.tag));
+  const exportA = exportOf([entry(a, "accept_default")]);
+  const exportLater = exportOf([entry(a, "accept_default"), entry(b, "none"), entry(c, "accept_default")]);
+  const afterA = merge(exportA);
+  assert.deepEqual(afterA.errors, []);
+  const state = asMerged(afterA);
+  assert.notEqual(sha256(state.bytes), SHA, "the merge changed the lookup");
+  // The later export, made against the pre-merge page, still merges: a is already merged and identical.
+  const later = mergeOn(state, exportLater);
+  assert.deepEqual(later.errors, []);
+  assert.equal(later.merged, 2);
+  assert.equal(later.unchanged, 1);
+  assert.equal(later.lookup.counts.reviewed, 3);
+});
+
+test("merging the same export again is a no-op", () => {
+  const exported = exportOf(queue.rows.slice(0, 5).map((row) => entry(byTag(row.tag), "accept_default")));
+  const first = merge(exported);
+  const state = asMerged(first);
+  const again = mergeOn(state, exported);
+  assert.deepEqual(again.errors, []);
+  assert.equal(again.merged, 0);
+  assert.equal(again.unchanged, 5);
+  assert.equal(renderDocument(again.lookup, "rows"), state.bytes.toString("utf8"));
+  assert.equal(renderDocument(again.queue, "rows", again.queueItems), state.queueText);
+});
+
+test("a conflicting decision for a reviewed tag is rejected, and only --skip-rejected applies the rest", () => {
+  const [a, b] = queue.rows.slice(0, 2).map((row) => byTag(row.tag));
+  const state = asMerged(merge(exportOf([entry(a, "accept_default")])));
+  const mixed = exportOf([entry(a, "none"), entry(b, "accept_default")]);
+  const refused = mergeOn(state, mixed);
+  assert.match(refused.errors.join("\n"), /conflicts with the lookup: it is already reviewed as/);
+  assert.equal(refused.lookup, undefined);
+  const partial = mergeOn(state, mixed, { skipRejected: true });
+  assert.deepEqual(partial.errors, []);
+  assert.equal(partial.rejected.length, 1);
+  assert.equal(partial.merged, 1);
+  assert.deepEqual(partial.lookup.rows.find((row) => row.tag === a.tag).result, a.proposals.claude ?? a.proposals.jev, "the reviewed answer is untouched");
+  assert.equal(partial.lookup.rows.find((row) => row.tag === b.tag).review_state, "reviewed");
+});
+
+test("a row decided against a different row hash is rejected", () => {
+  const out = merge(exportOf([entry(agree, "accept_default", { h: "0".repeat(16) })]));
+  assert.match(out.errors.join("\n"), /decided against a different row/);
+  assert.equal(out.lookup, undefined);
+  const changed = JSON.parse(JSON.stringify(lookup));
+  const row = changed.rows.find((item) => item.tag === agree.tag);
+  row.proposals.jev = ["Jazz"];
+  const out2 = mergeExport(exportOf([entry(agree, "accept_default")]), lookupBytes, changed, queueText, tree);
+  assert.match(out2.errors.join("\n"), /decided against a different row/);
+});
+
+test("an export for a different queue_version, dump or tree is refused outright", () => {
+  const version = merge(exportOf([entry(agree, "accept_default")], { queue_version: "2" }));
+  assert.match(version.errors.join("\n"), /queue_version/);
+  const dump = merge(exportOf([entry(agree, "accept_default")], { lookup: { dump: "20200101-000000", tree_dump_date: lookup.source.tree.dump_date } }));
+  assert.match(dump.errors.join("\n"), /names dump/);
+  const treeDate = merge(exportOf([entry(agree, "accept_default")], { lookup: { dump: lookup.source.musicbrainz.dump, tree_dump_date: "20200101" } }));
+  assert.match(treeDate.errors.join("\n"), /tree dump/);
+  assert.equal(merge(exportOf([entry(agree, "accept_default")], { queue_version: "2" })).lookup, undefined);
 });
 
 test("a row needs a reviewer, a timestamp, a known decision and no duplicate", () => {
@@ -129,7 +186,7 @@ test("the lookup becomes publishable only when the queue is empty, and then need
   const marked = { ...lookup, publishable: true };
   assert.match(validateTagLookup(marked, tree).join("\n"), /publishable lookup carries pending row/);
   // Review every pending row, then the merge marks it publishable.
-  const all = queue.rows.map((row, i) => ({ tag: row.tag, decision: i % 2 ? "none" : "accept_default", result: i % 2 ? [] : row.default, reviewer: "robert", at: AT }));
+  const all = queue.rows.map((row, i) => ({ tag: row.tag, h: rowHash(byTag(row.tag)), decision: i % 2 ? "none" : "accept_default", result: i % 2 ? [] : row.default, reviewer: "robert", at: AT }));
   const done = merge(exportOf(all));
   assert.deepEqual(done.errors, []);
   assert.equal(done.lookup.publishable, true);
@@ -156,8 +213,9 @@ test("the CLI merges a file, refuses a bad one without writing, and rebuilds the
     assert.equal(good.status, 0, good.stderr);
     const merged = JSON.parse(readFileSync(paths.lookup, "utf8"));
     assert.equal(merged.counts.reviewed, 1);
-    assert.match(readFileSync(paths.data, "utf8"), new RegExp(sha256(readFileSync(paths.lookup))));
-    assert.equal(run(paths.good).status, 1, "the same export is now stale");
+    assert.match(readFileSync(paths.data, "utf8"), /"merged":\{"total":1,/);
+    assert.equal(run(paths.good).status, 0, "the same export again is a no-op");
+    assert.equal(JSON.parse(readFileSync(paths.lookup, "utf8")).counts.reviewed, 1);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -228,7 +286,8 @@ test("page: an export round-trips through the merge script, and a stale file is 
   R.apply(data, state, "skip", undefined, AT);
   const exported = R.buildExport(data, state, AT);
   assert.equal(exported.rows.length, 3, "a skip is not an export row");
-  assert.equal(exported.lookup.sha256, SHA);
+  assert.equal(exported.lookup.dump, lookup.source.musicbrainz.dump);
+  assert.ok(exported.rows.every((row) => /^[0-9a-f]{16}$/.test(row.h)));
   const out = merge(JSON.parse(JSON.stringify(exported)));
   assert.deepEqual(out.errors, []);
   assert.equal(out.lookup.counts.reviewed, 3);
@@ -237,6 +296,34 @@ test("page: an export round-trips through the merge script, and a stale file is 
   assert.deepEqual(R.importProgress(data, fresh, exported), { imported: 3, skipped: 0 });
   assert.equal(R.counts(data, fresh).decided, 3);
   assert.equal(fresh.pos, 3, "resumes at the first open row; the skipped row was not exported, so it is open again");
-  const stale = R.importProgress(data, R.newState(data), { ...exported, lookup: { ...exported.lookup, sha256: "f".repeat(64) } });
-  assert.match(stale.error, /different lookup/);
+  assert.match(R.importProgress(data, R.newState(data), { ...exported, queue_version: "2" }).error, /different queue/);
+  const edited = { ...exported, rows: exported.rows.map((row, i) => (i === 0 ? { ...row, h: "0".repeat(16) } : row)) };
+  assert.deepEqual(R.importProgress(data, R.newState(data), edited), { imported: 2, skipped: 1 });
+});
+
+test("page: after a merge and reload, merged rows are done, unmerged decisions stay and counts are right", () => {
+  const old = JSON.parse(JSON.stringify(data));
+  const state = R.newState(old);
+  state.reviewer = "robert";
+  for (const action of ["accept_default", "none", "accept_default", "skip"]) R.apply(old, state, action, undefined, AT);
+  const exportA = R.buildExport(old, { ...state, decisions: Object.fromEntries(Object.entries(state.decisions).slice(0, 2)) }, AT);
+  const out = merge(JSON.parse(JSON.stringify(exportA)));
+  assert.deepEqual(out.errors, []);
+  const fresh = JSON.parse(JSON.stringify(buildReviewData(Buffer.from(renderDocument(out.lookup, "rows")), out.lookup, out.queue, tree)));
+  assert.equal(R.storageKey(fresh), R.storageKey(old), "the progress key is stable across a merge");
+  assert.equal(fresh.rows.length, old.rows.length - 2);
+  assert.equal(fresh.total, old.total);
+  const reloaded = JSON.parse(JSON.stringify(state));
+  assert.deepEqual(R.reconcile(fresh, reloaded), { merged: 2, changed: 0 });
+  const c = R.counts(fresh, reloaded);
+  assert.deepEqual([c.total, c.decided, c.accept_default, c.none, c.skip], [old.total, 3, 2, 1, 1]);
+  assert.equal(c.open, old.total - 3);
+  assert.ok(reloaded.decisions[old.rows[2].t], "the unmerged decision is kept");
+  const next = R.buildExport(fresh, reloaded, AT);
+  assert.equal(next.rows.length, 1);
+  assert.deepEqual(merge(next).errors, [], "and it merges");
+  const stale = JSON.parse(JSON.stringify(state));
+  const edited = JSON.parse(JSON.stringify(fresh));
+  edited.rows.find((row) => row.t === old.rows[2].t).h = "0".repeat(16);
+  assert.deepEqual(R.reconcile(edited, stale), { merged: 2, changed: 1 }, "a row that changed needs review again");
 });

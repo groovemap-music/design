@@ -56,15 +56,32 @@ export function renderDocument(document, listKey, rawItems = null) {
   return `{\n${parts.join(",\n")}\n}\n`;
 }
 
-// What the review page knows. `lookup.sha256` is the SHA-256 of the lookup file's bytes: an export names
-// it, and a merge refuses an export made against any other lookup.
+// A short hash of what the reviewer was shown for a tag: its bucket and both proposals (the default follows
+// from them). An export row carries it, and a merge applies the row only while the lookup still agrees.
+export function rowHash(row) {
+  const proposals = row.proposals ?? { jev: null, claude: null };
+  return sha256(JSON.stringify([row.tag, row.bucket, proposals.jev, proposals.claude])).slice(0, 16);
+}
+
+// What the review page knows. Progress is keyed on queue_version, the dump and the tree date, which a merge
+// does not change, and each decision on its tag and row hash. `lookup.sha256` is informational.
 export function buildReviewData(lookupBytes, lookup, queue, tree) {
+  const byTag = new Map(lookup.rows.map((row) => [row.tag, row]));
+  const merged = { total: 0, accept_default: 0, accept_other: 0, none: 0, pick: 0 };
+  for (const row of lookup.rows) {
+    if (row.review_state !== "reviewed") continue;
+    merged.total += 1;
+    if (row.decision in merged) merged[row.decision] += 1;
+  }
   return {
     queue_version: queue.queue_version,
     lookup: { dump: lookup.source.musicbrainz.dump, sha256: sha256(lookupBytes), tree_dump_date: lookup.source.tree.dump_date },
+    total: queue.rows.length + merged.total,
+    merged,
     tree: tree.genres.map((entry) => [entry.genre, entry.children.map((child) => child.style)]),
     rows: queue.rows.map((row) => ({
       t: row.tag,
+      h: rowHash(byTag.get(row.tag)),
       u: row.uses,
       b: row.bucket,
       d: row.default,
@@ -84,38 +101,48 @@ export function otherAnswer(proposals) {
   return proposals.claude === null ? null : proposals.claude === defaultAnswer(proposals) ? proposals.jev : proposals.claude;
 }
 
-// Check an export against the lookup it claims to be made on, and resolve each decision to a result.
-// Returns { errors, decisions } and never throws on bad input.
-export function checkExport(exported, lookup, lookupSha, tree) {
+// Check an export against the lookup. File-level problems (version, queue_version, dump, tree) are `errors`
+// and stop everything. Row-level problems are `rejected`: a row is applied only when its tag is still pending
+// and its row hash matches what the reviewer saw. A row for a tag already reviewed with the same result is a
+// no-op (`unchanged`), so merging the same export twice changes nothing. Never throws on bad input.
+export function checkExport(exported, lookup, tree, queueVersion) {
   const errors = [];
+  const rejected = [];
   const decisions = new Map();
+  const unchanged = [];
   if (exported?.export_version !== EXPORT_VERSION) errors.push(`export_version is ${JSON.stringify(exported?.export_version)}, expected ${JSON.stringify(EXPORT_VERSION)}`);
-  if (!Array.isArray(exported?.rows)) return { errors: [...errors, "export has no rows"], decisions };
-  if (exported.lookup?.sha256 !== lookupSha) {
-    return { errors: [...errors, `stale export: it was made against lookup ${exported.lookup?.sha256 ?? "(none)"}, this lookup is ${lookupSha}`], decisions };
-  }
+  if (!Array.isArray(exported?.rows)) return { errors: [...errors, "export has no rows"], rejected, decisions, unchanged };
+  if (exported.queue_version !== queueVersion) errors.push(`export is for queue_version ${JSON.stringify(exported.queue_version)}, this queue is ${JSON.stringify(queueVersion)}`);
   if (exported.lookup?.dump !== lookup.source.musicbrainz.dump) errors.push(`export names dump ${exported.lookup?.dump}, the lookup is ${lookup.source.musicbrainz.dump}`);
-  if (errors.length > 0) return { errors, decisions };
+  if (exported.lookup?.tree_dump_date !== lookup.source.tree.dump_date) errors.push(`export names tree dump ${exported.lookup?.tree_dump_date}, the lookup is ${lookup.source.tree.dump_date}`);
+  if (errors.length > 0) return { errors, rejected, decisions, unchanged };
 
   const index = treeIndex(tree);
   const byTag = new Map(lookup.rows.map((row) => [row.tag, row]));
+  const seen = new Set();
   for (const entry of exported.rows) {
     const where = `export row ${JSON.stringify(entry?.tag)}`;
     const row = byTag.get(entry?.tag);
     if (!row) {
-      errors.push(`${where} is not a tag in the queue`);
+      rejected.push(`${where} is not a tag in the queue`);
       continue;
     }
-    if (row.review_state !== "pending") {
-      errors.push(`${where} is not pending (${row.review_state})`);
+    if (row.proposals === null || row.bucket === "agree_none") {
+      rejected.push(`${where} is not a queue row (${row.bucket}, ${row.review_state})`);
       continue;
     }
-    if (decisions.has(entry.tag)) {
-      errors.push(`${where} appears more than once`);
+    if (seen.has(entry.tag)) {
+      rejected.push(`${where} appears more than once`);
       continue;
     }
-    if (typeof entry.reviewer !== "string" || entry.reviewer.trim() === "") errors.push(`${where} names no reviewer`);
-    if (typeof entry.at !== "string" || !ISO.test(entry.at) || Number.isNaN(Date.parse(entry.at))) errors.push(`${where} has no ISO 8601 timestamp`);
+    seen.add(entry.tag);
+    if (entry.h !== rowHash(row)) {
+      rejected.push(`${where} was decided against a different row (hash ${entry.h}, the lookup's is ${rowHash(row)}): review it again`);
+      continue;
+    }
+    const problems = [];
+    if (typeof entry.reviewer !== "string" || entry.reviewer.trim() === "") problems.push("names no reviewer");
+    if (typeof entry.at !== "string" || !ISO.test(entry.at) || Number.isNaN(Date.parse(entry.at))) problems.push("has no ISO 8601 timestamp");
     let result;
     switch (entry.decision) {
       case "accept_default":
@@ -123,7 +150,7 @@ export function checkExport(exported, lookup, lookupSha, tree) {
         break;
       case "accept_other":
         result = otherAnswer(row.proposals);
-        if (result === null) errors.push(`${where} accepts the other model, which gave no answer`);
+        if (result === null) problems.push("accepts the other model, which gave no answer");
         break;
       case "none":
         result = [];
@@ -131,42 +158,39 @@ export function checkExport(exported, lookup, lookupSha, tree) {
       case "pick":
         result = entry.result;
         if (!Array.isArray(result) || result.length === 0 || result.some((part) => typeof part !== "string") || !pathInTree(index, result)) {
-          errors.push(`${where} picks ${JSON.stringify(entry.result)}, which is not a genre or style path in the tree`);
+          problems.push(`picks ${JSON.stringify(entry.result)}, which is not a genre or style path in the tree`);
           result = null;
         }
         break;
       default:
-        errors.push(`${where} has unknown decision ${JSON.stringify(entry.decision)}`);
+        problems.push(`has unknown decision ${JSON.stringify(entry.decision)}`);
         result = null;
     }
-    if (result === null || result === undefined) continue;
-    if (entry.decision !== "pick" && entry.result !== undefined && !same(entry.result, result)) {
-      errors.push(`${where} says ${entry.decision} but its result ${show(entry.result)} is not ${show(result)}`);
+    if (result !== null && result !== undefined && entry.decision !== "pick" && entry.result !== undefined && !same(entry.result, result)) {
+      problems.push(`says ${entry.decision} but its result ${show(entry.result)} is not ${show(result)}`);
+    }
+    if (problems.length > 0) {
+      rejected.push(...problems.map((problem) => `${where} ${problem}`));
       continue;
     }
-    decisions.set(entry.tag, { decision: entry.decision, result, reviewer: entry.reviewer?.trim(), at: entry.at });
+    if (row.review_state === "reviewed") {
+      if (same(row.result, result)) unchanged.push(entry.tag);
+      else rejected.push(`${where} conflicts with the lookup: it is already reviewed as ${show(row.result)} (${row.reviewer}), the export says ${show(result)}`);
+      continue;
+    }
+    decisions.set(entry.tag, { decision: entry.decision, result, reviewer: entry.reviewer.trim(), at: entry.at });
   }
-  return { errors, decisions };
+  return { errors, rejected, decisions, unchanged };
 }
 
-// The item lines of a file renderDocument wrote, by tag, exactly as written.
-export function itemLines(text) {
-  const lines = new Map();
-  for (const line of text.split("\n")) {
-    if (!line.startsWith('  {"tag": ')) continue;
-    const body = line.trim().replace(/,$/, "");
-    lines.set(JSON.parse(body).tag, body);
-  }
-  return lines;
-}
-
-// Apply an export. Returns { errors, lookup, queue } and the new files only when `errors` is empty. The
+// Apply an export. Returns { errors, lookup, queue } and the new files only when `errors` is empty. A rejected
+// row fails the whole merge unless `skipRejected` is set, which applies the rest and reports the rejects. The
 // result depends only on the lookup and the decisions, never on row order or the wall clock.
-export function mergeExport(exported, lookupBytes, lookup, queueText, tree) {
+export function mergeExport(exported, lookupBytes, lookup, queueText, tree, { skipRejected = false } = {}) {
   const queue = JSON.parse(queueText);
-  const lookupSha = sha256(lookupBytes);
-  const { errors, decisions } = checkExport(exported, lookup, lookupSha, tree);
+  const { errors, rejected, decisions, unchanged } = checkExport(exported, lookup, tree, queue.queue_version);
   if (errors.length > 0) return { errors };
+  if (rejected.length > 0 && !skipRejected) return { errors: [...rejected, "nothing was merged: fix these or pass --skip-rejected to apply the other rows"] };
 
   const rows = lookup.rows.map((row) => {
     const made = decisions.get(row.tag);
@@ -193,7 +217,18 @@ export function mergeExport(exported, lookupBytes, lookup, queueText, tree) {
   const problems = [...validateTagLookup(next, tree), ...validateReviewQueue(nextQueue, next)];
   if (problems.length > 0) return { errors: problems.map((problem) => `merged lookup is invalid: ${problem}`) };
   const raw = itemLines(queueText);
-  return { errors: [], lookup: next, queue: nextQueue, queueItems: queueRows.map((row) => raw.get(row.tag)), merged: decisions.size };
+  return { errors: [], lookup: next, queue: nextQueue, queueItems: queueRows.map((row) => raw.get(row.tag)), merged: decisions.size, unchanged: unchanged.length, rejected };
+}
+
+// The item lines of a file renderDocument wrote, by tag, exactly as written.
+export function itemLines(text) {
+  const lines = new Map();
+  for (const line of text.split("\n")) {
+    if (!line.startsWith('  {"tag": ')) continue;
+    const body = line.trim().replace(/,$/, "");
+    lines.set(JSON.parse(body).tag, body);
+  }
+  return lines;
 }
 
 const writeAtomic = (path, text) => {
@@ -212,7 +247,8 @@ function options(argv) {
     if (flag === "--export" || flag === "--lookup" || flag === "--queue" || flag === "--tree" || flag === "--data") {
       if (i + 1 >= argv.length) throw new Error(`${flag} needs a value`);
       found[flag.slice(2)] = resolve(argv[(i += 1)]);
-    } else rest.push(flag);
+    } else if (flag === "--skip-rejected") found.skipRejected = true;
+    else rest.push(flag);
   }
   return { found, rest };
 }
@@ -226,7 +262,7 @@ function main(argv) {
   const [command, ...args] = argv;
   const { found, rest } = options(args);
   if (rest.length > 0 || (command !== "build" && command !== "merge") || (command === "merge" && !found.export)) {
-    console.error("usage: mb-tag-review.mjs build [--data F] | merge --export FILE [--lookup F --queue F --tree F --data F]");
+    console.error("usage: mb-tag-review.mjs build [--data F] | merge --export FILE [--skip-rejected] [--lookup F --queue F --tree F --data F]");
     return 2;
   }
   if (command === "build") {
@@ -236,7 +272,7 @@ function main(argv) {
   }
   const lookupBytes = readFileSync(found.lookup);
   const lookup = JSON.parse(lookupBytes.toString("utf8"));
-  const result = mergeExport(readJson(found.export), lookupBytes, lookup, readFileSync(found.queue, "utf8"), readJson(found.tree));
+  const result = mergeExport(readJson(found.export), lookupBytes, lookup, readFileSync(found.queue, "utf8"), readJson(found.tree), { skipRejected: found.skipRejected === true });
   if (result.errors.length > 0) {
     console.error(`Refusing to merge ${found.export}; nothing was written:\n- ${result.errors.join("\n- ")}`);
     return 1;
@@ -244,7 +280,8 @@ function main(argv) {
   writeAtomic(found.lookup, renderDocument(result.lookup, "rows"));
   writeAtomic(found.queue, renderDocument(result.queue, "rows", result.queueItems));
   writeAtomic(found.data, buildFiles(found));
-  console.log(`Merged ${result.merged} reviewed rows: ${result.lookup.counts.reviewed} reviewed, ${result.lookup.counts.pending} pending, publishable: ${result.lookup.publishable}.`);
+  for (const line of result.rejected) console.error(`Skipped: ${line}`);
+  console.log(`Merged ${result.merged} new decisions (${result.unchanged} already merged, ${result.rejected.length} rejected): ${result.lookup.counts.reviewed} reviewed, ${result.lookup.counts.pending} pending, publishable: ${result.lookup.publishable}.`);
   return 0;
 }
 

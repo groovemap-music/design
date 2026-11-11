@@ -75,8 +75,8 @@ tag-review-build:
     {{tool}} node scripts/mb-tag-review.mjs build
 
 # Apply a review export to the lookup: just tag-review-merge ~/Downloads/mb-tag-genre-review-....json
-tag-review-merge export:
-    {{tool}} node scripts/mb-tag-review.mjs merge --export {{export}}
+tag-review-merge export *flags:
+    {{tool}} node scripts/mb-tag-review.mjs merge --export {{export}} {{flags}}
 
 # Validate the native identity vocabulary and its schema.
 identity:

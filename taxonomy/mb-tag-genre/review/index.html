@@ -98,7 +98,7 @@
   var $ = function (id) { return document.getElementById(id); };
   if (!data || !R) { document.body.textContent = "data.js or core.js did not load. Run: just tag-review-build"; return; }
 
-  var KEY = "mb-tag-genre-review:" + data.lookup.sha256;
+  var KEY = R.storageKey(data);
   var options = R.buildOptions(data.tree);
   var parents = {};
   data.tree.forEach(function (e) { e[1].forEach(function (s) { (parents[s] = parents[s] || []).push(e[0]); }); });
@@ -111,7 +111,7 @@
 
   try {
     var saved = JSON.parse(localStorage.getItem(KEY) || "null");
-    if (saved && saved.lookupSha === state.lookupSha) state = saved;
+    if (saved && saved.key === state.key) state = saved;
   } catch (e) { storageOk = false; }
 
   function save() {
@@ -142,6 +142,8 @@
   }
   function fmt(n) { return n.toLocaleString("en-US"); }
 
+  var reconciled = R.reconcile(data, state);
+
   function render() {
     var row = data.rows[state.pos];
     var c = R.counts(data, state);
@@ -150,6 +152,7 @@
     $("who").value = state.reviewer;
     var out = $("row");
     out.textContent = "";
+    if (!row) { out.appendChild(el("div", "tag", "Queue empty")); out.appendChild(el("div", "meta", "Every row is merged into the lookup.")); return; }
     var title = el("div", "tag", row.t);
     out.appendChild(title);
     var meta = el("div", "meta", "row " + fmt(state.pos + 1) + " of " + fmt(c.total) + " · " + fmt(row.u) + " uses");
@@ -219,7 +222,7 @@
     var blob = new Blob([JSON.stringify(R.buildExport(data, state, stamp), null, 1) + "\n"], { type: "application/json" });
     var a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "mb-tag-genre-review-" + data.lookup.sha256.slice(0, 8) + "-" + stamp.replace(/[:.]/g, "-") + ".json";
+    a.download = "mb-tag-genre-review-" + data.lookup.dump + "-" + stamp.replace(/[:.]/g, "-") + ".json";
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
     state.exportedAt = c.decided; save(); render();
@@ -283,7 +286,9 @@
     e.preventDefault();
   });
 
+  save();
   render();
+  if (reconciled.merged || reconciled.changed) toast(reconciled.merged + " saved decisions are already merged into the lookup" + (reconciled.changed ? "; " + reconciled.changed + " changed rows need review again" : "") + ".");
   if (!state.reviewer.trim()) $("who").focus();
 })();
 </script>
